@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent card and panel components." />
+    <title>Cards &amp; Panels — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/cards-panels">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C07</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span
+            ><strong>cards-panels.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C07</p>
+              <h1>Cards &amp; panels</h1>
+              <p class="ds-hero__lede">
+                Panels define durable workbench regions. Cards group portable
+                content or a single choice. Inspectors use panels and property
+                lists to explain the selected object.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C07</span>
+          </header>
+          <section class="ds-section" id="panels">
+            <h2>Panel anatomy</h2>
+            <div class="ds-grid">
+              <article class="rf-panel">
+                <div class="rf-panel__header">
+                  <span>LEARNING_METRICS</span
+                  ><span class="rf-status rf-status--success">live</span>
+                </div>
+                <div class="rf-panel__body">
+                  <div class="ds-row">
+                    <div class="rf-radial" style="--rf-progress-value: 74%">
+                      <div class="rf-radial__value">
+                        74<small>MASTERY</small>
+                      </div>
+                    </div>
+                    <div>
+                      <span
+                        style="
+                          color: var(--rf-color-ink-subtle);
+                          font: var(--rf-type-overline);
+                        "
+                        >STATUS</span
+                      >
+                      <h3>GROWING ↑</h3>
+                      <small>+6 this week</small>
+                    </div>
+                  </div>
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">
+                  <span>NODE_INSPECTOR</span><span>02/07</span>
+                </div>
+                <div class="rf-panel__body">
+                  <h3>Order API</h3>
+                  <p>
+                    Accepts order commands, persists the initial record, and
+                    publishes the event.
+                  </p>
+                  <dl class="rf-property-list">
+                    <div>
+                      <dt>RUNTIME</dt>
+                      <dd>ASP.NET Core</dd>
+                    </div>
+                    <div>
+                      <dt>LEARNING</dt>
+                      <dd>3 lessons</dd>
+                    </div>
+                    <div>
+                      <dt>MASTERY</dt>
+                      <dd>88%</dd>
+                    </div>
+                  </dl>
+                </div>
+              </article>
+            </div>
+          </section>
+          <section class="ds-section" id="cards">
+            <h2>Cards</h2>
+            <div class="ds-grid ds-grid--3">
+              <article class="rf-card">
+                <div class="rf-card__header">INFORMATION</div>
+                <div class="rf-card__body">
+                  <h3>Resilient messaging</h3>
+                  <p>3 lessons · 45 minutes</p>
+                  <span class="rf-badge">OPTIONAL</span>
+                </div>
+              </article>
+              <article class="rf-card rf-card--interactive" tabindex="0">
+                <div class="rf-card__header">ACTIONABLE</div>
+                <div class="rf-card__body">
+                  <h3>Order lifecycle quiz</h3>
+                  <p>8 questions · due Jul 24</p>
+                  <span class="rf-status rf-status--warning">due soon</span>
+                </div>
+              </article>
+              <article class="rf-card" aria-selected="true">
+                <div class="rf-card__header">SELECTED</div>
+                <div class="rf-card__body">
+                  <h3>Checkout team</h3>
+                  <p>14 learners · required assignment</p>
+                  <span class="rf-status rf-status--success">selected</span>
+                </div>
+              </article>
+            </div>
+            <p>
+              A card becomes interactive only when the entire object leads to
+              one destination or selection. Otherwise, expose explicit actions
+              inside it.
+            </p>
+          </section>
+          <section class="ds-section" id="properties">
+            <h2>Property lists and dividers</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">READ-ONLY OBJECT FACTS</div>
+              <div class="ds-example__stage">
+                <dl class="rf-property-list">
+                  <div>
+                    <dt>SOURCE</dt>
+                    <dd>Order Platform / main@8f24c1a</dd>
+                  </div>
+                  <div>
+                    <dt>VERSION</dt>
+                    <dd>Curriculum v3 · immutable</dd>
+                  </div>
+                  <div>
+                    <dt>PUBLISHED</dt>
+                    <dd>22 Jul 2026 by A. Rivera</dd>
+                  </div>
+                  <div>
+                    <dt>ACCESS</dt>
+                    <dd>
+                      <span class="rf-status rf-status--success"
+                        >permitted</span
+                      >
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+            <p>
+              Property lists present label/value facts. Use a form for editable
+              values and a table when comparing multiple objects.
+            </p>
+          </section>
+          <section class="ds-section" id="empty">
+            <h2>Empty, loading, and restricted states</h2>
+            <div class="ds-grid ds-grid--3">
+              <div class="rf-panel">
+                <div class="rf-empty">
+                  <div>
+                    <strong>No assignments yet</strong>
+                    <p>Your optional library is still available.</p>
+                    <button type="button" class="rf-button">
+                      BROWSE LIBRARY
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="rf-panel">
+                <div class="rf-panel__body ds-stack">
+                  <div class="rf-skeleton" style="width: 35%"></div>
+                  <div class="rf-skeleton"></div>
+                  <div class="rf-skeleton" style="width: 80%"></div>
+                </div>
+              </div>
+              <div class="rf-panel">
+                <div class="rf-empty">
+                  <div>
+                    <strong>Manager access required</strong>
+                    <p>
+                      Aggregate analytics are available to permitted cohort
+                      managers.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Container rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Use panels for structural regions and cards for portable,
+                  repeatable content.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Nest cards more than one level, make every panel rounded, or
+                  hide empty-state recovery.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-01</span
+              ><span class="ds-requirement">LRN-05</span
+              ><span class="ds-requirement">ANL-02</span
+              ><span class="ds-requirement">ADM-02</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

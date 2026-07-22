@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RepoFluent curriculum lifecycle pattern."
+    />
+    <title>Curriculum Lifecycle — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/curriculum-lifecycle">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P07</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span
+            ><strong>curriculum-lifecycle.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P07</p>
+              <h1>Curriculum lifecycle</h1>
+              <p class="ds-hero__lede">
+                Authors move a standardized, agent-produced package through safe
+                upload, deterministic validation, preview, human review,
+                publication, versioning, and retirement.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P07</span>
+          </header>
+          <section class="ds-section" id="lifecycle">
+            <h2>Lifecycle states</h2>
+            <div class="rf-workflow rf-workflow--long">
+              <div class="rf-workflow__node">
+                <strong>DRAFT</strong><small>local package</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>VALIDATE</strong><small>schema + policy</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>REVIEW</strong><small>human approval</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>PUBLISH</strong><small>immutable v4</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>RETIRE</strong><small>history kept</small>
+              </div>
+            </div>
+            <p>
+              Validation and review may return to draft. Published content is
+              never edited in place; a change creates a new version.
+            </p>
+          </section>
+          <section class="ds-section" id="upload">
+            <h2>Upload and processing</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">CURRICULUM INPUT CONTRACT V1</div>
+              <div class="ds-example__stage">
+                <div class="rf-panel">
+                  <div class="rf-panel__header">
+                    UPLOAD PACKAGE
+                    <span class="rf-status rf-status--info">ready</span>
+                  </div>
+                  <div class="rf-panel__body ds-stack">
+                    <label class="rf-field"
+                      ><span class="rf-field__label">Curriculum package</span
+                      ><input
+                        class="rf-input"
+                        type="file"
+                        accept=".zip,.json"
+                      /><span class="rf-field__hint"
+                        >ZIP or JSON · maximum configured tenant size · active
+                        content is rejected</span
+                      ></label
+                    ><label class="rf-check"
+                      ><input type="checkbox" /><span
+                        >I confirm the package contains no secrets, local
+                        absolute paths, or unauthorized source.</span
+                      ></label
+                    >
+                    <div class="ds-row" style="justify-content: flex-end">
+                      <button
+                        type="button"
+                        class="rf-button rf-button--primary"
+                      >
+                        UPLOAD AND VALIDATE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p>
+              After upload, show named processing stages, determinate progress
+              when measurable, a safe error identifier, and a cancel action only
+              while cancellation is safe.
+            </p>
+          </section>
+          <section class="ds-section" id="validation">
+            <h2>Actionable validation</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                VALIDATION RESULT / 2 ERRORS / 1 WARNING
+              </div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div class="rf-callout rf-callout--danger" style="margin: 1rem">
+                  <div>
+                    <strong>Publication blocked</strong>
+                    <p>
+                      Resolve all errors, regenerate the package, and validate
+                      again.
+                    </p>
+                  </div>
+                </div>
+                <div class="rf-table-wrap">
+                  <table class="rf-table">
+                    <thead>
+                      <tr>
+                        <th>SEVERITY</th>
+                        <th>CODE</th>
+                        <th>JSON PATH</th>
+                        <th>MESSAGE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <span class="rf-status rf-status--danger">error</span>
+                        </td>
+                        <td>RF-CUR-1042</td>
+                        <td><code>$.courses[0].id</code></td>
+                        <td>Stable identifier contains spaces.</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span class="rf-status rf-status--danger">error</span>
+                        </td>
+                        <td>RF-SEC-1011</td>
+                        <td><code>$.sources[2].path</code></td>
+                        <td>Absolute local path is not allowed.</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span class="rf-status rf-status--warning"
+                            >warning</span
+                          >
+                        </td>
+                        <td>RF-ASM-2020</td>
+                        <td><code>$.objectives[4]</code></td>
+                        <td>No scored item covers this objective.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <p>
+              Each issue includes stable code, severity, JSON path,
+              plain-language cause, recovery, and documentation link. Warnings
+              never silently become blockers.
+            </p>
+          </section>
+          <section class="ds-section" id="review">
+            <h2>Preview and human review</h2>
+            <div class="ds-grid">
+              <article class="rf-panel">
+                <div class="rf-panel__header">REVIEW CHECKLIST</div>
+                <div class="rf-panel__body ds-stack">
+                  <label class="rf-check"
+                    ><input type="checkbox" checked /><span
+                      >System behavior matches approved sources</span
+                    ></label
+                  ><label class="rf-check"
+                    ><input type="checkbox" checked /><span
+                      >Code references and revision are accurate</span
+                    ></label
+                  ><label class="rf-check"
+                    ><input type="checkbox" /><span
+                      >Assessment coverage and rationale reviewed</span
+                    ></label
+                  ><label class="rf-check"
+                    ><input type="checkbox" /><span
+                      >Accessibility and content safety checked</span
+                    ></label
+                  >
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">VERSION CANDIDATE</div>
+                <div class="rf-panel__body">
+                  <dl class="rf-property-list">
+                    <div>
+                      <dt>PACKAGE</dt>
+                      <dd>order-platform-4.zip</dd>
+                    </div>
+                    <div>
+                      <dt>SOURCE</dt>
+                      <dd>main@ad29e07</dd>
+                    </div>
+                    <div>
+                      <dt>DIFF</dt>
+                      <dd>+2 lessons · 3 updated references</dd>
+                    </div>
+                    <div>
+                      <dt>APPROVERS</dt>
+                      <dd>1 of 2 complete</dd>
+                    </div>
+                  </dl>
+                  <button
+                    type="button"
+                    class="rf-button rf-button--primary rf-button--wide"
+                    disabled
+                  >
+                    PUBLISH VERSION
+                  </button>
+                </div>
+              </article>
+            </div>
+          </section>
+          <section class="ds-section" id="publication">
+            <h2>Publication and retirement</h2>
+            <ul>
+              <li>
+                Publication confirmation names tenant, curriculum, source
+                revision, audience visibility, and the immutable version to
+                create.
+              </li>
+              <li>
+                Learners cannot see drafts or approved-but-unpublished versions.
+                Assignments bind to a specific published version or an explicit
+                policy.
+              </li>
+              <li>
+                Retirement stops future use while preserving prior assignments,
+                progress, attempts, reports, and audit events.
+              </li>
+              <li>
+                Every upload, validation, approval, publication, rejection,
+                export, and retirement records actor and timestamp.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">CUR-01–12</span
+              ><span class="ds-requirement">AGT-01–08</span
+              ><span class="ds-requirement">ADM-02</span
+              ><span class="ds-requirement">IAM-05</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

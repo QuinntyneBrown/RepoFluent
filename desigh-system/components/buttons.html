@@ -1,10 +1,206 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="RepoFluent button components."><title>Buttons — RepoFluent Design System</title><link rel="stylesheet" href="../assets/tokens.css"><link rel="stylesheet" href="../assets/components.css"><link rel="stylesheet" href="../assets/docs.css"><script src="../assets/docs.js" defer></script></head>
-<body data-category="Components" data-page="components/buttons"><a class="ds-skip-link" href="#main-content">Skip to content</a><div class="ds-app"><header class="ds-header" data-ds-header></header><aside class="ds-sidebar" aria-label="Design system sections"><div class="ds-sidebar__head"><span>DESIGN EXPLORER</span><span>C01</span></div><nav class="ds-nav" data-ds-nav></nav></aside><main class="ds-main" id="main-content"><div class="ds-page">
-<div class="ds-breadcrumbs"><a href="../index.html">design-system</a><span>›</span><span>components</span><span>›</span><strong>button.rf</strong></div><header class="ds-hero"><div><p class="ds-eyebrow">Component / C01</p><h1>Buttons</h1><p class="ds-hero__lede">Buttons start immediate actions. Their hierarchy communicates consequence and priority before the learner reads the label.</p></div><span class="ds-page-id">RF-C01</span></header>
-<section class="ds-section" id="variants"><h2>Variants</h2><div class="ds-example"><div class="ds-example__head">DEFAULT STATES</div><div class="ds-example__stage ds-row"><button class="rf-button rf-button--primary" type="button">RESUME SESSION <kbd>↵</kbd></button><button class="rf-button" type="button">SAVE DRAFT</button><button class="rf-button rf-button--ghost" type="button">CANCEL</button><button class="rf-button rf-button--danger" type="button">RETIRE VERSION</button></div></div><table class="ds-token-table"><thead><tr><th>VARIANT</th><th>USE</th><th>LIMIT</th></tr></thead><tbody><tr><td>Primary</td><td>Preferred next action in the current region</td><td>One per action group</td></tr><tr><td>Secondary</td><td>Valid alternative or neutral operation</td><td>May appear in groups</td></tr><tr><td>Ghost</td><td>Dismissal and low-emphasis local action</td><td>Not for destructive action</td></tr><tr><td>Danger</td><td>Destructive or irreversible intent</td><td>Requires consequence language</td></tr></tbody></table></section>
-<section class="ds-section" id="states"><h2>States</h2><div class="ds-example"><div class="ds-example__head">REST / PRESSED / DISABLED / BUSY</div><div class="ds-example__stage ds-row"><button class="rf-button" type="button">DEFAULT</button><button class="rf-button" type="button" aria-pressed="true">PINNED</button><button class="rf-button" type="button" disabled>UNAVAILABLE</button><button class="rf-button" type="button" aria-busy="true"><span class="rf-status rf-status--info">SAVING</span></button></div></div><p>Disabled controls remain discoverable only when the surrounding interface explains why. Prefer an enabled control that validates and explains over a silent disabled action.</p></section>
-<section class="ds-section" id="sizes"><h2>Sizes and icon buttons</h2><div class="ds-example"><div class="ds-example__head">28 / 36 / 44 / ICON</div><div class="ds-example__stage ds-row"><button class="rf-button rf-button--small" type="button">FILTER</button><button class="rf-button" type="button">OPEN LESSON</button><button class="rf-button rf-button--large rf-button--primary" type="button">START ASSESSMENT</button><button class="rf-icon-button" type="button" aria-label="More actions"><svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="4" cy="10" r="1"/><circle cx="10" cy="10" r="1"/><circle cx="16" cy="10" r="1"/></svg></button></div></div><p>Icon-only controls require an accessible name and a tooltip on hover and focus. Small buttons belong inside toolbars with a 44px group target on touch devices.</p></section>
-<section class="ds-section" id="toggles"><h2>Toggle groups</h2><div class="ds-example"><div class="ds-example__head">EXCLUSIVE VIEW MODE</div><div class="ds-example__stage"><div class="rf-toggle-group" data-toggle-group aria-label="Map view"><button class="rf-button" type="button" aria-pressed="true">TOPOLOGY</button><button class="rf-button" type="button" aria-pressed="false">DATA FLOW</button><button class="rf-button" type="button" aria-pressed="false">LEARNING</button></div></div></div><p>Use a toggle group when a view changes in place and every option remains available. Use tabs when each option owns a distinct content panel and keyboard arrow behavior.</p></section>
-<section class="ds-section" id="anatomy"><h2>Anatomy and placement</h2><ol class="ds-anatomy-list"><li>Optional leading icon names the action category.</li><li>Verb-first label describes the immediate result.</li><li>Optional shortcut reinforces keyboard availability.</li><li>Border and fill establish hierarchy and state.</li></ol><div class="ds-do-dont"><div class="ds-do"><strong>DO</strong><p>Use “Publish version,” “Export CSV,” and “Mark complete.”</p></div><div class="ds-dont"><strong>DON'T</strong><p>Use vague labels such as “OK,” “Yes,” “Submit,” or more than one primary action.</p></div></div><div class="ds-requirements"><span class="ds-requirement">LRN-03</span><span class="ds-requirement">ASM-07</span><span class="ds-requirement">ADM-01</span><span class="ds-requirement">9.2 KEYBOARD</span></div></section>
-</div></main><footer class="ds-statusbar" data-ds-status></footer></div></body></html>
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent button components." />
+    <title>Buttons — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/buttons">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C01</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span><strong>button.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C01</p>
+              <h1>Buttons</h1>
+              <p class="ds-hero__lede">
+                Buttons start immediate actions. Their hierarchy communicates
+                consequence and priority before the learner reads the label.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C01</span>
+          </header>
+          <section class="ds-section" id="variants">
+            <h2>Variants</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">DEFAULT STATES</div>
+              <div class="ds-example__stage ds-row">
+                <button class="rf-button rf-button--primary" type="button">
+                  RESUME SESSION <kbd>↵</kbd></button
+                ><button class="rf-button" type="button">SAVE DRAFT</button
+                ><button class="rf-button rf-button--ghost" type="button">
+                  CANCEL</button
+                ><button class="rf-button rf-button--danger" type="button">
+                  RETIRE VERSION
+                </button>
+              </div>
+            </div>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>VARIANT</th>
+                  <th>USE</th>
+                  <th>LIMIT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Primary</td>
+                  <td>Preferred next action in the current region</td>
+                  <td>One per action group</td>
+                </tr>
+                <tr>
+                  <td>Secondary</td>
+                  <td>Valid alternative or neutral operation</td>
+                  <td>May appear in groups</td>
+                </tr>
+                <tr>
+                  <td>Ghost</td>
+                  <td>Dismissal and low-emphasis local action</td>
+                  <td>Not for destructive action</td>
+                </tr>
+                <tr>
+                  <td>Danger</td>
+                  <td>Destructive or irreversible intent</td>
+                  <td>Requires consequence language</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="states">
+            <h2>States</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                REST / PRESSED / DISABLED / BUSY
+              </div>
+              <div class="ds-example__stage ds-row">
+                <button class="rf-button" type="button">DEFAULT</button
+                ><button class="rf-button" type="button" aria-pressed="true">
+                  PINNED</button
+                ><button class="rf-button" type="button" disabled>
+                  UNAVAILABLE</button
+                ><button class="rf-button" type="button" aria-busy="true">
+                  <span class="rf-status rf-status--info">SAVING</span>
+                </button>
+              </div>
+            </div>
+            <p>
+              Disabled controls remain discoverable only when the surrounding
+              interface explains why. Prefer an enabled control that validates
+              and explains over a silent disabled action.
+            </p>
+          </section>
+          <section class="ds-section" id="sizes">
+            <h2>Sizes and icon buttons</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">28 / 36 / 44 / ICON</div>
+              <div class="ds-example__stage ds-row">
+                <button class="rf-button rf-button--small" type="button">
+                  FILTER</button
+                ><button class="rf-button" type="button">OPEN LESSON</button
+                ><button
+                  class="rf-button rf-button--large rf-button--primary"
+                  type="button"
+                >
+                  START ASSESSMENT</button
+                ><button
+                  class="rf-icon-button"
+                  type="button"
+                  aria-label="More actions"
+                >
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <circle cx="4" cy="10" r="1" />
+                    <circle cx="10" cy="10" r="1" />
+                    <circle cx="16" cy="10" r="1" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <p>
+              Icon-only controls require an accessible name and a tooltip on
+              hover and focus. Small buttons belong inside toolbars with a 44px
+              group target on touch devices.
+            </p>
+          </section>
+          <section class="ds-section" id="toggles">
+            <h2>Toggle groups</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">EXCLUSIVE VIEW MODE</div>
+              <div class="ds-example__stage">
+                <div
+                  class="rf-toggle-group"
+                  data-toggle-group
+                  role="group"
+                  aria-label="Map view"
+                >
+                  <button class="rf-button" type="button" aria-pressed="true">
+                    TOPOLOGY</button
+                  ><button class="rf-button" type="button" aria-pressed="false">
+                    DATA FLOW</button
+                  ><button class="rf-button" type="button" aria-pressed="false">
+                    LEARNING
+                  </button>
+                </div>
+              </div>
+            </div>
+            <p>
+              Use a toggle group when a view changes in place and every option
+              remains available. Use tabs when each option owns a distinct
+              content panel and keyboard arrow behavior.
+            </p>
+          </section>
+          <section class="ds-section" id="anatomy">
+            <h2>Anatomy and placement</h2>
+            <ol class="ds-anatomy-list">
+              <li>Optional leading icon names the action category.</li>
+              <li>Verb-first label describes the immediate result.</li>
+              <li>Optional shortcut reinforces keyboard availability.</li>
+              <li>Border and fill establish hierarchy and state.</li>
+            </ol>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>Use “Publish version,” “Export CSV,” and “Mark complete.”</p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Use vague labels such as “OK,” “Yes,” “Submit,” or more than
+                  one primary action.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-03</span
+              ><span class="ds-requirement">ASM-07</span
+              ><span class="ds-requirement">ADM-01</span
+              ><span class="ds-requirement">9.2 KEYBOARD</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

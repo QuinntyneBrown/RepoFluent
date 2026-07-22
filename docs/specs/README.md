@@ -46,7 +46,7 @@ The acceptance criteria retain the requested **GIVE / WHEN / THEN** labels. `GIV
 
 ## Shared quality baseline
 
-All subsystems shall preserve tenant isolation, role-based access, immutable published curriculum evidence, WCAG 2.2 AA behavior for launch-critical flows, safe failure behavior, structured telemetry without sensitive payloads, and the learner-shell performance budgets defined in the PRD. Cross-cutting controls are specified once in their owning subsystem and referenced rather than redefined inconsistently.
+All development and all subsystems shall conform to PRD ENG-01–ENG-03 and the normative [Engineering handbook](https://github.com/QuinntyneBrown/engineering-handbook). They shall also preserve tenant isolation, role-based access, immutable published curriculum evidence, WCAG 2.2 AA behavior for launch-critical flows, safe failure behavior, structured telemetry without sensitive payloads, and the learner-shell performance budgets defined in the PRD. Cross-cutting controls are specified once in their owning subsystem and referenced rather than redefined inconsistently.
 
 ## Open decisions before baseline approval
 
@@ -69,4 +69,4 @@ The specifications deliberately do not invent answers to PRD section 18. The fol
 
 ## Baseline approval criteria
 
-A subsystem specification is ready for baseline approval when its open decisions are resolved or explicitly deferred, L1 owners and priorities are accepted, every L2 traces to an approved L1, acceptance criteria are testable in an agreed environment, cross-subsystem dependencies have owners, and security/privacy/accessibility/operational reviewers have approved the applicable controls.
+A subsystem specification is ready for baseline approval when its open decisions are resolved or explicitly deferred, L1 owners and priorities are accepted, every L2 traces to an approved L1, acceptance criteria are testable in an agreed environment, cross-subsystem dependencies have owners, handbook conformance and any documented specializations have been reviewed, and security/privacy/accessibility/operational reviewers have approved the applicable controls.

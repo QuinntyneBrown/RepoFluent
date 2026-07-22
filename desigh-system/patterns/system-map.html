@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent system map pattern." />
+    <title>System Map — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/system-map">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P04</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span
+            ><strong>system-map.graph</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P04</p>
+              <h1>System map</h1>
+              <p class="ds-hero__lede">
+                The map relates systems, subsystems, data stores, events, and
+                external dependencies to learning content and code—without
+                making spatial rendering a prerequisite.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P04</span>
+          </header>
+          <section class="ds-section" id="canvas">
+            <h2>Canvas and inspector</h2>
+            <div class="ds-example" data-graph-demo>
+              <div class="ds-example__head">
+                ORDER PROCESSING / SELECT A NODE
+              </div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: minmax(30rem, 1fr) 20rem;
+                  "
+                >
+                  <div class="rf-graph">
+                    <button
+                      type="button"
+                      class="rf-graph__node"
+                      data-graph-node
+                      aria-pressed="false"
+                      data-kind="EXPERIENCE_LAYER"
+                      data-title="Storefront"
+                      data-description="Collects the cart and submits checkout."
+                      style="left: 5%; top: 44%"
+                    >
+                      <small>ANGULAR</small><strong>Storefront</strong></button
+                    ><button
+                      type="button"
+                      class="rf-graph__node"
+                      data-graph-node
+                      aria-pressed="true"
+                      data-kind="CORE_SERVICE"
+                      data-title="Order API"
+                      data-description="Validates order commands, persists intent, and publishes the workflow event."
+                      style="left: 34%; top: 24%"
+                    >
+                      <small>HTTP</small><strong>Order API</strong></button
+                    ><button
+                      type="button"
+                      class="rf-graph__node"
+                      data-graph-node
+                      aria-pressed="false"
+                      data-kind="DATA_STORE"
+                      data-title="Orders DB"
+                      data-description="Stores the durable order and its state transitions."
+                      style="left: 34%; top: 64%"
+                    >
+                      <small>SQL</small><strong>Orders DB</strong></button
+                    ><button
+                      type="button"
+                      class="rf-graph__node"
+                      data-graph-node
+                      aria-pressed="false"
+                      data-kind="PLATFORM"
+                      data-title="Message bus"
+                      data-description="Carries durable domain events to retryable workers."
+                      style="left: 66%; top: 44%"
+                    >
+                      <small>EVENT</small><strong>Message bus</strong>
+                    </button>
+                  </div>
+                  <aside
+                    class="rf-panel"
+                    aria-label="System node inspector example"
+                    style="border-width: 0 0 0 1px"
+                  >
+                    <div class="rf-panel__header">
+                      NODE_INSPECTOR <span>02/07</span>
+                    </div>
+                    <div class="rf-panel__body" data-graph-inspector>
+                      <small data-node-kind>CORE_SERVICE</small>
+                      <h2 data-node-title>Order API</h2>
+                      <p data-node-description>
+                        Validates order commands, persists intent, and publishes
+                        the workflow event.
+                      </p>
+                      <dl class="rf-property-list">
+                        <div>
+                          <dt>RUNTIME</dt>
+                          <dd>ASP.NET Core</dd>
+                        </div>
+                        <div>
+                          <dt>LEARNING</dt>
+                          <dd>3 lessons</dd>
+                        </div>
+                        <div>
+                          <dt>MASTERY</dt>
+                          <dd>88%</dd>
+                        </div>
+                      </dl>
+                      <button
+                        type="button"
+                        class="rf-button rf-button--primary rf-button--wide"
+                      >
+                        OPEN RELATED LESSON
+                      </button>
+                    </div>
+                  </aside>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="modes">
+            <h2>View modes and selection</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>MODE</th>
+                  <th>QUESTION</th>
+                  <th>ENCODING</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Topology</td>
+                  <td>What exists and how is it connected?</td>
+                  <td>Node kind, ownership, directional edge</td>
+                </tr>
+                <tr>
+                  <td>Data flow</td>
+                  <td>What moves across each boundary?</td>
+                  <td>Protocol, command/event/data labels, direction</td>
+                </tr>
+                <tr>
+                  <td>Learning</td>
+                  <td>Where is assigned content and demonstrated mastery?</td>
+                  <td>Lesson count, completion, objective coverage</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              Only one node is selected. Focus may move independently. The
+              inspector updates after selection and announces the node title
+              through a polite live region.
+            </p>
+          </section>
+          <section class="ds-section" id="table">
+            <h2>Accessible relationship table</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <caption>
+                  Relationships in the order processing system map
+                </caption>
+                <thead>
+                  <tr>
+                    <th>FROM</th>
+                    <th>TO</th>
+                    <th>RELATIONSHIP</th>
+                    <th>LEARNING</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Storefront</td>
+                    <td>Order API</td>
+                    <td>HTTPS · POST /orders</td>
+                    <td>2 lessons</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Order API</td>
+                    <td>Orders DB</td>
+                    <td>EF Core · writes order</td>
+                    <td>1 lesson</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Order API</td>
+                    <td>Message bus</td>
+                    <td>Publishes OrderSubmitted</td>
+                    <td>2 lessons</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Message bus</td>
+                    <td>Order Processor</td>
+                    <td>Consumes OrderSubmitted</td>
+                    <td>4 lessons</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              The table contains every visible relationship, uses the same
+              filters and selected system, and supports direct navigation to
+              permitted details.
+            </p>
+          </section>
+          <section class="ds-section" id="interaction">
+            <h2>Interaction and fallback</h2>
+            <ul>
+              <li>
+                Arrow keys move spatially among nodes; Tab reaches toolbar,
+                canvas, inspector, table, and related actions.
+              </li>
+              <li>
+                Zoom never changes semantic selection. “Fit graph” restores the
+                full topology. Pan and zoom controls are labeled.
+              </li>
+              <li>
+                WebGPU may add ambient depth or large-graph performance, but
+                initial content, selection, inspector, and table render without
+                it.
+              </li>
+              <li>
+                On phone, nodes become an ordered list grouped by layer and the
+                inspector follows selection; the relationship table remains
+                available.
+              </li>
+              <li>
+                Large graphs progressively load or cluster while preserving
+                search and the full accessible relationship model.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-05</span
+              ><span class="ds-requirement">CODE-07</span
+              ><span class="ds-requirement">9.1 WEBGPU</span
+              ><span class="ds-requirement">9.2 COMPANION</span
+              ><span class="ds-requirement">9.3 LARGE DATA</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

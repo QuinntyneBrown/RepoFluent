@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent table components." />
+    <title>Tables — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/tables">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C08</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span><strong>table.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C08</p>
+              <h1>Tables</h1>
+              <p class="ds-hero__lede">
+                Tables support scanning, comparison, selection, and drill-down
+                across assignments, learners, validation issues, attempts,
+                versions, and audit events.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C08</span>
+          </header>
+          <section class="ds-section" id="anatomy">
+            <h2>Data table anatomy</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">ASSIGNMENT QUEUE / 2 RESULTS</div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div class="rf-table-wrap">
+                  <table class="rf-table">
+                    <caption class="rf-visually-hidden">
+                      Upcoming learner assignments
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">TYPE</th>
+                        <th scope="col">ITEM</th>
+                        <th scope="col">DUE</th>
+                        <th scope="col">STATUS</th>
+                        <th scope="col">
+                          <span class="rf-visually-hidden">Actions</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr aria-selected="true">
+                        <td><span class="rf-badge">TEST</span></td>
+                        <td>
+                          <span class="rf-table__primary"
+                            >Order lifecycle quiz</span
+                          ><br /><small>8 questions · 10 min</small>
+                        </td>
+                        <td><time datetime="2026-07-24">JUL 24</time></td>
+                        <td>
+                          <span class="rf-status rf-status--warning"
+                            >due soon</span
+                          >
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            class="rf-icon-button rf-button--ghost"
+                            aria-label="Actions for Order lifecycle quiz"
+                          >
+                            •••
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><span class="rf-badge">COURSE</span></td>
+                        <td>
+                          <span class="rf-table__primary"
+                            >Resilient messaging</span
+                          ><br /><small>3 lessons · 45 min</small>
+                        </td>
+                        <td><time datetime="2026-07-29">JUL 29</time></td>
+                        <td><span class="rf-status">queued</span></td>
+                        <td>
+                          <button
+                            type="button"
+                            class="rf-icon-button rf-button--ghost"
+                            aria-label="Actions for Resilient messaging"
+                          >
+                            •••
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="interaction">
+            <h2>Sorting, filtering, and selection</h2>
+            <ul>
+              <li>
+                Sortable headers use a button with the current direction
+                announced through <code>aria-sort</code>.
+              </li>
+              <li>
+                Filters appear above the table, show active criteria as
+                removable chips, and announce the new result count.
+              </li>
+              <li>
+                Row selection is separate from row navigation. Use checkboxes
+                for multi-select and an explicit primary link for drill-down.
+              </li>
+              <li>
+                Keep bulk actions disabled until selection exists, then announce
+                how many records they affect.
+              </li>
+            </ul>
+            <div class="ds-example">
+              <div class="ds-example__head">FILTER AND BULK-ACTION BAR</div>
+              <div class="ds-example__stage">
+                <div class="rf-toolbar">
+                  <button type="button" class="rf-button rf-button--small">
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <path d="M3 4h14l-5.5 6v5l-3 2v-7L3 4Z" /></svg
+                    >FILTERS · 2</button
+                  ><span class="rf-badge">STATUS: IN PROGRESS ×</span
+                  ><span class="rf-badge">TEAM: CHECKOUT ×</span
+                  ><span class="rf-toolbar__spacer"></span
+                  ><span>3 selected</span
+                  ><button type="button" class="rf-button rf-button--small">
+                    ASSIGN
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="states">
+            <h2>Loading, empty, and error</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>STATE</th>
+                  <th>PLACEMENT</th>
+                  <th>RECOVERY</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Initial loading</td>
+                  <td>Skeleton rows retain columns</td>
+                  <td>Announce “Loading [table name]”</td>
+                </tr>
+                <tr>
+                  <td>No records</td>
+                  <td>Single full-width empty row</td>
+                  <td>Offer creation or explain why none exist</td>
+                </tr>
+                <tr>
+                  <td>No filter matches</td>
+                  <td>Empty row plus active criteria</td>
+                  <td>Clear all filters</td>
+                </tr>
+                <tr>
+                  <td>Load failed</td>
+                  <td>Full-width error row</td>
+                  <td>Error identifier + retry</td>
+                </tr>
+                <tr>
+                  <td>Restricted aggregate</td>
+                  <td>Cell or table notice</td>
+                  <td>Explain minimum-group rule without leaking count</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="responsive">
+            <h2>Pagination and responsive behavior</h2>
+            <ul>
+              <li>
+                Paginate server-backed records; virtualize only when selection
+                and assistive-technology behavior remain predictable.
+              </li>
+              <li>
+                Keep identity and primary state columns sticky on wide tables;
+                allow horizontal scrolling inside the table region.
+              </li>
+              <li>
+                On phones, transform only simple two- or three-column tables
+                into labeled records. Preserve true comparison tables as
+                scrollable tables.
+              </li>
+              <li>
+                Exports reflect active filters and authorized columns, and label
+                the population, time window, and curriculum version.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">ANL-03</span
+              ><span class="ds-requirement">ANL-06</span
+              ><span class="ds-requirement">ANL-07</span
+              ><span class="ds-requirement">ADM-01</span
+              ><span class="ds-requirement">9.3 PAGINATION</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

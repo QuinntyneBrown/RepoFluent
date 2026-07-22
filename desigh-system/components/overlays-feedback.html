@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent overlays and feedback." />
+    <title>Overlays &amp; Feedback — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/overlays-feedback">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C10</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span
+            ><strong>overlays-feedback.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C10</p>
+              <h1>Overlays &amp; feedback</h1>
+              <p class="ds-hero__lede">
+                Feedback stays close to its cause. Dialogs interrupt only when a
+                decision must be made before work can safely continue.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C10</span>
+          </header>
+          <section class="ds-section" id="callouts">
+            <h2>Inline notices</h2>
+            <div class="ds-stack">
+              <div class="rf-callout">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <circle cx="10" cy="10" r="7" />
+                  <path d="M10 9v5M10 6h.01" />
+                </svg>
+                <div>
+                  <strong>Source snapshot</strong>
+                  <p>This excerpt is bound to main@8f24c1a.</p>
+                </div>
+              </div>
+              <div class="rf-callout rf-callout--success">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="m4 10 4 4 8-8" />
+                </svg>
+                <div>
+                  <strong>Validation passed</strong>
+                  <p>Package v4 is ready for human review.</p>
+                </div>
+              </div>
+              <div class="rf-callout rf-callout--warning">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="m10 3 8 14H2L10 3Z" />
+                  <path d="M10 8v4M10 14h.01" />
+                </svg>
+                <div>
+                  <strong>Reference may be stale</strong>
+                  <p>
+                    The current repository revision differs from this curriculum
+                    snapshot.
+                  </p>
+                </div>
+              </div>
+              <div class="rf-callout rf-callout--danger">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <circle cx="10" cy="10" r="7" />
+                  <path d="m7.5 7.5 5 5M12.5 7.5l-5 5" />
+                </svg>
+                <div>
+                  <strong>Import blocked</strong>
+                  <p>
+                    Fix 3 schema errors before requesting review. Error ID
+                    RF-CUR-1042.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="dialog">
+            <h2>Dialog anatomy</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                DESTRUCTIVE CONFIRMATION / LIVE DEMO
+              </div>
+              <div class="ds-example__stage">
+                <button
+                  class="rf-button rf-button--danger"
+                  type="button"
+                  data-dialog-open="retire-dialog"
+                >
+                  RETIRE VERSION
+                </button>
+              </div>
+            </div>
+            <div class="rf-dialog-backdrop" id="retire-dialog" hidden>
+              <section
+                class="rf-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="retire-title"
+                aria-describedby="retire-description"
+              >
+                <header class="rf-dialog__header">
+                  <h2 id="retire-title">Retire curriculum v3?</h2>
+                  <button
+                    type="button"
+                    class="rf-icon-button rf-button--ghost"
+                    data-dialog-close
+                    aria-label="Close dialog"
+                  >
+                    ×
+                  </button>
+                </header>
+                <div class="rf-dialog__body">
+                  <p id="retire-description">
+                    New assignments will stop using v3. Existing completion and
+                    assessment evidence remains unchanged and auditable.
+                  </p>
+                  <label class="rf-check"
+                    ><input type="checkbox" />I understand this affects future
+                    assignments.</label
+                  >
+                </div>
+                <footer class="rf-dialog__footer">
+                  <button
+                    type="button"
+                    class="rf-button rf-button--ghost"
+                    data-dialog-close
+                  >
+                    CANCEL</button
+                  ><button
+                    type="button"
+                    class="rf-button rf-button--danger"
+                    data-dialog-close
+                    data-toast="CURRICULUM V3 RETIRED"
+                  >
+                    RETIRE VERSION
+                  </button>
+                </footer>
+              </section>
+            </div>
+            <ol class="ds-anatomy-list">
+              <li>Title names the exact decision or consequence.</li>
+              <li>Description states impact, preservation, and recovery.</li>
+              <li>Close and Cancel both restore focus to the trigger.</li>
+              <li>
+                Actions put safe dismissal before destructive confirmation.
+              </li>
+            </ol>
+          </section>
+          <section class="ds-section" id="toast">
+            <h2>Toasts and announcements</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">NON-BLOCKING CONFIRMATION</div>
+              <div class="ds-example__stage ds-row">
+                <button
+                  type="button"
+                  class="rf-button rf-button--primary"
+                  data-toast="PROGRESS SAVED: LESSON 04 COMPLETE"
+                >
+                  MARK COMPLETE
+                </button>
+                <div class="rf-toast">✓ PROGRESS_SAVED: LESSON_04 COMPLETE</div>
+              </div>
+            </div>
+            <p>
+              Toasts confirm an action that already succeeded; they do not
+              contain the only copy of critical information or essential
+              recovery. Use a polite live region.
+            </p>
+          </section>
+          <section class="ds-section" id="tooltips">
+            <h2>Tooltips</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">SUPPLEMENTAL LABEL</div>
+              <div class="ds-example__stage ds-row">
+                <button
+                  type="button"
+                  class="rf-icon-button"
+                  aria-label="Copy source link"
+                >
+                  <svg class="rf-icon" viewBox="0 0 20 20">
+                    <rect x="6" y="6" width="10" height="10" />
+                    <path d="M13 6V3H3v10h3" />
+                  </svg></button
+                ><span class="rf-tooltip" role="tooltip">Copy source link</span>
+              </div>
+            </div>
+            <p>
+              Tooltips appear on hover and focus after a short delay, remain
+              under pointer movement, and contain only a concise label or
+              shortcut—not required instructions.
+            </p>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Overlay rules</h2>
+            <ul>
+              <li>
+                Allow only one modal layer. A menu or tooltip closes before its
+                parent dialog closes.
+              </li>
+              <li>
+                Trap focus within a modal dialog; inert the background; close
+                with Escape unless work would be lost.
+              </li>
+              <li>
+                Use a full-page state for complex multi-step work instead of a
+                very large dialog.
+              </li>
+              <li>
+                Associate field-level errors with fields and reserve banners for
+                page- or workflow-level conditions.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-03</span
+              ><span class="ds-requirement">CODE-04</span
+              ><span class="ds-requirement">CUR-VALIDATION</span
+              ><span class="ds-requirement">ADM-03</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

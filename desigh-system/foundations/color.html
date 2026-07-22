@@ -1,17 +1,278 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="RepoFluent color foundations."><title>Color — RepoFluent Design System</title><link rel="stylesheet" href="../assets/tokens.css"><link rel="stylesheet" href="../assets/components.css"><link rel="stylesheet" href="../assets/docs.css"><script src="../assets/docs.js" defer></script></head>
-<body data-category="Foundations" data-page="foundations/color"><a class="ds-skip-link" href="#main-content">Skip to content</a><div class="ds-app"><header class="ds-header" data-ds-header></header><aside class="ds-sidebar" aria-label="Design system sections"><div class="ds-sidebar__head"><span>DESIGN EXPLORER</span><span>F01</span></div><nav class="ds-nav" data-ds-nav></nav></aside><main class="ds-main" id="main-content"><div class="ds-page">
-  <div class="ds-breadcrumbs"><a href="../index.html">design-system</a><span>›</span><span>foundations</span><span>›</span><strong>color.css</strong></div>
-  <header class="ds-hero"><div><p class="ds-eyebrow">Foundation / F01</p><h1>Color</h1><p class="ds-hero__lede">A low-luminance workspace with precise semantic accents. Color clarifies interaction, health, risk, and data relationships; it never carries meaning alone.</p></div><span class="ds-page-id">RF-F01</span></header>
-  <section class="ds-section" id="surfaces"><h2>Surfaces</h2><p>Five dark layers establish hierarchy primarily through boundaries. Avoid stacking shadows where a one-pixel line communicates the relationship.</p><table class="ds-token-table"><thead><tr><th>Token</th><th>Sample</th><th>Value</th><th>Use</th><th></th></tr></thead><tbody>
-    <tr><td><code>--rf-color-void</code></td><td><i class="ds-swatch" style="background:#070a0e"></i></td><td>#070a0e</td><td>Title bars, code canvases, deep backdrops</td><td><button class="ds-copy-button" data-copy="var(--rf-color-void)">COPY</button></td></tr>
-    <tr><td><code>--rf-color-canvas</code></td><td><i class="ds-swatch" style="background:#090d12"></i></td><td>#090d12</td><td>Primary application canvas</td><td><button class="ds-copy-button" data-copy="var(--rf-color-canvas)">COPY</button></td></tr>
-    <tr><td><code>--rf-color-surface-1</code></td><td><i class="ds-swatch" style="background:#0e141b"></i></td><td>#0e141b</td><td>Sidebars, panels, default cards</td><td><button class="ds-copy-button" data-copy="var(--rf-color-surface-1)">COPY</button></td></tr>
-    <tr><td><code>--rf-color-surface-2</code></td><td><i class="ds-swatch" style="background:#121a23"></i></td><td>#121a23</td><td>Raised cards, menus, dialogs</td><td><button class="ds-copy-button" data-copy="var(--rf-color-surface-2)">COPY</button></td></tr>
-    <tr><td><code>--rf-color-surface-3</code></td><td><i class="ds-swatch" style="background:#18222d"></i></td><td>#18222d</td><td>Controls and highest local surfaces</td><td><button class="ds-copy-button" data-copy="var(--rf-color-surface-3)">COPY</button></td></tr>
-  </tbody></table></section>
-  <section class="ds-section" id="ink"><h2>Ink and borders</h2><div class="ds-example"><div class="ds-example__head">TEXT HIERARCHY</div><div class="ds-example__stage ds-stack"><strong style="color:var(--rf-color-ink-strong);font-size:1.25rem">Strong ink · page and decision titles</strong><span style="color:var(--rf-color-ink)">Default ink · primary labels and prose</span><span style="color:var(--rf-color-ink-muted)">Muted ink · supporting content</span><span style="color:var(--rf-color-ink-subtle)">Subtle ink · metadata and timestamps</span><span style="color:var(--rf-color-ink-disabled)">Disabled ink · unavailable controls only</span></div></div><p>Body text uses <code>ink</code> or <code>ink-muted</code>. Disabled ink is not permitted for essential instructions, error recovery, or status.</p></section>
-  <section class="ds-section" id="semantic"><h2>Semantic accents</h2><div class="ds-grid ds-grid--4"><div class="rf-callout rf-callout--success"><div><strong>PRIMARY / SUCCESS</strong><p>#4de094 · action, complete, verified</p></div></div><div class="rf-callout"><div><strong>INFO / FOCUS</strong><p>#52c7e8 · focus and context</p></div></div><div class="rf-callout rf-callout--warning"><div><strong>WARNING</strong><p>#f2b760 · overdue, stale, caution</p></div></div><div class="rf-callout rf-callout--danger"><div><strong>DANGER</strong><p>#f07676 · failed, blocked, destructive</p></div></div></div><div class="ds-do-dont"><div class="ds-do"><strong>DO</strong><p>Pair every semantic color with an icon, label, state word, or structural change.</p></div><div class="ds-dont"><strong>DON'T</strong><p>Use green to decorate neutral content or red merely to make an element prominent.</p></div></div></section>
-  <section class="ds-section" id="charts"><h2>Chart palette</h2><p>Series receive fixed slots in order. Do not recycle a slot within one visualization, and keep warning/danger colors out of categorical charts unless they encode those states.</p><div class="ds-example"><div class="ds-example__head">CATEGORICAL SLOTS / 01–08</div><div class="ds-example__stage ds-grid ds-grid--4"><span style="height:4rem;background:var(--rf-chart-1)"></span><span style="height:4rem;background:var(--rf-chart-2)"></span><span style="height:4rem;background:var(--rf-chart-3)"></span><span style="height:4rem;background:var(--rf-chart-4)"></span><span style="height:4rem;background:var(--rf-chart-5)"></span><span style="height:4rem;background:var(--rf-chart-6)"></span><span style="height:4rem;background:var(--rf-chart-7)"></span><span style="height:4rem;background:var(--rf-chart-8)"></span></div></div></section>
-  <section class="ds-section" id="accessibility"><h2>Contrast contract</h2><ul><li>Normal text targets at least 4.5:1 against every supported surface; large text targets 3:1.</li><li>Focus indicators and essential control boundaries target at least 3:1 against adjacent colors.</li><li>State fills use their matching dark background and retain a written state label.</li><li>Charts provide labels, patterns or shapes where series distinction is essential, plus an equivalent table.</li></ul><div class="ds-requirements"><span class="ds-requirement">9.1 VISUAL SYSTEM</span><span class="ds-requirement">9.2 ACCESSIBILITY</span><span class="ds-requirement">ANL-04</span><span class="ds-requirement">ADM-05</span></div></section>
-</div></main><footer class="ds-statusbar" data-ds-status></footer></div></body></html>
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent color foundations." />
+    <title>Color — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Foundations" data-page="foundations/color">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>F01</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>foundations</span><span>›</span><strong>color.css</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Foundation / F01</p>
+              <h1>Color</h1>
+              <p class="ds-hero__lede">
+                A low-luminance workspace with precise semantic accents. Color
+                clarifies interaction, health, risk, and data relationships; it
+                never carries meaning alone.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-F01</span>
+          </header>
+          <section class="ds-section" id="surfaces">
+            <h2>Surfaces</h2>
+            <p>
+              Five dark layers establish hierarchy primarily through boundaries.
+              Avoid stacking shadows where a one-pixel line communicates the
+              relationship.
+            </p>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Sample</th>
+                  <th>Value</th>
+                  <th>Use</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--rf-color-void</code></td>
+                  <td><i class="ds-swatch" style="background: #070a0e"></i></td>
+                  <td>#070a0e</td>
+                  <td>Title bars, code canvases, deep backdrops</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="ds-copy-button"
+                      data-copy="var(--rf-color-void)"
+                    >
+                      COPY
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--rf-color-canvas</code></td>
+                  <td><i class="ds-swatch" style="background: #090d12"></i></td>
+                  <td>#090d12</td>
+                  <td>Primary application canvas</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="ds-copy-button"
+                      data-copy="var(--rf-color-canvas)"
+                    >
+                      COPY
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--rf-color-surface-1</code></td>
+                  <td><i class="ds-swatch" style="background: #0e141b"></i></td>
+                  <td>#0e141b</td>
+                  <td>Sidebars, panels, default cards</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="ds-copy-button"
+                      data-copy="var(--rf-color-surface-1)"
+                    >
+                      COPY
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--rf-color-surface-2</code></td>
+                  <td><i class="ds-swatch" style="background: #121a23"></i></td>
+                  <td>#121a23</td>
+                  <td>Raised cards, menus, dialogs</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="ds-copy-button"
+                      data-copy="var(--rf-color-surface-2)"
+                    >
+                      COPY
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>--rf-color-surface-3</code></td>
+                  <td><i class="ds-swatch" style="background: #18222d"></i></td>
+                  <td>#18222d</td>
+                  <td>Controls and highest local surfaces</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="ds-copy-button"
+                      data-copy="var(--rf-color-surface-3)"
+                    >
+                      COPY
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="ink">
+            <h2>Ink and borders</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">TEXT HIERARCHY</div>
+              <div class="ds-example__stage ds-stack">
+                <strong
+                  style="color: var(--rf-color-ink-strong); font-size: 1.25rem"
+                  >Strong ink · page and decision titles</strong
+                ><span style="color: var(--rf-color-ink)"
+                  >Default ink · primary labels and prose</span
+                ><span style="color: var(--rf-color-ink-muted)"
+                  >Muted ink · supporting content</span
+                ><span style="color: var(--rf-color-ink-subtle)"
+                  >Subtle ink · metadata and timestamps</span
+                ><span style="color: var(--rf-color-ink-disabled)"
+                  >Disabled ink · unavailable controls only</span
+                >
+              </div>
+            </div>
+            <p>
+              Body text uses <code>ink</code> or <code>ink-muted</code>.
+              Disabled ink is not permitted for essential instructions, error
+              recovery, or status.
+            </p>
+          </section>
+          <section class="ds-section" id="semantic">
+            <h2>Semantic accents</h2>
+            <div class="ds-grid ds-grid--4">
+              <div class="rf-callout rf-callout--success">
+                <div>
+                  <strong>PRIMARY / SUCCESS</strong>
+                  <p>#4de094 · action, complete, verified</p>
+                </div>
+              </div>
+              <div class="rf-callout">
+                <div>
+                  <strong>INFO / FOCUS</strong>
+                  <p>#52c7e8 · focus and context</p>
+                </div>
+              </div>
+              <div class="rf-callout rf-callout--warning">
+                <div>
+                  <strong>WARNING</strong>
+                  <p>#f2b760 · overdue, stale, caution</p>
+                </div>
+              </div>
+              <div class="rf-callout rf-callout--danger">
+                <div>
+                  <strong>DANGER</strong>
+                  <p>#f07676 · failed, blocked, destructive</p>
+                </div>
+              </div>
+            </div>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Pair every semantic color with an icon, label, state word, or
+                  structural change.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Use green to decorate neutral content or red merely to make an
+                  element prominent.
+                </p>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="charts">
+            <h2>Chart palette</h2>
+            <p>
+              Series receive fixed slots in order. Do not recycle a slot within
+              one visualization, and keep warning/danger colors out of
+              categorical charts unless they encode those states.
+            </p>
+            <div class="ds-example">
+              <div class="ds-example__head">CATEGORICAL SLOTS / 01–08</div>
+              <div class="ds-example__stage ds-grid ds-grid--4">
+                <span style="height: 4rem; background: var(--rf-chart-1)"></span
+                ><span
+                  style="height: 4rem; background: var(--rf-chart-2)"
+                ></span
+                ><span
+                  style="height: 4rem; background: var(--rf-chart-3)"
+                ></span
+                ><span
+                  style="height: 4rem; background: var(--rf-chart-4)"
+                ></span
+                ><span
+                  style="height: 4rem; background: var(--rf-chart-5)"
+                ></span
+                ><span
+                  style="height: 4rem; background: var(--rf-chart-6)"
+                ></span
+                ><span
+                  style="height: 4rem; background: var(--rf-chart-7)"
+                ></span
+                ><span
+                  style="height: 4rem; background: var(--rf-chart-8)"
+                ></span>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="accessibility">
+            <h2>Contrast contract</h2>
+            <ul>
+              <li>
+                Normal text targets at least 4.5:1 against every supported
+                surface; large text targets 3:1.
+              </li>
+              <li>
+                Focus indicators and essential control boundaries target at
+                least 3:1 against adjacent colors.
+              </li>
+              <li>
+                State fills use their matching dark background and retain a
+                written state label.
+              </li>
+              <li>
+                Charts provide labels, patterns or shapes where series
+                distinction is essential, plus an equivalent table.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">9.1 VISUAL SYSTEM</span
+              ><span class="ds-requirement">9.2 ACCESSIBILITY</span
+              ><span class="ds-requirement">ANL-04</span
+              ><span class="ds-requirement">ADM-05</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

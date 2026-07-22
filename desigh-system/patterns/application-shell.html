@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent application shell pattern." />
+    <title>Application Shell — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/application-shell">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P01</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span
+            ><strong>application-shell.graph</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P01</p>
+              <h1>Application shell</h1>
+              <p class="ds-hero__lede">
+                The Code Command frame preserves location, workspace, open
+                views, and operational status while adapting from a multi-pane
+                workstation to a single-column phone flow.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P01</span>
+          </header>
+          <section class="ds-section" id="frame">
+            <h2>The frame</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                WIDE WORKSTATION / FIVE REGIONS
+              </div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div class="rf-mini-shell">
+                  <div
+                    class="rf-mini-shell__title"
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 0.5rem;
+                      padding: 0.25rem 0.5rem;
+                    "
+                  >
+                    <span class="rf-brand__mark">RF</span
+                    ><strong>RepoFluent</strong>
+                    <div
+                      class="rf-command-trigger"
+                      style="width: 45%; margin: auto"
+                    >
+                      <span>Search curriculum, code, systems…</span
+                      ><kbd>Ctrl K</kbd>
+                    </div>
+                    <span class="rf-status rf-status--success">synced</span>
+                  </div>
+                  <nav
+                    class="rf-mini-shell__activity"
+                    aria-label="Primary"
+                    style="
+                      display: grid;
+                      align-content: start;
+                      place-items: center;
+                      gap: 0.5rem;
+                      padding: 0.5rem 0;
+                    "
+                  >
+                    <span style="color: var(--rf-color-primary)">⌂</span
+                    ><span>▤</span><span>◇</span>
+                  </nav>
+                  <aside
+                    class="rf-mini-shell__sidebar"
+                    aria-label="Learning explorer example"
+                  >
+                    <div class="rf-panel__header">LEARNING EXPLORER</div>
+                    <ul class="rf-tree">
+                      <li>
+                        <span class="rf-tree__item" aria-current="page"
+                          >dashboard.rf</span
+                        >
+                      </li>
+                      <li>
+                        <details open>
+                          <summary>⌄ foundations</summary>
+                          <ul>
+                            <li>
+                              <span class="rf-tree__item"
+                                >order-workflow.md</span
+                              >
+                            </li>
+                            <li>
+                              <span class="rf-tree__item"
+                                >knowledge-check.test</span
+                              >
+                            </li>
+                          </ul>
+                        </details>
+                      </li>
+                    </ul>
+                  </aside>
+                  <div class="rf-mini-shell__main">
+                    <div class="rf-tabs">
+                      <span class="rf-tab" aria-selected="true"
+                        >dashboard.rf</span
+                      ><span class="rf-tab">order-workflow.md</span>
+                    </div>
+                    <div class="rf-breadcrumbs">
+                      order-platform › learning › <strong>dashboard.rf</strong>
+                    </div>
+                    <div class="rf-empty">
+                      <div>
+                        <strong>Workbench</strong>
+                        <p>
+                          Route content, split panes, inspectors, and overlays
+                          render here.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <footer class="rf-mini-shell__status"></footer>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="regions">
+            <h2>Region responsibilities and sizes</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>REGION</th>
+                  <th>DEFAULT</th>
+                  <th>OWNS</th>
+                  <th>NEVER OWNS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Titlebar</td>
+                  <td>42px high</td>
+                  <td>Brand, global search, sync, account</td>
+                  <td>Local view actions</td>
+                </tr>
+                <tr>
+                  <td>Activity bar</td>
+                  <td>48px wide</td>
+                  <td>Primary product destinations</td>
+                  <td>Curriculum hierarchy</td>
+                </tr>
+                <tr>
+                  <td>Sidebar</td>
+                  <td>238px wide</td>
+                  <td>Current workspace tree and progress</td>
+                  <td>Global account state</td>
+                </tr>
+                <tr>
+                  <td>Workbench</td>
+                  <td>Flexible</td>
+                  <td>Page, tabs, split panes, inspector</td>
+                  <td>Persistent global status</td>
+                </tr>
+                <tr>
+                  <td>Statusbar</td>
+                  <td>22px high</td>
+                  <td>Environment, errors, version, encoding</td>
+                  <td>Blocking alerts</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="routing">
+            <h2>Routing and context</h2>
+            <ul>
+              <li>
+                Every primary document has a stable, shareable URL scoped to
+                tenant, curriculum version, and permitted object.
+              </li>
+              <li>
+                Tabs reflect open work but do not replace browser history.
+                Back/forward restores the prior route and selection.
+              </li>
+              <li>
+                Deep links restore the closest available workspace state and
+                explain missing permission, retired version, or stale source.
+              </li>
+              <li>
+                Split-pane widths and sidebar collapse may persist per user;
+                critical content order remains encoded in the DOM.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="responsive">
+            <h2>Device classes</h2>
+            <div class="ds-grid ds-grid--3">
+              <article class="rf-card">
+                <div class="rf-card__header">WIDE / ≥1024</div>
+                <div class="rf-card__body">
+                  Persistent titlebar, activity bar, sidebar, tabs, statusbar,
+                  and available split panes.
+                </div>
+              </article>
+              <article class="rf-card">
+                <div class="rf-card__header">COMPACT / 768–1023</div>
+                <div class="rf-card__body">
+                  Collapsible sidebar. Inspectors may stack below content while
+                  open tabs remain scrollable.
+                </div>
+              </article>
+              <article class="rf-card">
+                <div class="rf-card__header">PHONE / &lt;768</div>
+                <div class="rf-card__body">
+                  Drawer navigation, active-view title, stacked code/inspector,
+                  fixed destination bar, safe bottom spacing.
+                </div>
+              </article>
+            </div>
+            <p>
+              Phone adaptations preserve assessments, lesson completion, source
+              excerpts, map relationships, and validation recovery. Decorative
+              statusbar details may collapse.
+            </p>
+          </section>
+          <section class="ds-section" id="failure">
+            <h2>Shell-level failure modes</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>CONDITION</th>
+                  <th>BEHAVIOR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>WebGPU unavailable</td>
+                  <td>
+                    Load accessible HTML/SVG system map without blocking
+                    navigation
+                  </td>
+                </tr>
+                <tr>
+                  <td>Offline after load</td>
+                  <td>
+                    Keep permitted cached content, mark sync unavailable, queue
+                    retry-safe progress
+                  </td>
+                </tr>
+                <tr>
+                  <td>Session expired</td>
+                  <td>
+                    Preserve local context, authenticate, then return to the
+                    same route
+                  </td>
+                </tr>
+                <tr>
+                  <td>Unauthorized deep link</td>
+                  <td>
+                    Show a safe denial without confirming hidden content
+                    metadata
+                  </td>
+                </tr>
+                <tr>
+                  <td>Global load failure</td>
+                  <td>
+                    Show error identifier, retry, support route, and
+                    non-sensitive diagnostics
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-03–05</span
+              ><span class="ds-requirement">CODE-03–05</span
+              ><span class="ds-requirement">9.1 CONTEXT</span
+              ><span class="ds-requirement">9.3 PERFORMANCE</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

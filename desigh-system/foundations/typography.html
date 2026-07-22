@@ -1,10 +1,244 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="RepoFluent typography foundations."><title>Typography — RepoFluent Design System</title><link rel="stylesheet" href="../assets/tokens.css"><link rel="stylesheet" href="../assets/components.css"><link rel="stylesheet" href="../assets/docs.css"><script src="../assets/docs.js" defer></script></head>
-<body data-category="Foundations" data-page="foundations/typography"><a class="ds-skip-link" href="#main-content">Skip to content</a><div class="ds-app"><header class="ds-header" data-ds-header></header><aside class="ds-sidebar" aria-label="Design system sections"><div class="ds-sidebar__head"><span>DESIGN EXPLORER</span><span>F02</span></div><nav class="ds-nav" data-ds-nav></nav></aside><main class="ds-main" id="main-content"><div class="ds-page">
-  <div class="ds-breadcrumbs"><a href="../index.html">design-system</a><span>›</span><span>foundations</span><span>›</span><strong>typography.css</strong></div><header class="ds-hero"><div><p class="ds-eyebrow">Foundation / F02</p><h1>Typography</h1><p class="ds-hero__lede">Two system-first families separate explanation from evidence: sans for learning and interface prose, mono for code, paths, identifiers, scores, and commands.</p></div><span class="ds-page-id">RF-F02</span></header>
-  <section class="ds-section" id="families"><h2>Type families</h2><div class="ds-grid"><article class="rf-card"><div class="rf-card__header">SANS / EXPLANATION</div><div class="rf-card__body" style="font-family:var(--rf-font-sans);font-size:1.25rem">Inter, system UI, Segoe UI<br><small style="color:var(--rf-color-ink-subtle)">Lessons, labels, guidance, and descriptions</small></div></article><article class="rf-card"><div class="rf-card__header">MONO / EVIDENCE</div><div class="rf-card__body" style="font-family:var(--rf-font-mono);font-size:1.1rem">OrderController.cs · L42–57<br><small style="color:var(--rf-color-ink-subtle)">Code, paths, commands, data, and timestamps</small></div></article></div><p>Both stacks are local. The interface must remain legible when neither preferred family is installed.</p></section>
-  <section class="ds-section" id="scale"><h2>Type scale</h2><div class="ds-type-sample"><span>DISPLAY</span><strong style="font:var(--rf-type-display);letter-spacing:-.06em">RepoFluent_</strong><small>clamp 36–72</small></div><div class="ds-type-sample"><span>PAGE TITLE</span><strong style="font:var(--rf-type-page-title);letter-spacing:-.04em">Order processing</strong><small>clamp 28–44</small></div><div class="ds-type-sample"><span>SECTION</span><strong style="font:var(--rf-type-section)">From request to intent</strong><small>21 / 26</small></div><div class="ds-type-sample"><span>TITLE</span><strong style="font:var(--rf-type-title)">How an order becomes a workflow</strong><small>16 / 22</small></div><div class="ds-type-sample"><span>BODY</span><span style="font:var(--rf-type-body)">The API accepts the request quickly. Durable work continues after the response.</span><small>14 / 23</small></div><div class="ds-type-sample"><span>DATA</span><span style="font:var(--rf-type-data)">main@8f24c1a · 2026-07-22T14:18Z</span><small>12 / 17</small></div><div class="ds-type-sample"><span>OVERLINE</span><span style="font:var(--rf-type-overline);letter-spacing:var(--rf-tracking-caps)">RECOMMENDED_NEXT</span><small>10 / 12</small></div></section>
-  <section class="ds-section" id="reading"><h2>Learning-content rhythm</h2><div class="ds-example"><div class="ds-example__head">READING COLUMN / MAX 46REM</div><div class="ds-example__stage"><article style="max-width:46rem"><p class="ds-eyebrow"># ORDER PROCESSING FOUNDATIONS</p><h1 style="margin:.5rem 0 1rem;color:var(--rf-color-ink-strong);font:var(--rf-type-page-title)">How an order becomes a workflow</h1><p style="color:var(--rf-color-ink-muted);font-size:1rem;line-height:1.8">The API accepts the request quickly. The real work begins after it publishes a message. This wider line-height supports sustained reading while the compact surrounding shell preserves technical context.</p></article></div></div><ul><li>Keep lesson prose between 55 and 80 characters per line.</li><li>Use sentence case for headings and actions; reserve uppercase for short overlines and state codes.</li><li>Never place long explanatory paragraphs in the mono family.</li></ul></section>
-  <section class="ds-section" id="data"><h2>Technical data</h2><div class="rf-table-wrap"><table class="rf-table"><thead><tr><th>CONTENT</th><th>EXAMPLE</th><th>STYLE</th></tr></thead><tbody><tr><td>Repository path</td><td class="rf-table__primary" style="font-family:var(--rf-font-mono)">src/Order.Api/Controllers</td><td>data</td></tr><tr><td>Revision</td><td>main@8f24c1a</td><td>data</td></tr><tr><td>Mastery</td><td>74 / GROWING ↑</td><td>data + label</td></tr><tr><td>Code</td><td><code>await bus.Publish(order)</code></td><td>code + syntax color</td></tr></tbody></table></div></section>
-  <section class="ds-section" id="rules"><h2>Usage rules</h2><div class="ds-do-dont"><div class="ds-do"><strong>DO</strong><p>Use weight, size, spacing, and color together to establish hierarchy.</p></div><div class="ds-dont"><strong>DON'T</strong><p>Use all-caps prose, simulated code fonts, or font weight below 400 for essential text.</p></div></div><div class="ds-requirements"><span class="ds-requirement">9.1 VISUAL SYSTEM</span><span class="ds-requirement">9.2 ACCESSIBILITY</span><span class="ds-requirement">LRN-02</span><span class="ds-requirement">CODE-01</span></div></section>
-</div></main><footer class="ds-statusbar" data-ds-status></footer></div></body></html>
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent typography foundations." />
+    <title>Typography — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Foundations" data-page="foundations/typography">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>F02</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>foundations</span><span>›</span
+            ><strong>typography.css</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Foundation / F02</p>
+              <h1>Typography</h1>
+              <p class="ds-hero__lede">
+                Two system-first families separate explanation from evidence:
+                sans for learning and interface prose, mono for code, paths,
+                identifiers, scores, and commands.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-F02</span>
+          </header>
+          <section class="ds-section" id="families">
+            <h2>Type families</h2>
+            <div class="ds-grid">
+              <article class="rf-card">
+                <div class="rf-card__header">SANS / EXPLANATION</div>
+                <div
+                  class="rf-card__body"
+                  style="font-family: var(--rf-font-sans); font-size: 1.25rem"
+                >
+                  Inter, system UI, Segoe UI<br /><small
+                    style="color: var(--rf-color-ink-subtle)"
+                    >Lessons, labels, guidance, and descriptions</small
+                  >
+                </div>
+              </article>
+              <article class="rf-card">
+                <div class="rf-card__header">MONO / EVIDENCE</div>
+                <div
+                  class="rf-card__body"
+                  style="font-family: var(--rf-font-mono); font-size: 1.1rem"
+                >
+                  OrderController.cs · L42–57<br /><small
+                    style="color: var(--rf-color-ink-subtle)"
+                    >Code, paths, commands, data, and timestamps</small
+                  >
+                </div>
+              </article>
+            </div>
+            <p>
+              Both stacks are local. The interface must remain legible when
+              neither preferred family is installed.
+            </p>
+          </section>
+          <section class="ds-section" id="scale">
+            <h2>Type scale</h2>
+            <div class="ds-type-sample">
+              <span>DISPLAY</span
+              ><strong
+                style="font: var(--rf-type-display); letter-spacing: -0.06em"
+                >RepoFluent_</strong
+              ><small>clamp 36–72</small>
+            </div>
+            <div class="ds-type-sample">
+              <span>PAGE TITLE</span
+              ><strong
+                style="font: var(--rf-type-page-title); letter-spacing: -0.04em"
+                >Order processing</strong
+              ><small>clamp 28–44</small>
+            </div>
+            <div class="ds-type-sample">
+              <span>SECTION</span
+              ><strong style="font: var(--rf-type-section)"
+                >From request to intent</strong
+              ><small>21 / 26</small>
+            </div>
+            <div class="ds-type-sample">
+              <span>TITLE</span
+              ><strong style="font: var(--rf-type-title)"
+                >How an order becomes a workflow</strong
+              ><small>16 / 22</small>
+            </div>
+            <div class="ds-type-sample">
+              <span>BODY</span
+              ><span style="font: var(--rf-type-body)"
+                >The API accepts the request quickly. Durable work continues
+                after the response.</span
+              ><small>14 / 23</small>
+            </div>
+            <div class="ds-type-sample">
+              <span>DATA</span
+              ><span style="font: var(--rf-type-data)"
+                >main@8f24c1a · 2026-07-22T14:18Z</span
+              ><small>12 / 17</small>
+            </div>
+            <div class="ds-type-sample">
+              <span>OVERLINE</span
+              ><span
+                style="
+                  font: var(--rf-type-overline);
+                  letter-spacing: var(--rf-tracking-caps);
+                "
+                >RECOMMENDED_NEXT</span
+              ><small>10 / 12</small>
+            </div>
+          </section>
+          <section class="ds-section" id="reading">
+            <h2>Learning-content rhythm</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">READING COLUMN / MAX 46REM</div>
+              <div class="ds-example__stage">
+                <article style="max-width: 46rem">
+                  <p class="ds-eyebrow"># ORDER PROCESSING FOUNDATIONS</p>
+                  <h1
+                    style="
+                      margin: 0.5rem 0 1rem;
+                      color: var(--rf-color-ink-strong);
+                      font: var(--rf-type-page-title);
+                    "
+                  >
+                    How an order becomes a workflow
+                  </h1>
+                  <p
+                    style="
+                      color: var(--rf-color-ink-muted);
+                      font-size: 1rem;
+                      line-height: 1.8;
+                    "
+                  >
+                    The API accepts the request quickly. The real work begins
+                    after it publishes a message. This wider line-height
+                    supports sustained reading while the compact surrounding
+                    shell preserves technical context.
+                  </p>
+                </article>
+              </div>
+            </div>
+            <ul>
+              <li>Keep lesson prose between 55 and 80 characters per line.</li>
+              <li>
+                Use sentence case for headings and actions; reserve uppercase
+                for short overlines and state codes.
+              </li>
+              <li>
+                Never place long explanatory paragraphs in the mono family.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="data">
+            <h2>Technical data</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th>CONTENT</th>
+                    <th>EXAMPLE</th>
+                    <th>STYLE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Repository path</td>
+                    <td
+                      class="rf-table__primary"
+                      style="font-family: var(--rf-font-mono)"
+                    >
+                      src/Order.Api/Controllers
+                    </td>
+                    <td>data</td>
+                  </tr>
+                  <tr>
+                    <td>Revision</td>
+                    <td>main@8f24c1a</td>
+                    <td>data</td>
+                  </tr>
+                  <tr>
+                    <td>Mastery</td>
+                    <td>74 / GROWING ↑</td>
+                    <td>data + label</td>
+                  </tr>
+                  <tr>
+                    <td>Code</td>
+                    <td><code>await bus.Publish(order)</code></td>
+                    <td>code + syntax color</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Usage rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Use weight, size, spacing, and color together to establish
+                  hierarchy.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Use all-caps prose, simulated code fonts, or font weight below
+                  400 for essential text.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">9.1 VISUAL SYSTEM</span
+              ><span class="ds-requirement">9.2 ACCESSIBILITY</span
+              ><span class="ds-requirement">LRN-02</span
+              ><span class="ds-requirement">CODE-01</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

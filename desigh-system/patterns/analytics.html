@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RepoFluent analytics and reporting pattern."
+    />
+    <title>Analytics &amp; Reporting — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/analytics">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P06</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span
+            ><strong>analytics.report</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P06</p>
+              <h1>Analytics &amp; reporting</h1>
+              <p class="ds-hero__lede">
+                Manager analytics presents transparent learning evidence at an
+                authorized cohort level, labels every population and time
+                window, and prevents hidden employee ranking.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P06</span>
+          </header>
+          <section class="ds-section" id="overview">
+            <h2>Cohort overview</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                CHECKOUT TEAM / CURRICULUM V3 / JUL 1–22
+              </div>
+              <div class="ds-example__stage ds-stack">
+                <div class="rf-toolbar">
+                  <button type="button" class="rf-button rf-button--small">
+                    CHECKOUT TEAM⌄</button
+                  ><button type="button" class="rf-button rf-button--small">
+                    CURRICULUM V3⌄</button
+                  ><button type="button" class="rf-button rf-button--small">
+                    JUL 1–22⌄</button
+                  ><span class="rf-toolbar__spacer"></span
+                  ><button type="button" class="rf-button rf-button--small">
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <path d="M4 15v2h12v-2M10 3v10M6 9l4 4 4-4" /></svg
+                    >EXPORT CSV
+                  </button>
+                </div>
+                <div class="ds-grid ds-grid--4">
+                  <article class="rf-card">
+                    <div class="rf-card__header">PARTICIPATION</div>
+                    <div class="rf-card__body">
+                      <h2>13 / 14</h2>
+                      <p>learners started</p>
+                    </div>
+                  </article>
+                  <article class="rf-card">
+                    <div class="rf-card__header">COMPLETION</div>
+                    <div class="rf-card__body">
+                      <h2>71%</h2>
+                      <p>required curriculum</p>
+                    </div>
+                  </article>
+                  <article class="rf-card">
+                    <div class="rf-card__header">MASTERY</div>
+                    <div class="rf-card__body">
+                      <h2>74</h2>
+                      <p>median · 6/8 objectives</p>
+                    </div>
+                  </article>
+                  <article class="rf-card">
+                    <div class="rf-card__header">TIME</div>
+                    <div class="rf-card__body">
+                      <h2>2h 18m</h2>
+                      <p>median active learning</p>
+                    </div>
+                  </article>
+                </div>
+                <figure class="rf-chart">
+                  <figcaption>
+                    <strong>Demonstrated mastery by objective</strong>
+                    <p>Latest valid attempt · permitted learners only</p>
+                  </figcaption>
+                  <div
+                    class="rf-chart__plot"
+                    role="img"
+                    aria-label="API boundaries 88, event delivery 61, failure recovery 43, observability 72"
+                  >
+                    <i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 88%;
+                        --rf-bar-color: var(--rf-chart-1);
+                      "
+                      ><span>88</span></i
+                    ><i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 61%;
+                        --rf-bar-color: var(--rf-chart-2);
+                      "
+                      ><span>61</span></i
+                    ><i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 43%;
+                        --rf-bar-color: var(--rf-chart-3);
+                      "
+                      ><span>43</span></i
+                    ><i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 72%;
+                        --rf-bar-color: var(--rf-chart-4);
+                      "
+                      ><span>72</span></i
+                    >
+                  </div>
+                </figure>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="measures">
+            <h2>Measure definitions</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>MEASURE</th>
+                  <th>DEFINITION SHOWN TO USER</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Participation</td>
+                  <td>
+                    Assigned learners with at least one meaningful progress
+                    event
+                  </td>
+                </tr>
+                <tr>
+                  <td>Completion</td>
+                  <td>
+                    Required lessons and assessments meeting configured
+                    completion rules
+                  </td>
+                </tr>
+                <tr>
+                  <td>Objective coverage</td>
+                  <td>
+                    Objectives with valid completion or scored evidence, shown
+                    separately
+                  </td>
+                </tr>
+                <tr>
+                  <td>Mastery</td>
+                  <td>
+                    Tenant-consistent objective-level derivation with inputs and
+                    recency visible
+                  </td>
+                </tr>
+                <tr>
+                  <td>Knowledge gap</td>
+                  <td>
+                    Objective below configured evidence threshold; never
+                    inferred from activity alone
+                  </td>
+                </tr>
+                <tr>
+                  <td>High-performing</td>
+                  <td>
+                    Transparent configured indicators with population context;
+                    not an opaque rank
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="drilldown">
+            <h2>Drill-down path</h2>
+            <div class="rf-workflow">
+              <div class="rf-workflow__node">
+                <strong>COHORT</strong><small>Checkout team</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>CURRICULUM</strong><small>Order processing v3</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>OBJECTIVE</strong><small>Failure recovery</small>
+              </div>
+            </div>
+            <p>
+              Permitted managers may continue to learner detail only when policy
+              allows. Breadcrumbs preserve selected filters, and every level
+              restates its population denominator.
+            </p>
+          </section>
+          <section class="ds-section" id="privacy">
+            <h2>Privacy and minimum groups</h2>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>Result suppressed</strong>
+                <p>
+                  This filtered group is below the tenant's minimum reporting
+                  size. Broaden filters to view an aggregate. The hidden count
+                  is not disclosed.
+                </p>
+              </div>
+            </div>
+            <ul>
+              <li>
+                Permissions apply to every summary, chart, drill-down, search
+                result, and export—not only the page route.
+              </li>
+              <li>
+                Avoid small-group inference through subtraction, adjacent
+                filters, chart tooltips, or export totals.
+              </li>
+              <li>
+                Do not use analytics as punitive employee ranking; include
+                context, acceptable-use guidance, and configurable indicators.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="comparison">
+            <h2>Comparison and export</h2>
+            <ul>
+              <li>
+                Comparisons label cohort membership, curriculum version, time
+                window, assignment policy, and population changes.
+              </li>
+              <li>
+                Exports include filter metadata, generated time, data version,
+                column definitions, and authorization scope.
+              </li>
+              <li>
+                Stale, partial, recalculated, and invalidated data is explicitly
+                marked and excluded consistently where required.
+              </li>
+              <li>
+                Content-quality measures such as abandonment and repeated
+                failure lead to content review, not learner blame.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">ANL-01–09</span
+              ><span class="ds-requirement">IAM-03</span
+              ><span class="ds-requirement">ASM-05</span
+              ><span class="ds-requirement">9.2 PRIVACY</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

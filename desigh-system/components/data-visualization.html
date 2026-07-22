@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RepoFluent data visualization components."
+    />
+    <title>Data Visualization — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/data-visualization">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C12</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span
+            ><strong>data-visualization.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C12</p>
+              <h1>Data visualization</h1>
+              <p class="ds-hero__lede">
+                Charts reveal distributions, comparisons, trends, and gaps while
+                keeping population, time window, filters, versions, and exact
+                values available.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C12</span>
+          </header>
+          <section class="ds-section" id="bar">
+            <h2>Bar chart anatomy</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                OBJECTIVE MASTERY / CHECKOUT TEAM / CURRICULUM V3
+              </div>
+              <div class="ds-example__stage">
+                <figure class="rf-chart">
+                  <figcaption>
+                    <strong>Demonstrated mastery by objective</strong>
+                    <p>
+                      14 permitted learners · latest valid attempt · Jul 1–22
+                    </p>
+                  </figcaption>
+                  <div
+                    class="rf-chart__plot"
+                    role="img"
+                    aria-label="API boundaries 88 percent, event delivery 61 percent, failure recovery 43 percent, observability 72 percent"
+                  >
+                    <i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 88%;
+                        --rf-bar-color: var(--rf-chart-1);
+                      "
+                      ><span>88</span></i
+                    ><i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 61%;
+                        --rf-bar-color: var(--rf-chart-2);
+                      "
+                      ><span>61</span></i
+                    ><i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 43%;
+                        --rf-bar-color: var(--rf-chart-3);
+                      "
+                      ><span>43</span></i
+                    ><i
+                      class="rf-chart__bar"
+                      style="
+                        --rf-bar-value: 72%;
+                        --rf-bar-color: var(--rf-chart-4);
+                      "
+                      ><span>72</span></i
+                    >
+                  </div>
+                  <div class="rf-chart__legend">
+                    <span
+                      ><i style="--rf-legend-color: var(--rf-chart-1)"></i>API
+                      boundaries</span
+                    ><span
+                      ><i style="--rf-legend-color: var(--rf-chart-2)"></i>Event
+                      delivery</span
+                    ><span
+                      ><i style="--rf-legend-color: var(--rf-chart-3)"></i
+                      >Failure recovery</span
+                    ><span
+                      ><i style="--rf-legend-color: var(--rf-chart-4)"></i
+                      >Observability</span
+                    >
+                  </div>
+                </figure>
+              </div>
+            </div>
+            <ol class="ds-anatomy-list">
+              <li>Title states the measure, not merely the chart form.</li>
+              <li>Subtitle states population, aggregation, and time window.</li>
+              <li>Plot uses fixed palette slots and visible exact values.</li>
+              <li>Legend and accessible table use the same series order.</li>
+            </ol>
+          </section>
+          <section class="ds-section" id="selection">
+            <h2>Choose by analytical task</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>TASK</th>
+                  <th>FORM</th>
+                  <th>REPOFLUENT EXAMPLE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Compare categories</td>
+                  <td>Bar / dot plot</td>
+                  <td>Mastery by objective</td>
+                </tr>
+                <tr>
+                  <td>Show distribution</td>
+                  <td>Histogram / box plot</td>
+                  <td>Assessment result distribution</td>
+                </tr>
+                <tr>
+                  <td>Show trend</td>
+                  <td>Line chart</td>
+                  <td>Weekly completion over time</td>
+                </tr>
+                <tr>
+                  <td>Part-to-whole</td>
+                  <td>Stacked bar</td>
+                  <td>Assignment states within one cohort</td>
+                </tr>
+                <tr>
+                  <td>Exact comparison</td>
+                  <td>Table</td>
+                  <td>Learner attempt history</td>
+                </tr>
+                <tr>
+                  <td>Relationships</td>
+                  <td>Node-link map + table</td>
+                  <td>System and subsystem topology</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              Do not use a donut for more than three parts, a gauge for a
+              distribution, or a spatial map when a table communicates the task
+              more directly.
+            </p>
+          </section>
+          <section class="ds-section" id="accessibility">
+            <h2>Accessible equivalent</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <caption>
+                  Data shown in the objective mastery chart
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">OBJECTIVE</th>
+                    <th scope="col">MASTERY</th>
+                    <th scope="col">LEARNERS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">API boundaries</td>
+                    <td>88%</td>
+                    <td>14</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Event delivery</td>
+                    <td>61%</td>
+                    <td>14</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Failure recovery</td>
+                    <td>43%</td>
+                    <td>14</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Observability</td>
+                    <td>72%</td>
+                    <td>14</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              The table follows the chart, shares filters, and remains available
+              when enhanced rendering or WebGPU fails.
+            </p>
+          </section>
+          <section class="ds-section" id="privacy">
+            <h2>Privacy and interpretation</h2>
+            <ul>
+              <li>
+                Label hidden or suppressed groups without revealing a
+                sub-threshold population.
+              </li>
+              <li>
+                Never imply causation from correlation or compare cohorts
+                without labeling population and version differences.
+              </li>
+              <li>
+                Explain calculation inputs and whether the measure uses latest,
+                best, average, or valid attempts.
+              </li>
+              <li>
+                Use “No data” separately from zero; show stale, partial, or
+                delayed data explicitly.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Usage rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Start with the question, show exact values, disclose filters,
+                  and provide a table.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Create decorative dashboards, hidden rankings, unlabeled axes,
+                  or color-only series.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">ANL-02–06</span
+              ><span class="ds-requirement">ANL-09</span
+              ><span class="ds-requirement">9.1 WEBGPU FALLBACK</span
+              ><span class="ds-requirement">9.2 ALTERNATIVE</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

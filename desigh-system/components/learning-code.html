@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RepoFluent learning and code components."
+    />
+    <title>Learning &amp; Code — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/learning-code">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C11</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span
+            ><strong>learning-code.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C11</p>
+              <h1>Learning &amp; code</h1>
+              <p class="ds-hero__lede">
+                Structured learning blocks connect explanation to authorized,
+                revision-bound source evidence without turning RepoFluent into a
+                code editor.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C11</span>
+          </header>
+          <section class="ds-section" id="objectives">
+            <h2>Objectives and lesson blocks</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">LEARNING CONTRACT</div>
+              <div class="ds-example__stage">
+                <div class="rf-objectives">
+                  <span class="rf-objectives__label">OBJECTIVES</span>
+                  <p>
+                    <span>[✓]</span>Trace the path from HTTP request to durable
+                    order
+                  </p>
+                  <p>
+                    <span>[✓]</span>Explain why processing happens
+                    asynchronously
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p>
+              Objectives appear near the lesson title, use observable verbs, and
+              map to assessments and reporting. A completion check does not
+              imply demonstrated mastery.
+            </p>
+          </section>
+          <section class="ds-section" id="references">
+            <h2>Source references</h2>
+            <div class="ds-example" data-source-demo>
+              <div class="ds-example__head">SELECT A REFERENCE</div>
+              <div class="ds-example__stage ds-grid">
+                <div class="ds-stack">
+                  <button
+                    type="button"
+                    class="rf-source-link"
+                    data-source-target="controller-code"
+                    data-source-file="OrderController.cs"
+                    aria-pressed="true"
+                  >
+                    <span>↳</span
+                    ><span
+                      ><strong>OrderController.cs</strong
+                      ><small>src/Order.Api/Controllers · L42–57</small></span
+                    ><kbd>OPEN</kbd></button
+                  ><button
+                    type="button"
+                    class="rf-source-link"
+                    data-source-target="consumer-code"
+                    data-source-file="OrderSubmittedConsumer.cs"
+                    aria-pressed="false"
+                  >
+                    <span>↳</span
+                    ><span
+                      ><strong>OrderSubmittedConsumer.cs</strong
+                      ><small
+                        >src/Order.Processor/Consumers · L18–29</small
+                      ></span
+                    ><kbd>OPEN</kbd>
+                  </button>
+                  <div class="rf-callout rf-callout--warning">
+                    <div>
+                      <strong>Revision-bound</strong>
+                      <p>main@8f24c1a · current repository may differ</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <pre
+                    class="rf-code"
+                    id="controller-code"
+                    data-source-panel
+                    role="region"
+                    aria-label="OrderController.cs lines 49 to 54"
+                  ><code><span class="rf-code__line rf-code__line--focus" data-line="49"><span class="rf-syntax-keyword">var</span> order = Order.Create(command);</span><span class="rf-code__line rf-code__line--focus" data-line="50">db.Orders.Add(order);</span><span class="rf-code__line rf-code__line--focus" data-line="51"><span class="rf-syntax-keyword">await</span> db.SaveChangesAsync();</span><span class="rf-code__line" data-line="52"></span><span class="rf-code__line rf-code__line--focus" data-line="53"><span class="rf-syntax-keyword">await</span> bus.Publish(</span><span class="rf-code__line rf-code__line--focus" data-line="54">  <span class="rf-syntax-keyword">new</span> OrderSubmitted(order.Id));</span></code></pre>
+                  <pre
+                    class="rf-code"
+                    id="consumer-code"
+                    data-source-panel
+                    hidden
+                    role="region"
+                    aria-label="OrderSubmittedConsumer.cs lines 21 to 25"
+                  ><code><span class="rf-code__line rf-code__line--focus" data-line="21"><span class="rf-syntax-keyword">var</span> order = <span class="rf-syntax-keyword">await</span> orders.GetAsync(</span><span class="rf-code__line rf-code__line--focus" data-line="22">  ctx.Message.OrderId);</span><span class="rf-code__line" data-line="23"></span><span class="rf-code__line rf-code__line--focus" data-line="24"><span class="rf-syntax-keyword">await</span> inventory.ReserveAsync(</span><span class="rf-code__line rf-code__line--focus" data-line="25">  order.Items, ctx.CancellationToken);</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="code">
+            <h2>Code presentation</h2>
+            <ul>
+              <li>
+                Render supplied read-only C# and Angular excerpts with
+                language-appropriate syntax, selectable text, and stable line
+                numbers.
+              </li>
+              <li>
+                Use focused-line background plus a left edge; do not remove
+                surrounding context that explains the symbol.
+              </li>
+              <li>
+                Display repository-relative path, symbol when supplied, exact
+                line range, snapshot/revision, provenance, and authorization
+                state.
+              </li>
+              <li>
+                Deep links open the authorized repository provider in a new
+                context and warn when the provider revision differs.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="glossary">
+            <h2>Glossary and callouts</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">CONTEXT WITHOUT NAVIGATION</div>
+              <div class="ds-example__stage">
+                <p>
+                  The
+                  <button
+                    class="rf-term"
+                    type="button"
+                    data-toast="GLOSSARY · HTTP-facing service that validates order commands"
+                  >
+                    Order API
+                  </button>
+                  validates the command and creates a lightweight order record.
+                </p>
+                <div class="rf-callout">
+                  <svg class="rf-icon" viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="7" />
+                    <path d="M10 9v5M10 6h.01" />
+                  </svg>
+                  <div>
+                    <strong>Why this matters</strong>
+                    <p>
+                      Publishing after persistence ensures the workflow always
+                      has an order to retrieve.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Content rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Explain the concept first, then connect it to precise,
+                  authorized source evidence.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Expose absolute local paths, secrets, inaccessible symbols, or
+                  code without revision context.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-02</span
+              ><span class="ds-requirement">LRN-06</span
+              ><span class="ds-requirement">CODE-01–05</span
+              ><span class="ds-requirement">CODE-08</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

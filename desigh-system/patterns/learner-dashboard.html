@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent learner dashboard pattern." />
+    <title>Learner Dashboard — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/learner-dashboard">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P02</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span
+            ><strong>learner-dashboard.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P02</p>
+              <h1>Learner dashboard</h1>
+              <p class="ds-hero__lede">
+                The dashboard answers four questions immediately: What should I
+                do next? What is required? What have I demonstrated? What
+                changed recently?
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P02</span>
+          </header>
+          <section class="ds-section" id="composition">
+            <h2>Dashboard composition</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">PERSONALIZED HOME / MAYA QUINN</div>
+              <div class="ds-example__stage ds-stack">
+                <div>
+                  <p class="ds-eyebrow">&gt; learner.status --today</p>
+                  <h2
+                    style="
+                      margin: 0;
+                      color: var(--rf-color-ink-strong);
+                      font: var(--rf-type-page-title);
+                    "
+                  >
+                    Ready when you are, Maya<span
+                      style="color: var(--rf-color-primary)"
+                      >_</span
+                    >
+                  </h2>
+                  <p>
+                    One focused session will finish the order workflow lesson.
+                  </p>
+                </div>
+                <div class="ds-grid">
+                  <article class="rf-panel">
+                    <div class="rf-panel__header">
+                      <span>RECOMMENDED_NEXT</span><span>12 MIN</span>
+                    </div>
+                    <div class="rf-panel__body">
+                      <small>ORDER PROCESSING FOUNDATIONS / LESSON 04</small>
+                      <h2>How an order becomes a workflow</h2>
+                      <p>
+                        Trace the request from Angular checkout to a durable,
+                        asynchronous processing pipeline.
+                      </p>
+                      <code>$ course resume order-processing --lesson 4</code>
+                      <div style="margin-top: 1rem">
+                        <button
+                          type="button"
+                          class="rf-button rf-button--primary"
+                          data-toast="OPENING LESSON 04"
+                        >
+                          RESUME SESSION <kbd>↵</kbd>
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      class="rf-panel__body"
+                      style="border-top: 1px solid var(--rf-color-line)"
+                    >
+                      <div class="rf-progress">
+                        <div class="rf-progress__meta">
+                          <span>SESSION PROGRESS</span><strong>68%</strong>
+                        </div>
+                        <div class="rf-progress__track">
+                          <span
+                            class="rf-progress__fill"
+                            style="width: 68%"
+                          ></span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                  <aside class="rf-panel" aria-label="Learning metrics example">
+                    <div class="rf-panel__header">
+                      <span>LEARNING_METRICS</span
+                      ><span class="rf-status rf-status--success">live</span>
+                    </div>
+                    <div class="rf-panel__body">
+                      <div class="ds-row">
+                        <div class="rf-radial" style="--rf-progress-value: 74%">
+                          <div class="rf-radial__value">
+                            74<small>MASTERY</small>
+                          </div>
+                        </div>
+                        <div>
+                          <small>STATUS</small>
+                          <h3>GROWING ↑</h3>
+                          <span>+6 this week</span>
+                        </div>
+                      </div>
+                      <div class="rf-progress" style="margin-top: 1rem">
+                        <div class="rf-progress__meta">
+                          <span>API boundaries</span><strong>88</strong>
+                        </div>
+                        <div class="rf-progress__track">
+                          <span
+                            class="rf-progress__fill"
+                            style="width: 88%"
+                          ></span>
+                        </div>
+                      </div>
+                      <div class="rf-progress" style="margin-top: 0.75rem">
+                        <div class="rf-progress__meta">
+                          <span>Failure recovery</span><strong>43</strong>
+                        </div>
+                        <div class="rf-progress__track">
+                          <span
+                            class="rf-progress__fill"
+                            style="
+                              width: 43%;
+                              background: var(--rf-color-warning);
+                            "
+                          ></span>
+                        </div>
+                      </div>
+                    </div>
+                  </aside>
+                </div>
+                <div class="rf-table-wrap">
+                  <table class="rf-table">
+                    <caption class="rf-visually-hidden">
+                      Assignment queue
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th>TYPE</th>
+                        <th>ASSIGNMENT</th>
+                        <th>DUE</th>
+                        <th>STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><span class="rf-badge">TEST</span></td>
+                        <td class="rf-table__primary">Order lifecycle quiz</td>
+                        <td>JUL 24</td>
+                        <td>
+                          <span class="rf-status rf-status--warning"
+                            >due soon</span
+                          >
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><span class="rf-badge">COURSE</span></td>
+                        <td class="rf-table__primary">Resilient messaging</td>
+                        <td>JUL 29</td>
+                        <td><span class="rf-status">queued</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="priority">
+            <h2>Information priority</h2>
+            <ol>
+              <li>
+                <strong>Recommended next action:</strong> one explainable
+                suggestion with title, reason, duration, context, and resume
+                action.
+              </li>
+              <li>
+                <strong>Required assignments:</strong> separated from optional
+                enrichment, ordered by due date and urgency.
+              </li>
+              <li>
+                <strong>Learning evidence:</strong> completion, objective
+                coverage, latest result, mastery, and recency remain
+                distinguishable.
+              </li>
+              <li>
+                <strong>Recent activity:</strong> meaningful completion, score,
+                assignment, and source-version events—not a noisy audit log.
+              </li>
+            </ol>
+          </section>
+          <section class="ds-section" id="recommendation">
+            <h2>Recommendation rules</h2>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>Explain why this is next</strong>
+                <p>
+                  Examples: “Resume where you stopped,” “Due in two days,”
+                  “Review after an incorrect answer,” or “Knowledge is becoming
+                  stale.” The learner can choose another permitted item.
+                </p>
+              </div>
+            </div>
+            <p>
+              Do not imply surveillance, optimize for engagement at the expense
+              of required learning, or hide required work behind a
+              recommendation model.
+            </p>
+          </section>
+          <section class="ds-section" id="states">
+            <h2>Dashboard states</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>STATE</th>
+                  <th>PRIMARY MESSAGE</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>First visit</td>
+                  <td>Explain assigned curriculum and expected time</td>
+                  <td>Start orientation</td>
+                </tr>
+                <tr>
+                  <td>Active learning</td>
+                  <td>Resume exact lesson position</td>
+                  <td>Resume session</td>
+                </tr>
+                <tr>
+                  <td>All required complete</td>
+                  <td>Celebrate without hiding recency or results</td>
+                  <td>Review evidence / browse optional</td>
+                </tr>
+                <tr>
+                  <td>Overdue</td>
+                  <td>Name affected required items and dates</td>
+                  <td>Continue highest priority</td>
+                </tr>
+                <tr>
+                  <td>No assignments</td>
+                  <td>Explain that nothing is required</td>
+                  <td>Browse permitted library</td>
+                </tr>
+                <tr>
+                  <td>Progress unavailable</td>
+                  <td>Preserve content access and mark status delayed</td>
+                  <td>Retry status</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="responsive">
+            <h2>Responsive order</h2>
+            <p>
+              On phone: greeting and next action, required assignments, mastery
+              explanation, recent activity. Cards become a single column;
+              assignment records retain type, title, date, and state. Nothing
+              required becomes hover-only.
+            </p>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-01</span
+              ><span class="ds-requirement">LRN-07–10</span
+              ><span class="ds-requirement">ANL-01</span
+              ><span class="ds-requirement">9.1 RESPONSIVE</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

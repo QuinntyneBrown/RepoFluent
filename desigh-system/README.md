@@ -7,13 +7,27 @@ versioned interface contract rather than a collection of screenshots.
 Open `index.html` directly in a browser. Every page works over `file://`; there is
 no build step, package manager, webfont request, or runtime dependency.
 
+No tooling is required to view the documentation. Optional quality checks use the
+development dependencies declared in `package.json` and the locally installed Chrome:
+
+```powershell
+npm install --no-package-lock
+npm test
+```
+
+HTML validation uses the included configuration:
+
+```powershell
+npm run validate
+```
+
 ## Contents
 
-| Area | Coverage |
-| --- | --- |
-| Foundations | Color, typography, spacing, elevation, iconography, motion, accessibility |
-| Components | Buttons, forms, navigation, commands, tabs, trees, panels, tables, status, overlays, learning/code, charts |
-| Patterns | Shell, dashboard, lesson workspace, system map, assessments, analytics, curriculum lifecycle, administration |
+| Area        | Coverage                                                                                                     |
+| ----------- | ------------------------------------------------------------------------------------------------------------ |
+| Foundations | Color, typography, spacing, elevation, iconography, motion, accessibility                                    |
+| Components  | Buttons, forms, navigation, commands, tabs, trees, panels, tables, status, overlays, learning/code, charts   |
+| Patterns    | Shell, dashboard, lesson workspace, system map, assessments, analytics, curriculum lifecycle, administration |
 
 ## Shared assets
 
@@ -48,4 +62,3 @@ use `.rf-*` classes so changes are reviewed against the same contract consumers 
    documentation route.
 5. Verify mouse, keyboard, narrow viewport, 200% zoom, reduced motion, and non-color
    state communication before treating the contract as active.
-
