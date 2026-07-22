@@ -48,3 +48,25 @@ The acceptance criteria retain the requested **GIVE / WHEN / THEN** labels. `GIV
 
 All subsystems shall preserve tenant isolation, role-based access, immutable published curriculum evidence, WCAG 2.2 AA behavior for launch-critical flows, safe failure behavior, structured telemetry without sensitive payloads, and the learner-shell performance budgets defined in the PRD. Cross-cutting controls are specified once in their owning subsystem and referenced rather than redefined inconsistently.
 
+## Open decisions before baseline approval
+
+The specifications deliberately do not invent answers to PRD section 18. The following decisions require product, architecture, security, legal, or pilot-customer approval before the affected L1/L2 set can be promoted from draft to an approved production baseline.
+
+| PRD decision | Primary owner |
+| --- | --- |
+| SaaS, single-tenant hosted, customer-managed, or combined deployment model | Security/Privacy and Observability/Supportability |
+| Initial identity provider, SSO protocol, and provisioning standard | Identity/Tenancy/Access |
+| Storage of source excerpts versus repository-provider metadata/links | Curriculum Contract, Codebase Navigation, and Security/Privacy |
+| First repository and document providers | Codebase Navigation and Agent Authoring Kit |
+| Customer-managed versus managed agent execution | Agent Authoring Kit and Security/Privacy |
+| Allowed v1 diagram, image, and video formats | Curriculum Contract and Experience Platform |
+| Required locales and translated-variant model | Curriculum Contract and Learning Experience |
+| Retention, learner privacy, manager visibility, and acceptable-use defaults | Administration, Analytics, and Security/Privacy |
+| Evidence and tenant opt-in for “top learner” indicators | Analytics and Reporting |
+| Material-code-change detection and curriculum staleness trigger | Curriculum Lifecycle and Codebase Navigation |
+| Informal knowledge check versus internal-certification policy | Assessment and Mastery |
+| Pilot package, excerpt, course, concurrency, and tenant-scale limits | Curriculum Contract, Experience Platform, and Observability/Supportability |
+
+## Baseline approval criteria
+
+A subsystem specification is ready for baseline approval when its open decisions are resolved or explicitly deferred, L1 owners and priorities are accepted, every L2 traces to an approved L1, acceptance criteria are testable in an agreed environment, cross-subsystem dependencies have owners, and security/privacy/accessibility/operational reviewers have approved the applicable controls.
