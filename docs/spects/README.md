@@ -1,0 +1,50 @@
+# RepoFluent Subsystem Requirements
+
+## Document control
+
+| Field | Value |
+| --- | --- |
+| Product | RepoFluent |
+| Requirements baseline | `docs/PRD.md`, version 0.1, 2026-07-22 |
+| Specification status | Draft for engineering and stakeholder review |
+| Requirement language | **Shall** is mandatory, **should** is planned but deferrable, and **may** is optional |
+
+## Purpose
+
+This directory decomposes the RepoFluent product requirements into subsystem-owned specifications. Every subsystem contains:
+
+- `L1.md`: stable, outcome-oriented subsystem requirements and boundaries.
+- `L2.md`: testable detailed requirements, each traced to an L1 requirement and supplied with acceptance criteria.
+
+The acceptance criteria retain the requested **GIVE / WHEN / THEN** labels. `GIVE` is the precondition (the conventional “Given” clause), `WHEN` is the triggering action or event, and `THEN` is the observable result.
+
+## Subsystem map
+
+| Subsystem | Responsibility | Primary PRD source |
+| --- | --- | --- |
+| `01-identity-tenancy-access` | Tenant isolation, authentication, authorization, teams, and access audit | IAM-01–IAM-07 |
+| `02-curriculum-input-contract` | Portable curriculum package contract, ICD, schema, fixtures, compatibility, and safety limits | PRD 8.3, CUR-01–CUR-04 |
+| `03-agent-authoring-kit` | Versioned agent guidance, generation workflow, local validation, and manifests | AGT-01–AGT-08 |
+| `04-curriculum-lifecycle` | Upload, validation orchestration, draft, preview, review, approval, publication, versioning, and retirement | CUR-01–CUR-12 |
+| `05-learning-experience` | Learner home, course delivery, progress, search, glossary, recommendations, notes, and review | LRN-01–LRN-11 |
+| `06-codebase-navigation` | Source excerpts, code references, code tours, file/symbol navigation, and architecture relationships | CODE-01–CODE-08 |
+| `07-assessment-mastery` | Quizzes, tests, grading, attempt evidence, answer protection, and explainable mastery | ASM-01–ASM-09 |
+| `08-analytics-reporting` | Learner and manager analytics, privacy-safe drill-down, gaps, comparisons, and export | ANL-01–ANL-09 |
+| `09-administration-operations` | Users, groups, assignments, settings, processing status, retention, branding, and notifications | ADM-01–ADM-06 |
+| `10-experience-platform` | Design system, responsive interaction, accessibility, progressive visual enhancement, and performance | PRD 9, pilot AC-8/9 |
+| `11-security-privacy-compliance` | Data protection, content safety, secrets, audit integrity, retention controls, and tenant boundaries | PRD 4/11/17 |
+| `12-observability-supportability` | Telemetry, correlation, monitoring, diagnostics, reliability, backup/restore, and incident readiness | PRD 12, ADM-04 |
+
+## Traceability rules
+
+1. L1 identifiers are unique and use `L1-<subsystem>-NN`.
+2. L2 identifiers are unique and use `L2-<subsystem>-NN`.
+3. Every L2 requirement names exactly one primary L1 parent and may name supporting L1 or PRD requirements.
+4. Every L2 requirement has at least one observable acceptance scenario using GIVE / WHEN / THEN.
+5. PRD priorities remain authoritative. A decomposition may add testable detail but shall not weaken a PRD requirement.
+6. Open product decisions in PRD section 18 remain unresolved unless a requirement explicitly defines a safe default needed for the pilot.
+
+## Shared quality baseline
+
+All subsystems shall preserve tenant isolation, role-based access, immutable published curriculum evidence, WCAG 2.2 AA behavior for launch-critical flows, safe failure behavior, structured telemetry without sensitive payloads, and the learner-shell performance budgets defined in the PRD. Cross-cutting controls are specified once in their owning subsystem and referenced rather than redefined inconsistently.
+

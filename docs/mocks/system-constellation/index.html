@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RepoFluent System Constellation interface concept.">
+  <title>System Constellation — RepoFluent</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i><span class="grain"></span></div>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="RepoFluent home"><span class="brand-orbit"><i></i></span><strong>repo<span>fluent</span></strong></a>
+    <nav class="main-nav" aria-label="Primary navigation">
+      <button class="active" type="button" data-view="home"><span>01</span>Today</button>
+      <button type="button" data-view="lesson"><span>02</span>Learn</button>
+      <button type="button" data-view="map"><span>03</span>Explore</button>
+    </nav>
+    <div class="user-cluster"><button class="focus-mode" type="button"><i></i> Focus mode</button><div class="user-copy"><strong>Maya Quinn</strong><span>Platform learner</span></div><button class="avatar" type="button" aria-label="Account menu">MQ<span></span></button></div>
+  </header>
+
+  <main id="main-content">
+    <section class="view active" data-screen="home" aria-labelledby="home-title">
+      <div class="home-wrap">
+        <div class="home-heading">
+          <div><div class="eyebrow"><span></span> Your learning space</div><h1 id="home-title">Follow your curiosity,<br><em>Maya.</em></h1></div>
+          <div class="daily-orbit" aria-label="3 of 4 weekly learning days complete"><div class="orbit-label"><strong>3</strong><span>of 4 days</span></div><i class="day d1">M</i><i class="day d2">T</i><i class="day d3">W</i><i class="day d4">T</i></div>
+        </div>
+
+        <div class="home-grid">
+          <article class="next-card glass-card">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="next-meta"><span class="signal"><i></i> Your next step</span><span>12 min journey</span></div>
+            <div class="path-preview" aria-hidden="true">
+              <svg viewBox="0 0 430 330"><path d="M72 260 C115 200 83 128 155 113 C217 100 207 218 273 201 C330 186 314 92 376 62"/><circle cx="72" cy="260" r="7"/><circle cx="155" cy="113" r="7"/><circle cx="273" cy="201" r="7"/><circle cx="376" cy="62" r="7"/></svg>
+              <span class="preview-node n1"><i>A</i>Storefront</span><span class="preview-node n2"><i>API</i>Order API</span><span class="preview-node n3"><i>↝</i>Event bus</span><span class="preview-node n4"><i>OP</i>Processor</span>
+            </div>
+            <div class="next-content"><span class="overline">Order Processing Foundations · 04</span><h2>How an order<br>becomes a workflow</h2><p>Trace the hidden journey from a customer’s click to a durable order.</p><button class="journey-button" type="button" data-go="lesson">Continue journey <span aria-hidden="true">→</span></button></div>
+            <div class="next-progress"><span>68% explored</span><div><i style="width:68%"></i></div><span>4 of 6</span></div>
+          </article>
+
+          <aside class="pulse-card glass-card">
+            <div class="card-title"><span>Knowledge pulse</span><button type="button" aria-label="Knowledge pulse details">•••</button></div>
+            <div class="pulse-visual"><svg viewBox="0 0 180 180" role="img" aria-label="Mastery score 74"><circle cx="90" cy="90" r="66"/><circle class="progress" cx="90" cy="90" r="66"/></svg><div><strong>74</strong><span>growing</span></div><i class="pulse-dot p1"></i><i class="pulse-dot p2"></i><i class="pulse-dot p3"></i></div>
+            <p>Your understanding of API boundaries is taking shape.</p>
+            <div class="pulse-stats"><div><span>Strongest</span><strong>API boundaries</strong><small>88%</small></div><div><span>Explore next</span><strong>Event delivery</strong><small>61%</small></div></div>
+          </aside>
+
+          <section class="horizon-card glass-card" aria-labelledby="horizon-title">
+            <div class="card-title"><span id="horizon-title">On your horizon</span><button type="button">View all</button></div>
+            <div class="horizon-list">
+              <article><div class="date-orb"><strong>24</strong><span>JUL</span></div><div><span class="tag coral">Knowledge check</span><h3>Order lifecycle quiz</h3><p>8 questions · 10 minutes</p></div><span class="due">in 2 days</span></article>
+              <article><div class="date-orb violet"><strong>29</strong><span>JUL</span></div><div><span class="tag violet">New course</span><h3>Resilient messaging</h3><p>3 lessons · 45 minutes</p></div><span class="due">next week</span></article>
+            </div>
+          </section>
+
+          <aside class="activity-card glass-card">
+            <div class="card-title"><span>Recent signals</span></div>
+            <div class="signal-row"><i class="success">✓</i><div><strong>Lesson complete</strong><span>Creating an order · 18m</span></div></div>
+            <div class="signal-row"><i>+8</i><div><strong>Mastery grew</strong><span>API boundaries · today</span></div></div>
+            <button class="quiet-button" type="button" data-go="map">See your system progress <span>↗</span></button>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-screen="lesson" aria-labelledby="lesson-title">
+      <div class="lesson-shell">
+        <aside class="journey-rail" aria-label="Lesson journey">
+          <div class="rail-head"><button type="button" data-go="home" aria-label="Back to home">←</button><span>04 / 06</span></div>
+          <ol>
+            <li class="complete"><i>✓</i><div><span>01</span><strong>Meet the system</strong></div></li>
+            <li class="complete"><i>✓</i><div><span>02</span><strong>The checkout boundary</strong></div></li>
+            <li class="complete"><i>✓</i><div><span>03</span><strong>Creating an order</strong></div></li>
+            <li class="current"><i></i><div><span>04 · You are here</span><strong>How an order becomes a workflow</strong></div></li>
+            <li><i></i><div><span>05</span><strong>Handling failure safely</strong></div></li>
+            <li><i></i><div><span>06</span><strong>Knowledge check</strong></div></li>
+          </ol>
+          <div class="rail-progress"><span>Course progress</span><strong>68%</strong><div><i></i></div></div>
+        </aside>
+
+        <article class="lesson-page">
+          <div class="lesson-heading"><div class="eyebrow"><span></span> Lesson 04 · 12 min</div><h1 id="lesson-title">How an order<br>becomes a <em>workflow</em></h1><p>The API accepts the request quickly. The real work begins after it publishes a message.</p></div>
+          <div class="objective-chips"><span>After this journey, you can</span><button type="button">01 · Trace request → order</button><button type="button">02 · Explain async processing</button></div>
+          <div class="lesson-copy">
+            <div class="section-marker"><span>01</span><i></i></div>
+            <section><h2>From request to intent</h2><p>When the storefront submits checkout, <button class="term" type="button" data-term="Order API">Order API</button> validates the command and creates a lightweight order record. It does not reserve stock or charge a card inside the request.</p><p>Instead, it publishes <code>OrderSubmitted</code> to the message bus. This creates a durable boundary between accepting the customer’s intent and coordinating downstream work.</p>
+              <button class="source-peek active" type="button" data-code="controller"><span class="source-orb">&lt;/&gt;</span><span><small>Explore source · 01</small><strong>OrderController.cs</strong><em>lines 42–57</em></span><span class="open-arrow">↗</span></button>
+              <blockquote><span>Insight</span><p>The controller is deliberately boring: validate, persist, publish, return.</p></blockquote>
+            </section>
+            <div class="section-marker"><span>02</span><i></i></div>
+            <section><h2>A workflow can wait</h2><p>The <button class="term" type="button" data-term="Order Processor">Order Processor</button> consumes the event independently. A temporary inventory outage can delay fulfillment without holding the browser request open or losing the order.</p>
+              <div class="insight-card"><span class="insight-icon">◎</span><div><strong>Architecture insight</strong><p>The message is the hand-off point. Everything before it is synchronous; everything after it is recoverable workflow.</p></div></div>
+              <button class="source-peek" type="button" data-code="consumer"><span class="source-orb">&lt;/&gt;</span><span><small>Explore source · 02</small><strong>OrderSubmittedConsumer.cs</strong><em>lines 18–29</em></span><span class="open-arrow">↗</span></button>
+            </section>
+          </div>
+          <div class="complete-card"><div><span>Ready for the next path?</span><strong id="completion-copy">Complete this lesson to reveal failure handling.</strong></div><button id="complete-lesson" class="journey-button" type="button">Mark as complete <span>✓</span></button></div>
+        </article>
+
+        <aside class="context-drawer" aria-label="Source context">
+          <div class="drawer-head"><div><span>Source context</span><strong id="code-file">OrderController.cs</strong></div><button class="drawer-close" type="button" aria-label="Close source context">×</button></div>
+          <div class="source-meta"><span>main@8f24c1a</span><span>Verified snapshot ✓</span></div>
+          <div class="source-path" id="code-path">src / Order.Api / Controllers</div>
+          <pre class="code-block" id="code-controller"><code><span class="ln"><i>42</i><b>[HttpPost]</b></span>
+<span class="ln"><i>43</i><em>public async</em> Task&lt;ActionResult&gt; Create(</span>
+<span class="ln"><i>44</i>  CreateOrder command)</span>
+<span class="ln"><i>45</i>{</span>
+<span class="ln"><i>46</i>  <em>var</em> result = <em>await</em> validator</span>
+<span class="ln"><i>47</i>    .ValidateAsync(command);</span>
+<span class="ln"><i>48</i></span>
+<span class="ln focus"><i>49</i>  <em>var</em> order = Order.Create(command);</span>
+<span class="ln focus"><i>50</i>  db.Orders.Add(order);</span>
+<span class="ln focus"><i>51</i>  <em>await</em> db.SaveChangesAsync();</span>
+<span class="ln"><i>52</i></span>
+<span class="ln focus"><i>53</i>  <em>await</em> bus.Publish(</span>
+<span class="ln focus"><i>54</i>    <em>new</em> OrderSubmitted(order.Id));</span>
+<span class="ln"><i>55</i></span>
+<span class="ln"><i>56</i>  <em>return</em> AcceptedAtAction(</span>
+<span class="ln"><i>57</i>    nameof(Get), <em>new</em> { order.Id });</span>
+<span class="ln"><i>58</i>}</span></code></pre>
+          <pre class="code-block hidden" id="code-consumer"><code><span class="ln"><i>18</i><em>public async</em> Task Consume(</span>
+<span class="ln"><i>19</i>  ConsumeContext&lt;OrderSubmitted&gt; ctx)</span>
+<span class="ln"><i>20</i>{</span>
+<span class="ln focus"><i>21</i>  <em>var</em> order = <em>await</em> orders</span>
+<span class="ln focus"><i>22</i>    .GetAsync(ctx.Message.OrderId);</span>
+<span class="ln"><i>23</i></span>
+<span class="ln focus"><i>24</i>  <em>await</em> inventory.ReserveAsync(</span>
+<span class="ln focus"><i>25</i>    order.Items, ctx.CancellationToken);</span>
+<span class="ln"><i>26</i></span>
+<span class="ln"><i>27</i>  order.MarkInventoryReserved();</span>
+<span class="ln"><i>28</i>  <em>await</em> orders.SaveAsync(order);</span>
+<span class="ln"><i>29</i>}</span></code></pre>
+          <div class="source-why"><span>Why this matters</span><p id="code-note">Publishing after persistence ensures the workflow always has an order to retrieve.</p></div>
+          <button class="quiet-button" type="button">Open repository <span>↗</span></button>
+        </aside>
+      </div>
+    </section>
+
+    <section class="view" data-screen="map" aria-labelledby="map-title">
+      <div class="universe">
+        <div class="universe-head"><div><div class="eyebrow"><span></span> Architecture explorer</div><h1 id="map-title">Order processing<br><em>constellation</em></h1><p>Select a system to reveal its purpose, relationships, and learning paths.</p></div><div class="map-controls"><div><button class="active" type="button">Flow</button><button type="button">Learning</button><button type="button">Mastery</button></div><button class="quiet-button" type="button" data-go="lesson">Resume lesson <span>→</span></button></div></div>
+        <div class="universe-grid">
+          <div class="cosmos" aria-label="Interactive system relationship map">
+            <svg viewBox="0 0 950 650" role="img" aria-label="Storefront connects to Order API, which connects to database and message bus. The bus connects to Order Processor, Inventory, and Payments."><defs><linearGradient id="wire-gradient"><stop stop-color="#75e8d3"/><stop offset="1" stop-color="#8c7cff"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M150 330 C220 330 225 210 315 210"/><path d="M420 210 C500 210 490 330 570 330"/><path d="M367 260 C367 330 320 370 320 450"/><path d="M680 330 C735 330 730 150 820 150"/><path d="M680 330 C740 330 745 330 820 330"/><path d="M680 330 C735 330 730 510 820 510"/></svg>
+            <div class="system-core" aria-hidden="true"><i></i><i></i><span>ORDER<br>SYSTEM</span></div>
+            <button class="cosmic-node storefront" type="button" data-node="storefront"><i>A</i><span><small>Experience</small><strong>Storefront</strong></span><em>2 lessons</em></button>
+            <button class="cosmic-node api selected" type="button" data-node="api"><i>API</i><span><small>Core service</small><strong>Order API</strong></span><em>3 lessons</em></button>
+            <button class="cosmic-node database" type="button" data-node="database"><i>DB</i><span><small>Data store</small><strong>Orders DB</strong></span><em>1 lesson</em></button>
+            <button class="cosmic-node bus" type="button" data-node="bus"><i>↝</i><span><small>Platform</small><strong>Message bus</strong></span><em>2 lessons</em></button>
+            <button class="cosmic-node processor" type="button" data-node="processor"><i>OP</i><span><small>Core service</small><strong>Order Processor</strong></span><em>4 lessons</em></button>
+            <button class="cosmic-node inventory" type="button" data-node="inventory"><i>IN</i><span><small>External</small><strong>Inventory</strong></span><em>1 lesson</em></button>
+            <button class="cosmic-node payments" type="button" data-node="payments"><i>$</i><span><small>External</small><strong>Payments</strong></span><em>1 lesson</em></button>
+            <div class="map-key"><span><i></i>Synchronous</span><span><i class="dash"></i>Asynchronous</span></div>
+          </div>
+          <aside class="system-detail" aria-live="polite">
+            <div class="detail-top"><span id="node-count">02 / 07</span><button type="button" aria-label="Close details">×</button></div>
+            <div class="detail-orb" id="node-glyph">API</div><span class="tag violet" id="node-kind">Core service</span><h2 id="node-title">Order API</h2><p id="node-description">Accepts order commands, validates input, persists the initial record, and publishes the event that starts fulfillment.</p>
+            <dl><div><dt>Owns</dt><dd id="node-owns">Order intake</dd></div><div><dt>Technology</dt><dd id="node-tech">ASP.NET Core</dd></div><div><dt>Learning</dt><dd id="node-learning">3 lessons</dd></div></dl>
+            <div class="mastery-band"><span>Your mastery</span><strong>88%</strong><div><i style="width:88%"></i></div></div>
+            <button class="journey-button" type="button" data-go="lesson">Enter learning path <span>→</span></button>
+            <button class="quiet-button wide" type="button">Explore 4 source references <span>↗</span></button>
+          </aside>
+        </div>
+        <details class="accessible-map"><summary>View relationships as a table</summary><table><thead><tr><th>From</th><th>To</th><th>Relationship</th></tr></thead><tbody><tr><td>Storefront</td><td>Order API</td><td>HTTPS request</td></tr><tr><td>Order API</td><td>Orders DB</td><td>Persists order</td></tr><tr><td>Order API</td><td>Message bus</td><td>Publishes event</td></tr><tr><td>Message bus</td><td>Order Processor</td><td>Delivers event</td></tr><tr><td>Order Processor</td><td>Inventory and Payments</td><td>Coordinates work</td></tr></tbody></table></details>
+      </div>
+    </section>
+  </main>
+
+  <div class="definition-popover" role="dialog" aria-labelledby="definition-title" hidden><button class="definition-backdrop" type="button" aria-label="Close definition"></button><div><button class="definition-close" type="button" aria-label="Close definition">×</button><span>Contextual glossary</span><h2 id="definition-title">Order API</h2><p id="definition-text"></p><button class="quiet-button" type="button" data-go="map">Find in constellation <b>→</b></button></div></div>
+  <script src="script.js"></script>
+</body>
+</html>

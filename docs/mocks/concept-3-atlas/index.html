@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Atlas — Learner Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="RepoFluent Atlas dashboard">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>
+          <span class="brand-title">RepoFluent</span>
+          <span class="concept-label">Concept 3 — Atlas</span>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="Concept pages">
+        <a href="index.html" aria-current="page">Learner Atlas</a>
+        <a href="lesson.html">Lesson + Code Tour</a>
+        <a href="analytics.html">Manager Analytics</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <span class="eyebrow">Orion Commerce Platform · C#/.NET + Angular</span>
+          <h1 id="page-title">Your codebase atlas.</h1>
+          <p class="lead">
+            Welcome back, Amara Osei. RepoFluent turns agent-generated curriculum into
+            lessons, code tours, quizzes, and progress signals anchored to the systems
+            you are learning on Platform Team.
+          </p>
+        </div>
+        <aside class="glass panel-tight" aria-label="Learner context">
+          <p class="meta">Learner</p>
+          <h2>Amara Osei</h2>
+          <p>Software Engineer II · joined Platform Team 3 weeks ago.</p>
+          <div class="metric-pill" aria-label="Current mastery is developing">
+            <strong>Developing</strong>
+            <span>current Checkout mastery</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="dashboard-grid" aria-label="Dashboard content">
+        <article class="glass panel map-stage" aria-labelledby="map-title">
+          <div class="map-head">
+            <div>
+              <span class="eyebrow">Map-first learning model</span>
+              <h2 id="map-title">Orion system architecture</h2>
+              <p>
+                Lessons appear as spatial overlays on the codebase map, helping learners
+                connect curriculum progress to subsystem boundaries and dependencies.
+              </p>
+            </div>
+            <div class="metric-pill">
+              <strong>7</strong>
+              <span>next lesson</span>
+            </div>
+          </div>
+
+          <svg class="system-map" viewBox="0 0 900 560" role="img" aria-labelledby="svg-title svg-desc">
+            <title id="svg-title">Orion Commerce Platform system map</title>
+            <desc id="svg-desc">
+              Checkout connects to Payments, Catalog, and Fulfillment. Identity connects
+              to all systems. Fulfillment connects to Catalog.
+            </desc>
+            <defs>
+              <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M2,2 L10,6 L2,10 Z" fill="rgba(222,233,255,0.66)"></path>
+              </marker>
+            </defs>
+            <path class="map-edge" marker-end="url(#arrow)" d="M450 265 C540 240 610 206 692 166"></path>
+            <path class="map-edge" marker-end="url(#arrow)" d="M410 235 C346 184 270 150 185 118"></path>
+            <path class="map-edge" marker-end="url(#arrow)" d="M446 314 C542 354 616 400 700 456"></path>
+            <path class="map-edge identity-edge" marker-end="url(#arrow)" d="M448 118 C450 164 450 196 450 232"></path>
+            <path class="map-edge identity-edge" marker-end="url(#arrow)" d="M405 100 C318 96 265 100 200 112"></path>
+            <path class="map-edge identity-edge" marker-end="url(#arrow)" d="M495 104 C570 112 626 132 688 158"></path>
+            <path class="map-edge identity-edge" marker-end="url(#arrow)" d="M492 138 C580 214 634 328 700 444"></path>
+            <path class="map-edge identity-edge" marker-end="url(#arrow)" d="M420 140 C342 222 282 332 205 438"></path>
+            <path class="map-edge" marker-end="url(#arrow)" d="M684 434 C560 350 390 210 218 132"></path>
+
+            <g class="checkout-text">
+              <circle class="map-halo" cx="450" cy="280" r="118"></circle>
+              <circle class="map-node checkout active" cx="450" cy="280" r="78"></circle>
+              <text class="map-label" x="450" y="274" text-anchor="middle">Checkout</text>
+              <text class="map-sub" x="450" y="300" text-anchor="middle">62% · developing</text>
+            </g>
+            <g class="identity-text">
+              <circle class="map-halo" cx="450" cy="92" r="72"></circle>
+              <circle class="map-node identity" cx="450" cy="92" r="54"></circle>
+              <text class="map-label" x="450" y="88" text-anchor="middle">Identity</text>
+              <text class="map-sub" x="450" y="112" text-anchor="middle">AuthN/AuthZ</text>
+            </g>
+            <g class="catalog-text">
+              <circle class="map-halo" cx="170" cy="108" r="80"></circle>
+              <circle class="map-node catalog" cx="170" cy="108" r="58"></circle>
+              <text class="map-label" x="170" y="104" text-anchor="middle">Catalog</text>
+              <text class="map-sub" x="170" y="128" text-anchor="middle">products</text>
+            </g>
+            <g class="payments-text">
+              <circle class="map-halo" cx="720" cy="156" r="78"></circle>
+              <circle class="map-node payments" cx="720" cy="156" r="58"></circle>
+              <text class="map-label" x="720" y="152" text-anchor="middle">Payments</text>
+              <text class="map-sub" x="720" y="176" text-anchor="middle">optional</text>
+            </g>
+            <g class="fulfillment-text">
+              <circle class="map-halo" cx="720" cy="466" r="78"></circle>
+              <circle class="map-node fulfillment" cx="720" cy="466" r="58"></circle>
+              <text class="map-label" x="720" y="462" text-anchor="middle">Fulfillment</text>
+              <text class="map-sub" x="720" y="486" text-anchor="middle">events</text>
+            </g>
+          </svg>
+
+          <details class="map-companion" open>
+            <summary>Accessible map companion: systems and relationships</summary>
+            <ul class="relationship-list">
+              <li><span class="system-dot checkout-text"></span>Checkout connects to Payments, Catalog, and Fulfillment.</li>
+              <li><span class="system-dot identity-text"></span>Identity connects to Checkout, Catalog, Fulfillment, and Payments.</li>
+              <li><span class="system-dot fulfillment-text"></span>Fulfillment depends on Catalog for inventory context.</li>
+              <li><span class="system-dot payments-text"></span>Payments is recommended optional enrichment after Checkout.</li>
+            </ul>
+          </details>
+        </article>
+
+        <aside class="side-stack" aria-label="Assignments and activity">
+          <section class="glass panel-tight next-step" aria-labelledby="next-title">
+            <span class="tag">Recommended next step</span>
+            <h2 id="next-title">Lesson 7 “The CartPricingService pipeline”</h2>
+            <p>Continue Checkout Subsystem Deep Dive with a guided tour from Angular cart state to .NET pricing rules.</p>
+            <div class="button-row">
+              <a class="btn" href="lesson.html">Open lesson</a>
+              <a class="btn secondary" href="#assignments">View assignment</a>
+            </div>
+          </section>
+
+          <section id="assignments" class="glass panel-tight" aria-labelledby="assignments-title">
+            <div class="card-row">
+              <div>
+                <span class="eyebrow">Assigned curricula</span>
+                <h2 id="assignments-title">Learning queue</h2>
+              </div>
+              <span class="metric-pill"><strong>4</strong><span>active</span></span>
+            </div>
+            <div class="card-stack">
+              <article class="assignment-card" style="--course-color: var(--checkout);">
+                <div class="card-row">
+                  <h3>Checkout Subsystem Deep Dive</h3>
+                  <span class="status-tag">Developing</span>
+                </div>
+                <p class="meta">62% complete · due Aug 8 · 12 lessons</p>
+                <div class="progress" aria-label="62 percent complete"><span style="--value: 62%;"></span></div>
+              </article>
+
+              <article class="assignment-card" style="--course-color: var(--catalog);">
+                <div class="card-row">
+                  <h3>Orion Platform Foundations</h3>
+                  <span class="status-tag done">Proficient</span>
+                </div>
+                <p class="meta">100% complete · passed final test 92%</p>
+                <div class="progress" aria-label="100 percent complete"><span style="--value: 100%;"></span></div>
+              </article>
+
+              <article class="assignment-card" style="--course-color: var(--payments);">
+                <div class="card-row">
+                  <h3>Payments Integration Patterns</h3>
+                  <span class="status-tag">Optional</span>
+                </div>
+                <p class="meta">Not started · due Aug 22 · optional enrichment</p>
+                <div class="progress" aria-label="0 percent complete"><span style="--value: 0%;"></span></div>
+              </article>
+
+              <article class="assignment-card" style="--course-color: var(--identity);">
+                <div class="card-row">
+                  <h3>Identity &amp; AuthN/AuthZ in Orion</h3>
+                  <span class="status-tag overdue">Overdue</span>
+                </div>
+                <p class="meta">25% complete · overdue Jul 18 · needs attention</p>
+                <div class="progress" aria-label="25 percent complete"><span style="--value: 25%;"></span></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="glass panel-tight" aria-labelledby="activity-title">
+            <span class="eyebrow">Recent activity</span>
+            <h2 id="activity-title">Learning trace</h2>
+            <ul class="activity-list">
+              <li>
+                <strong>Quiz “Checkout state machine” · 8/10</strong>
+                <span class="meta">Jul 21 · confidence improved on order transitions.</span>
+              </li>
+              <li>
+                <strong>Completed lesson “Order lifecycle events”</strong>
+                <span class="meta">Jul 21 · Fulfillment dependency unlocked.</span>
+              </li>
+              <li>
+                <strong>Bookmarked <code>CartPricingService.cs</code></strong>
+                <span class="meta">Jul 20 · saved for code review prep.</span>
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

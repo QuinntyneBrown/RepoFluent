@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Clarity — Lesson Code Tour</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="topbar">
+    <div class="nav-shell">
+      <a class="brand" href="index.html" aria-label="RepoFluent Clarity dashboard">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span class="brand-copy">
+          <span class="brand-title">RepoFluent</span>
+          <span class="concept-label">Concept 2 — Clarity</span>
+        </span>
+      </a>
+      <nav class="primary-nav" aria-label="Concept pages">
+        <a href="index.html">Learner</a>
+        <a href="lesson.html" aria-current="page">Lesson</a>
+        <a href="analytics.html">Analytics</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <span>Checkout Subsystem Deep Dive</span>
+      <span>Module 3: Pricing &amp; Promotions</span>
+      <span>Lesson 7</span>
+    </nav>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <div class="hero-panel">
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Orion Commerce Platform</p>
+        <h1 id="lesson-title">The CartPricingService pipeline</h1>
+        <p class="lede">Follow a price calculation from the Angular cart summary through the Checkout API, then into promotion rules, tax calculation, and returned totals.</p>
+        <div class="cluster">
+          <span class="chip primary">Estimated 25 min</span>
+          <span class="chip warning">Code tour: step 2 of 5</span>
+          <span class="chip">Mastery: Developing</span>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-labelledby="objectives-title">
+        <h2 id="objectives-title">Learning objectives</h2>
+        <ol class="objectives">
+          <li>Explain how <code>CartPricingService</code> composes pricing rules.</li>
+          <li>Trace a price calculation from Angular cart component to API.</li>
+          <li>Identify where promotion rules are registered.</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="lesson-layout">
+      <aside class="card card-pad sticky-panel" aria-labelledby="tour-title">
+        <div class="section-head">
+          <div>
+            <h2 id="tour-title">Code tour</h2>
+            <p class="muted">Five linked files. Select a step to focus the explanation.</p>
+          </div>
+        </div>
+        <ol class="tour-list">
+          <li>
+            <button class="tour-step-button" type="button" data-step="1" aria-controls="step-1">
+              <span class="step-number">1</span>
+              <span><strong>Service dependencies</strong><br><span class="muted small">CartPricingService constructor</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="tour-step-button is-active" type="button" data-step="2" aria-controls="step-2">
+              <span class="step-number">2</span>
+              <span><strong>PriceAsync pipeline</strong><br><span class="muted small">Subtotal, rules, tax, totals</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="tour-step-button" type="button" data-step="3" aria-controls="step-3">
+              <span class="step-number">3</span>
+              <span><strong>Rule registration</strong><br><span class="muted small">PromotionRuleRegistry.cs</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="tour-step-button" type="button" data-step="4" aria-controls="step-4">
+              <span class="step-number">4</span>
+              <span><strong>Angular summary</strong><br><span class="muted small">cart-summary.component.ts</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="tour-step-button" type="button" data-step="5" aria-controls="step-5">
+              <span class="step-number">5</span>
+              <span><strong>Cart API client</strong><br><span class="muted small">cart.service.ts</span></span>
+            </button>
+          </li>
+        </ol>
+      </aside>
+
+      <section class="stack" aria-labelledby="code-title">
+        <div class="snapshot" role="note">
+          <span aria-hidden="true">ⓘ</span>
+          <p><strong>Snapshot:</strong> main @ 4f2c9ab · captured Jul 14, 2026 — repository may have changed since capture.</p>
+        </div>
+
+        <article id="step-1" class="card card-pad step-panel" data-panel="1" aria-labelledby="step-1-title">
+          <span class="chip">Step 1 · src/Orion.Checkout/Services/CartPricingService.cs</span>
+          <h2 id="step-1-title">Start with injected collaborators</h2>
+          <p class="muted">The service receives an <code>IPromotionRuleRegistry</code> and <code>ITaxCalculator</code>. That separation keeps rule composition, tax policy, and total calculation testable.</p>
+        </article>
+
+        <article id="step-2" class="card card-pad step-panel is-active" data-panel="2" aria-labelledby="step-2-title">
+          <span class="chip primary">Step 2 · src/Orion.Checkout/Services/CartPricingService.cs</span>
+          <h2 id="step-2-title">Trace the price calculation pipeline</h2>
+          <p class="muted">The active tour step shows how subtotal flows through a <button class="glossary-term" type="button" aria-describedby="pricing-rule-definition">pricing rule</button> registry before tax is calculated and the immutable totals object is returned.</p>
+        </article>
+
+        <div class="code-shell" aria-labelledby="code-title">
+          <div class="code-toolbar">
+            <div>
+              <h2 id="code-title" class="micro">Code excerpt</h2>
+              <div class="file-path">src/Orion.Checkout/Services/CartPricingService.cs</div>
+            </div>
+            <span class="chip accent">C#/.NET</span>
+          </div>
+          <pre class="code-block"><code><span class="code-line"><span><span class="kw">public sealed class</span> <span class="type">CartPricingService</span> : <span class="type">ICartPricingService</span></span></span>
+<span class="code-line"><span>{</span></span>
+<span class="code-line"><span>    <span class="kw">private readonly</span> <span class="type">IPromotionRuleRegistry</span> <span class="var">_rules</span>;</span></span>
+<span class="code-line"><span>    <span class="kw">private readonly</span> <span class="type">ITaxCalculator</span> <span class="var">_tax</span>;</span></span>
+<span class="code-line"><span></span></span>
+<span class="code-line"><span>    <span class="kw">public</span> <span class="method">CartPricingService</span>(<span class="type">IPromotionRuleRegistry</span> rules, <span class="type">ITaxCalculator</span> tax)</span></span>
+<span class="code-line"><span>    {</span></span>
+<span class="code-line"><span>        <span class="var">_rules</span> <span class="operator">=</span> rules;</span></span>
+<span class="code-line"><span>        <span class="var">_tax</span> <span class="operator">=</span> tax;</span></span>
+<span class="code-line"><span>    }</span></span>
+<span class="code-line"><span></span></span>
+<span class="code-line"><span>    <span class="kw">public async</span> <span class="type">Task</span>&lt;<span class="type">CartTotals</span>&gt; <span class="method">PriceAsync</span>(<span class="type">Cart</span> cart, <span class="type">CancellationToken</span> ct)</span></span>
+<span class="code-line"><span>    {</span></span>
+<span class="code-line highlight"><span>        <span class="kw">var</span> subtotal <span class="operator">=</span> cart.Lines.<span class="method">Sum</span>(l <span class="operator">=&gt;</span> l.UnitPrice <span class="operator">*</span> l.Quantity);</span></span>
+<span class="code-line highlight"><span>        <span class="kw">var</span> discounted <span class="operator">=</span> <span class="kw">await</span> <span class="var">_rules</span>.<span class="method">ApplyAsync</span>(cart, subtotal, ct);</span></span>
+<span class="code-line highlight"><span>        <span class="kw">var</span> tax <span class="operator">=</span> <span class="var">_tax</span>.<span class="method">Calculate</span>(discounted, cart.ShippingAddress);</span></span>
+<span class="code-line highlight"><span>        <span class="kw">return new</span> <span class="type">CartTotals</span>(subtotal, discounted, tax);</span></span>
+<span class="code-line"><span>    }</span></span>
+<span class="code-line"><span>}</span></span></code></pre>
+        </div>
+
+        <article id="step-3" class="card card-pad step-panel" data-panel="3" aria-labelledby="step-3-title">
+          <span class="chip">Step 3 · src/Orion.Checkout/Rules/PromotionRuleRegistry.cs</span>
+          <h2 id="step-3-title">PromotionRuleRegistry owns rule registration</h2>
+          <p class="muted">Look here for the ordered set of seasonal discounts, coupon validation rules, and customer-tier promotions that <code>PriceAsync</code> applies.</p>
+        </article>
+
+        <article id="step-4" class="card card-pad step-panel" data-panel="4" aria-labelledby="step-4-title">
+          <span class="chip">Step 4 · webapp/src/app/cart/cart-summary.component.ts</span>
+          <h2 id="step-4-title">Angular displays calculated totals</h2>
+          <p class="muted">The cart summary component subscribes to totals returned by the cart service and presents subtotal, discount, tax, and final due amounts.</p>
+        </article>
+
+        <article id="step-5" class="card card-pad step-panel" data-panel="5" aria-labelledby="step-5-title">
+          <span class="chip">Step 5 · webapp/src/app/cart/cart.service.ts</span>
+          <h2 id="step-5-title">Cart service calls the Checkout API</h2>
+          <p class="muted">The TypeScript service is the frontend boundary. It posts cart line changes and receives refreshed totals from the backend pipeline.</p>
+        </article>
+      </section>
+
+      <aside class="stack sticky-panel" aria-label="Lesson support">
+        <section class="card card-pad definition-card" id="pricing-rule-definition" aria-labelledby="glossary-title">
+          <span class="chip accent">Glossary</span>
+          <h2 id="glossary-title">Pricing rule</h2>
+          <p class="muted">A pricing rule is a small, ordered policy that adjusts a cart subtotal before tax. In Orion, rules are registered centrally so Checkout can explain which promotion changed the total.</p>
+        </section>
+
+        <section class="card card-pad knowledge-check" aria-labelledby="check-title">
+          <span class="chip primary">Knowledge check</span>
+          <h2 id="check-title">Which component is responsible for registering promotion rules?</h2>
+          <form>
+            <fieldset>
+              <legend class="muted small">Choose one answer.</legend>
+              <label class="option"><input type="radio" name="registry"> CartPricingService</label>
+              <label class="option"><input type="radio" name="registry"> ITaxCalculator</label>
+              <label class="option correct"><input type="radio" name="registry"> PromotionRuleRegistry</label>
+              <label class="option"><input type="radio" name="registry"> cart-summary.component.ts</label>
+            </fieldset>
+          </form>
+          <details>
+            <summary class="button secondary">Show explanation</summary>
+            <p class="muted small">Correct: <strong>PromotionRuleRegistry</strong> registers the ordered promotion rules that <code>CartPricingService</code> applies.</p>
+          </details>
+        </section>
+
+        <section class="card card-pad" aria-labelledby="lesson-progress-title">
+          <h2 id="lesson-progress-title">Lesson progress</h2>
+          <div class="cluster">
+            <div class="progress-ring" style="--progress: 40; --ring-color: var(--color-primary);" aria-label="Step 2 of 5 complete">
+              <svg viewBox="0 0 42 42" aria-hidden="true">
+                <circle class="track" cx="21" cy="21" r="15.915" fill="none" stroke-width="4"></circle>
+                <circle class="value" cx="21" cy="21" r="15.915" fill="none" stroke-width="4" pathLength="100"></circle>
+              </svg>
+              <span class="ring-label">2/5</span>
+            </div>
+            <p class="muted">Next: inspect <code>PromotionRuleRegistry.cs</code> and connect it to the highlighted <code>ApplyAsync</code> call.</p>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    document.documentElement.classList.add('js');
+    const buttons = Array.from(document.querySelectorAll('[data-step]'));
+    const panels = Array.from(document.querySelectorAll('[data-panel]'));
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const step = button.dataset.step;
+        buttons.forEach((item) => item.classList.toggle('is-active', item === button));
+        panels.forEach((panel) => panel.classList.toggle('is-active', panel.dataset.panel === step));
+      });
+    });
+  </script>
+</body>
+</html>

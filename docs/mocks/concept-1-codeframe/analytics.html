@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Codeframe — Manager Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#analytics-content">Skip to analytics content</a>
+  <div class="app-frame">
+    <header class="topbar" aria-label="RepoFluent workspace">
+      <div class="window-controls" aria-hidden="true">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">RF</span>
+        <span class="brand-name">RepoFluent</span>
+        <span class="concept-label">Concept 1 — Codeframe</span>
+      </div>
+      <nav class="main-nav" aria-label="Primary">
+        <a class="nav-link" href="index.html">Learner</a>
+        <a class="nav-link" href="lesson.html">Lesson + code tour</a>
+        <a class="nav-link" aria-current="page" href="analytics.html">Analytics</a>
+      </nav>
+    </header>
+
+    <div class="shell">
+      <aside class="activity-rail" aria-label="Workspace activity">
+        <ul class="rail-list">
+          <li><span class="rail-item" title="Learn">⌘</span></li>
+          <li><span class="rail-item" title="Courses">C#</span></li>
+          <li><span class="rail-item" title="Tours">TS</span></li>
+          <li><span class="rail-item" title="Quizzes">?</span></li>
+          <li><span class="rail-item active" title="Analytics">∑</span></li>
+        </ul>
+      </aside>
+
+      <aside class="sidebar" aria-labelledby="analytics-nav-title">
+        <h2 id="analytics-nav-title" class="sidebar-title">Analytics explorer</h2>
+        <nav aria-label="Analytics sections">
+          <ul class="tree">
+            <li class="tree-group">Cohorts</li>
+            <li><a class="tree-item active" href="#"><span>Platform Onboarding Cohort — Q3</span><span class="tree-meta">9</span></a></li>
+            <li><a class="tree-item" href="#"><span>Backend guild ramp</span><span class="tree-meta">18</span></a></li>
+            <li><a class="tree-item" href="#"><span>Angular migration</span><span class="tree-meta">12</span></a></li>
+            <li class="tree-group">Reports</li>
+            <li><a class="tree-item" href="#status-panel"><span>Assignment status</span><span class="tree-meta">dist</span></a></li>
+            <li><a class="tree-item" href="#mastery-panel"><span>System mastery</span><span class="tree-meta">heat</span></a></li>
+            <li><a class="tree-item" href="#gap-panel"><span>Knowledge gaps</span><span class="tree-meta">rank</span></a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main id="analytics-content" class="content">
+        <section class="page-header" aria-labelledby="analytics-title">
+          <div>
+            <p class="eyebrow">Manager analytics</p>
+            <h1 id="analytics-title">Platform Onboarding Cohort — Q3</h1>
+            <p class="lede">
+              Daniel Reyes is viewing 9 learners across the Orion Commerce Platform.
+              Signals combine assignments, code-tour completion, quiz outcomes, and
+              mastery estimates by system.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="#gap-panel">Review gaps</a>
+            <a class="button" href="#privacy-note">Privacy rules</a>
+          </div>
+        </section>
+
+        <section class="panel filter-panel" aria-labelledby="filters-title">
+          <div class="panel-header">
+            <h2 id="filters-title">Drill-down filters</h2>
+            <span class="badge">decorative preview</span>
+          </div>
+          <div class="panel-body">
+            <div class="filters">
+              <div class="field">
+                <label for="curriculum">Curriculum</label>
+                <select id="curriculum" aria-label="Curriculum filter">
+                  <option>All curricula</option>
+                  <option>Checkout Subsystem Deep Dive</option>
+                  <option>Orion Platform Foundations</option>
+                  <option>Payments Integration Patterns</option>
+                  <option>Identity &amp; AuthN/AuthZ in Orion</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="version">Version</label>
+                <select id="version" aria-label="Version filter">
+                  <option>main @ 4f2c9ab</option>
+                  <option>latest captured snapshot</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="team">Team</label>
+                <select id="team" aria-label="Team filter">
+                  <option>Platform Onboarding Cohort — Q3</option>
+                  <option>Platform Team</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="system">System</label>
+                <select id="system" aria-label="System filter">
+                  <option>All systems</option>
+                  <option>Checkout</option>
+                  <option>Catalog</option>
+                  <option>Identity</option>
+                  <option>Fulfillment</option>
+                  <option>Payments</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid analytics-grid">
+          <section id="status-panel" class="panel span-5" aria-labelledby="status-title">
+            <div class="panel-header">
+              <h2 id="status-title">Assignment status distribution</h2>
+              <span class="badge">9 learners</span>
+            </div>
+            <div class="panel-body">
+              <div class="distribution">
+                <div class="distribution-row">
+                  <span>Not started</span>
+                  <div class="bar-track" aria-label="2 not started"><span class="bar-fill" style="--value:22%;--bar:#6f8197"></span></div>
+                  <strong>2</strong>
+                </div>
+                <div class="distribution-row">
+                  <span>In progress</span>
+                  <div class="bar-track" aria-label="4 in progress"><span class="bar-fill" style="--value:44%;--bar:var(--accent)"></span></div>
+                  <strong>4</strong>
+                </div>
+                <div class="distribution-row">
+                  <span>Completed/passed</span>
+                  <div class="bar-track" aria-label="2 completed and passed"><span class="bar-fill" style="--value:22%;--bar:var(--success)"></span></div>
+                  <strong>2</strong>
+                </div>
+                <div class="distribution-row">
+                  <span>Overdue</span>
+                  <div class="bar-track" aria-label="1 overdue"><span class="bar-fill" style="--value:11%;--bar:var(--danger)"></span></div>
+                  <strong>1</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel span-7" aria-labelledby="completion-title">
+            <div class="panel-header">
+              <h2 id="completion-title">Completion by curriculum</h2>
+              <span class="badge">mean progress</span>
+            </div>
+            <div class="panel-body">
+              <div class="curriculum-bars">
+                <div class="curriculum-bar">
+                  <span>Checkout Subsystem Deep Dive</span>
+                  <div class="bar-track" aria-label="62 percent"><span class="bar-fill" style="--value:62%"></span></div>
+                  <strong>62%</strong>
+                </div>
+                <div class="curriculum-bar">
+                  <span>Orion Platform Foundations</span>
+                  <div class="bar-track" aria-label="100 percent"><span class="bar-fill" style="--value:100%;--bar:var(--success)"></span></div>
+                  <strong>100%</strong>
+                </div>
+                <div class="curriculum-bar">
+                  <span>Payments Integration Patterns</span>
+                  <div class="bar-track" aria-label="0 percent"><span class="bar-fill" style="--value:0%"></span></div>
+                  <strong>0%</strong>
+                </div>
+                <div class="curriculum-bar">
+                  <span>Identity &amp; AuthN/AuthZ in Orion</span>
+                  <div class="bar-track" aria-label="25 percent"><span class="bar-fill" style="--value:25%;--bar:var(--warning)"></span></div>
+                  <strong>25%</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="mastery-panel" class="panel span-7" aria-labelledby="mastery-title">
+            <div class="panel-header">
+              <h2 id="mastery-title">Mastery by system/subsystem</h2>
+              <span class="badge">heat-style table</span>
+            </div>
+            <div class="panel-body">
+              <table class="heat-table">
+                <thead>
+                  <tr>
+                    <th scope="col">System</th>
+                    <th scope="col">Mastery</th>
+                    <th scope="col">Primary signal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Checkout</th>
+                    <td class="heat-cell" style="--score:71%">71%</td>
+                    <td class="muted">Pricing tours and state-machine quizzes</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Catalog</th>
+                    <td class="heat-cell" style="--score:84%">84%</td>
+                    <td class="muted">Search indexing lessons</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Identity</th>
+                    <td class="heat-cell" style="--score:52%">52%</td>
+                    <td class="muted">AuthN/AuthZ recall checks</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Fulfillment</th>
+                    <td class="heat-cell" style="--score:63%">63%</td>
+                    <td class="muted">Saga compensation practice</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Payments</th>
+                    <td class="heat-cell" style="--score:44%">44%</td>
+                    <td class="muted">Adapter pattern enrichment</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <aside id="gap-panel" class="panel span-5" aria-labelledby="gap-title">
+            <div class="panel-header">
+              <h2 id="gap-title">Common knowledge gaps</h2>
+              <span class="badge warning">intervene</span>
+            </div>
+            <div class="panel-body">
+              <ol class="gap-list">
+                <li>
+                  <strong>Promotion rule registration</strong>
+                  <div class="muted">Missed by 6/9 · add registry-focused tour note.</div>
+                </li>
+                <li>
+                  <strong>Token refresh flow</strong>
+                  <div class="muted">Missed by 5/9 · pair with Identity review.</div>
+                </li>
+                <li>
+                  <strong>Saga compensation steps</strong>
+                  <div class="muted">Missed by 4/9 · schedule fulfillment walkthrough.</div>
+                </li>
+              </ol>
+            </div>
+          </aside>
+
+          <section class="panel span-6" aria-labelledby="performers-title">
+            <div class="panel-header">
+              <h2 id="performers-title">Top performers callout</h2>
+              <span class="badge success">transparent indicators</span>
+            </div>
+            <div class="panel-body stack">
+              <div class="performers">
+                <article class="performer-card">
+                  <span class="avatar" aria-hidden="true">PN</span>
+                  <div>
+                    <h3>Priya N.</h3>
+                    <p class="muted">Fastest checkout completion with strong quiz consistency.</p>
+                  </div>
+                </article>
+                <article class="performer-card">
+                  <span class="avatar" aria-hidden="true">MT</span>
+                  <div>
+                    <h3>Marcus T.</h3>
+                    <p class="muted">Highest code-tour completion across systems.</p>
+                  </div>
+                </article>
+              </div>
+              <p class="muted">
+                Indicators are shown with contributing signals so managers can explain why
+                a learner appears here and avoid opaque ranking.
+              </p>
+            </div>
+          </section>
+
+          <section id="privacy-note" class="panel span-6" aria-labelledby="privacy-title">
+            <div class="panel-header">
+              <h2 id="privacy-title">Minimum-group privacy rules</h2>
+              <span class="badge">ANL-06</span>
+            </div>
+            <div class="panel-body compact-stack">
+              <p>
+                RepoFluent applies ANL-06: analytics that could reveal sensitive individual
+                learning gaps are suppressed or aggregated unless the selected group meets
+                minimum size requirements.
+              </p>
+              <p class="muted">
+                This cohort has 9 learners, so group-level patterns are visible. Smaller
+                slices would show protected summaries instead of learner-identifying data.
+              </p>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <footer class="statusbar" aria-label="Analytics status">
+      <div class="statusbar-left">
+        <span>manager: Daniel Reyes</span>
+        <span>cohort: Platform Onboarding Cohort — Q3</span>
+      </div>
+      <div class="statusbar-right">
+        <span>learners 9</span>
+        <span>privacy: ANL-06 active</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

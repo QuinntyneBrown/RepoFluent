@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Codeframe — Learner Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="app-frame">
+    <header class="topbar" aria-label="RepoFluent workspace">
+      <div class="window-controls" aria-hidden="true">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">RF</span>
+        <span class="brand-name">RepoFluent</span>
+        <span class="concept-label">Concept 1 — Codeframe</span>
+      </div>
+      <nav class="main-nav" aria-label="Primary">
+        <a class="nav-link" aria-current="page" href="index.html">Learner</a>
+        <a class="nav-link" href="lesson.html">Lesson + code tour</a>
+        <a class="nav-link" href="analytics.html">Analytics</a>
+      </nav>
+    </header>
+
+    <div class="shell">
+      <aside class="activity-rail" aria-label="Workspace activity">
+        <ul class="rail-list">
+          <li><span class="rail-item active" title="Learn">⌘</span></li>
+          <li><span class="rail-item" title="Courses">C#</span></li>
+          <li><span class="rail-item" title="Tours">TS</span></li>
+          <li><span class="rail-item" title="Quizzes">?</span></li>
+          <li><span class="rail-item" title="Analytics">∑</span></li>
+        </ul>
+      </aside>
+
+      <aside class="sidebar" aria-labelledby="workspace-title">
+        <h2 id="workspace-title" class="sidebar-title">Orion Commerce Platform</h2>
+        <nav aria-label="Codebase systems">
+          <ul class="tree">
+            <li class="tree-group">Systems</li>
+            <li><a class="tree-item active" href="#"><span>Checkout</span><span class="tree-meta">62%</span></a></li>
+            <li><a class="tree-item" href="#"><span>Catalog</span><span class="tree-meta">84%</span></a></li>
+            <li><a class="tree-item" href="#"><span>Identity</span><span class="tree-meta">25%</span></a></li>
+            <li><a class="tree-item" href="#"><span>Fulfillment</span><span class="tree-meta">41%</span></a></li>
+            <li><a class="tree-item" href="#"><span>Payments</span><span class="tree-meta">new</span></a></li>
+            <li class="tree-group">Learning files</li>
+            <li><a class="tree-item" href="lesson.html"><span>Lesson 7 tour</span><span class="tree-meta">open</span></a></li>
+            <li><a class="tree-item" href="#"><span>Quiz queue</span><span class="tree-meta">3</span></a></li>
+            <li><a class="tree-item" href="#"><span>Bookmarks</span><span class="tree-meta">1</span></a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main id="main-content" class="content">
+        <section class="page-header" aria-labelledby="dashboard-title">
+          <div>
+            <p class="eyebrow">Learner dashboard</p>
+            <h1 id="dashboard-title">Welcome back, Amara Osei.</h1>
+            <p class="lede">
+              Software Engineer II · joined Platform Team 3 weeks ago · learning the
+              C#/.NET backend and Angular frontend behind the Orion Commerce Platform.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="lesson.html">Resume Lesson 7</a>
+            <a class="button" href="#curricula">View assignments</a>
+          </div>
+        </section>
+
+        <div class="grid dashboard-grid">
+          <section class="panel stack" aria-labelledby="next-step-title">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Recommended next step</p>
+                <h2 id="next-step-title">Lesson 7 “The CartPricingService pipeline”</h2>
+              </div>
+              <span class="badge">25 min</span>
+            </div>
+            <div class="panel-body">
+              <article class="course-card featured">
+                <div>
+                  <p class="course-title">Checkout Subsystem Deep Dive</p>
+                  <p class="muted">
+                    Continue Module 3, Pricing &amp; Promotions. The code tour opens with
+                    <span class="mono">CartPricingService.cs</span> and follows a calculation
+                    from Angular cart state to the checkout API.
+                  </p>
+                  <div class="tag-row" aria-label="Recommended lesson metadata">
+                    <span class="badge">Module 3</span>
+                    <span class="badge success">Step 2 of 5 ready</span>
+                    <span class="badge">Mastery: Developing</span>
+                  </div>
+                </div>
+                <a class="button primary" href="lesson.html">Open split view</a>
+              </article>
+            </div>
+          </section>
+
+          <aside class="panel" aria-labelledby="profile-title">
+            <div class="panel-header">
+              <h2 id="profile-title">Learner snapshot</h2>
+              <span class="badge success">Active</span>
+            </div>
+            <div class="panel-body stack">
+              <div class="stat-grid">
+                <div class="stat">
+                  <strong>4</strong>
+                  <span>assigned curricula</span>
+                </div>
+                <div class="stat">
+                  <strong>37</strong>
+                  <span>completed lessons</span>
+                </div>
+                <div class="stat">
+                  <strong>92%</strong>
+                  <span>best final test</span>
+                </div>
+              </div>
+              <div>
+                <h3>Current focus</h3>
+                <p class="muted">
+                  Pricing rules, checkout state transitions, and the API seam between
+                  Angular cart components and .NET services.
+                </p>
+              </div>
+            </div>
+          </aside>
+
+          <section id="curricula" class="panel" aria-labelledby="curricula-title">
+            <div class="panel-header">
+              <h2 id="curricula-title">Assigned curricula</h2>
+              <span class="badge">Orion Commerce Platform</span>
+            </div>
+            <div class="panel-body">
+              <div class="card-list">
+                <article class="course-card">
+                  <div>
+                    <h3 class="course-title">Checkout Subsystem Deep Dive</h3>
+                    <div class="meta-row">
+                      <span>Due Aug 8</span>
+                      <span>12 lessons</span>
+                      <span>Mastery: Developing</span>
+                    </div>
+                    <div class="progress" aria-label="62 percent complete">
+                      <span style="--value: 62%"></span>
+                    </div>
+                    <div class="progress-label"><span>progress</span><span>62%</span></div>
+                  </div>
+                  <span class="badge warning">In progress</span>
+                </article>
+
+                <article class="course-card">
+                  <div>
+                    <h3 class="course-title">Orion Platform Foundations</h3>
+                    <div class="meta-row">
+                      <span>Final test 92%</span>
+                      <span>Mastery: Proficient</span>
+                      <span>Completed</span>
+                    </div>
+                    <div class="progress" aria-label="100 percent complete">
+                      <span style="--value: 100%"></span>
+                    </div>
+                    <div class="progress-label"><span>progress</span><span>100%</span></div>
+                  </div>
+                  <span class="badge success">Passed</span>
+                </article>
+
+                <article class="course-card">
+                  <div>
+                    <h3 class="course-title">Payments Integration Patterns</h3>
+                    <div class="meta-row">
+                      <span>Due Aug 22</span>
+                      <span>Optional enrichment</span>
+                      <span>Mastery: Not assessed</span>
+                    </div>
+                    <div class="progress" aria-label="0 percent complete">
+                      <span style="--value: 0%"></span>
+                    </div>
+                    <div class="progress-label"><span>progress</span><span>Not started</span></div>
+                  </div>
+                  <span class="badge">Optional</span>
+                </article>
+
+                <article class="course-card">
+                  <div>
+                    <h3 class="course-title">Identity &amp; AuthN/AuthZ in Orion</h3>
+                    <div class="meta-row">
+                      <span>Overdue Jul 18</span>
+                      <span>25% complete</span>
+                      <span>Security-critical path</span>
+                    </div>
+                    <div class="progress" aria-label="25 percent complete">
+                      <span style="--value: 25%"></span>
+                    </div>
+                    <div class="progress-label"><span>progress</span><span>25%</span></div>
+                  </div>
+                  <span class="badge danger">Overdue</span>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <aside class="panel" aria-labelledby="activity-title">
+            <div class="panel-header">
+              <h2 id="activity-title">Recent activity</h2>
+              <span class="badge">last 72h</span>
+            </div>
+            <div class="panel-body">
+              <ul class="activity-list">
+                <li>
+                  <strong>Quiz “Checkout state machine”</strong>
+                  <div class="muted">8/10 · Jul 21 · two misses tagged as lifecycle events.</div>
+                </li>
+                <li>
+                  <strong>Completed lesson “Order lifecycle events”</strong>
+                  <div class="muted">Jul 21 · unlocked pricing module tour.</div>
+                </li>
+                <li>
+                  <strong>Bookmarked <span class="mono">CartPricingService.cs</span></strong>
+                  <div class="muted">Jul 20 · saved for sprint onboarding notes.</div>
+                </li>
+              </ul>
+            </div>
+          </aside>
+
+          <section class="panel" aria-labelledby="systems-title">
+            <div class="panel-header">
+              <h2 id="systems-title">System map</h2>
+              <span class="badge">C#/.NET + Angular</span>
+            </div>
+            <div class="panel-body">
+              <div class="stat-grid">
+                <div class="stat"><strong>Checkout</strong><span>cart, pricing, order state</span></div>
+                <div class="stat"><strong>Catalog</strong><span>product reads and indexing</span></div>
+                <div class="stat"><strong>Identity</strong><span>AuthN/AuthZ and token flow</span></div>
+                <div class="stat"><strong>Fulfillment</strong><span>sagas and shipment events</span></div>
+                <div class="stat"><strong>Payments</strong><span>processor adapters</span></div>
+                <div class="stat"><strong>Telemetry</strong><span>learning events and mastery</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <footer class="statusbar" aria-label="Learning progress status">
+      <div class="statusbar-left">
+        <span>branch: learning/amara-checkout</span>
+        <span>course: Checkout Subsystem Deep Dive</span>
+      </div>
+      <div class="statusbar-right">
+        <span>overall progress 62%</span>
+        <span>RepoFluent Codeframe</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

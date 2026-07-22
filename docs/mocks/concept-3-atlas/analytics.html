@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Atlas — Manager Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="RepoFluent Atlas dashboard">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>
+          <span class="brand-title">RepoFluent</span>
+          <span class="concept-label">Concept 3 — Atlas</span>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="Concept pages">
+        <a href="index.html">Learner Atlas</a>
+        <a href="lesson.html">Lesson + Code Tour</a>
+        <a href="analytics.html" aria-current="page">Manager Analytics</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="analytics-title">
+        <div>
+          <span class="eyebrow">Manager view · Orion Commerce Platform</span>
+          <h1 id="analytics-title">Cohort mastery atlas.</h1>
+          <p class="lead">
+            Daniel Reyes is viewing Platform Onboarding Cohort — Q3, a 9 learner group.
+            Spatial analytics show which subsystems are fluent, fragile, or ready for drill-down.
+          </p>
+        </div>
+        <aside class="glass panel-tight" aria-label="Cohort snapshot">
+          <p class="meta">Team</p>
+          <h2>Platform Onboarding Cohort — Q3</h2>
+          <p>9 learners · Orion Commerce Platform · C#/.NET backend + Angular frontend.</p>
+          <div class="metric-pill"><strong>63%</strong><span>average mastery</span></div>
+        </aside>
+      </section>
+
+      <form class="filter-bar glass panel-tight" aria-label="Drill-down filters">
+        <label>
+          Curriculum
+          <select>
+            <option>All assigned curricula</option>
+            <option>Checkout Subsystem Deep Dive</option>
+            <option>Orion Platform Foundations</option>
+          </select>
+        </label>
+        <label>
+          Version
+          <select>
+            <option>main @ 4f2c9ab</option>
+            <option>release/2026.07</option>
+          </select>
+        </label>
+        <label>
+          Team
+          <select>
+            <option>Platform Onboarding Cohort — Q3</option>
+            <option>Platform Team</option>
+          </select>
+        </label>
+        <label>
+          System
+          <select>
+            <option>All systems</option>
+            <option>Checkout</option>
+            <option>Catalog</option>
+            <option>Identity</option>
+            <option>Fulfillment</option>
+            <option>Payments</option>
+          </select>
+        </label>
+      </form>
+
+      <section class="analytics-grid" aria-label="Analytics dashboard">
+        <article class="glass panel map-stage" aria-labelledby="mastery-map-title">
+          <div class="map-head">
+            <div>
+              <span class="eyebrow">Mastery by system</span>
+              <h2 id="mastery-map-title">Intensity map</h2>
+              <p>
+                Node glow and percentage labels visualize subsystem mastery. Lower-intensity
+                nodes indicate where managers can assign reinforcement or host code walkthroughs.
+              </p>
+            </div>
+            <span class="metric-pill"><strong>5</strong><span>systems</span></span>
+          </div>
+
+          <svg class="system-map" viewBox="0 0 900 560" role="img" aria-labelledby="analytics-svg-title analytics-svg-desc">
+            <title id="analytics-svg-title">System mastery map for Platform Onboarding Cohort Q3</title>
+            <desc id="analytics-svg-desc">
+              Checkout mastery is 71 percent, Catalog is 84 percent, Identity is 52 percent,
+              Fulfillment is 63 percent, and Payments is 44 percent.
+            </desc>
+            <defs>
+              <marker id="analytics-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M2,2 L10,6 L2,10 Z" fill="rgba(222,233,255,0.66)"></path>
+              </marker>
+            </defs>
+            <path class="map-edge" marker-end="url(#analytics-arrow)" d="M450 265 C540 240 610 206 692 166"></path>
+            <path class="map-edge" marker-end="url(#analytics-arrow)" d="M410 235 C346 184 270 150 185 118"></path>
+            <path class="map-edge" marker-end="url(#analytics-arrow)" d="M446 314 C542 354 616 400 700 456"></path>
+            <path class="map-edge identity-edge" marker-end="url(#analytics-arrow)" d="M448 118 C450 164 450 196 450 232"></path>
+            <path class="map-edge identity-edge" marker-end="url(#analytics-arrow)" d="M405 100 C318 96 265 100 200 112"></path>
+            <path class="map-edge identity-edge" marker-end="url(#analytics-arrow)" d="M495 104 C570 112 626 132 688 158"></path>
+            <path class="map-edge identity-edge" marker-end="url(#analytics-arrow)" d="M492 138 C580 214 634 328 700 444"></path>
+            <path class="map-edge identity-edge" marker-end="url(#analytics-arrow)" d="M420 140 C342 222 282 332 205 438"></path>
+            <path class="map-edge" marker-end="url(#analytics-arrow)" d="M680 448 C536 424 360 424 215 448"></path>
+
+            <g class="checkout-text">
+              <circle class="map-halo" cx="450" cy="280" r="126" style="--halo-opacity: 0.28;"></circle>
+              <circle class="map-node checkout" cx="450" cy="280" r="82"></circle>
+              <text class="map-label" x="450" y="263" text-anchor="middle">Checkout</text>
+              <text class="map-percent" x="450" y="294" text-anchor="middle">71%</text>
+              <text class="map-sub" x="450" y="320" text-anchor="middle">developing+</text>
+            </g>
+            <g class="catalog-text">
+              <circle class="map-halo" cx="170" cy="108" r="100" style="--halo-opacity: 0.34;"></circle>
+              <circle class="map-node catalog active" cx="170" cy="108" r="64"></circle>
+              <text class="map-label" x="170" y="91" text-anchor="middle">Catalog</text>
+              <text class="map-percent" x="170" y="122" text-anchor="middle">84%</text>
+              <text class="map-sub" x="170" y="146" text-anchor="middle">proficient</text>
+            </g>
+            <g class="identity-text">
+              <circle class="map-halo" cx="450" cy="92" r="76" style="--halo-opacity: 0.2;"></circle>
+              <circle class="map-node identity" cx="450" cy="92" r="56"></circle>
+              <text class="map-label" x="450" y="76" text-anchor="middle">Identity</text>
+              <text class="map-percent" x="450" y="106" text-anchor="middle">52%</text>
+              <text class="map-sub" x="450" y="130" text-anchor="middle">fragile</text>
+            </g>
+            <g class="fulfillment-text">
+              <circle class="map-halo" cx="720" cy="466" r="86" style="--halo-opacity: 0.24;"></circle>
+              <circle class="map-node fulfillment" cx="720" cy="466" r="60"></circle>
+              <text class="map-label" x="720" y="450" text-anchor="middle">Fulfillment</text>
+              <text class="map-percent" x="720" y="480" text-anchor="middle">63%</text>
+              <text class="map-sub" x="720" y="504" text-anchor="middle">developing</text>
+            </g>
+            <g class="payments-text">
+              <circle class="map-halo" cx="720" cy="156" r="70" style="--halo-opacity: 0.16;"></circle>
+              <circle class="map-node payments" cx="720" cy="156" r="54"></circle>
+              <text class="map-label" x="720" y="140" text-anchor="middle">Payments</text>
+              <text class="map-percent" x="720" y="170" text-anchor="middle">44%</text>
+              <text class="map-sub" x="720" y="194" text-anchor="middle">needs focus</text>
+            </g>
+          </svg>
+
+          <details class="map-companion" open>
+            <summary>Accessible table fallback for mastery map</summary>
+            <table class="fallback-table">
+              <thead>
+                <tr>
+                  <th scope="col">System</th>
+                  <th scope="col">Mastery</th>
+                  <th scope="col">Signal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Checkout</td><td>71%</td><td>Developing, improving on pricing pipeline.</td></tr>
+                <tr><td>Catalog</td><td>84%</td><td>Proficient, strongest subsystem.</td></tr>
+                <tr><td>Identity</td><td>52%</td><td>Fragile, token refresh flow gap.</td></tr>
+                <tr><td>Fulfillment</td><td>63%</td><td>Developing, saga compensation needs practice.</td></tr>
+                <tr><td>Payments</td><td>44%</td><td>Needs focus, optional enrichment not started by most learners.</td></tr>
+              </tbody>
+            </table>
+          </details>
+        </article>
+
+        <aside class="side-stack" aria-label="Supporting analytics">
+          <section class="glass panel-tight" aria-labelledby="status-title">
+            <span class="eyebrow">Assignment status distribution</span>
+            <h2 id="status-title">Cohort progress</h2>
+            <div class="distribution" role="list" aria-label="Assignment status counts">
+              <div class="stat-card" role="listitem"><strong>2</strong><span>not started</span></div>
+              <div class="stat-card" role="listitem"><strong>4</strong><span>in progress</span></div>
+              <div class="stat-card" role="listitem"><strong>2</strong><span>completed/passed</span></div>
+              <div class="stat-card" role="listitem"><strong>1</strong><span>overdue</span></div>
+            </div>
+          </section>
+
+          <section class="glass panel-tight" aria-labelledby="completion-title">
+            <span class="eyebrow">Completion by curriculum</span>
+            <h2 id="completion-title">Course throughput</h2>
+            <div class="bar-chart">
+              <div class="bar-row" style="--course-color: var(--checkout);">
+                <span>Checkout Subsystem Deep Dive</span>
+                <span class="bar-track"><span class="bar-fill" style="--value: 62%;"></span></span>
+                <strong>62%</strong>
+              </div>
+              <div class="bar-row" style="--course-color: var(--catalog);">
+                <span>Orion Platform Foundations</span>
+                <span class="bar-track"><span class="bar-fill" style="--value: 100%;"></span></span>
+                <strong>100%</strong>
+              </div>
+              <div class="bar-row" style="--course-color: var(--payments);">
+                <span>Payments Integration Patterns</span>
+                <span class="bar-track"><span class="bar-fill" style="--value: 12%;"></span></span>
+                <strong>12%</strong>
+              </div>
+              <div class="bar-row" style="--course-color: var(--identity);">
+                <span>Identity &amp; AuthN/AuthZ in Orion</span>
+                <span class="bar-track"><span class="bar-fill" style="--value: 38%;"></span></span>
+                <strong>38%</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="glass panel-tight" aria-labelledby="gaps-title">
+            <span class="eyebrow">Common knowledge gaps</span>
+            <h2 id="gaps-title">Where to reinforce</h2>
+            <ul class="gap-list">
+              <li>
+                <strong>Promotion rule registration</strong>
+                <span class="meta">missed by 6/9 learners · schedule a registry walkthrough.</span>
+              </li>
+              <li>
+                <strong>Token refresh flow</strong>
+                <span class="meta">missed by 5/9 learners · pair Identity lesson with API trace.</span>
+              </li>
+              <li>
+                <strong>Saga compensation steps</strong>
+                <span class="meta">missed by 4/9 learners · reinforce Fulfillment event recovery.</span>
+              </li>
+            </ul>
+          </section>
+
+          <section class="glass panel-tight" aria-labelledby="performers-title">
+            <span class="eyebrow">Transparent indicators</span>
+            <h2 id="performers-title">Top performers callout</h2>
+            <ul class="performer-list">
+              <li class="avatar-chip"><span class="avatar" aria-hidden="true">P</span> Priya N.</li>
+              <li class="avatar-chip"><span class="avatar" aria-hidden="true">M</span> Marcus T.</li>
+            </ul>
+            <p>
+              Indicators combine completed lessons, quiz mastery, and code-tour confidence.
+              Managers see why a learner is highlighted rather than an opaque score.
+            </p>
+          </section>
+
+          <section class="privacy-note" aria-labelledby="privacy-title">
+            <h2 id="privacy-title">Privacy guardrail · ANL-06</h2>
+            <p>
+              Minimum-group privacy rules apply: analytics suppress drill-downs that could
+              reveal individual performance in cohorts below the configured threshold.
+            </p>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Atlas — CartPricingService Lesson</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="RepoFluent Atlas dashboard">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>
+          <span class="brand-title">RepoFluent</span>
+          <span class="concept-label">Concept 3 — Atlas</span>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="Concept pages">
+        <a href="index.html">Learner Atlas</a>
+        <a href="lesson.html" aria-current="page">Lesson + Code Tour</a>
+        <a href="analytics.html">Manager Analytics</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="lesson-title">
+        <div>
+          <span class="eyebrow">Checkout Subsystem Deep Dive</span>
+          <ol class="breadcrumb" aria-label="Lesson location">
+            <li>Course “Checkout Subsystem Deep Dive”</li>
+            <li>Module 3 “Pricing &amp; Promotions”</li>
+            <li>Lesson 7</li>
+          </ol>
+          <h1 id="lesson-title">The CartPricingService pipeline.</h1>
+          <p class="lead">
+            Trace a cart total from Angular UI state to the .NET pricing service,
+            then identify where Orion Commerce Platform promotion behavior is registered.
+          </p>
+        </div>
+        <aside class="glass panel-tight" aria-label="Lesson progress">
+          <p class="meta">Amara Osei · Software Engineer II</p>
+          <h2>Step 2 of 5</h2>
+          <p>Estimated 25 min · current file is <code>CartPricingService.cs</code>.</p>
+          <div class="progress" aria-label="Code tour is 40 percent complete"><span style="--value: 40%;"></span></div>
+        </aside>
+      </section>
+
+      <section class="lesson-layout" aria-label="Lesson and code tour">
+        <article class="glass panel lesson-panel" aria-labelledby="content-title">
+          <span class="eyebrow">Lesson overlay</span>
+          <h2 id="content-title">Pricing &amp; Promotions path</h2>
+
+          <div class="mini-map" aria-label="Mini map breadcrumb">
+            <svg viewBox="0 0 150 110" role="img" aria-labelledby="mini-title mini-desc">
+              <title id="mini-title">Mini map breadcrumb for lesson location</title>
+              <desc id="mini-desc">Checkout is highlighted as the active lesson location; it connects to Catalog, Payments, and Fulfillment.</desc>
+              <path class="map-edge" d="M75 55 L30 25"></path>
+              <path class="map-edge" d="M75 55 L122 25"></path>
+              <path class="map-edge" d="M75 55 L122 88"></path>
+              <circle class="map-node catalog" cx="30" cy="25" r="13"></circle>
+              <circle class="map-node payments" cx="122" cy="25" r="13"></circle>
+              <circle class="map-node fulfillment" cx="122" cy="88" r="13"></circle>
+              <circle class="map-node checkout active" cx="75" cy="55" r="22"></circle>
+            </svg>
+            <div>
+              <h3>Map position</h3>
+              <p>
+                Checkout → pricing pipeline → promotion rule registry. Identity remains
+                a cross-cutting dependency for API authorization.
+              </p>
+            </div>
+          </div>
+
+          <section aria-labelledby="objectives-title">
+            <h3 id="objectives-title">Learning objectives</h3>
+            <ul class="objective-list">
+              <li><strong>Explain how CartPricingService composes pricing rules.</strong></li>
+              <li><strong>Trace a price calculation from Angular cart component to API.</strong></li>
+              <li><strong>Identify where promotion rules are registered.</strong></li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="tour-title">
+            <h3 id="tour-title">Code tour route</h3>
+            <p>
+              Each tour stop stays anchored to the Checkout node so the architectural
+              context remains visible while the learner moves between backend and frontend files.
+            </p>
+            <ol class="tour-list">
+              <li>
+                <strong>1 · <code>src/Orion.Checkout/Services/CartPricingService.cs</code></strong>
+                <span class="meta">Constructor dependencies establish pricing collaborators.</span>
+              </li>
+              <li class="active" aria-current="step">
+                <strong>2 · <code>src/Orion.Checkout/Services/CartPricingService.cs</code></strong>
+                <span class="meta">Follow <code>PriceAsync</code> from subtotal to discounted total to tax.</span>
+              </li>
+              <li>
+                <strong>3 · <code>src/Orion.Checkout/Rules/PromotionRuleRegistry.cs</code></strong>
+                <span class="meta">Promotion registrations are composed before checkout pricing runs.</span>
+              </li>
+              <li>
+                <strong>4 · <code>webapp/src/app/cart/cart-summary.component.ts</code></strong>
+                <span class="meta">Angular cart summary presents totals and applied discounts.</span>
+              </li>
+              <li>
+                <strong>5 · <code>webapp/src/app/cart/cart.service.ts</code></strong>
+                <span class="meta">Client service calls the checkout API and hydrates cart state.</span>
+              </li>
+            </ol>
+          </section>
+
+          <aside class="glossary-card" aria-labelledby="glossary-title">
+            <h3 id="glossary-title">Glossary</h3>
+            <details open>
+              <summary>pricing rule</summary>
+              <p>
+                A pricing rule is a discrete promotion or adjustment that can inspect cart
+                contents, customer context, and subtotal to produce a discounted total. In
+                Orion, rules are registered through <strong>PromotionRuleRegistry</strong>.
+              </p>
+            </details>
+          </aside>
+        </article>
+
+        <article class="glass panel code-panel" aria-labelledby="code-title">
+          <div class="code-header">
+            <div>
+              <span class="eyebrow">Code tour · Step 2</span>
+              <h2 id="code-title">CartPricingService.cs</h2>
+            </div>
+            <span class="file-pill">src/Orion.Checkout/Services/CartPricingService.cs</span>
+          </div>
+
+          <p class="snapshot">
+            Snapshot: main @ 4f2c9ab · captured Jul 14, 2026 — repository may have changed since capture.
+          </p>
+
+          <pre aria-label="C sharp code excerpt for CartPricingService"><code><span class="kw">public</span> <span class="kw">sealed</span> <span class="kw">class</span> <span class="type">CartPricingService</span> : <span class="type">ICartPricingService</span>
+{
+    <span class="kw">private</span> <span class="kw">readonly</span> <span class="type">IPromotionRuleRegistry</span> <span class="field">_rules</span>;
+    <span class="kw">private</span> <span class="kw">readonly</span> <span class="type">ITaxCalculator</span> <span class="field">_tax</span>;
+
+    <span class="kw">public</span> <span class="fn">CartPricingService</span>(<span class="type">IPromotionRuleRegistry</span> <span class="param">rules</span>, <span class="type">ITaxCalculator</span> <span class="param">tax</span>)
+    {
+        <span class="field">_rules</span> <span class="op">=</span> <span class="param">rules</span>;
+        <span class="field">_tax</span> <span class="op">=</span> <span class="param">tax</span>;
+    }
+
+    <span class="kw">public</span> <span class="kw">async</span> <span class="type">Task</span>&lt;<span class="type">CartTotals</span>&gt; <span class="fn">PriceAsync</span>(<span class="type">Cart</span> <span class="param">cart</span>, <span class="type">CancellationToken</span> <span class="param">ct</span>)
+    {
+        <span class="kw">var</span> <span class="param">subtotal</span> <span class="op">=</span> <span class="param">cart</span>.<span class="field">Lines</span>.<span class="fn">Sum</span>(<span class="param">l</span> <span class="op">=&gt;</span> <span class="param">l</span>.<span class="field">UnitPrice</span> <span class="op">*</span> <span class="param">l</span>.<span class="field">Quantity</span>);
+        <span class="kw">var</span> <span class="param">discounted</span> <span class="op">=</span> <span class="kw">await</span> <span class="field">_rules</span>.<span class="fn">ApplyAsync</span>(<span class="param">cart</span>, <span class="param">subtotal</span>, <span class="param">ct</span>);
+        <span class="kw">var</span> <span class="param">tax</span> <span class="op">=</span> <span class="field">_tax</span>.<span class="fn">Calculate</span>(<span class="param">discounted</span>, <span class="param">cart</span>.<span class="field">ShippingAddress</span>);
+        <span class="kw">return</span> <span class="kw">new</span> <span class="type">CartTotals</span>(<span class="param">subtotal</span>, <span class="param">discounted</span>, <span class="param">tax</span>);
+    }
+}</code></pre>
+
+          <section class="glass panel-tight" aria-labelledby="walkthrough-title">
+            <h3 id="walkthrough-title">Step 2 walkthrough</h3>
+            <p>
+              <code>PriceAsync</code> first aggregates cart lines into a subtotal, then
+              delegates promotion application to <code>_rules.ApplyAsync</code>. Tax is
+              calculated after discounting so the returned <code>CartTotals</code> keeps
+              the original subtotal, discounted amount, and tax separate for the Angular UI.
+            </p>
+          </section>
+
+          <section class="glass panel-tight" aria-labelledby="check-title">
+            <span class="eyebrow">Inline knowledge check</span>
+            <h3 id="check-title">Which component is responsible for registering promotion rules?</h3>
+            <form class="check-options">
+              <label>
+                <input type="radio" name="registry">
+                CartPricingService
+              </label>
+              <label>
+                <input type="radio" name="registry">
+                CartSummaryComponent
+              </label>
+              <label>
+                <input type="radio" name="registry">
+                PromotionRuleRegistry
+              </label>
+              <label>
+                <input type="radio" name="registry">
+                ITaxCalculator
+              </label>
+            </form>
+            <p class="answer-note">
+              Correct answer: <strong>PromotionRuleRegistry</strong>. It composes available
+              promotion rules before <code>CartPricingService</code> applies them.
+            </p>
+          </section>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

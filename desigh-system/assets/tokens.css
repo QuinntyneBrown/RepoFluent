@@ -1,0 +1,127 @@
+:root {
+  color-scheme: dark;
+
+  /* Color: foundations */
+  --rf-color-void: #070a0e;
+  --rf-color-canvas: #090d12;
+  --rf-color-surface-1: #0e141b;
+  --rf-color-surface-2: #121a23;
+  --rf-color-surface-3: #18222d;
+  --rf-color-surface-hover: #151e27;
+  --rf-color-surface-active: #1d2a34;
+  --rf-color-line: #26323d;
+  --rf-color-line-strong: #3c4a56;
+  --rf-color-ink: #dbe3eb;
+  --rf-color-ink-strong: #f2f6f9;
+  --rf-color-ink-muted: #9ba6b0;
+  --rf-color-ink-subtle: #77838f;
+  --rf-color-ink-disabled: #56616b;
+  --rf-color-ink-inverse: #07110c;
+  --rf-color-primary: #4de094;
+  --rf-color-primary-hover: #6ce9a8;
+  --rf-color-primary-pressed: #35c97d;
+  --rf-color-primary-dim: #163324;
+  --rf-color-primary-border: #347454;
+  --rf-color-info: #52c7e8;
+  --rf-color-info-dim: #122f39;
+  --rf-color-link: #739bff;
+  --rf-color-link-dim: #172340;
+  --rf-color-warning: #f2b760;
+  --rf-color-warning-dim: #392b18;
+  --rf-color-danger: #f07676;
+  --rf-color-danger-dim: #3a1c20;
+  --rf-color-focus: #52c7e8;
+  --rf-color-scrim: rgb(0 0 0 / 68%);
+
+  /* Data visualization: fixed order, never recycled within one chart. */
+  --rf-chart-1: #52c7e8;
+  --rf-chart-2: #4de094;
+  --rf-chart-3: #f2b760;
+  --rf-chart-4: #b692f6;
+  --rf-chart-5: #ff8fa3;
+  --rf-chart-6: #739bff;
+  --rf-chart-7: #c7d66d;
+  --rf-chart-8: #f49a65;
+  --rf-chart-grid: #26323d;
+  --rf-chart-axis: #77838f;
+
+  /* Typography */
+  --rf-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --rf-font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --rf-type-display: 500 clamp(2.25rem, 5vw, 4.5rem) / .98 var(--rf-font-mono);
+  --rf-type-page-title: 600 clamp(1.75rem, 3vw, 2.75rem) / 1.08 var(--rf-font-mono);
+  --rf-type-section: 650 1.35rem / 1.25 var(--rf-font-sans);
+  --rf-type-title: 650 1rem / 1.35 var(--rf-font-sans);
+  --rf-type-body: 400 .875rem / 1.65 var(--rf-font-sans);
+  --rf-type-body-small: 400 .75rem / 1.55 var(--rf-font-sans);
+  --rf-type-label: 650 .6875rem / 1.2 var(--rf-font-sans);
+  --rf-type-overline: 700 .625rem / 1.2 var(--rf-font-mono);
+  --rf-type-data: 400 .75rem / 1.45 var(--rf-font-mono);
+  --rf-type-code: 400 .8125rem / 1.7 var(--rf-font-mono);
+  --rf-tracking-caps: .1em;
+
+  /* Spacing: 4px base grid */
+  --rf-space-0: 0;
+  --rf-space-1: .25rem;
+  --rf-space-2: .5rem;
+  --rf-space-3: .75rem;
+  --rf-space-4: 1rem;
+  --rf-space-5: 1.25rem;
+  --rf-space-6: 1.5rem;
+  --rf-space-7: 2rem;
+  --rf-space-8: 2.5rem;
+  --rf-space-9: 3rem;
+  --rf-space-10: 4rem;
+  --rf-space-11: 6rem;
+
+  /* Component metrics */
+  --rf-size-icon: 1rem;
+  --rf-size-icon-large: 1.25rem;
+  --rf-size-control-small: 1.75rem;
+  --rf-size-control: 2.25rem;
+  --rf-size-control-large: 2.75rem;
+  --rf-size-row: 2.5rem;
+  --rf-size-row-dense: 2rem;
+  --rf-size-titlebar: 2.625rem;
+  --rf-size-tabbar: 2.25rem;
+  --rf-size-statusbar: 1.375rem;
+  --rf-size-activitybar: 3rem;
+  --rf-size-sidebar: 14.875rem;
+  --rf-layout-max: 80rem;
+  --rf-layout-reading: 46rem;
+
+  /* Shape and elevation */
+  --rf-radius-none: 0;
+  --rf-radius-small: .1875rem;
+  --rf-radius-medium: .375rem;
+  --rf-radius-large: .625rem;
+  --rf-radius-pill: 999px;
+  --rf-shadow-1: 0 2px 8px rgb(0 0 0 / 24%);
+  --rf-shadow-2: 0 10px 30px rgb(0 0 0 / 38%);
+  --rf-shadow-3: 0 22px 70px rgb(0 0 0 / 55%);
+  --rf-ring-focus: 0 0 0 2px var(--rf-color-canvas), 0 0 0 4px var(--rf-color-focus);
+
+  /* Motion */
+  --rf-motion-fast: 100ms;
+  --rf-motion-base: 180ms;
+  --rf-motion-slow: 280ms;
+  --rf-ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --rf-ease-exit: cubic-bezier(.4, 0, 1, 1);
+
+  /* Layering */
+  --rf-z-base: 0;
+  --rf-z-pane: 20;
+  --rf-z-sticky: 30;
+  --rf-z-menu: 60;
+  --rf-z-overlay: 80;
+  --rf-z-toast: 100;
+  --rf-z-skip: 120;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rf-motion-fast: 1ms;
+    --rf-motion-base: 1ms;
+    --rf-motion-slow: 1ms;
+  }
+}

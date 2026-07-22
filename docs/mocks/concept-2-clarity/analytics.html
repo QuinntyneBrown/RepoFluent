@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Clarity — Manager Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="topbar">
+    <div class="nav-shell">
+      <a class="brand" href="index.html" aria-label="RepoFluent Clarity dashboard">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span class="brand-copy">
+          <span class="brand-title">RepoFluent</span>
+          <span class="concept-label">Concept 2 — Clarity</span>
+        </span>
+      </a>
+      <nav class="primary-nav" aria-label="Concept pages">
+        <a href="index.html">Learner</a>
+        <a href="lesson.html">Lesson</a>
+        <a href="analytics.html" aria-current="page">Analytics</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="hero" aria-labelledby="analytics-title">
+      <div class="hero-panel">
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Manager analytics</p>
+        <h1 id="analytics-title">Platform Onboarding Cohort — Q3</h1>
+        <p class="lede">Daniel Reyes is viewing team-level learning signals for 9 learners on the Orion Commerce Platform. Cohort views prioritize trends, gaps, and privacy-safe drill-downs.</p>
+        <div class="cluster">
+          <span class="chip primary">9 learners</span>
+          <span class="chip accent">Orion Commerce Platform</span>
+          <span class="chip">C#/.NET + Angular</span>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-labelledby="privacy-title">
+        <span class="chip success">ANL-06</span>
+        <h2 id="privacy-title">Minimum-group privacy rules</h2>
+        <p class="muted">Individual drill-downs stay unavailable until a segment meets the minimum group size. Sensitive quiz responses are shown as aggregate trends, not personal surveillance.</p>
+      </aside>
+    </section>
+
+    <section class="card card-pad" aria-labelledby="filters-title">
+      <div class="section-head">
+        <div>
+          <h2 id="filters-title">Drill-down filters</h2>
+          <p class="muted">Decorative controls show the intended analytics surface without requiring live data.</p>
+        </div>
+        <button class="button ghost" type="button">Reset view</button>
+      </div>
+      <div class="filter-grid" aria-label="Analytics filters">
+        <div class="filter-pill"><span>Curriculum</span><strong>Checkout Subsystem Deep Dive</strong></div>
+        <div class="filter-pill"><span>Version</span><strong>main @ 4f2c9ab</strong></div>
+        <div class="filter-pill"><span>Team</span><strong>Platform Onboarding Cohort — Q3</strong></div>
+        <div class="filter-pill"><span>System</span><strong>All systems</strong></div>
+      </div>
+    </section>
+
+    <section class="analytics-grid">
+      <div class="stack">
+        <section class="card card-pad" aria-labelledby="status-title">
+          <div class="section-head">
+            <div>
+              <h2 id="status-title">Assignment status distribution</h2>
+              <p class="muted">Current required-course state across 9 learners.</p>
+            </div>
+          </div>
+          <div class="distribution">
+            <div class="donut-wrap" aria-label="2 not started, 4 in progress, 2 completed and passed, 1 overdue">
+              <svg viewBox="0 0 42 42" role="img" aria-labelledby="donut-title donut-desc">
+                <title id="donut-title">Assignment status distribution</title>
+                <desc id="donut-desc">Two not started, four in progress, two completed and passed, one overdue.</desc>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#e8edf5" stroke-width="6"></circle>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#66758d" stroke-width="6" pathLength="9" stroke-dasharray="2 7" stroke-dashoffset="0"></circle>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#2754d8" stroke-width="6" pathLength="9" stroke-dasharray="4 5" stroke-dashoffset="-2"></circle>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#157348" stroke-width="6" pathLength="9" stroke-dasharray="2 7" stroke-dashoffset="-6"></circle>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#b3261e" stroke-width="6" pathLength="9" stroke-dasharray="1 8" stroke-dashoffset="-8"></circle>
+              </svg>
+              <div class="donut-center"><strong>9</strong><span class="muted micro">learners</span></div>
+            </div>
+            <div class="legend">
+              <div class="legend-item"><span class="legend-key"><span class="swatch" style="--swatch:#66758d"></span>Not started</span><strong>2</strong></div>
+              <div class="legend-item"><span class="legend-key"><span class="swatch" style="--swatch:#2754d8"></span>In progress</span><strong>4</strong></div>
+              <div class="legend-item"><span class="legend-key"><span class="swatch" style="--swatch:#157348"></span>Completed/passed</span><strong>2</strong></div>
+              <div class="legend-item"><span class="legend-key"><span class="swatch" style="--swatch:#b3261e"></span>Overdue</span><strong>1</strong></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card card-pad" aria-labelledby="completion-title">
+          <div class="section-head">
+            <div>
+              <h2 id="completion-title">Completion by curriculum</h2>
+              <p class="muted">Average progress across the comparable Orion curricula.</p>
+            </div>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <strong>Checkout Subsystem Deep Dive</strong>
+              <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="--bar:62%"></div></div>
+              <span class="muted">62%</span>
+            </div>
+            <div class="bar-row">
+              <strong>Orion Platform Foundations</strong>
+              <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="--bar:100%"></div></div>
+              <span class="muted">100%</span>
+            </div>
+            <div class="bar-row">
+              <strong>Payments Integration Patterns</strong>
+              <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="--bar:0%"></div></div>
+              <span class="muted">0%</span>
+            </div>
+            <div class="bar-row">
+              <strong>Identity &amp; AuthN/AuthZ in Orion</strong>
+              <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="--bar:25%"></div></div>
+              <span class="muted">25%</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card card-pad" aria-labelledby="mastery-title">
+          <div class="section-head">
+            <div>
+              <h2 id="mastery-title">Mastery by system</h2>
+              <p class="muted">Heat-style table highlights where onboarding support is strongest or needs reinforcement.</p>
+            </div>
+          </div>
+          <table class="heat-table">
+            <thead>
+              <tr>
+                <th scope="col">System</th>
+                <th scope="col">Mastery</th>
+                <th scope="col">Signal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Checkout</td>
+                <td class="heat-cell" style="--heat-bg:#dff8f5;--heat-text:#006d66;">71%</td>
+                <td><span class="chip accent">Improving</span></td>
+              </tr>
+              <tr>
+                <td>Catalog</td>
+                <td class="heat-cell" style="--heat-bg:#e4f7ed;--heat-text:#157348;">84%</td>
+                <td><span class="chip success">Strong</span></td>
+              </tr>
+              <tr>
+                <td>Identity</td>
+                <td class="heat-cell" style="--heat-bg:#fff2d8;--heat-text:#8a4f00;">52%</td>
+                <td><span class="chip warning">Needs practice</span></td>
+              </tr>
+              <tr>
+                <td>Fulfillment</td>
+                <td class="heat-cell" style="--heat-bg:#e7edff;--heat-text:#173caa;">63%</td>
+                <td><span class="chip primary">Developing</span></td>
+              </tr>
+              <tr>
+                <td>Payments</td>
+                <td class="heat-cell" style="--heat-bg:#fde9e7;--heat-text:#b3261e;">44%</td>
+                <td><span class="chip danger">At risk</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <aside class="stack" aria-label="Cohort insights">
+        <section class="card card-pad" aria-labelledby="metrics-title">
+          <h2 id="metrics-title">Cohort snapshot</h2>
+          <div class="metric-row">
+            <div class="metric"><b>9</b><span class="muted small">learners</span></div>
+            <div class="metric"><b>4</b><span class="muted small">in progress</span></div>
+            <div class="metric"><b>2</b><span class="muted small">passed</span></div>
+            <div class="metric"><b>1</b><span class="muted small">overdue</span></div>
+          </div>
+        </section>
+
+        <section class="card card-pad" aria-labelledby="gaps-title">
+          <div class="section-head">
+            <div>
+              <h2 id="gaps-title">Common knowledge gaps</h2>
+              <p class="muted">Missed quiz concepts ranked by cohort frequency.</p>
+            </div>
+          </div>
+          <ol class="gap-list">
+            <li>
+              <div class="section-head"><strong>Promotion rule registration</strong><span class="chip danger">6/9 missed</span></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar-fill danger-fill" style="--bar:67%;"></div></div>
+            </li>
+            <li>
+              <div class="section-head"><strong>Token refresh flow</strong><span class="chip warning">5/9 missed</span></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar-fill warning-fill" style="--bar:56%;"></div></div>
+            </li>
+            <li>
+              <div class="section-head"><strong>Saga compensation steps</strong><span class="chip primary">4/9 missed</span></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="--bar:44%;"></div></div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="card card-pad" aria-labelledby="performers-title">
+          <span class="chip success">Transparent indicators</span>
+          <h2 id="performers-title">Top performers</h2>
+          <p class="muted">RepoFluent explains why a learner appears here: completion, quiz confidence, and code-tour recall. Indicators are visible to managers and learners.</p>
+          <div class="stack">
+            <div class="avatar-row">
+              <span class="avatar teal" aria-hidden="true">PN</span>
+              <div><strong>Priya N.</strong><br><span class="muted small">Completed foundations, 96% quiz average</span></div>
+            </div>
+            <div class="avatar-row">
+              <span class="avatar" aria-hidden="true">MT</span>
+              <div><strong>Marcus T.</strong><br><span class="muted small">Fastest checkout code-tour recovery</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card card-pad" aria-labelledby="recommendation-title">
+          <span class="chip primary">Next team action</span>
+          <h2 id="recommendation-title">Schedule a 20-minute promotion rules review</h2>
+          <p class="muted">Six of nine learners missed the registration concept. Add an instructor-led walkthrough before the Payments module opens.</p>
+          <button class="button" type="button">Draft cohort nudge</button>
+        </section>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

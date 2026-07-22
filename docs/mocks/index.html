@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare three interface directions for RepoFluent.">
+  <title>RepoFluent — UI concept gallery</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f5f5f2;
+      --muted: #9c9c98;
+      --line: rgba(255,255,255,.13);
+      --panel: #171816;
+      --accent: #c9ff62;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(201,255,98,.11), transparent 31rem),
+        radial-gradient(circle at 90% 15%, rgba(102,119,255,.12), transparent 28rem),
+        #0c0d0c;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: inherit; }
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 28px 0; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 760; letter-spacing: -.03em; }
+    .brand-mark { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 9px; color: #0c0d0c; background: var(--accent); font-size: 14px; }
+    .count { color: var(--muted); font-size: 13px; }
+    .hero { padding: clamp(70px, 11vw, 142px) 0 66px; max-width: 860px; }
+    .eyebrow { color: var(--accent); font-size: 12px; font-weight: 760; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 18px 0 22px; font-size: clamp(46px, 8vw, 94px); line-height: .94; letter-spacing: -.07em; font-weight: 690; }
+    .hero p { max-width: 670px; margin: 0; color: #bdbdb7; font-size: clamp(17px, 2vw, 21px); line-height: 1.58; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-bottom: 90px; }
+    .card { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); transition: transform .22s ease, border-color .22s ease; }
+    .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,.3); }
+    .preview { position: relative; height: 250px; overflow: hidden; border-bottom: 1px solid var(--line); }
+    .preview::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 65%, rgba(0,0,0,.2)); pointer-events: none; }
+    .card-body { padding: 24px; }
+    .number { display: block; margin-bottom: 22px; color: var(--muted); font: 600 11px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    h2 { margin: 0 0 10px; font-size: 23px; letter-spacing: -.035em; }
+    .card p { min-height: 66px; margin: 0 0 25px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .launch { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 720; text-decoration: none; }
+    .launch::after { content: "↗"; transition: transform .2s ease; }
+    .launch:hover::after { transform: translate(2px,-2px); }
+    .editorial { background: #e9e3d5; padding: 19px; color: #161d35; }
+    .e-bar { display:flex; align-items:center; justify-content:space-between; height:24px; padding:0 8px; background:#fffaf0; border-radius:5px 5px 0 0; font-size:5px; font-weight:800; }
+    .e-main { display:grid; grid-template-columns:27% 1fr; height:188px; background:#fffaf0; }
+    .e-side { padding:16px 9px; border-right:1px solid #d9d2c3; }
+    .e-line { height:5px; margin-bottom:8px; border-radius:4px; background:#c7c4bb; }
+    .e-line.blue { background:#3559dd; }
+    .e-page { padding:19px 17px; }
+    .e-label { width:45px; height:5px; background:#e26349; border-radius:4px; }
+    .e-title { width:85%; height:26px; margin:11px 0 18px; background:#161d35; border-radius:2px; }
+    .e-card { height:62px; border:1px solid #d9d2c3; border-radius:7px; background:#f4efe5; }
+    .command { background:#080d12; padding:15px; color:#9bf6c2; font-family:monospace; }
+    .c-top { height:21px; padding:6px 7px; border:1px solid #26323d; border-bottom:0; color:#b8c0ca; font-size:5px; }
+    .c-main { display:grid; grid-template-columns:24% 1fr; height:199px; border:1px solid #26323d; }
+    .c-side { padding:12px 7px; border-right:1px solid #26323d; }
+    .c-line { height:4px; margin-bottom:7px; background:#34414c; }
+    .c-line.green { background:#44d98d; }
+    .c-page { padding:14px; }
+    .c-chip { width:50px; height:13px; border:1px solid #44d98d; }
+    .c-title { width:76%; height:19px; margin:12px 0; background:#e4ebf2; }
+    .code { margin-top:17px; color:#74808b; font-size:6px; line-height:2; }
+    .constellation { background: radial-gradient(circle at 70% 20%, #6059b9 0, #242143 34%, #131426 72%); padding:18px; }
+    .s-frame { position:relative; height:214px; border:1px solid rgba(255,255,255,.14); border-radius:13px; background:rgba(8,9,22,.42); backdrop-filter:blur(5px); }
+    .s-nav { position:absolute; left:9px; top:9px; bottom:9px; width:31px; border-radius:8px; background:rgba(255,255,255,.07); }
+    .node { position:absolute; border:1px solid rgba(255,255,255,.35); border-radius:50%; background:#7770df; box-shadow:0 0 20px rgba(128,120,240,.6); }
+    .n1 { width:38px; height:38px; left:106px; top:83px; }
+    .n2 { width:21px; height:21px; left:78px; top:38px; background:#58d6be; }
+    .n3 { width:24px; height:24px; right:27px; top:60px; background:#f3a962; }
+    .n4 { width:19px; height:19px; left:78px; bottom:29px; background:#e9709a; }
+    .wire { position:absolute; height:1px; transform-origin:left; background:rgba(255,255,255,.25); }
+    .w1 { width:50px; left:91px; top:58px; transform:rotate(56deg); }
+    .w2 { width:58px; left:138px; top:99px; transform:rotate(-25deg); }
+    .w3 { width:53px; left:101px; top:143px; transform:rotate(-72deg); }
+    footer { display:flex; justify-content:space-between; gap:20px; padding:28px 0 38px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }
+    @media (max-width: 850px) { .grid { grid-template-columns:1fr; } .preview { height:290px; } .card p { min-height:0; } }
+    @media (max-width: 520px) { .shell { width:min(100% - 24px,1180px); } .hero { padding-top:60px; } h1 { font-size:48px; } .preview { height:230px; } footer { flex-direction:column; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *, *::before, *::after { transition:none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><span class="brand-mark">RF</span>RepoFluent</div>
+      <div class="count">UI exploration / 03 concepts</div>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Design study · July 2026</div>
+        <h1>One product.<br>Three points of view.</h1>
+        <p>Explore the same learning journey through three distinct interfaces. Each prototype includes a learner home, lesson and code workspace, and interactive system map.</p>
+      </section>
+
+      <section class="grid" aria-label="Interface concepts">
+        <article class="card">
+          <div class="preview editorial" aria-hidden="true">
+            <div class="e-bar"><span>RepoFluent</span><span>LEARN&nbsp;&nbsp; LIBRARY&nbsp;&nbsp; MAP</span></div>
+            <div class="e-main">
+              <div class="e-side"><div class="e-line blue"></div><div class="e-line"></div><div class="e-line"></div><div class="e-line"></div></div>
+              <div class="e-page"><div class="e-label"></div><div class="e-title"></div><div class="e-card"></div></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="number">CONCEPT 01 / LIGHT</span>
+            <h2>Editorial Atlas</h2>
+            <p>A calm, publication-inspired learning environment that makes complex systems feel approachable.</p>
+            <a class="launch" href="editorial-atlas/index.html">Launch concept</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="preview command" aria-hidden="true">
+            <div class="c-top">repo-fluent / learning / order-processing</div>
+            <div class="c-main">
+              <div class="c-side"><div class="c-line green"></div><div class="c-line"></div><div class="c-line"></div><div class="c-line"></div></div>
+              <div class="c-page"><div class="c-chip"></div><div class="c-title"></div><div class="code">01&nbsp; public async Task&lt;Order&gt;<br>02&nbsp; {<br>03&nbsp;&nbsp;&nbsp; await bus.Publish(order);<br>04&nbsp; }</div></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="number">CONCEPT 02 / DARK</span>
+            <h2>Code Command</h2>
+            <p>A dense, keyboard-friendly workspace that borrows the confidence and utility of modern developer tools.</p>
+            <a class="launch" href="code-command/index.html">Launch concept</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="preview constellation" aria-hidden="true">
+            <div class="s-frame"><div class="s-nav"></div><span class="wire w1"></span><span class="wire w2"></span><span class="wire w3"></span><span class="node n1"></span><span class="node n2"></span><span class="node n3"></span><span class="node n4"></span></div>
+          </div>
+          <div class="card-body">
+            <span class="number">CONCEPT 03 / IMMERSIVE</span>
+            <h2>System Constellation</h2>
+            <p>A spatial interface that treats architecture as the organizing layer for learning, code, and progress.</p>
+            <a class="launch" href="system-constellation/index.html">Launch concept</a>
+          </div>
+        </article>
+      </section>
+    </main>
+    <footer><span>RepoFluent interface concepts</span><span>Standalone HTML · CSS · JavaScript</span></footer>
+  </div>
+</body>
+</html>

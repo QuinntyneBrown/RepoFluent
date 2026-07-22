@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepoFluent Codeframe — Lesson + Code Tour</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#lesson-content">Skip to lesson content</a>
+  <div class="app-frame">
+    <header class="topbar" aria-label="RepoFluent workspace">
+      <div class="window-controls" aria-hidden="true">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">RF</span>
+        <span class="brand-name">RepoFluent</span>
+        <span class="concept-label">Concept 1 — Codeframe</span>
+      </div>
+      <nav class="main-nav" aria-label="Primary">
+        <a class="nav-link" href="index.html">Learner</a>
+        <a class="nav-link" aria-current="page" href="lesson.html">Lesson + code tour</a>
+        <a class="nav-link" href="analytics.html">Analytics</a>
+      </nav>
+    </header>
+
+    <main class="lesson-shell">
+      <aside class="lesson-nav" aria-labelledby="tour-title">
+        <p class="eyebrow">Code tour</p>
+        <h2 id="tour-title" class="tour-heading">The CartPricingService pipeline</h2>
+        <p class="muted">Progress: step 2 of 5 · estimated 25 min.</p>
+        <div class="compact-stack" aria-label="Tour steps">
+          <article class="tour-step">
+            <div class="meta-row">
+              <span class="tour-number">1</span>
+              <strong>Constructor dependencies</strong>
+            </div>
+            <div class="file-path">src/Orion.Checkout/Services/CartPricingService.cs</div>
+          </article>
+          <article class="tour-step active">
+            <div class="meta-row">
+              <span class="tour-number">2</span>
+              <strong>PriceAsync composition</strong>
+            </div>
+            <div class="file-path">src/Orion.Checkout/Services/CartPricingService.cs</div>
+          </article>
+          <article class="tour-step">
+            <div class="meta-row">
+              <span class="tour-number">3</span>
+              <strong>Promotion rule registry</strong>
+            </div>
+            <div class="file-path">src/Orion.Checkout/Rules/PromotionRuleRegistry.cs</div>
+          </article>
+          <article class="tour-step">
+            <div class="meta-row">
+              <span class="tour-number">4</span>
+              <strong>Angular summary component</strong>
+            </div>
+            <div class="file-path">webapp/src/app/cart/cart-summary.component.ts</div>
+          </article>
+          <article class="tour-step">
+            <div class="meta-row">
+              <span class="tour-number">5</span>
+              <strong>Cart API client</strong>
+            </div>
+            <div class="file-path">webapp/src/app/cart/cart.service.ts</div>
+          </article>
+        </div>
+      </aside>
+
+      <section id="lesson-content" class="lesson-notes" aria-labelledby="lesson-title">
+        <p class="eyebrow">Checkout Subsystem Deep Dive › Module 3 “Pricing &amp; Promotions”</p>
+        <h1 id="lesson-title" class="lesson-heading">Lesson 7 “The CartPricingService pipeline”</h1>
+        <p class="lede">
+          Learn how Orion Commerce Platform composes promotion rules, calculates taxes,
+          and returns cart totals across the .NET checkout API and Angular cart flow.
+        </p>
+
+        <div class="stack lesson-stack">
+          <aside class="notice" aria-label="Source snapshot notice">
+            <strong>Snapshot:</strong> main @ 4f2c9ab · captured Jul 14, 2026 —
+            repository may have changed since capture.
+          </aside>
+
+          <section class="panel" aria-labelledby="objectives-title">
+            <div class="panel-header">
+              <h3 id="objectives-title">Learning objectives</h3>
+              <span class="badge">25 min</span>
+            </div>
+            <div class="panel-body">
+              <ol class="objectives">
+                <li>Explain how CartPricingService composes pricing rules.</li>
+                <li>Trace a price calculation from Angular cart component to API.</li>
+                <li>Identify where promotion rules are registered.</li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="narrative-title">
+            <div class="panel-header">
+              <h3 id="narrative-title">Step 2 guidance</h3>
+              <span class="badge success">active tour step</span>
+            </div>
+            <div class="panel-body compact-stack">
+              <p>
+                The service intentionally reads like a pipeline. It first derives a
+                subtotal from cart lines, then delegates discount logic to the injected
+                registry, then calculates tax against the discounted amount and shipping
+                address before returning immutable totals.
+              </p>
+              <p>
+                The important boundary is the <span class="mono">IPromotionRuleRegistry</span>.
+                A <strong>pricing rule</strong> is not embedded in the service; rules are
+                composed elsewhere and applied here so checkout remains extensible.
+              </p>
+              <details class="glossary" open>
+                <summary>Glossary: pricing rule</summary>
+                <div>
+                  A pricing rule is a small, registered policy that can modify a cart total:
+                  for example seasonal discounts, minimum-order promotions, or customer-tier
+                  adjustments. In Orion, rules are registered by
+                  <span class="mono">PromotionRuleRegistry</span> and applied as a set.
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <section class="knowledge-check" aria-labelledby="check-title">
+            <h3 id="check-title">Inline knowledge check</h3>
+            <p class="muted">Which component is responsible for registering promotion rules?</p>
+            <fieldset class="choice-list">
+              <legend class="subtle">Choose one option</legend>
+              <label class="choice">
+                <input type="radio" name="promotion-owner">
+                <span>CartPricingService</span>
+              </label>
+              <label class="choice correct">
+                <input type="radio" name="promotion-owner">
+                <span>PromotionRuleRegistry <span class="badge success">correct</span></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="promotion-owner">
+                <span>CartSummaryComponent</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="promotion-owner">
+                <span>ITaxCalculator</span>
+              </label>
+            </fieldset>
+          </section>
+        </div>
+      </section>
+
+      <section class="code-pane" aria-labelledby="code-title">
+        <div class="code-toolbar">
+          <span id="code-title">CartPricingService.cs</span>
+          <span class="muted">C# · step 2/5 · lines 1–21</span>
+        </div>
+        <pre class="code-window" aria-label="C sharp code excerpt"><code>
+<span class="code-line"><span class="line-number">1</span><span class="code-text"><span class="kw">public</span> <span class="kw">sealed</span> <span class="kw">class</span> <span class="type">CartPricingService</span> <span class="punct">:</span> <span class="iface">ICartPricingService</span></span></span>
+<span class="code-line"><span class="line-number">2</span><span class="code-text"><span class="punct">{</span></span></span>
+<span class="code-line"><span class="line-number">3</span><span class="code-text">    <span class="kw">private</span> <span class="kw">readonly</span> <span class="iface">IPromotionRuleRegistry</span> <span class="field">_rules</span><span class="punct">;</span></span></span>
+<span class="code-line"><span class="line-number">4</span><span class="code-text">    <span class="kw">private</span> <span class="kw">readonly</span> <span class="iface">ITaxCalculator</span> <span class="field">_tax</span><span class="punct">;</span></span></span>
+<span class="code-line"><span class="line-number">5</span><span class="code-text"></span></span>
+<span class="code-line"><span class="line-number">6</span><span class="code-text">    <span class="kw">public</span> <span class="method">CartPricingService</span><span class="punct">(</span><span class="iface">IPromotionRuleRegistry</span> <span class="var">rules</span><span class="punct">,</span> <span class="iface">ITaxCalculator</span> <span class="var">tax</span><span class="punct">)</span></span></span>
+<span class="code-line"><span class="line-number">7</span><span class="code-text">    <span class="punct">{</span></span></span>
+<span class="code-line"><span class="line-number">8</span><span class="code-text">        <span class="field">_rules</span> <span class="op">=</span> <span class="var">rules</span><span class="punct">;</span></span></span>
+<span class="code-line"><span class="line-number">9</span><span class="code-text">        <span class="field">_tax</span> <span class="op">=</span> <span class="var">tax</span><span class="punct">;</span></span></span>
+<span class="code-line"><span class="line-number">10</span><span class="code-text">    <span class="punct">}</span></span></span>
+<span class="code-line"><span class="line-number">11</span><span class="code-text"></span></span>
+<span class="code-line highlight"><span class="line-number">12</span><span class="code-text">    <span class="kw">public</span> <span class="kw">async</span> <span class="type">Task</span><span class="punct">&lt;</span><span class="type">CartTotals</span><span class="punct">&gt;</span> <span class="method">PriceAsync</span><span class="punct">(</span><span class="type">Cart</span> <span class="var">cart</span><span class="punct">,</span> <span class="type">CancellationToken</span> <span class="var">ct</span><span class="punct">)</span></span></span>
+<span class="code-line highlight"><span class="line-number">13</span><span class="code-text">    <span class="punct">{</span></span></span>
+<span class="code-line highlight"><span class="line-number">14</span><span class="code-text">        <span class="kw">var</span> <span class="var">subtotal</span> <span class="op">=</span> <span class="var">cart</span><span class="punct">.</span><span class="var">Lines</span><span class="punct">.</span><span class="method">Sum</span><span class="punct">(</span><span class="var">l</span> <span class="op">=&gt;</span> <span class="var">l</span><span class="punct">.</span><span class="var">UnitPrice</span> <span class="op">*</span> <span class="var">l</span><span class="punct">.</span><span class="var">Quantity</span><span class="punct">);</span></span></span>
+<span class="code-line highlight"><span class="line-number">15</span><span class="code-text">        <span class="kw">var</span> <span class="var">discounted</span> <span class="op">=</span> <span class="kw">await</span> <span class="field">_rules</span><span class="punct">.</span><span class="method">ApplyAsync</span><span class="punct">(</span><span class="var">cart</span><span class="punct">,</span> <span class="var">subtotal</span><span class="punct">,</span> <span class="var">ct</span><span class="punct">);</span></span></span>
+<span class="code-line highlight"><span class="line-number">16</span><span class="code-text">        <span class="kw">var</span> <span class="var">tax</span> <span class="op">=</span> <span class="field">_tax</span><span class="punct">.</span><span class="method">Calculate</span><span class="punct">(</span><span class="var">discounted</span><span class="punct">,</span> <span class="var">cart</span><span class="punct">.</span><span class="var">ShippingAddress</span><span class="punct">);</span></span></span>
+<span class="code-line highlight"><span class="line-number">17</span><span class="code-text">        <span class="kw">return</span> <span class="kw">new</span> <span class="type">CartTotals</span><span class="punct">(</span><span class="var">subtotal</span><span class="punct">,</span> <span class="var">discounted</span><span class="punct">,</span> <span class="var">tax</span><span class="punct">);</span></span></span>
+<span class="code-line highlight"><span class="line-number">18</span><span class="code-text">    <span class="punct">}</span></span></span>
+<span class="code-line"><span class="line-number">19</span><span class="code-text"><span class="punct">}</span></span></span>
+        </code></pre>
+      </section>
+    </main>
+
+    <footer class="statusbar" aria-label="Lesson progress status">
+      <div class="statusbar-left">
+        <span>Course: Checkout Subsystem Deep Dive</span>
+        <span>Module 3</span>
+        <span>Lesson 7</span>
+      </div>
+      <div class="statusbar-right">
+        <span>Tour step 2/5</span>
+        <span>Snapshot main@4f2c9ab</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

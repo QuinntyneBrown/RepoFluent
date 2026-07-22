@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RepoFluent Code Command interface concept.">
+  <title>Code Command — RepoFluent</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app">
+    <header class="titlebar">
+      <a class="brand" href="#home"><span class="brand-cursor">R<span>F</span></span><strong>RepoFluent</strong><small>LEARN</small></a>
+      <button class="command-trigger" type="button" aria-haspopup="dialog"><span aria-hidden="true">⌕</span><span>Search curriculum, code, systems…</span><kbd>Ctrl K</kbd></button>
+      <div class="title-actions"><span class="sync"><i></i> synced</span><button class="icon-button" type="button" aria-label="Notifications">○</button><button class="avatar" type="button" aria-label="Account menu">MQ</button></div>
+    </header>
+    <aside class="activitybar" aria-label="Main sections">
+      <nav>
+        <button class="activity active" type="button" data-view="home" aria-label="Learning home"><span aria-hidden="true">⌂</span></button>
+        <button class="activity" type="button" data-view="lesson" aria-label="Current lesson"><span aria-hidden="true">▤</span></button>
+        <button class="activity" type="button" data-view="map" aria-label="System map"><span aria-hidden="true">⌘</span></button>
+      </nav>
+      <a class="gallery-link" href="../index.html" aria-label="Back to concept gallery">↙</a>
+    </aside>
+    <aside class="sidebar">
+      <div class="sidebar-head"><span>LEARNING EXPLORER</span><button type="button" aria-label="More explorer actions">•••</button></div>
+      <div class="workspace">
+        <strong>ORDER PLATFORM</strong><span>⌄</span>
+      </div>
+      <nav class="tree" aria-label="Curriculum navigation">
+        <button type="button" data-go="home"><span>▦</span><strong>dashboard.rf</strong></button>
+        <details open>
+          <summary><span>⌄</span> foundations</summary>
+          <button type="button"><span class="status done">✓</span> meet-the-system.md</button>
+          <button type="button"><span class="status done">✓</span> checkout-boundary.md</button>
+          <button type="button"><span class="status done">✓</span> creating-an-order.md</button>
+          <button class="selected" type="button" data-go="lesson"><span class="status current">4</span> order-workflow.md</button>
+          <button type="button"><span class="status">5</span> handling-failure.md</button>
+          <button type="button"><span class="status">6</span> knowledge-check.test</button>
+        </details>
+        <details open>
+          <summary><span>⌄</span> architecture</summary>
+          <button type="button" data-go="map"><span>◈</span> system-map.graph</button>
+          <button type="button"><span>⌬</span> glossary.json</button>
+        </details>
+        <details>
+          <summary><span>›</span> source-references</summary>
+        </details>
+      </nav>
+      <div class="sidebar-progress"><div><span>COURSE PROGRESS</span><strong>68%</strong></div><div class="bar"><i></i></div><small>4 of 6 lessons · 46 min left</small></div>
+    </aside>
+
+    <main id="main-content" class="workbench">
+      <div class="tabbar" role="tablist" aria-label="Open learning views">
+        <button class="tab active" type="button" data-view="home"><span class="tab-icon green">RF</span>dashboard.rf <i></i></button>
+        <button class="tab" type="button" data-view="lesson"><span class="tab-icon blue">M↓</span>order-workflow.md <i></i></button>
+        <button class="tab" type="button" data-view="map"><span class="tab-icon amber">◇</span>system-map.graph <i></i></button>
+      </div>
+      <div class="breadcrumbs"><span>order-platform</span><b>›</b><span id="crumb-section">learning</span><b>›</b><strong id="crumb-page">dashboard.rf</strong></div>
+
+      <section class="view active" data-screen="home" aria-labelledby="dashboard-title">
+        <div class="dashboard">
+          <div class="dash-heading"><div><p class="prompt"><span>&gt;</span> learner.status --today</p><h1 id="dashboard-title">Ready when you are, Maya<span class="blink">_</span></h1><p>One focused session will finish the order workflow lesson.</p></div><div class="date"><span>WED</span><strong>22</strong><small>JUL 2026</small></div></div>
+          <div class="dash-grid">
+            <article class="continue-panel panel">
+              <div class="panel-label"><span class="live-dot"></span> RECOMMENDED_NEXT <small>12 MIN</small></div>
+              <div class="continue-content">
+                <div class="file-meta">ORDER PROCESSING FOUNDATIONS / LESSON_04</div>
+                <h2>How an order<br>becomes a workflow</h2>
+                <p>Trace the request from Angular checkout to a durable, asynchronous processing pipeline.</p>
+                <div class="terminal-path"><span>$</span> course resume order-processing --lesson 4</div>
+                <button class="run-button" type="button" data-go="lesson"><span aria-hidden="true">▶</span> RESUME SESSION <kbd>↵</kbd></button>
+              </div>
+              <div class="workflow-mini" aria-label="Workflow preview">
+                <div><span>01</span><i class="angular">A</i><strong>Storefront</strong><small>POST /orders</small></div>
+                <b></b>
+                <div><span>02</span><i>API</i><strong>Order API</strong><small>202 Accepted</small></div>
+                <b></b>
+                <div><span>03</span><i class="event">↝</i><strong>Message bus</strong><small>OrderSubmitted</small></div>
+              </div>
+              <div class="panel-progress"><span>SESSION_PROGRESS</span><div><i style="width:68%"></i></div><strong>68%</strong></div>
+            </article>
+
+            <aside class="metrics-panel panel">
+              <div class="panel-label">LEARNING_METRICS <small>LIVE</small></div>
+              <div class="metric-main"><div class="radial"><strong>74</strong><span>MASTERY</span></div><div><span>STATUS</span><strong>GROWING ↑</strong><small>+6 this week</small></div></div>
+              <div class="metric-row"><span>API boundaries</span><div><i style="width:88%"></i></div><strong>88</strong></div>
+              <div class="metric-row"><span>Event delivery</span><div><i style="width:61%"></i></div><strong>61</strong></div>
+              <div class="metric-row"><span>Failure recovery</span><div><i style="width:43%"></i></div><strong>43</strong></div>
+              <button class="ghost-button" type="button">OPEN FULL REPORT →</button>
+            </aside>
+
+            <section class="queue-panel panel" aria-labelledby="queue-heading">
+              <div class="panel-label"><span id="queue-heading">ASSIGNMENT_QUEUE</span><small>2 UPCOMING</small></div>
+              <div class="table-head"><span>TYPE</span><span>ITEM</span><span>DUE</span><span>STATUS</span></div>
+              <div class="table-row"><span class="file-type test">TEST</span><div><strong>Order lifecycle quiz</strong><small>8 questions · 10 min</small></div><time datetime="2026-07-24">JUL 24</time><span class="state warning">DUE_SOON</span></div>
+              <div class="table-row"><span class="file-type course">CRS</span><div><strong>Resilient messaging</strong><small>3 lessons · 45 min</small></div><time datetime="2026-07-29">JUL 29</time><span class="state">QUEUED</span></div>
+            </section>
+
+            <aside class="activity-panel panel">
+              <div class="panel-label">RECENT_ACTIVITY</div>
+              <ol><li><i class="success">✓</i><div><strong>Creating an order</strong><small>Completed · 18 min ago</small></div></li><li><i>+8</i><div><strong>API boundary mastery</strong><small>Score updated · today</small></div></li><li><i class="commit">⌁</i><div><strong>Snapshot refreshed</strong><small>main@8f24c1a · yesterday</small></div></li></ol>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" data-screen="lesson" aria-labelledby="lesson-title">
+        <div class="lesson-workspace">
+          <article class="lesson-document">
+            <div class="doc-toolbar"><span class="mode active">RENDERED</span><button class="mode" type="button">SOURCE</button><span class="spacer"></span><span class="saved">● AUTO-SAVED</span></div>
+            <div class="doc-body">
+              <div class="frontmatter"><span>---</span><span>lesson: 04</span><span>duration: 12m</span><span>objectives: 2</span><span>---</span></div>
+              <p class="prompt"><span>#</span> ORDER PROCESSING FOUNDATIONS</p>
+              <h1 id="lesson-title">How an order becomes a workflow</h1>
+              <p class="doc-lede">The API accepts the request quickly. The real work begins after it publishes a message.</p>
+              <section class="objective-block"><div class="block-tag">OBJECTIVES</div><p><span>[✓]</span> Trace the path from HTTP request to durable order</p><p><span>[✓]</span> Explain why processing happens asynchronously</p></section>
+              <h2><span>01.</span> From request to intent</h2>
+              <p>When the storefront submits checkout, <button class="term" type="button" data-term="Order API">Order API</button> validates the command and creates a lightweight order record. It does not reserve stock or charge a card inside the request.</p>
+              <p>Instead, it publishes <code>OrderSubmitted</code> to the message bus. This creates a durable boundary between accepting the customer’s intent and coordinating downstream work.</p>
+              <button class="source-link active" type="button" data-code="controller"><span>↳</span><span>OrderController.cs</span><small>src/Order.Api/Controllers · L42–57</small><kbd>OPEN</kbd></button>
+              <div class="quote"><span>// DOMAIN_INSIGHT</span><p>“The controller is deliberately boring: validate, persist, publish, return.”</p></div>
+              <h2><span>02.</span> A workflow can wait</h2>
+              <p>The <button class="term" type="button" data-term="Order Processor">Order Processor</button> consumes the event independently. A temporary inventory outage can delay fulfillment without holding the browser request open or losing the order.</p>
+              <div class="info-block"><strong>INFO</strong><p>The message is the hand-off point. Everything before it is synchronous; everything after it is recoverable workflow.</p></div>
+              <button class="source-link" type="button" data-code="consumer"><span>↳</span><span>OrderSubmittedConsumer.cs</span><small>src/Order.Processor/Consumers · L18–29</small><kbd>OPEN</kbd></button>
+              <div class="complete-line"><div><span>LESSON_STATUS</span><strong id="lesson-status">IN_PROGRESS</strong></div><button id="complete-lesson" class="run-button" type="button">MARK COMPLETE <kbd>⌘↵</kbd></button></div>
+            </div>
+          </article>
+          <aside class="source-pane" aria-label="Source code reference">
+            <div class="pane-tabs"><button class="active" type="button"><span class="cs-icon">C#</span><span id="code-file">OrderController.cs</span><i>×</i></button></div>
+            <div class="source-toolbar"><span>main</span><b>/</b><span id="code-path">src/Order.Api/Controllers</span><button type="button">8f24c1a⌄</button></div>
+            <pre class="code-block" id="code-controller"><code><span class="ln"><i>42</i><b>[HttpPost]</b></span>
+<span class="ln"><i>43</i><em>public async</em> Task&lt;ActionResult&gt; Create(</span>
+<span class="ln"><i>44</i>  CreateOrder command)</span>
+<span class="ln"><i>45</i>{</span>
+<span class="ln"><i>46</i>  <em>var</em> result = <em>await</em> validator</span>
+<span class="ln"><i>47</i>    .ValidateAsync(command);</span>
+<span class="ln"><i>48</i></span>
+<span class="ln focus"><i>49</i>  <em>var</em> order = Order.Create(command);</span>
+<span class="ln focus"><i>50</i>  db.Orders.Add(order);</span>
+<span class="ln focus"><i>51</i>  <em>await</em> db.SaveChangesAsync();</span>
+<span class="ln"><i>52</i></span>
+<span class="ln focus"><i>53</i>  <em>await</em> bus.Publish(</span>
+<span class="ln focus"><i>54</i>    <em>new</em> OrderSubmitted(order.Id));</span>
+<span class="ln"><i>55</i></span>
+<span class="ln"><i>56</i>  <em>return</em> AcceptedAtAction(</span>
+<span class="ln"><i>57</i>    nameof(Get), <em>new</em> { order.Id });</span>
+<span class="ln"><i>58</i>}</span></code></pre>
+            <pre class="code-block hidden" id="code-consumer"><code><span class="ln"><i>18</i><em>public async</em> Task Consume(</span>
+<span class="ln"><i>19</i>  ConsumeContext&lt;OrderSubmitted&gt; ctx)</span>
+<span class="ln"><i>20</i>{</span>
+<span class="ln focus"><i>21</i>  <em>var</em> order = <em>await</em> orders</span>
+<span class="ln focus"><i>22</i>    .GetAsync(ctx.Message.OrderId);</span>
+<span class="ln"><i>23</i></span>
+<span class="ln focus"><i>24</i>  <em>await</em> inventory.ReserveAsync(</span>
+<span class="ln focus"><i>25</i>    order.Items, ctx.CancellationToken);</span>
+<span class="ln"><i>26</i></span>
+<span class="ln"><i>27</i>  order.MarkInventoryReserved();</span>
+<span class="ln"><i>28</i>  <em>await</em> orders.SaveAsync(order);</span>
+<span class="ln"><i>29</i>}</span></code></pre>
+            <div class="explain-pane"><div class="panel-label">WHY_THIS_MATTERS</div><p id="code-note">Publishing after persistence ensures the workflow always has an order to retrieve.</p><div><span>PROVENANCE</span><strong>✓ VERIFIED</strong></div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" data-screen="map" aria-labelledby="map-title">
+        <div class="graph-workspace">
+          <div class="graph-toolbar"><div><span class="live-dot"></span><strong>order-platform.graph</strong><small>7 nodes · 6 edges</small></div><div><button class="active" type="button">TOPOLOGY</button><button type="button">DATA FLOW</button><button type="button">LEARNING</button></div><button class="ghost-button" type="button" data-go="lesson">OPEN LESSON →</button></div>
+          <div class="graph-main">
+            <div class="graph-canvas" aria-labelledby="map-title">
+              <div class="graph-title"><p class="prompt"><span>&gt;</span> architecture inspect --system orders</p><h1 id="map-title">Order processing system</h1></div>
+              <svg viewBox="0 0 930 550" role="img" aria-label="Storefront connects to Order API, which connects to database and message bus. The bus connects to Order Processor, Inventory, and Payments."><defs><marker id="arrow-code" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3z"/></marker></defs><path d="M175 275 L315 190"/><path d="M420 190 L535 275"/><path d="M365 230 L365 385"/><path d="M640 275 L765 140"/><path d="M640 275 L765 275"/><path d="M640 275 L765 410"/></svg>
+              <button class="graph-node storefront" type="button" data-node="storefront"><small>ANGULAR</small><strong>Storefront</strong><span>app.storefront</span></button>
+              <button class="graph-node api selected" type="button" data-node="api"><small>HTTP</small><strong>Order API</strong><span>svc.order-api</span></button>
+              <button class="graph-node database" type="button" data-node="database"><small>SQL</small><strong>Orders DB</strong><span>db.orders</span></button>
+              <button class="graph-node bus" type="button" data-node="bus"><small>EVENT</small><strong>Message bus</strong><span>bus.order-events</span></button>
+              <button class="graph-node processor" type="button" data-node="processor"><small>WORKER</small><strong>Order Processor</strong><span>svc.processor</span></button>
+              <button class="graph-node inventory" type="button" data-node="inventory"><small>HTTP</small><strong>Inventory</strong><span>ext.inventory</span></button>
+              <button class="graph-node payments" type="button" data-node="payments"><small>HTTP</small><strong>Payments</strong><span>ext.payments</span></button>
+              <div class="canvas-tools"><button type="button" aria-label="Zoom in">+</button><button type="button" aria-label="Zoom out">−</button><button type="button" aria-label="Fit graph">⊙</button></div>
+            </div>
+            <aside class="inspect-pane" aria-live="polite">
+              <div class="panel-label">NODE_INSPECTOR <small id="node-count">02/07</small></div>
+              <div class="node-heading"><span class="node-glyph">API</span><div><small id="node-kind">CORE_SERVICE</small><h2 id="node-title">Order API</h2></div></div>
+              <p id="node-description">Accepts order commands, validates input, persists the initial record, and publishes the event that starts fulfillment.</p>
+              <dl><div><dt>OWNS</dt><dd id="node-owns">Order intake</dd></div><div><dt>RUNTIME</dt><dd id="node-tech">ASP.NET Core</dd></div><div><dt>LEARNING</dt><dd id="node-learning">3 lessons</dd></div><div><dt>MASTERY</dt><dd><span class="good">88%</span></dd></div></dl>
+              <div class="connections"><span>CONNECTIONS</span><button type="button">← Storefront <small>HTTPS</small></button><button type="button">→ Orders DB <small>EF CORE</small></button><button type="button">→ Message bus <small>EVENT</small></button></div>
+              <button class="run-button wide" type="button" data-go="lesson">OPEN RELATED LESSON <kbd>↵</kbd></button>
+            </aside>
+          </div>
+          <details class="accessible-graph"><summary>ACCESSIBLE_RELATIONSHIP_TABLE</summary><table><thead><tr><th>FROM</th><th>TO</th><th>RELATIONSHIP</th></tr></thead><tbody><tr><td>Storefront</td><td>Order API</td><td>HTTPS request</td></tr><tr><td>Order API</td><td>Orders DB</td><td>Persists order</td></tr><tr><td>Order API</td><td>Message bus</td><td>Publishes event</td></tr><tr><td>Message bus</td><td>Order Processor</td><td>Delivers event</td></tr></tbody></table></details>
+        </div>
+      </section>
+    </main>
+    <footer class="statusbar"><div><span class="status-brand">RF</span><span>main*</span><span>↻</span><span>0 errors</span><span>0 warnings</span></div><div><span>Ln 04, Col 12</span><span>UTF-8</span><span>Spaces: 2</span><span>RepoFluent 0.1</span></div></footer>
+  </div>
+
+  <div class="command-dialog" role="dialog" aria-modal="true" aria-labelledby="command-title" hidden><button class="dialog-backdrop" type="button" aria-label="Close command menu"></button><div class="command-box"><label id="command-title" for="command-input">Quick command</label><div class="command-input"><span>›</span><input id="command-input" type="search" placeholder="Type a command or search…" autocomplete="off"><kbd>ESC</kbd></div><div class="command-results"><span>RECENT</span><button type="button" data-command-go="lesson"><i>M↓</i><strong>Open current lesson</strong><kbd>lesson</kbd></button><button type="button" data-command-go="map"><i>◇</i><strong>Inspect system map</strong><kbd>architecture</kbd></button><button type="button" data-command-go="home"><i>RF</i><strong>Show learning status</strong><kbd>dashboard</kbd></button></div></div></div>
+  <div class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RepoFluent Editorial Atlas interface concept.">
+  <title>Editorial Atlas — RepoFluent</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="RepoFluent home">
+        <span class="brand-mark">R</span>
+        <span>Repo<span>Fluent</span></span>
+      </a>
+      <button class="mobile-menu" type="button" aria-expanded="false" aria-controls="primary-nav"><span aria-hidden="true">☰</span><span class="sr-only">Open navigation</span></button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <button class="nav-link active" type="button" data-view="home">My learning</button>
+        <button class="nav-link" type="button" data-view="lesson">Current lesson</button>
+        <button class="nav-link" type="button" data-view="map">System atlas</button>
+      </nav>
+      <div class="profile">
+        <span class="streak"><span aria-hidden="true">◇</span> 4 day streak</span>
+        <button class="avatar" type="button" aria-label="Open account menu">MQ</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="view active" data-screen="home" aria-labelledby="home-title">
+        <div class="page home-page">
+          <div class="welcome-row">
+            <div>
+              <p class="kicker">Wednesday, July 22</p>
+              <h1 id="home-title">Good afternoon, Maya.</h1>
+              <p class="lede">Keep your momentum going. You’re one lesson away from understanding the order workflow.</p>
+            </div>
+            <div class="week-progress" aria-label="Weekly learning goal: 3 of 4 days complete">
+              <div class="week-ring"><span>3<small>/4</small></span></div>
+              <div><strong>Weekly rhythm</strong><span>One more day to your goal</span></div>
+            </div>
+          </div>
+
+          <div class="home-grid">
+            <section class="continue-card" aria-labelledby="continue-title">
+              <div class="card-topline">
+                <span class="pill coral">Recommended next</span>
+                <span class="meta">12 min</span>
+              </div>
+              <div class="course-context"><span class="context-number">03</span><span>Order Processing Foundations</span></div>
+              <h2 id="continue-title">How an order becomes a workflow</h2>
+              <p>Follow an order from the Angular checkout through the API and into the asynchronous processing pipeline.</p>
+              <div class="lesson-footer">
+                <div class="progress-copy"><strong>68% complete</strong><span>Lesson 4 of 6</span></div>
+                <div class="progress-track" aria-hidden="true"><span style="width:68%"></span></div>
+                <button class="primary-button" type="button" data-go="lesson">Continue lesson <span aria-hidden="true">→</span></button>
+              </div>
+              <div class="illustration" aria-hidden="true">
+                <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
+                <span class="shape shape-one">API</span><span class="shape shape-two">BUS</span><span class="shape shape-three">DB</span>
+              </div>
+            </section>
+
+            <aside class="due-card" aria-labelledby="due-title">
+              <div class="card-heading"><p class="kicker">Coming up</p><h2 id="due-title">Your queue</h2></div>
+              <div class="queue-item">
+                <div class="date-tile"><strong>24</strong><span>Jul</span></div>
+                <div><span class="type">Knowledge check</span><strong>Order lifecycle quiz</strong><span>8 questions · 10 min</span></div>
+              </div>
+              <div class="queue-item">
+                <div class="date-tile muted"><strong>29</strong><span>Jul</span></div>
+                <div><span class="type">Assigned course</span><strong>Resilient messaging</strong><span>3 lessons · 45 min</span></div>
+              </div>
+              <button class="text-button" type="button">View all assignments <span aria-hidden="true">→</span></button>
+            </aside>
+
+            <section class="library-card" aria-labelledby="library-title">
+              <div class="card-heading row"><div><p class="kicker">Your curriculum</p><h2 id="library-title">Continue exploring</h2></div><button class="text-button" type="button">View library</button></div>
+              <div class="course-list">
+                <article class="course-row">
+                  <div class="course-icon indigo" aria-hidden="true">⌁</div>
+                  <div class="course-name"><strong>Order Processing Foundations</strong><span>4 of 6 lessons</span></div>
+                  <div class="mini-progress"><span style="width:68%"></span></div><strong>68%</strong>
+                </article>
+                <article class="course-row">
+                  <div class="course-icon mint" aria-hidden="true">↗</div>
+                  <div class="course-name"><strong>Angular Storefront Architecture</strong><span>2 of 5 lessons</span></div>
+                  <div class="mini-progress"><span style="width:36%"></span></div><strong>36%</strong>
+                </article>
+                <article class="course-row">
+                  <div class="course-icon gold" aria-hidden="true">◎</div>
+                  <div class="course-name"><strong>Observability in Practice</strong><span>Not started</span></div>
+                  <div class="mini-progress"><span style="width:0%"></span></div><strong>0%</strong>
+                </article>
+              </div>
+            </section>
+
+            <aside class="mastery-card" aria-labelledby="mastery-title">
+              <p class="kicker">Knowledge pulse</p><h2 id="mastery-title">Your mastery</h2>
+              <div class="mastery-score"><strong>74</strong><span>Growing</span></div>
+              <p>You’re strongest in API boundaries. Review event delivery next.</p>
+              <div class="skill"><span>API boundaries</span><strong>88%</strong><div><i style="width:88%"></i></div></div>
+              <div class="skill"><span>Event delivery</span><strong>61%</strong><div><i style="width:61%"></i></div></div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="view lesson-view" data-screen="lesson" aria-labelledby="lesson-title">
+        <div class="lesson-top">
+          <button class="back-button" type="button" data-go="home"><span aria-hidden="true">←</span> My learning</button>
+          <div class="lesson-breadcrumb"><span>Order Processing Foundations</span><i></i><strong>Lesson 4 of 6</strong></div>
+          <div class="save-state" role="status"><span aria-hidden="true">✓</span> Progress saved</div>
+        </div>
+        <div class="lesson-layout">
+          <aside class="lesson-outline" aria-label="Course outline">
+            <p class="kicker">Course outline</p>
+            <h2>Order Processing Foundations</h2>
+            <ol>
+              <li class="done"><span>1</span><div><strong>Meet the system</strong><small>Complete</small></div></li>
+              <li class="done"><span>2</span><div><strong>The checkout boundary</strong><small>Complete</small></div></li>
+              <li class="done"><span>3</span><div><strong>Creating an order</strong><small>Complete</small></div></li>
+              <li class="current"><span>4</span><div><strong>How an order becomes a workflow</strong><small>In progress</small></div></li>
+              <li><span>5</span><div><strong>Handling failure safely</strong><small>14 min</small></div></li>
+              <li><span>6</span><div><strong>Knowledge check</strong><small>10 min</small></div></li>
+            </ol>
+          </aside>
+
+          <article class="lesson-content">
+            <div class="article-head">
+              <p class="kicker">Lesson 04 · 12 min</p>
+              <h1 id="lesson-title">How an order becomes a workflow</h1>
+              <p class="article-lede">The API accepts the request quickly. The real work begins after it publishes a message.</p>
+              <div class="objectives"><strong>By the end, you can</strong><span>Trace the path from HTTP request to durable order</span><span>Explain why processing happens asynchronously</span></div>
+            </div>
+            <div class="article-body">
+              <h2>From request to intent</h2>
+              <p>When the storefront submits checkout, <button class="term" type="button" data-term="Order API">Order API</button> validates the command and creates a lightweight order record. It does not reserve stock or charge a card inside the request.</p>
+              <p>Instead, it publishes <code>OrderSubmitted</code> to the message bus. This creates a durable boundary between accepting the customer’s intent and coordinating the downstream work.</p>
+              <button class="code-citation active" type="button" data-code="controller"><span class="citation-icon" aria-hidden="true">&lt;/&gt;</span><span><small>Source reference 1 of 2</small><strong>OrderController.cs · lines 42–57</strong></span><span aria-hidden="true">View →</span></button>
+              <blockquote><span aria-hidden="true">“</span>The controller is deliberately boring: validate, persist, publish, return.</blockquote>
+              <h2>A workflow can wait</h2>
+              <p>The <button class="term" type="button" data-term="Order Processor">Order Processor</button> consumes the event independently. A temporary inventory outage can delay fulfillment without holding the browser request open or losing the order.</p>
+              <div class="callout"><span class="callout-mark">i</span><div><strong>Architecture note</strong><p>The message is the hand-off point. Everything before it is synchronous; everything after it is recoverable workflow.</p></div></div>
+              <button class="code-citation" type="button" data-code="consumer"><span class="citation-icon" aria-hidden="true">&lt;/&gt;</span><span><small>Source reference 2 of 2</small><strong>OrderSubmittedConsumer.cs · lines 18–34</strong></span><span aria-hidden="true">View →</span></button>
+              <div class="lesson-complete">
+                <div><strong>Ready to keep going?</strong><span>Mark this lesson complete to unlock failure handling.</span></div>
+                <button id="complete-lesson" class="primary-button" type="button"><span class="unchecked" aria-hidden="true">○</span> Mark complete</button>
+              </div>
+            </div>
+          </article>
+
+          <aside class="code-panel" aria-label="Source code reference">
+            <div class="code-panel-head">
+              <div><p class="kicker">Cited source</p><strong id="code-file">OrderController.cs</strong><span id="code-path">src/Order.Api/Controllers</span></div>
+              <button class="close-code" type="button" aria-label="Close code panel">×</button>
+            </div>
+            <div class="snapshot"><span>Snapshot</span><strong>main@8f24c1a</strong><span class="verified">✓ Verified</span></div>
+            <pre class="code-block" id="code-controller" aria-label="OrderController code excerpt"><code><span class="line"><i>42</i><b> [HttpPost]</b></span>
+<span class="line"><i>43</i><em> public async</em> Task&lt;ActionResult&gt; Create(</span>
+<span class="line"><i>44</i>   CreateOrder command)</span>
+<span class="line"><i>45</i> {</span>
+<span class="line"><i>46</i>   <em>var</em> result = <em>await</em> validator</span>
+<span class="line"><i>47</i>     .ValidateAsync(command);</span>
+<span class="line"><i>48</i></span>
+<span class="line highlight"><i>49</i>   <em>var</em> order = Order.Create(command);</span>
+<span class="line highlight"><i>50</i>   db.Orders.Add(order);</span>
+<span class="line highlight"><i>51</i>   <em>await</em> db.SaveChangesAsync();</span>
+<span class="line"><i>52</i></span>
+<span class="line highlight"><i>53</i>   <em>await</em> bus.Publish(</span>
+<span class="line highlight"><i>54</i>     <em>new</em> OrderSubmitted(order.Id));</span>
+<span class="line"><i>55</i></span>
+<span class="line"><i>56</i>   <em>return</em> AcceptedAtAction(</span>
+<span class="line"><i>57</i>     nameof(Get), <em>new</em> { order.Id });</span>
+<span class="line"><i>58</i> }</span></code></pre>
+            <pre class="code-block hidden" id="code-consumer" aria-label="OrderSubmittedConsumer code excerpt"><code><span class="line"><i>18</i><em> public async</em> Task Consume(</span>
+<span class="line"><i>19</i>   ConsumeContext&lt;OrderSubmitted&gt; ctx)</span>
+<span class="line"><i>20</i> {</span>
+<span class="line highlight"><i>21</i>   <em>var</em> order = <em>await</em> orders</span>
+<span class="line highlight"><i>22</i>     .GetAsync(ctx.Message.OrderId);</span>
+<span class="line"><i>23</i></span>
+<span class="line highlight"><i>24</i>   <em>await</em> inventory.ReserveAsync(</span>
+<span class="line highlight"><i>25</i>     order.Items, ctx.CancellationToken);</span>
+<span class="line"><i>26</i></span>
+<span class="line"><i>27</i>   order.MarkInventoryReserved();</span>
+<span class="line"><i>28</i>   <em>await</em> orders.SaveAsync(order);</span>
+<span class="line"><i>29</i> }</span></code></pre>
+            <div class="code-note"><strong>Why this matters</strong><p>Publishing after persistence ensures the workflow always has an order to retrieve.</p></div>
+            <button class="repo-link" type="button">Open repository link <span aria-hidden="true">↗</span></button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" data-screen="map" aria-labelledby="map-title">
+        <div class="page map-page">
+          <div class="map-heading">
+            <div><p class="kicker">Architecture at a glance</p><h1 id="map-title">Order processing system</h1><p class="lede">See how services collaborate, then jump directly into the learning that explains each boundary.</p></div>
+            <button class="secondary-button" type="button" data-go="lesson">Return to lesson <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="map-layout">
+            <div class="system-map" aria-label="Interactive system relationship map">
+              <svg viewBox="0 0 850 510" role="img" aria-label="Storefront connects to Order API, which connects to database and message bus. The bus connects to Order Processor, Inventory, and Payments.">
+                <defs><marker id="arrow-atlas" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#9b998f"/></marker></defs>
+                <path d="M148 255 C205 255 205 180 270 180"/><path d="M390 180 C455 180 445 255 510 255"/><path d="M335 225 C335 290 290 300 290 360"/><path d="M630 255 C690 255 685 145 748 145"/><path d="M630 255 C690 255 685 255 748 255"/><path d="M630 255 C690 255 685 365 748 365"/>
+              </svg>
+              <button class="map-node storefront" type="button" data-node="storefront"><span class="node-icon">A</span><strong>Storefront</strong><small>Angular app</small></button>
+              <button class="map-node api selected" type="button" data-node="api"><span class="node-icon">API</span><strong>Order API</strong><small>HTTP boundary</small></button>
+              <button class="map-node database" type="button" data-node="database"><span class="node-icon">DB</span><strong>Orders DB</strong><small>SQL Server</small></button>
+              <button class="map-node bus" type="button" data-node="bus"><span class="node-icon">↝</span><strong>Message bus</strong><small>Async boundary</small></button>
+              <button class="map-node processor" type="button" data-node="processor"><span class="node-icon">OP</span><strong>Order Processor</strong><small>.NET worker</small></button>
+              <button class="map-node inventory" type="button" data-node="inventory"><span class="node-icon">IN</span><strong>Inventory</strong><small>External service</small></button>
+              <button class="map-node payments" type="button" data-node="payments"><span class="node-icon">$</span><strong>Payments</strong><small>External service</small></button>
+              <div class="map-legend"><span><i class="solid"></i> Synchronous</span><span><i class="dashed"></i> Asynchronous</span></div>
+            </div>
+            <aside class="node-detail" aria-live="polite">
+              <div class="detail-count">02 / 07</div>
+              <span class="pill blue" id="node-kind">Core service</span>
+              <h2 id="node-title">Order API</h2>
+              <p id="node-description">Accepts order commands, validates input, persists the initial record, and publishes the event that starts fulfillment.</p>
+              <dl><div><dt>Owns</dt><dd id="node-owns">Order intake</dd></div><div><dt>Technology</dt><dd id="node-tech">ASP.NET Core</dd></div><div><dt>Learning</dt><dd id="node-learning">3 lessons</dd></div></dl>
+              <button class="primary-button" type="button" data-go="lesson">Open related lesson <span aria-hidden="true">→</span></button>
+              <button class="text-button" type="button">Browse 4 code references</button>
+            </aside>
+          </div>
+          <details class="accessible-map">
+            <summary>View accessible relationship list</summary>
+            <table><thead><tr><th>From</th><th>To</th><th>Relationship</th></tr></thead><tbody><tr><td>Storefront</td><td>Order API</td><td>HTTPS request</td></tr><tr><td>Order API</td><td>Orders DB</td><td>Persists order</td></tr><tr><td>Order API</td><td>Message bus</td><td>Publishes event</td></tr><tr><td>Message bus</td><td>Order Processor</td><td>Delivers event</td></tr><tr><td>Order Processor</td><td>Inventory and Payments</td><td>Coordinates work</td></tr></tbody></table>
+          </details>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="glossary" role="dialog" aria-modal="true" aria-labelledby="glossary-title" hidden>
+    <button class="glossary-backdrop" type="button" aria-label="Close glossary"></button>
+    <div class="glossary-panel"><button class="glossary-close" type="button" aria-label="Close glossary">×</button><p class="kicker">Glossary</p><h2 id="glossary-title">Order API</h2><p id="glossary-text">The HTTP-facing service that accepts and validates order commands before handing work to the asynchronous pipeline.</p><button class="text-button" type="button" data-go="map">See it in the system atlas →</button></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
