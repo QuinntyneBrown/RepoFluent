@@ -56,6 +56,16 @@ The platform separates content preparation from content delivery:
 6. **Progress means demonstrated understanding.** Completion, quiz performance, test performance, confidence, and recency are distinct signals.
 7. **The content contract is portable and versioned.** Organizations must not be locked into one model, agent, or content-generation workflow.
 
+### 4.1 Engineering standards
+
+The [Engineering handbook](https://github.com/QuinntyneBrown/engineering-handbook) is the normative engineering standard for RepoFluent development.
+
+| ID | Priority | Requirement |
+| --- | --- | --- |
+| ENG-01 | Must | All RepoFluent development, whether performed by a person or an automated agent, shall adhere to the Engineering handbook, including its product, architecture, design-system, coding, requirements, testing, security, accessibility, documentation, delivery, and definition-of-done standards. |
+| ENG-02 | Must | A RepoFluent-specific requirement or accepted architecture decision may specialize a handbook default only when it identifies the affected rule and records the rationale and consequences. An unresolved conflict or undocumented deviation shall block the affected change. |
+| ENG-03 | Must | Every change shall retain the conformance evidence required by the handbook and applicable RepoFluent requirements, including traceable requirements and decisions, risk-appropriate test and quality-gate results, affected documentation updates, and a handoff that states verification results and any remaining risk. |
+
 ## 5. Goals and non-goals
 
 ### 5.1 Goals

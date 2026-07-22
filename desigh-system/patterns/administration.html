@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent administration pattern." />
+    <title>Administration — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/administration">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P08</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span
+            ><strong>administration.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P08</p>
+              <h1>Administration</h1>
+              <p class="ds-hero__lede">
+                Administration makes tenant scope, permissions, affected
+                records, and audit consequences explicit across users, teams,
+                roles, assignments, branding, retention, and operations.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P08</span>
+          </header>
+          <section class="ds-section" id="people">
+            <h2>Users, teams, and roles</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">CHECKOUT TEAM / 14 MEMBERS</div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div class="rf-toolbar">
+                  <label class="rf-field" style="flex: 1"
+                    ><span class="rf-visually-hidden">Search people</span
+                    ><input
+                      class="rf-input"
+                      type="search"
+                      placeholder="Search permitted users and teams…" /></label
+                  ><button type="button" class="rf-button">INVITE USER</button
+                  ><button type="button" class="rf-button rf-button--primary">
+                    CREATE TEAM
+                  </button>
+                </div>
+                <div class="rf-table-wrap">
+                  <table class="rf-table">
+                    <thead>
+                      <tr>
+                        <th><span class="rf-visually-hidden">Select</span></th>
+                        <th>PERSON</th>
+                        <th>ROLE</th>
+                        <th>TEAM</th>
+                        <th>STATUS</th>
+                        <th>LAST ACCESS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input
+                            type="checkbox"
+                            aria-label="Select Maya Quinn"
+                          />
+                        </td>
+                        <td class="rf-table__primary">
+                          Maya Quinn<br /><small>maya@example.test</small>
+                        </td>
+                        <td>Learner</td>
+                        <td>Checkout</td>
+                        <td>
+                          <span class="rf-status rf-status--success"
+                            >active</span
+                          >
+                        </td>
+                        <td>22 Jul 2026</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <input
+                            type="checkbox"
+                            aria-label="Select Amir Rivera"
+                          />
+                        </td>
+                        <td class="rf-table__primary">
+                          Amir Rivera<br /><small>amir@example.test</small>
+                        </td>
+                        <td>Author</td>
+                        <td>Platform</td>
+                        <td>
+                          <span class="rf-status rf-status--success"
+                            >active</span
+                          >
+                        </td>
+                        <td>21 Jul 2026</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <input type="checkbox" aria-label="Select Jo Chen" />
+                        </td>
+                        <td class="rf-table__primary">
+                          Jo Chen<br /><small>jo@example.test</small>
+                        </td>
+                        <td>Manager</td>
+                        <td>Checkout</td>
+                        <td>
+                          <span class="rf-status rf-status--warning"
+                            >invited</span
+                          >
+                        </td>
+                        <td>Never</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <p>
+              Role changes summarize gained and lost capabilities before
+              confirmation. Tenant and team boundaries are enforced server-side
+              at every interface.
+            </p>
+          </section>
+          <section class="ds-section" id="assignments">
+            <h2>Assignments</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">ASSIGN ORDER PROCESSING V3</div>
+              <div class="ds-example__stage">
+                <div class="rf-field-row">
+                  <label class="rf-field"
+                    ><span class="rf-field__label">Audience</span
+                    ><select class="rf-select">
+                      <option>Checkout team · 14 learners</option>
+                    </select></label
+                  ><label class="rf-field"
+                    ><span class="rf-field__label">Due date</span
+                    ><input class="rf-input" type="date" value="2026-08-15"
+                  /></label>
+                </div>
+                <div class="ds-stack" style="margin-top: 1rem">
+                  <label class="rf-check"
+                    ><input type="radio" name="required" checked /><span
+                      >Required — tracked separately and included in due-date
+                      reporting</span
+                    ></label
+                  ><label class="rf-check"
+                    ><input type="radio" name="required" /><span
+                      >Optional enrichment — visible without overdue
+                      status</span
+                    ></label
+                  ><label class="rf-check"
+                    ><input type="checkbox" checked /><span
+                      >Notify newly assigned learners</span
+                    ></label
+                  >
+                  <div class="ds-row" style="justify-content: flex-end">
+                    <button type="button" class="rf-button rf-button--primary">
+                      REVIEW 14 ASSIGNMENTS
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p>
+              The review step names curriculum version, users added/removed by
+              group expansion, due date, notification effect, and whether prior
+              completion satisfies the assignment.
+            </p>
+          </section>
+          <section class="ds-section" id="settings">
+            <h2>Tenant settings</h2>
+            <div class="ds-grid ds-grid--3">
+              <article class="rf-panel">
+                <div class="rf-panel__header">BRANDING</div>
+                <div class="rf-panel__body">
+                  <label class="rf-field"
+                    ><span class="rf-field__label">Tenant name</span
+                    ><input
+                      type="text"
+                      class="rf-input"
+                      value="Northstar Engineering"
+                  /></label>
+                  <p>
+                    Logo and approved accent tokens must preserve contrast and
+                    RepoFluent status semantics.
+                  </p>
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">PRIVACY</div>
+                <div class="rf-panel__body">
+                  <label class="rf-field"
+                    ><span class="rf-field__label">Minimum analytics group</span
+                    ><input class="rf-input" type="number" value="5" min="3"
+                  /></label>
+                  <p>
+                    Manager visibility and acceptable use are explained beside
+                    the setting.
+                  </p>
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">NOTIFICATIONS</div>
+                <div class="rf-panel__body">
+                  <label class="rf-switch"
+                    ><input type="checkbox" checked /><span
+                      class="rf-switch__track"
+                    ></span
+                    ><span>Assignment due dates</span></label
+                  ><br /><br /><label class="rf-switch"
+                    ><input type="checkbox" checked /><span
+                      class="rf-switch__track"
+                    ></span
+                    ><span>Validation failures</span></label
+                  >
+                </div>
+              </article>
+            </div>
+          </section>
+          <section class="ds-section" id="retention">
+            <h2>Retention and destructive workflows</h2>
+            <div class="rf-callout rf-callout--danger">
+              <svg class="rf-icon" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="7" />
+                <path d="m7.5 7.5 5 5M12.5 7.5l-5 5" />
+              </svg>
+              <div>
+                <strong>Deletion requires exact scope</strong>
+                <p>
+                  Name source content, derived indexes, caches, analytics,
+                  audit/legal exceptions, effective time, and recovery window
+                  before confirmation.
+                </p>
+              </div>
+            </div>
+            <ul>
+              <li>
+                Use preview counts only when authorization and minimum-group
+                rules allow them.
+              </li>
+              <li>
+                Require recent authentication or elevated approval for sensitive
+                bulk actions.
+              </li>
+              <li>
+                After execution, provide an audit identifier and whether
+                recovery remains possible.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="operations">
+            <h2>Operations and audit</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <caption>
+                  Recent administrative audit events
+                </caption>
+                <thead>
+                  <tr>
+                    <th>TIME</th>
+                    <th>ACTOR</th>
+                    <th>ACTION</th>
+                    <th>TARGET</th>
+                    <th>RESULT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>18:42:11Z</td>
+                    <td>amir@example.test</td>
+                    <td>CURRICULUM_PUBLISHED</td>
+                    <td>order-platform:v3</td>
+                    <td>
+                      <span class="rf-status rf-status--success">success</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>18:35:02Z</td>
+                    <td>jo@example.test</td>
+                    <td>REPORT_EXPORTED</td>
+                    <td>checkout-team</td>
+                    <td>
+                      <span class="rf-status rf-status--success">success</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>18:19:47Z</td>
+                    <td>system</td>
+                    <td>IMPORT_VALIDATION</td>
+                    <td>package:01K…</td>
+                    <td>
+                      <span class="rf-status rf-status--danger">failed</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Operational diagnostics expose safe identifiers, processing stage,
+              and support correlation without logging source excerpts, answers,
+              tokens, or sensitive free text.
+            </p>
+            <div class="ds-requirements">
+              <span class="ds-requirement">IAM-01–07</span
+              ><span class="ds-requirement">ADM-01–06</span
+              ><span class="ds-requirement">ANL-06</span
+              ><span class="ds-requirement">SECURITY / AUDIT</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

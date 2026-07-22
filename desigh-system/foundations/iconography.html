@@ -1,10 +1,223 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="RepoFluent iconography foundations."><title>Iconography — RepoFluent Design System</title><link rel="stylesheet" href="../assets/tokens.css"><link rel="stylesheet" href="../assets/components.css"><link rel="stylesheet" href="../assets/docs.css"><script src="../assets/docs.js" defer></script></head>
-<body data-category="Foundations" data-page="foundations/iconography"><a class="ds-skip-link" href="#main-content">Skip to content</a><div class="ds-app"><header class="ds-header" data-ds-header></header><aside class="ds-sidebar" aria-label="Design system sections"><div class="ds-sidebar__head"><span>DESIGN EXPLORER</span><span>F05</span></div><nav class="ds-nav" data-ds-nav></nav></aside><main class="ds-main" id="main-content"><div class="ds-page">
-  <div class="ds-breadcrumbs"><a href="../index.html">design-system</a><span>›</span><span>foundations</span><span>›</span><strong>iconography.svg</strong></div><header class="ds-hero"><div><p class="ds-eyebrow">Foundation / F05</p><h1>Iconography</h1><p class="ds-hero__lede">A bundled, dependency-free SVG language replaces ambiguous Unicode symbols while preserving the compact utility of developer tools.</p></div><span class="ds-page-id">RF-F05</span></header>
-  <section class="ds-section" id="construction"><h2>Construction</h2><div class="ds-grid ds-grid--3"><article class="rf-card"><div class="rf-card__header">GRID</div><div class="rf-card__body"><strong>20 × 20 viewBox</strong><p>Primary optical area from 3 to 17 units.</p></div></article><article class="rf-card"><div class="rf-card__header">STROKE</div><div class="rf-card__body"><strong>1.8 units</strong><p>Round caps and joins; no decorative fills.</p></div></article><article class="rf-card"><div class="rf-card__header">SIZES</div><div class="rf-card__body"><strong>16px / 20px / 24px</strong><p>Inline, default action, feature context.</p></div></article></div></section>
-  <section class="ds-section" id="actions"><h2>Action icons</h2><div class="ds-icon-grid"><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5"/><path d="m12.5 12.5 4 4"/></svg><span>search</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M4 15v2h12v-2M10 3v10M6 9l4 4 4-4"/></svg><span>download</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><rect x="6" y="6" width="10" height="10"/><path d="M13 6V3H3v10h3"/></svg><span>copy</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M3 4h14l-5.5 6v5l-3 2v-7L3 4Z"/></svg><span>filter</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="m7 4 9 6-9 6V4Z"/></svg><span>play</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><circle cx="4" cy="10" r="1"/><circle cx="10" cy="10" r="1"/><circle cx="16" cy="10" r="1"/></svg><span>more</span></div></div></section>
-  <section class="ds-section" id="objects"><h2>Object and navigation icons</h2><div class="ds-icon-grid"><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M5 3h7l3 3v11H5zM12 3v4h4"/></svg><span>file / lesson</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M5 3v11h4M5 8h4M9 5h7v5H9zM9 12h7v5H9z"/></svg><span>tree</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><circle cx="5" cy="10" r="2"/><circle cx="15" cy="5" r="2"/><circle cx="15" cy="15" r="2"/><path d="m7 9 6-3M7 11l6 3"/></svg><span>system map</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M3 17V9h3v8M8.5 17V4h3v13M14 17v-6h3v6"/></svg><span>analytics</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M3 4h5a2 2 0 0 1 2 2v11a2 2 0 0 0-2-2H3zM17 4h-5a2 2 0 0 0-2 2v11a2 2 0 0 1 2-2h5z"/></svg><span>learning</span></div><div class="ds-icon-cell"><svg class="rf-icon" viewBox="0 0 20 20"><path d="m7 6-4 4 4 4M13 6l4 4-4 4M11 4 9 16"/></svg><span>code</span></div></div></section>
-  <section class="ds-section" id="semantics"><h2>Accessible semantics</h2><div class="ds-example"><div class="ds-example__head">DECORATIVE VS. INFORMATIVE</div><div class="ds-example__stage ds-row"><button class="rf-button" type="button"><svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 15v2h12v-2M10 3v10M6 9l4 4 4-4"/></svg>EXPORT REPORT</button><button class="rf-icon-button" type="button" aria-label="Close dialog"><svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button><svg class="rf-icon" viewBox="0 0 20 20" role="img" aria-label="Warning"><path d="m10 3 8 14H2L10 3Z"/><path d="M10 8v4M10 14h.01"/></svg><span>Source revision is stale</span></div></div><ul><li>Hide decorative icons from assistive technology when adjacent text supplies the name.</li><li>Icon-only buttons require an explicit accessible name and a visible tooltip on hover and focus.</li><li>Informative status icons receive a label and are paired with visible status text.</li></ul></section>
-  <section class="ds-section" id="rules"><h2>Usage rules</h2><div class="ds-do-dont"><div class="ds-do"><strong>DO</strong><p>Use one stable icon for one action throughout the product and pair unfamiliar actions with text.</p></div><div class="ds-dont"><strong>DON'T</strong><p>Mix emoji, platform glyphs, filled illustrations, or different icons for the same command.</p></div></div><div class="ds-requirements"><span class="ds-requirement">9.1 VISUAL SYSTEM</span><span class="ds-requirement">9.2 ACCESSIBLE NAMES</span><span class="ds-requirement">LRN-04</span></div></section>
-</div></main><footer class="ds-statusbar" data-ds-status></footer></div></body></html>
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent iconography foundations." />
+    <title>Iconography — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Foundations" data-page="foundations/iconography">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>F05</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>foundations</span><span>›</span
+            ><strong>iconography.svg</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Foundation / F05</p>
+              <h1>Iconography</h1>
+              <p class="ds-hero__lede">
+                A bundled, dependency-free SVG language replaces ambiguous
+                Unicode symbols while preserving the compact utility of
+                developer tools.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-F05</span>
+          </header>
+          <section class="ds-section" id="construction">
+            <h2>Construction</h2>
+            <div class="ds-grid ds-grid--3">
+              <article class="rf-card">
+                <div class="rf-card__header">GRID</div>
+                <div class="rf-card__body">
+                  <strong>20 × 20 viewBox</strong>
+                  <p>Primary optical area from 3 to 17 units.</p>
+                </div>
+              </article>
+              <article class="rf-card">
+                <div class="rf-card__header">STROKE</div>
+                <div class="rf-card__body">
+                  <strong>1.8 units</strong>
+                  <p>Round caps and joins; no decorative fills.</p>
+                </div>
+              </article>
+              <article class="rf-card">
+                <div class="rf-card__header">SIZES</div>
+                <div class="rf-card__body">
+                  <strong>16px / 20px / 24px</strong>
+                  <p>Inline, default action, feature context.</p>
+                </div>
+              </article>
+            </div>
+          </section>
+          <section class="ds-section" id="actions">
+            <h2>Action icons</h2>
+            <div class="ds-icon-grid">
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <circle cx="8.5" cy="8.5" r="5" />
+                  <path d="m12.5 12.5 4 4" /></svg
+                ><span>search</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="M4 15v2h12v-2M10 3v10M6 9l4 4 4-4" /></svg
+                ><span>download</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <rect x="6" y="6" width="10" height="10" />
+                  <path d="M13 6V3H3v10h3" /></svg
+                ><span>copy</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="M3 4h14l-5.5 6v5l-3 2v-7L3 4Z" /></svg
+                ><span>filter</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="m7 4 9 6-9 6V4Z" /></svg
+                ><span>play</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <circle cx="4" cy="10" r="1" />
+                  <circle cx="10" cy="10" r="1" />
+                  <circle cx="16" cy="10" r="1" /></svg
+                ><span>more</span>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="objects">
+            <h2>Object and navigation icons</h2>
+            <div class="ds-icon-grid">
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="M5 3h7l3 3v11H5zM12 3v4h4" /></svg
+                ><span>file / lesson</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="M5 3v11h4M5 8h4M9 5h7v5H9zM9 12h7v5H9z" /></svg
+                ><span>tree</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <circle cx="5" cy="10" r="2" />
+                  <circle cx="15" cy="5" r="2" />
+                  <circle cx="15" cy="15" r="2" />
+                  <path d="m7 9 6-3M7 11l6 3" /></svg
+                ><span>system map</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="M3 17V9h3v8M8.5 17V4h3v13M14 17v-6h3v6" /></svg
+                ><span>analytics</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path
+                    d="M3 4h5a2 2 0 0 1 2 2v11a2 2 0 0 0-2-2H3zM17 4h-5a2 2 0 0 0-2 2v11a2 2 0 0 1 2-2h5z"
+                  /></svg
+                ><span>learning</span>
+              </div>
+              <div class="ds-icon-cell">
+                <svg class="rf-icon" viewBox="0 0 20 20">
+                  <path d="m7 6-4 4 4 4M13 6l4 4-4 4M11 4 9 16" /></svg
+                ><span>code</span>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="semantics">
+            <h2>Accessible semantics</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">DECORATIVE VS. INFORMATIVE</div>
+              <div class="ds-example__stage ds-row">
+                <button class="rf-button" type="button">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M4 15v2h12v-2M10 3v10M6 9l4 4 4-4" /></svg
+                  >EXPORT REPORT</button
+                ><button
+                  class="rf-icon-button"
+                  type="button"
+                  aria-label="Close dialog"
+                >
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m5 5 10 10M15 5 5 15" />
+                  </svg></button
+                ><svg
+                  class="rf-icon"
+                  viewBox="0 0 20 20"
+                  role="img"
+                  aria-label="Warning"
+                >
+                  <path d="m10 3 8 14H2L10 3Z" />
+                  <path d="M10 8v4M10 14h.01" /></svg
+                ><span>Source revision is stale</span>
+              </div>
+            </div>
+            <ul>
+              <li>
+                Hide decorative icons from assistive technology when adjacent
+                text supplies the name.
+              </li>
+              <li>
+                Icon-only buttons require an explicit accessible name and a
+                visible tooltip on hover and focus.
+              </li>
+              <li>
+                Informative status icons receive a label and are paired with
+                visible status text.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Usage rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Use one stable icon for one action throughout the product and
+                  pair unfamiliar actions with text.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Mix emoji, platform glyphs, filled illustrations, or different
+                  icons for the same command.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">9.1 VISUAL SYSTEM</span
+              ><span class="ds-requirement">9.2 ACCESSIBLE NAMES</span
+              ><span class="ds-requirement">LRN-04</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

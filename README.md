@@ -71,6 +71,11 @@ When changing behavior or scope, update the PRD and affected specifications
 together, preserve requirement identifiers where possible, and keep acceptance
 criteria observable without weakening the source requirement.
 
+All RepoFluent development shall follow PRD requirements `ENG-01` through
+`ENG-03` and the normative
+[Engineering handbook](https://github.com/QuinntyneBrown/engineering-handbook).
+This obligation applies equally to human contributors and automated agents.
+
 ## Initial product scope
 
 RepoFluent initially targets enterprise teams learning C# and Angular codebases.

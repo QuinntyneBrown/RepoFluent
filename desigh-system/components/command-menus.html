@@ -1,8 +1,211 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="RepoFluent command palette and menus."><title>Command Palette & Menus — RepoFluent Design System</title><link rel="stylesheet" href="../assets/tokens.css"><link rel="stylesheet" href="../assets/components.css"><link rel="stylesheet" href="../assets/docs.css"><script src="../assets/docs.js" defer></script></head>
-<body data-category="Components" data-page="components/command-menus"><a class="ds-skip-link" href="#main-content">Skip to content</a><div class="ds-app"><header class="ds-header" data-ds-header></header><aside class="ds-sidebar" aria-label="Design system sections"><div class="ds-sidebar__head"><span>DESIGN EXPLORER</span><span>C04</span></div><nav class="ds-nav" data-ds-nav></nav></aside><main class="ds-main" id="main-content"><div class="ds-page">
-<div class="ds-breadcrumbs"><a href="../index.html">design-system</a><span>›</span><span>components</span><span>›</span><strong>command-menu.rf</strong></div><header class="ds-hero"><div><p class="ds-eyebrow">Component / C04</p><h1>Command palette & menus</h1><p class="ds-hero__lede">The palette is a fast global route to permitted content and actions. Menus hold local, secondary commands without becoming the only way to discover essential work.</p></div><span class="ds-page-id">RF-C04</span></header>
-<section class="ds-section" id="palette"><h2>Command palette</h2><div class="ds-example"><div class="ds-example__head">GLOBAL / CTRL K</div><div class="ds-example__stage"><div class="rf-command"><div class="rf-command__input"><svg class="rf-icon" viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5"/><path d="m12.5 12.5 4 4"/></svg><input aria-label="Command or search" placeholder="Search curriculum, code, systems…"><kbd>ESC</kbd></div><div class="rf-menu" style="width:100%;border:0;box-shadow:none"><span class="rf-menu__label">RECENT</span><button class="rf-menu__item"><span>M↓</span><strong>Open current lesson</strong><kbd>lesson</kbd></button><button class="rf-menu__item" aria-selected="true"><span>◇</span><strong>Inspect Order API</strong><kbd>system</kbd></button><button class="rf-menu__item"><span>RF</span><strong>Show learning status</strong><kbd>dashboard</kbd></button></div></div></div></div><ol class="ds-anatomy-list"><li>Search input owns a persistent label and query.</li><li>Results are grouped by content type or command.</li><li>Selected result remains visually distinct from focus.</li><li>Metadata explains destination, scope, or shortcut.</li></ol></section>
-<section class="ds-section" id="menus"><h2>Context menus</h2><div class="ds-example"><div class="ds-example__head">OBJECT ACTIONS</div><div class="ds-example__stage"><div class="rf-menu"><span class="rf-menu__label">ORDER-WORKFLOW.MD</span><button class="rf-menu__item"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z"/><circle cx="10" cy="10" r="2"/></svg><span>Open lesson</span><kbd>Enter</kbd></button><button class="rf-menu__item"><svg class="rf-icon" viewBox="0 0 20 20"><rect x="6" y="6" width="10" height="10"/><path d="M13 6V3H3v10h3"/></svg><span>Copy link</span></button><button class="rf-menu__item"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M5 3h7l3 3v11H5zM12 3v4h4"/></svg><span>View source</span></button><hr class="rf-menu__separator"><button class="rf-menu__item" disabled><svg class="rf-icon" viewBox="0 0 20 20"><rect x="4" y="8" width="12" height="9"/><path d="M7 8V6a3 3 0 0 1 6 0v2"/></svg><span>Review protected answers</span><kbd>restricted</kbd></button></div></div></div></section>
-<section class="ds-section" id="keyboard"><h2>Keyboard behavior</h2><table class="ds-token-table"><thead><tr><th>KEY</th><th>BEHAVIOR</th></tr></thead><tbody><tr><td><kbd>Ctrl K</kbd> / <kbd>⌘ K</kbd></td><td>Open palette and focus the query</td></tr><tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Move active result without leaving the input</td></tr><tr><td><kbd>Enter</kbd></td><td>Run the active permitted result</td></tr><tr><td><kbd>Esc</kbd></td><td>Close and return focus to the trigger</td></tr><tr><td>Typeahead</td><td>Filters by label, aliases, system, path, and authorized code metadata</td></tr></tbody></table></section>
-<section class="ds-section" id="placement"><h2>Placement and permissions</h2><ul><li>Anchor local menus to their trigger and keep them within the viewport.</li><li>Open from keyboard directly below the trigger; preserve the same item order as pointer use.</li><li>Do not render results the user cannot know exist. A visible disabled item is appropriate only when its existence teaches a permission or workflow rule.</li><li>Never expose protected assessment answers, unauthorized source paths, or cross-tenant content through search indexes or result counts.</li></ul><div class="ds-do-dont"><div class="ds-do"><strong>DO</strong><p>Keep frequent commands visible in context and offer the palette as an accelerator.</p></div><div class="ds-dont"><strong>DON'T</strong><p>Hide required navigation exclusively inside a “more” menu or expose unauthorized result metadata.</p></div></div><div class="ds-requirements"><span class="ds-requirement">LRN-04</span><span class="ds-requirement">CODE-05</span><span class="ds-requirement">IAM-03</span><span class="ds-requirement">ASM-06</span></div></section>
-</div></main><footer class="ds-statusbar" data-ds-status></footer></div></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent command palette and menus." />
+    <title>Command Palette &amp; Menus — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/command-menus">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C04</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span
+            ><strong>command-menu.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C04</p>
+              <h1>Command palette &amp; menus</h1>
+              <p class="ds-hero__lede">
+                The palette is a fast global route to permitted content and
+                actions. Menus hold local, secondary commands without becoming
+                the only way to discover essential work.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C04</span>
+          </header>
+          <section class="ds-section" id="palette">
+            <h2>Command palette</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">GLOBAL / CTRL K</div>
+              <div class="ds-example__stage">
+                <div class="rf-command">
+                  <div class="rf-command__input">
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <circle cx="8.5" cy="8.5" r="5" />
+                      <path d="m12.5 12.5 4 4" /></svg
+                    ><input
+                      type="text"
+                      aria-label="Command or search"
+                      placeholder="Search curriculum, code, systems…"
+                    /><kbd>ESC</kbd>
+                  </div>
+                  <div
+                    class="rf-menu"
+                    style="width: 100%; border: 0; box-shadow: none"
+                  >
+                    <span class="rf-menu__label">RECENT</span
+                    ><button type="button" class="rf-menu__item">
+                      <span>M↓</span><strong>Open current lesson</strong
+                      ><kbd>lesson</kbd></button
+                    ><button
+                      type="button"
+                      class="rf-menu__item"
+                      aria-selected="true"
+                    >
+                      <span>◇</span><strong>Inspect Order API</strong
+                      ><kbd>system</kbd></button
+                    ><button type="button" class="rf-menu__item">
+                      <span>RF</span><strong>Show learning status</strong
+                      ><kbd>dashboard</kbd>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ol class="ds-anatomy-list">
+              <li>Search input owns a persistent label and query.</li>
+              <li>Results are grouped by content type or command.</li>
+              <li>Selected result remains visually distinct from focus.</li>
+              <li>Metadata explains destination, scope, or shortcut.</li>
+            </ol>
+          </section>
+          <section class="ds-section" id="menus">
+            <h2>Context menus</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">OBJECT ACTIONS</div>
+              <div class="ds-example__stage">
+                <div class="rf-menu">
+                  <span class="rf-menu__label">ORDER-WORKFLOW.MD</span
+                  ><button type="button" class="rf-menu__item">
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" />
+                      <circle cx="10" cy="10" r="2" /></svg
+                    ><span>Open lesson</span><kbd>Enter</kbd></button
+                  ><button type="button" class="rf-menu__item">
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <rect x="6" y="6" width="10" height="10" />
+                      <path d="M13 6V3H3v10h3" /></svg
+                    ><span>Copy link</span></button
+                  ><button type="button" class="rf-menu__item">
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <path d="M5 3h7l3 3v11H5zM12 3v4h4" /></svg
+                    ><span>View source</span>
+                  </button>
+                  <hr class="rf-menu__separator" />
+                  <button type="button" class="rf-menu__item" disabled>
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <rect x="4" y="8" width="12" height="9" />
+                      <path d="M7 8V6a3 3 0 0 1 6 0v2" /></svg
+                    ><span>Review protected answers</span><kbd>restricted</kbd>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="keyboard">
+            <h2>Keyboard behavior</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>KEY</th>
+                  <th>BEHAVIOR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><kbd>Ctrl K</kbd> / <kbd>⌘ K</kbd></td>
+                  <td>Open palette and focus the query</td>
+                </tr>
+                <tr>
+                  <td><kbd>↑</kbd> / <kbd>↓</kbd></td>
+                  <td>Move active result without leaving the input</td>
+                </tr>
+                <tr>
+                  <td><kbd>Enter</kbd></td>
+                  <td>Run the active permitted result</td>
+                </tr>
+                <tr>
+                  <td><kbd>Esc</kbd></td>
+                  <td>Close and return focus to the trigger</td>
+                </tr>
+                <tr>
+                  <td>Typeahead</td>
+                  <td>
+                    Filters by label, aliases, system, path, and authorized code
+                    metadata
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="placement">
+            <h2>Placement and permissions</h2>
+            <ul>
+              <li>
+                Anchor local menus to their trigger and keep them within the
+                viewport.
+              </li>
+              <li>
+                Open from keyboard directly below the trigger; preserve the same
+                item order as pointer use.
+              </li>
+              <li>
+                Do not render results the user cannot know exist. A visible
+                disabled item is appropriate only when its existence teaches a
+                permission or workflow rule.
+              </li>
+              <li>
+                Never expose protected assessment answers, unauthorized source
+                paths, or cross-tenant content through search indexes or result
+                counts.
+              </li>
+            </ul>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Keep frequent commands visible in context and offer the
+                  palette as an accelerator.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Hide required navigation exclusively inside a “more” menu or
+                  expose unauthorized result metadata.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-04</span
+              ><span class="ds-requirement">CODE-05</span
+              ><span class="ds-requirement">IAM-03</span
+              ><span class="ds-requirement">ASM-06</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

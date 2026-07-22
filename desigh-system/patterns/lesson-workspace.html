@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RepoFluent lesson and code workspace pattern."
+    />
+    <title>Lesson &amp; Code Workspace — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/lesson-workspace">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P03</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span
+            ><strong>lesson-workspace.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P03</p>
+              <h1>Lesson &amp; code workspace</h1>
+              <p class="ds-hero__lede">
+                A two-pane learning environment keeps narrative, objectives,
+                glossary, source evidence, revision, and progress visible as one
+                coherent task.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P03</span>
+          </header>
+          <section class="ds-section" id="split">
+            <h2>Split workspace</h2>
+            <div class="ds-example" data-source-demo>
+              <div class="ds-example__head">LESSON DOCUMENT / SOURCE PANE</div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: minmax(24rem, 1.15fr) minmax(
+                        22rem,
+                        0.85fr
+                      );
+                    min-height: 38rem;
+                  "
+                >
+                  <article style="padding: 2rem; overflow: hidden">
+                    <div class="rf-toolbar" style="margin: -2rem -2rem 2rem">
+                      <div class="rf-toggle-group" data-toggle-group>
+                        <button
+                          type="button"
+                          class="rf-button"
+                          aria-pressed="true"
+                        >
+                          RENDERED</button
+                        ><button
+                          type="button"
+                          class="rf-button"
+                          aria-pressed="false"
+                        >
+                          SOURCE
+                        </button>
+                      </div>
+                      <span class="rf-toolbar__spacer"></span
+                      ><span class="rf-status rf-status--success"
+                        >auto-saved</span
+                      >
+                    </div>
+                    <p class="ds-eyebrow"># ORDER PROCESSING FOUNDATIONS</p>
+                    <h2 style="font: var(--rf-type-page-title)">
+                      How an order becomes a workflow
+                    </h2>
+                    <p
+                      style="font-size: 1rem; color: var(--rf-color-ink-muted)"
+                    >
+                      The API accepts the request quickly. The real work begins
+                      after it publishes a message.
+                    </p>
+                    <div class="rf-objectives">
+                      <span class="rf-objectives__label">OBJECTIVES</span>
+                      <p><span>[✓]</span>Trace HTTP request to durable order</p>
+                      <p><span>[✓]</span>Explain asynchronous processing</p>
+                    </div>
+                    <h3>01. From request to intent</h3>
+                    <p>
+                      The
+                      <button
+                        type="button"
+                        class="rf-term"
+                        data-toast="GLOSSARY · HTTP-facing command boundary"
+                      >
+                        Order API
+                      </button>
+                      validates the command, persists an order, and publishes
+                      <code>OrderSubmitted</code>.
+                    </p>
+                    <button
+                      type="button"
+                      class="rf-source-link"
+                      data-source-target="lesson-controller"
+                      data-source-file="OrderController.cs"
+                      aria-pressed="true"
+                    >
+                      <span>↳</span
+                      ><span
+                        ><strong>OrderController.cs</strong
+                        ><small>src/Order.Api/Controllers · L49–54</small></span
+                      ><kbd>OPEN</kbd>
+                    </button>
+                  </article>
+                  <aside
+                    aria-label="Source code reference example"
+                    style="
+                      min-width: 0;
+                      border-left: 1px solid var(--rf-color-line);
+                      background: var(--rf-color-void);
+                    "
+                  >
+                    <div class="rf-tabs">
+                      <span class="rf-tab" aria-selected="true"
+                        >C# · OrderController.cs</span
+                      >
+                    </div>
+                    <div class="rf-breadcrumbs">
+                      main / src / Order.Api / Controllers
+                    </div>
+                    <pre
+                      class="rf-code"
+                      id="lesson-controller"
+                      data-source-panel
+                    ><code><span class="rf-code__line" data-line="46"><span class="rf-syntax-keyword">var</span> result = <span class="rf-syntax-keyword">await</span> validator</span><span class="rf-code__line" data-line="47">  .ValidateAsync(command);</span><span class="rf-code__line" data-line="48"></span><span class="rf-code__line rf-code__line--focus" data-line="49"><span class="rf-syntax-keyword">var</span> order = Order.Create(command);</span><span class="rf-code__line rf-code__line--focus" data-line="50">db.Orders.Add(order);</span><span class="rf-code__line rf-code__line--focus" data-line="51"><span class="rf-syntax-keyword">await</span> db.SaveChangesAsync();</span><span class="rf-code__line" data-line="52"></span><span class="rf-code__line rf-code__line--focus" data-line="53"><span class="rf-syntax-keyword">await</span> bus.Publish(</span><span class="rf-code__line rf-code__line--focus" data-line="54">  <span class="rf-syntax-keyword">new</span> OrderSubmitted(order.Id));</span></code></pre>
+                    <div class="rf-panel__body">
+                      <div class="rf-callout rf-callout--success">
+                        <div>
+                          <strong>PROVENANCE · VERIFIED</strong>
+                          <p>
+                            Publishing after persistence ensures the workflow
+                            has an order to retrieve.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </aside>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="flow">
+            <h2>Learning flow</h2>
+            <ol>
+              <li>
+                Show prerequisites, estimated time, objectives, and completion
+                rules before substantive content.
+              </li>
+              <li>
+                Auto-save meaningful position and interaction state without
+                claiming completion.
+              </li>
+              <li>
+                Open a source reference in the adjacent pane, emphasize its
+                authorized line range, and keep the lesson scroll position.
+              </li>
+              <li>
+                Glossary definitions appear inline or as non-modal popovers and
+                return focus to the term.
+              </li>
+              <li>
+                Mark completion explicitly; assessments provide separate
+                evidence of mastery.
+              </li>
+            </ol>
+          </section>
+          <section class="ds-section" id="tours">
+            <h2>Multi-step code tours</h2>
+            <div class="rf-workflow">
+              <div class="rf-workflow__node">
+                <strong>01 · Controller</strong><small>Accept intent</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>02 · Event</strong><small>Durable handoff</small>
+              </div>
+              <i class="rf-workflow__edge"></i>
+              <div class="rf-workflow__node">
+                <strong>03 · Consumer</strong><small>Coordinate work</small>
+              </div>
+            </div>
+            <p>
+              Each step includes purpose, file/symbol/lines, revision, and
+              previous/next controls. The tree, lesson objective, and tour
+              position stay visible or recoverable.
+            </p>
+          </section>
+          <section class="ds-section" id="failure">
+            <h2>Failure and permission states</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>CONDITION</th>
+                  <th>BEHAVIOR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Reference unavailable</td>
+                  <td>
+                    Keep explanation; show safe reason and next permitted action
+                  </td>
+                </tr>
+                <tr>
+                  <td>Revision mismatch</td>
+                  <td>
+                    Show snapshot excerpt, mark stale, offer authorized current
+                    view
+                  </td>
+                </tr>
+                <tr>
+                  <td>Progress save delayed</td>
+                  <td>
+                    Keep learning usable, announce queued state, retry
+                    idempotently
+                  </td>
+                </tr>
+                <tr>
+                  <td>Source too wide</td>
+                  <td>
+                    Horizontal code scroll; never scale text below readable size
+                  </td>
+                </tr>
+                <tr>
+                  <td>Phone</td>
+                  <td>
+                    Lesson first, source as following region or explicit view;
+                    preserve return position
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-02–06</span
+              ><span class="ds-requirement">CODE-01–07</span
+              ><span class="ds-requirement">9.1 CONTEXT</span
+              ><span class="ds-requirement">9.2 NARROW FLOW</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

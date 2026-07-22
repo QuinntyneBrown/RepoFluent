@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent indicators and progress." />
+    <title>Indicators &amp; Progress — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/indicators-progress">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C09</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span
+            ><strong>indicators-progress.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C09</p>
+              <h1>Indicators &amp; progress</h1>
+              <p class="ds-hero__lede">
+                State indicators answer “what condition is this in?” Progress
+                answers “how much of a defined journey is complete?” Mastery is
+                evidence, not generic progress.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C09</span>
+          </header>
+          <section class="ds-section" id="status">
+            <h2>Status</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">WRITTEN STATE + COLOR + SHAPE</div>
+              <div class="ds-example__stage ds-row">
+                <span class="rf-status rf-status--success">completed</span
+                ><span class="rf-status rf-status--info">in review</span
+                ><span class="rf-status rf-status--warning">due soon</span
+                ><span class="rf-status rf-status--danger">failed</span
+                ><span class="rf-status">not started</span
+                ><span class="rf-badge">OPTIONAL</span>
+              </div>
+            </div>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>FAMILY</th>
+                  <th>EXAMPLES</th>
+                  <th>SEMANTIC COLOR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Learning</td>
+                  <td>Not started, in progress, completed</td>
+                  <td>Neutral → info → success</td>
+                </tr>
+                <tr>
+                  <td>Assessment</td>
+                  <td>Not attempted, passed, failed, invalidated</td>
+                  <td>Neutral / success / danger / warning</td>
+                </tr>
+                <tr>
+                  <td>Content</td>
+                  <td>Draft, validating, in review, published, retired</td>
+                  <td>Neutral / info / warning / success / neutral</td>
+                </tr>
+                <tr>
+                  <td>Knowledge</td>
+                  <td>Current, review due, stale</td>
+                  <td>Success / warning / warning</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="linear">
+            <h2>Linear progress</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                DEFINED TOTAL / INTERACTIVE DEMO
+              </div>
+              <div class="ds-example__stage ds-stack">
+                <div
+                  class="rf-progress"
+                  role="progressbar"
+                  aria-label="Order processing course progress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow="68"
+                >
+                  <div class="rf-progress__meta">
+                    <span>COURSE PROGRESS · 4 OF 6 LESSONS</span
+                    ><strong data-progress-value>68%</strong>
+                  </div>
+                  <div class="rf-progress__track">
+                    <span class="rf-progress__fill" style="width: 68%"></span>
+                  </div>
+                  <small>46 minutes estimated remaining</small>
+                </div>
+                <button type="button" class="rf-button" data-progress-demo>
+                  TOGGLE COMPLETION
+                </button>
+              </div>
+            </div>
+            <p>
+              Always show a textual numerator/denominator or percentage. Time
+              remaining is an estimate and must be labeled as such.
+            </p>
+          </section>
+          <section class="ds-section" id="mastery">
+            <h2>Mastery indicator</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">EVIDENCE SUMMARY / NOT A RANK</div>
+              <div class="ds-example__stage ds-row">
+                <div class="rf-radial" style="--rf-progress-value: 74%">
+                  <div class="rf-radial__value">74<small>MASTERY</small></div>
+                </div>
+                <dl
+                  class="rf-property-list"
+                  style="min-width: min(24rem, 100%)"
+                >
+                  <div>
+                    <dt>OBJECTIVES</dt>
+                    <dd>6 of 8 demonstrated</dd>
+                  </div>
+                  <div>
+                    <dt>LATEST RESULT</dt>
+                    <dd>82% · 21 Jul</dd>
+                  </div>
+                  <div>
+                    <dt>RECENCY</dt>
+                    <dd>
+                      <span class="rf-status rf-status--success">current</span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+            <p>
+              A mastery summary links to its inputs: objective coverage, attempt
+              history, confidence where enabled, and staleness. Never use a
+              radial score as the only explanation.
+            </p>
+          </section>
+          <section class="ds-section" id="loading">
+            <h2>Loading and saved state</h2>
+            <div class="ds-grid">
+              <article class="rf-panel">
+                <div class="rf-panel__header">SAVING</div>
+                <div class="rf-panel__body">
+                  <span class="rf-status rf-status--info">saving</span>
+                  <p>
+                    Use during an active retry-safe write. Announce once, not on
+                    every keystroke.
+                  </p>
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">SAVED</div>
+                <div class="rf-panel__body">
+                  <span class="rf-status rf-status--success">auto-saved</span>
+                  <p>
+                    Confirm meaningful progress with time or revision when
+                    relevant.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Usage rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Distinguish completion, score, mastery, recency, and
+                  required/optional status.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Collapse all learning evidence into one unexplained number or
+                  animate progress without a real update.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-03</span
+              ><span class="ds-requirement">LRN-08</span
+              ><span class="ds-requirement">ASM-05</span
+              ><span class="ds-requirement">ANL-04</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

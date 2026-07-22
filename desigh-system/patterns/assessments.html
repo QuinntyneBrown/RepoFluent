@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent assessment pattern." />
+    <title>Assessments — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Patterns" data-page="patterns/assessments">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>P05</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>patterns</span><span>›</span><strong>assessment.test</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Pattern / P05</p>
+              <h1>Assessments</h1>
+              <p class="ds-hero__lede">
+                Assessments explain the rules before an attempt, protect answers
+                until release, provide accessible question interactions, and
+                preserve auditable evidence after submission.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-P05</span>
+          </header>
+          <section class="ds-section" id="start">
+            <h2>Before the attempt</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">ORDER LIFECYCLE QUIZ / READY</div>
+              <div class="ds-example__stage">
+                <div class="rf-panel">
+                  <div class="rf-panel__header">
+                    <span>KNOWLEDGE CHECK</span
+                    ><span class="rf-badge">FORMATIVE</span>
+                  </div>
+                  <div class="rf-panel__body">
+                    <h2>Order lifecycle quiz</h2>
+                    <p>
+                      Demonstrate how a checkout command becomes a recoverable
+                      workflow.
+                    </p>
+                    <dl class="rf-property-list">
+                      <div>
+                        <dt>QUESTIONS</dt>
+                        <dd>8 selected from a pool of 12</dd>
+                      </div>
+                      <div>
+                        <dt>PASSING</dt>
+                        <dd>6 correct · 75%</dd>
+                      </div>
+                      <div>
+                        <dt>ATTEMPTS</dt>
+                        <dd>3 maximum · 3 remaining</dd>
+                      </div>
+                      <div>
+                        <dt>TIME</dt>
+                        <dd>10 minutes after start</dd>
+                      </div>
+                      <div>
+                        <dt>FEEDBACK</dt>
+                        <dd>
+                          After each response; protected answers remain hidden
+                        </dd>
+                      </div>
+                    </dl>
+                    <button type="button" class="rf-button rf-button--primary">
+                      START ATTEMPT
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p>
+              Summative tests additionally disclose submission deadline,
+              feedback release, navigation restrictions, save behavior, and what
+              happens when time expires.
+            </p>
+          </section>
+          <section class="ds-section" id="question">
+            <h2>Question interaction</h2>
+            <div class="ds-example" data-question>
+              <div class="ds-example__head">
+                QUESTION 03 OF 08 / SINGLE CHOICE
+              </div>
+              <div class="ds-example__stage">
+                <fieldset class="rf-question">
+                  <legend style="font: var(--rf-type-section)">
+                    <span class="rf-question__number"
+                      >OBJECTIVE · EVENT DELIVERY</span
+                    ><br />Why does the Order API publish
+                    <code>OrderSubmitted</code> after saving the order?
+                  </legend>
+                  <label class="rf-question__option"
+                    ><input type="radio" name="order-q" /><span
+                      >To reduce the size of the HTTP response.</span
+                    ></label
+                  ><label class="rf-question__option"
+                    ><input
+                      type="radio"
+                      name="order-q"
+                      data-correct="true"
+                    /><span
+                      >So a consumer can reliably retrieve the durable order
+                      while retrying downstream work.</span
+                    ></label
+                  ><label class="rf-question__option"
+                    ><input type="radio" name="order-q" /><span
+                      >So the browser can directly subscribe to database
+                      changes.</span
+                    ></label
+                  ><label class="rf-question__option"
+                    ><input type="radio" name="order-q" /><span
+                      >To avoid validating the checkout command.</span
+                    ></label
+                  >
+                  <div class="rf-callout" data-question-feedback hidden></div>
+                  <div class="ds-row" style="justify-content: space-between">
+                    <button type="button" class="rf-button rf-button--ghost">
+                      PREVIOUS</button
+                    ><button
+                      type="button"
+                      class="rf-button rf-button--primary"
+                      data-question-submit
+                    >
+                      CHECK ANSWER
+                    </button>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+            <p>
+              Choices use native controls, visible group legends, large labels,
+              and a stable DOM order. Randomization happens before render and
+              the stored item version remains auditable.
+            </p>
+          </section>
+          <section class="ds-section" id="types">
+            <h2>Supported question types</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>TYPE</th>
+                  <th>INTERACTION</th>
+                  <th>GRADING REQUIREMENT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Single choice / true-false</td>
+                  <td>Radio group</td>
+                  <td>Exactly one deterministic answer</td>
+                </tr>
+                <tr>
+                  <td>Multiple choice</td>
+                  <td>Checkbox group + selection instruction</td>
+                  <td>Document partial-credit policy</td>
+                </tr>
+                <tr>
+                  <td>Ordering</td>
+                  <td>Move controls + numbered list; drag optional</td>
+                  <td>Expected order or accepted sequences</td>
+                </tr>
+                <tr>
+                  <td>Matching</td>
+                  <td>Repeated selects or paired keyboard list</td>
+                  <td>Deterministic pairs</td>
+                </tr>
+                <tr>
+                  <td>Short answer</td>
+                  <td>Text input</td>
+                  <td>Documented deterministic normalization</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              Drag-and-drop is never the only interaction. Short answers that
+              require subjective judgment are not automatically scored.
+            </p>
+          </section>
+          <section class="ds-section" id="submission">
+            <h2>Submission and result</h2>
+            <div class="ds-grid">
+              <article class="rf-panel">
+                <div class="rf-panel__header">SUBMISSION REVIEW</div>
+                <div class="rf-panel__body">
+                  <p>8 answered · 0 unanswered · 2 flagged</p>
+                  <div class="rf-callout rf-callout--warning">
+                    <div>
+                      <strong>Final submission</strong>
+                      <p>You cannot change this attempt after submission.</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="rf-button rf-button--primary"
+                    style="margin-top: 1rem"
+                  >
+                    SUBMIT ATTEMPT
+                  </button>
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">ATTEMPT RESULT</div>
+                <div class="rf-panel__body">
+                  <div class="ds-row">
+                    <div class="rf-radial" style="--rf-progress-value: 87%">
+                      <div class="rf-radial__value">
+                        87<small>PASSED</small>
+                      </div>
+                    </div>
+                    <div>
+                      <h3>7 of 8 correct</h3>
+                      <p>Objective review recommended: failure recovery</p>
+                      <button type="button" class="rf-button">
+                        REVIEW FEEDBACK
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <p>
+              Submission is retry-safe and prevents duplicate attempts. If
+              confirmation is delayed, show “Submission pending” and resolve
+              against the server before allowing another attempt.
+            </p>
+          </section>
+          <section class="ds-section" id="history">
+            <h2>Attempts, protection, and invalidation</h2>
+            <ul>
+              <li>
+                History records curriculum version, item version,
+                start/submission timestamps, score, outcome, and
+                feedback-release state.
+              </li>
+              <li>
+                Before release, do not send answer keys, protected rationale,
+                hidden pool contents, or correctness flags to the client.
+              </li>
+              <li>
+                When a reviewer invalidates a defective item, label the affected
+                attempt, recalculate outcomes consistently, and retain the audit
+                trail.
+              </li>
+              <li>
+                Incorrect formative answers link to exact review material
+                without revealing unrelated protected answers.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">ASM-01–09</span
+              ><span class="ds-requirement">LRN-07–08</span
+              ><span class="ds-requirement">CODE-02</span
+              ><span class="ds-requirement">9.2 ASSESSMENTS</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

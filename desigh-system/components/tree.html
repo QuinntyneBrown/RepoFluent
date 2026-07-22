@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent tree component." />
+    <title>Tree — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/tree">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C06</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span><strong>tree.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C06</p>
+              <h1>Tree</h1>
+              <p class="ds-hero__lede">
+                Trees expose curriculum and repository hierarchy while keeping
+                completion, access, selection, and expansion as independent
+                states.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C06</span>
+          </header>
+          <section class="ds-section" id="anatomy">
+            <h2>Tree anatomy</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                CURRICULUM TREE / SELECT AN ITEM
+              </div>
+              <div class="ds-example__stage" style="max-width: 22rem">
+                <ul class="rf-tree" data-tree-select>
+                  <li>
+                    <span class="rf-tree__item"
+                      ><span class="rf-tree__status rf-tree__status--done"
+                        >✓</span
+                      ><strong>dashboard.rf</strong></span
+                    >
+                  </li>
+                  <li>
+                    <details open>
+                      <summary>⌄ foundations</summary>
+                      <ul>
+                        <li>
+                          <span class="rf-tree__item"
+                            ><span class="rf-tree__status rf-tree__status--done"
+                              >✓</span
+                            >meet-the-system.md</span
+                          >
+                        </li>
+                        <li>
+                          <span class="rf-tree__item" aria-current="page"
+                            ><span class="rf-tree__status">4</span
+                            >order-workflow.md</span
+                          >
+                        </li>
+                        <li>
+                          <span class="rf-tree__item"
+                            ><span class="rf-tree__status">5</span
+                            >handling-failure.md</span
+                          >
+                        </li>
+                        <li>
+                          <span class="rf-tree__item"
+                            ><span class="rf-tree__status">6</span
+                            >knowledge-check.test</span
+                          >
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li>
+                    <details>
+                      <summary>› architecture</summary>
+                      <ul>
+                        <li>
+                          <span class="rf-tree__item">system-map.graph</span>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <ol class="ds-anatomy-list">
+              <li>Disclosure control expands a branch without selecting it.</li>
+              <li>Type icon or progress marker identifies the object.</li>
+              <li>Label uses the object's stable learner-facing name.</li>
+              <li>
+                Selection edge indicates the item opened in the workbench.
+              </li>
+            </ol>
+          </section>
+          <section class="ds-section" id="states">
+            <h2>Node states</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>STATE</th>
+                  <th>TREATMENT</th>
+                  <th>INDEPENDENT FROM</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Expanded</td>
+                  <td>Down chevron; children rendered</td>
+                  <td>Selected</td>
+                </tr>
+                <tr>
+                  <td>Selected</td>
+                  <td>Strong ink, active surface, green edge</td>
+                  <td>Keyboard focus</td>
+                </tr>
+                <tr>
+                  <td>Completed</td>
+                  <td>Check marker + accessible “Completed” text</td>
+                  <td>Selected</td>
+                </tr>
+                <tr>
+                  <td>Current step</td>
+                  <td>Filled numbered marker</td>
+                  <td>Open document</td>
+                </tr>
+                <tr>
+                  <td>Restricted</td>
+                  <td>Lock icon and unavailable semantics</td>
+                  <td>Not started</td>
+                </tr>
+                <tr>
+                  <td>Stale source</td>
+                  <td>Amber warning icon and revision tooltip</td>
+                  <td>Completion</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="keyboard">
+            <h2>Keyboard and focus</h2>
+            <ul>
+              <li>
+                <kbd>↑</kbd>/<kbd>↓</kbd> move among visible nodes;
+                <kbd>→</kbd> expands or enters a branch; <kbd>←</kbd> collapses
+                or moves to its parent.
+              </li>
+              <li>
+                <kbd>Home</kbd>/<kbd>End</kbd> move to first/last visible node;
+                typeahead moves to a matching label.
+              </li>
+              <li>
+                <kbd>Enter</kbd> opens the selected content.
+                <kbd>Space</kbd> selects when selection is separate from
+                opening.
+              </li>
+              <li>
+                Virtualized trees retain the active descendant and announce
+                result count after filtering.
+              </li>
+            </ul>
+          </section>
+          <section class="ds-section" id="search">
+            <h2>Search and large trees</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">FILTER PRESERVES ANCESTRY</div>
+              <div class="ds-example__stage">
+                <label class="rf-field" style="max-width: 24rem"
+                  ><span class="rf-field__label">Filter learning explorer</span
+                  ><input class="rf-input" type="search" value="order" /><span
+                    class="rf-field__hint"
+                    >4 matches in 2 branches · ancestors shown for context</span
+                  ></label
+                >
+              </div>
+            </div>
+            <p>
+              Filtering keeps the ancestor path visible, emphasizes matched text
+              without changing accessible names, and provides a clear reset
+              action.
+            </p>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Usage rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Use a tree for true parent-child hierarchy where expansion
+                  preserves meaningful context.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Use a tree as a visual list, nest more than needed, or make
+                  the disclosure icon the only usable target.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-02</span
+              ><span class="ds-requirement">LRN-04</span
+              ><span class="ds-requirement">CODE-06</span
+              ><span class="ds-requirement">9.3 LARGE TREES</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

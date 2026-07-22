@@ -1,108 +1,323 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RepoFluent Code Command design system documentation.">
-  <title>RepoFluent Design System</title>
-  <link rel="stylesheet" href="assets/tokens.css">
-  <link rel="stylesheet" href="assets/components.css">
-  <link rel="stylesheet" href="assets/docs.css">
-  <script src="assets/docs.js" defer></script>
-</head>
-<body data-category="Overview" data-page="index">
-  <a class="ds-skip-link" href="#main-content">Skip to content</a>
-  <div class="ds-app">
-    <header class="ds-header" data-ds-header></header>
-    <aside class="ds-sidebar" aria-label="Design system sections"><div class="ds-sidebar__head"><span>DESIGN EXPLORER</span><span>28 FILES</span></div><nav class="ds-nav" data-ds-nav></nav></aside>
-    <main class="ds-main" id="main-content">
-      <div class="ds-page">
-        <section class="ds-overview-hero">
-          <p class="ds-eyebrow">RepoFluent / Code Command / v0.1</p>
-          <h1>Learn the system.<br><span>Trust the interface.</span></h1>
-          <p>A dense, keyboard-first product language for turning unfamiliar enterprise codebases into navigable learning environments. This is the visual and interaction contract for every RepoFluent surface.</p>
-        </section>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RepoFluent Code Command design system documentation."
+    />
+    <title>RepoFluent Design System</title>
+    <link rel="stylesheet" href="assets/tokens.css" />
+    <link rel="stylesheet" href="assets/components.css" />
+    <link rel="stylesheet" href="assets/docs.css" />
+    <script src="assets/docs.js" defer></script>
+  </head>
+  <body data-category="Overview" data-page="index">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>28 FILES</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <section class="ds-overview-hero">
+            <p class="ds-eyebrow">RepoFluent / Code Command / v0.1</p>
+            <h1>Learn the system.<br /><span>Trust the interface.</span></h1>
+            <p>
+              A dense, keyboard-first product language for turning unfamiliar
+              enterprise codebases into navigable learning environments. This is
+              the visual and interaction contract for every RepoFluent surface.
+            </p>
+          </section>
 
-        <section class="ds-section" id="principles">
-          <h2>Principles</h2>
-          <div class="ds-principles">
-            <article class="ds-principle"><span>01 / CONTEXT</span><h3>Keep learning beside the code</h3><p>Split views, inspectors, breadcrumbs, and source anchors preserve the learner's place while they investigate.</p></article>
-            <article class="ds-principle"><span>02 / EVIDENCE</span><h3>Make progress explainable</h3><p>Completion, mastery, scores, recency, and provenance remain distinct and expose the evidence behind them.</p></article>
-            <article class="ds-principle"><span>03 / CONTROL</span><h3>Reward keyboard fluency</h3><p>Commands are discoverable, focus is visible, actions are reversible, and no core capability depends on a pointer.</p></article>
-            <article class="ds-principle"><span>04 / DENSITY</span><h3>Compact without becoming cryptic</h3><p>Technical teams get information-rich layouts, consistent metrics, plain labels, and generous reading line-height.</p></article>
-            <article class="ds-principle"><span>05 / SAFETY</span><h3>Show boundaries and consequences</h3><p>Permissions, versions, protected answers, destructive actions, and stale source references are explicit.</p></article>
-            <article class="ds-principle"><span>06 / ACCESS</span><h3>Equivalent by default</h3><p>Maps, charts, motion, and color always have semantic, keyboard-operable, text-based equivalents.</p></article>
-          </div>
-        </section>
+          <section class="ds-section" id="principles">
+            <h2>Principles</h2>
+            <div class="ds-principles">
+              <article class="ds-principle">
+                <span>01 / CONTEXT</span>
+                <h3>Keep learning beside the code</h3>
+                <p>
+                  Split views, inspectors, breadcrumbs, and source anchors
+                  preserve the learner's place while they investigate.
+                </p>
+              </article>
+              <article class="ds-principle">
+                <span>02 / EVIDENCE</span>
+                <h3>Make progress explainable</h3>
+                <p>
+                  Completion, mastery, scores, recency, and provenance remain
+                  distinct and expose the evidence behind them.
+                </p>
+              </article>
+              <article class="ds-principle">
+                <span>03 / CONTROL</span>
+                <h3>Reward keyboard fluency</h3>
+                <p>
+                  Commands are discoverable, focus is visible, actions are
+                  reversible, and no core capability depends on a pointer.
+                </p>
+              </article>
+              <article class="ds-principle">
+                <span>04 / DENSITY</span>
+                <h3>Compact without becoming cryptic</h3>
+                <p>
+                  Technical teams get information-rich layouts, consistent
+                  metrics, plain labels, and generous reading line-height.
+                </p>
+              </article>
+              <article class="ds-principle">
+                <span>05 / SAFETY</span>
+                <h3>Show boundaries and consequences</h3>
+                <p>
+                  Permissions, versions, protected answers, destructive actions,
+                  and stale source references are explicit.
+                </p>
+              </article>
+              <article class="ds-principle">
+                <span>06 / ACCESS</span>
+                <h3>Equivalent by default</h3>
+                <p>
+                  Maps, charts, motion, and color always have semantic,
+                  keyboard-operable, text-based equivalents.
+                </p>
+              </article>
+            </div>
+          </section>
 
-        <section class="ds-section" id="contract">
-          <h2>Implementation contract</h2>
-          <div class="ds-grid ds-grid--3">
-            <article class="rf-card"><div class="rf-card__header">TOKENS.CSS <span class="rf-status rf-status--success">authoritative</span></div><div class="rf-card__body"><p>Semantic <code>--rf-*</code> values for color, type, spacing, geometry, elevation, motion, charts, and layers.</p></div></article>
-            <article class="rf-card"><div class="rf-card__header">COMPONENTS.CSS <span class="rf-status rf-status--info">product</span></div><div class="rf-card__body"><p>Framework-neutral <code>.rf-*</code> classes whose states and behaviors are demonstrated throughout these docs.</p></div></article>
-            <article class="rf-card"><div class="rf-card__header">DOCS.* <span class="rf-badge">documentation only</span></div><div class="rf-card__body"><p><code>.ds-*</code> chrome, navigation, search, and example framing are explicitly outside the product contract.</p></div></article>
-          </div>
-          <div class="rf-callout rf-callout--success" style="margin-top:1rem"><svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-8"/></svg><div><strong>Standalone and durable</strong><p>All pages work over <code>file://</code>, use bundled SVG icons, rely on system fonts, and require no build step.</p></div></div>
-        </section>
+          <section class="ds-section" id="contract">
+            <h2>Implementation contract</h2>
+            <div class="ds-grid ds-grid--3">
+              <article class="rf-card">
+                <div class="rf-card__header">
+                  TOKENS.CSS
+                  <span class="rf-status rf-status--success"
+                    >authoritative</span
+                  >
+                </div>
+                <div class="rf-card__body">
+                  <p>
+                    Semantic <code>--rf-*</code> values for color, type,
+                    spacing, geometry, elevation, motion, charts, and layers.
+                  </p>
+                </div>
+              </article>
+              <article class="rf-card">
+                <div class="rf-card__header">
+                  COMPONENTS.CSS
+                  <span class="rf-status rf-status--info">product</span>
+                </div>
+                <div class="rf-card__body">
+                  <p>
+                    Framework-neutral <code>.rf-*</code> classes whose states
+                    and behaviors are demonstrated throughout these docs.
+                  </p>
+                </div>
+              </article>
+              <article class="rf-card">
+                <div class="rf-card__header">
+                  DOCS.* <span class="rf-badge">documentation only</span>
+                </div>
+                <div class="rf-card__body">
+                  <p>
+                    <code>.ds-*</code> chrome, navigation, search, and example
+                    framing are explicitly outside the product contract.
+                  </p>
+                </div>
+              </article>
+            </div>
+            <div
+              class="rf-callout rf-callout--success"
+              style="margin-top: 1rem"
+            >
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong>Standalone and durable</strong>
+                <p>
+                  All pages work over <code>file://</code>, use bundled SVG
+                  icons, rely on system fonts, and require no build step.
+                </p>
+              </div>
+            </div>
+          </section>
 
-        <section class="ds-section" id="foundations">
-          <h2>Foundations</h2>
-          <div class="ds-page-cards">
-            <a class="ds-page-card" href="foundations/color.html"><small>F01</small><strong>Color</strong><span>Surfaces, ink, state, and chart palettes.</span></a>
-            <a class="ds-page-card" href="foundations/typography.html"><small>F02</small><strong>Typography</strong><span>Readable prose and precise technical data.</span></a>
-            <a class="ds-page-card" href="foundations/spacing.html"><small>F03</small><strong>Spacing & density</strong><span>A compact 4px grid and responsive regions.</span></a>
-            <a class="ds-page-card" href="foundations/elevation.html"><small>F04</small><strong>Elevation & shape</strong><span>Boundaries before shadows; focus above both.</span></a>
-            <a class="ds-page-card" href="foundations/iconography.html"><small>F05</small><strong>Iconography</strong><span>A consistent inline SVG action language.</span></a>
-            <a class="ds-page-card" href="foundations/motion.html"><small>F06</small><strong>Motion</strong><span>Fast orientation cues with reduced alternatives.</span></a>
-            <a class="ds-page-card" href="foundations/accessibility.html"><small>F07</small><strong>Accessibility</strong><span>The WCAG 2.2 AA interaction contract.</span></a>
-          </div>
-        </section>
+          <section class="ds-section" id="foundations">
+            <h2>Foundations</h2>
+            <div class="ds-page-cards">
+              <a class="ds-page-card" href="foundations/color.html"
+                ><small>F01</small><strong>Color</strong
+                ><span>Surfaces, ink, state, and chart palettes.</span></a
+              >
+              <a class="ds-page-card" href="foundations/typography.html"
+                ><small>F02</small><strong>Typography</strong
+                ><span>Readable prose and precise technical data.</span></a
+              >
+              <a class="ds-page-card" href="foundations/spacing.html"
+                ><small>F03</small><strong>Spacing &amp; density</strong
+                ><span>A compact 4px grid and responsive regions.</span></a
+              >
+              <a class="ds-page-card" href="foundations/elevation.html"
+                ><small>F04</small><strong>Elevation &amp; shape</strong
+                ><span>Boundaries before shadows; focus above both.</span></a
+              >
+              <a class="ds-page-card" href="foundations/iconography.html"
+                ><small>F05</small><strong>Iconography</strong
+                ><span>A consistent inline SVG action language.</span></a
+              >
+              <a class="ds-page-card" href="foundations/motion.html"
+                ><small>F06</small><strong>Motion</strong
+                ><span
+                  >Fast orientation cues with reduced alternatives.</span
+                ></a
+              >
+              <a class="ds-page-card" href="foundations/accessibility.html"
+                ><small>F07</small><strong>Accessibility</strong
+                ><span>The WCAG 2.2 AA interaction contract.</span></a
+              >
+            </div>
+          </section>
 
-        <section class="ds-section" id="components">
-          <h2>Components</h2>
-          <div class="ds-page-cards">
-            <a class="ds-page-card" href="components/buttons.html"><small>C01</small><strong>Buttons</strong><span>Actions, icons, toggles, and states.</span></a>
-            <a class="ds-page-card" href="components/form-controls.html"><small>C02</small><strong>Form controls</strong><span>Input, choice, validation, and grouping.</span></a>
-            <a class="ds-page-card" href="components/navigation.html"><small>C03</small><strong>Navigation</strong><span>Activity bars, sidebars, and breadcrumbs.</span></a>
-            <a class="ds-page-card" href="components/command-menus.html"><small>C04</small><strong>Command palette & menus</strong><span>Global search and contextual actions.</span></a>
-            <a class="ds-page-card" href="components/toolbars-tabs.html"><small>C05</small><strong>Toolbars & tabs</strong><span>Modes, document tabs, and local actions.</span></a>
-            <a class="ds-page-card" href="components/tree.html"><small>C06</small><strong>Tree</strong><span>Curriculum and repository hierarchies.</span></a>
-            <a class="ds-page-card" href="components/cards-panels.html"><small>C07</small><strong>Cards & panels</strong><span>Containers, inspectors, and empty states.</span></a>
-            <a class="ds-page-card" href="components/tables.html"><small>C08</small><strong>Tables</strong><span>Dense records, selection, and responsive use.</span></a>
-            <a class="ds-page-card" href="components/indicators-progress.html"><small>C09</small><strong>Indicators & progress</strong><span>Status, mastery, completion, and loading.</span></a>
-            <a class="ds-page-card" href="components/overlays-feedback.html"><small>C10</small><strong>Overlays & feedback</strong><span>Dialogs, notices, toasts, and tooltips.</span></a>
-            <a class="ds-page-card" href="components/learning-code.html"><small>C11</small><strong>Learning & code</strong><span>Objectives, excerpts, glossary, and references.</span></a>
-            <a class="ds-page-card" href="components/data-visualization.html"><small>C12</small><strong>Data visualization</strong><span>Charts, legends, palettes, and alternatives.</span></a>
-          </div>
-        </section>
+          <section class="ds-section" id="components">
+            <h2>Components</h2>
+            <div class="ds-page-cards">
+              <a class="ds-page-card" href="components/buttons.html"
+                ><small>C01</small><strong>Buttons</strong
+                ><span>Actions, icons, toggles, and states.</span></a
+              >
+              <a class="ds-page-card" href="components/form-controls.html"
+                ><small>C02</small><strong>Form controls</strong
+                ><span>Input, choice, validation, and grouping.</span></a
+              >
+              <a class="ds-page-card" href="components/navigation.html"
+                ><small>C03</small><strong>Navigation</strong
+                ><span>Activity bars, sidebars, and breadcrumbs.</span></a
+              >
+              <a class="ds-page-card" href="components/command-menus.html"
+                ><small>C04</small><strong>Command palette &amp; menus</strong
+                ><span>Global search and contextual actions.</span></a
+              >
+              <a class="ds-page-card" href="components/toolbars-tabs.html"
+                ><small>C05</small><strong>Toolbars &amp; tabs</strong
+                ><span>Modes, document tabs, and local actions.</span></a
+              >
+              <a class="ds-page-card" href="components/tree.html"
+                ><small>C06</small><strong>Tree</strong
+                ><span>Curriculum and repository hierarchies.</span></a
+              >
+              <a class="ds-page-card" href="components/cards-panels.html"
+                ><small>C07</small><strong>Cards &amp; panels</strong
+                ><span>Containers, inspectors, and empty states.</span></a
+              >
+              <a class="ds-page-card" href="components/tables.html"
+                ><small>C08</small><strong>Tables</strong
+                ><span>Dense records, selection, and responsive use.</span></a
+              >
+              <a class="ds-page-card" href="components/indicators-progress.html"
+                ><small>C09</small><strong>Indicators &amp; progress</strong
+                ><span>Status, mastery, completion, and loading.</span></a
+              >
+              <a class="ds-page-card" href="components/overlays-feedback.html"
+                ><small>C10</small><strong>Overlays &amp; feedback</strong
+                ><span>Dialogs, notices, toasts, and tooltips.</span></a
+              >
+              <a class="ds-page-card" href="components/learning-code.html"
+                ><small>C11</small><strong>Learning &amp; code</strong
+                ><span>Objectives, excerpts, glossary, and references.</span></a
+              >
+              <a class="ds-page-card" href="components/data-visualization.html"
+                ><small>C12</small><strong>Data visualization</strong
+                ><span>Charts, legends, palettes, and alternatives.</span></a
+              >
+            </div>
+          </section>
 
-        <section class="ds-section" id="patterns">
-          <h2>Patterns</h2>
-          <div class="ds-page-cards">
-            <a class="ds-page-card" href="patterns/application-shell.html"><small>P01</small><strong>Application shell</strong><span>The Code Command frame at every viewport.</span></a>
-            <a class="ds-page-card" href="patterns/learner-dashboard.html"><small>P02</small><strong>Learner dashboard</strong><span>Next action, assignments, and mastery.</span></a>
-            <a class="ds-page-card" href="patterns/lesson-workspace.html"><small>P03</small><strong>Lesson & code workspace</strong><span>Explanation and source context together.</span></a>
-            <a class="ds-page-card" href="patterns/system-map.html"><small>P04</small><strong>System map</strong><span>Architecture graph with an equivalent table.</span></a>
-            <a class="ds-page-card" href="patterns/assessments.html"><small>P05</small><strong>Assessments</strong><span>Questions, attempts, feedback, and mastery.</span></a>
-            <a class="ds-page-card" href="patterns/analytics.html"><small>P06</small><strong>Analytics & reporting</strong><span>Transparent measures and safe drill-down.</span></a>
-            <a class="ds-page-card" href="patterns/curriculum-lifecycle.html"><small>P07</small><strong>Curriculum lifecycle</strong><span>Import, validation, review, and publication.</span></a>
-            <a class="ds-page-card" href="patterns/administration.html"><small>P08</small><strong>Administration</strong><span>Users, groups, roles, and assignments.</span></a>
-          </div>
-        </section>
+          <section class="ds-section" id="patterns">
+            <h2>Patterns</h2>
+            <div class="ds-page-cards">
+              <a class="ds-page-card" href="patterns/application-shell.html"
+                ><small>P01</small><strong>Application shell</strong
+                ><span>The Code Command frame at every viewport.</span></a
+              >
+              <a class="ds-page-card" href="patterns/learner-dashboard.html"
+                ><small>P02</small><strong>Learner dashboard</strong
+                ><span>Next action, assignments, and mastery.</span></a
+              >
+              <a class="ds-page-card" href="patterns/lesson-workspace.html"
+                ><small>P03</small><strong>Lesson &amp; code workspace</strong
+                ><span>Explanation and source context together.</span></a
+              >
+              <a class="ds-page-card" href="patterns/system-map.html"
+                ><small>P04</small><strong>System map</strong
+                ><span>Architecture graph with an equivalent table.</span></a
+              >
+              <a class="ds-page-card" href="patterns/assessments.html"
+                ><small>P05</small><strong>Assessments</strong
+                ><span>Questions, attempts, feedback, and mastery.</span></a
+              >
+              <a class="ds-page-card" href="patterns/analytics.html"
+                ><small>P06</small><strong>Analytics &amp; reporting</strong
+                ><span>Transparent measures and safe drill-down.</span></a
+              >
+              <a class="ds-page-card" href="patterns/curriculum-lifecycle.html"
+                ><small>P07</small><strong>Curriculum lifecycle</strong
+                ><span>Import, validation, review, and publication.</span></a
+              >
+              <a class="ds-page-card" href="patterns/administration.html"
+                ><small>P08</small><strong>Administration</strong
+                ><span>Users, groups, roles, and assignments.</span></a
+              >
+            </div>
+          </section>
 
-        <section class="ds-section" id="traceability">
-          <h2>Requirement traceability</h2>
-          <p>Every product-pattern page maps its decisions back to the RepoFluent PRD. Component pages carry the requirement families they enable.</p>
-          <div class="ds-grid ds-grid--4">
-            <article class="rf-panel"><div class="rf-panel__header">IAM</div><div class="rf-panel__body">Identity, tenancy, permissions, teams, roles, and audit.</div></article>
-            <article class="rf-panel"><div class="rf-panel__header">CUR / AGT</div><div class="rf-panel__body">Package contract, agent authoring, validation, and publication.</div></article>
-            <article class="rf-panel"><div class="rf-panel__header">LRN / CODE</div><div class="rf-panel__body">Learning, navigation, glossary, architecture, and source context.</div></article>
-            <article class="rf-panel"><div class="rf-panel__header">ASM / ANL / ADM</div><div class="rf-panel__body">Assessment, reporting, management, settings, and operations.</div></article>
-          </div>
-        </section>
-      </div>
-    </main>
-    <footer class="ds-statusbar" data-ds-status></footer>
-  </div>
-</body>
+          <section class="ds-section" id="traceability">
+            <h2>Requirement traceability</h2>
+            <p>
+              Every product-pattern page maps its decisions back to the
+              RepoFluent PRD. Component pages carry the requirement families
+              they enable.
+            </p>
+            <div class="ds-grid ds-grid--4">
+              <article class="rf-panel">
+                <div class="rf-panel__header">IAM</div>
+                <div class="rf-panel__body">
+                  Identity, tenancy, permissions, teams, roles, and audit.
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">CUR / AGT</div>
+                <div class="rf-panel__body">
+                  Package contract, agent authoring, validation, and
+                  publication.
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">LRN / CODE</div>
+                <div class="rf-panel__body">
+                  Learning, navigation, glossary, architecture, and source
+                  context.
+                </div>
+              </article>
+              <article class="rf-panel">
+                <div class="rf-panel__header">ASM / ANL / ADM</div>
+                <div class="rf-panel__body">
+                  Assessment, reporting, management, settings, and operations.
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
 </html>

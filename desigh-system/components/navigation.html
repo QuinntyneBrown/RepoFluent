@@ -1,10 +1,260 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="RepoFluent navigation components."><title>Navigation — RepoFluent Design System</title><link rel="stylesheet" href="../assets/tokens.css"><link rel="stylesheet" href="../assets/components.css"><link rel="stylesheet" href="../assets/docs.css"><script src="../assets/docs.js" defer></script></head>
-<body data-category="Components" data-page="components/navigation"><a class="ds-skip-link" href="#main-content">Skip to content</a><div class="ds-app"><header class="ds-header" data-ds-header></header><aside class="ds-sidebar" aria-label="Design system sections"><div class="ds-sidebar__head"><span>DESIGN EXPLORER</span><span>C03</span></div><nav class="ds-nav" data-ds-nav></nav></aside><main class="ds-main" id="main-content"><div class="ds-page">
-<div class="ds-breadcrumbs"><a href="../index.html">design-system</a><span>›</span><span>components</span><span>›</span><strong>navigation.rf</strong></div><header class="ds-hero"><div><p class="ds-eyebrow">Component / C03</p><h1>Navigation</h1><p class="ds-hero__lede">Global destinations, workspace hierarchy, open documents, and local ancestry use distinct visual models so location remains obvious in a dense interface.</p></div><span class="ds-page-id">RF-C03</span></header>
-<section class="ds-section" id="titlebar"><h2>Titlebar</h2><div class="ds-example"><div class="ds-example__head">GLOBAL / 42PX</div><div class="ds-example__stage ds-example__stage--flush"><div class="rf-titlebar" style="padding-inline:.75rem"><a class="rf-brand" href="#titlebar"><span class="rf-brand__mark">RF</span><strong>RepoFluent</strong></a><button class="rf-command-trigger" type="button"><svg class="rf-icon" viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5"/><path d="m12.5 12.5 4 4"/></svg><span>Search curriculum, code, systems…</span><kbd>Ctrl K</kbd></button><div class="ds-row" style="justify-content:flex-end"><span class="rf-status rf-status--success">synced</span><button class="rf-icon-button rf-button--ghost" aria-label="Notifications"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M5 14h10l-1.5-2V8a3.5 3.5 0 0 0-7 0v4L5 14ZM8.5 17h3"/></svg></button></div></div></div></div><p>The titlebar owns brand/home, global search, environment status, notifications, and account. It never hosts page-specific actions.</p></section>
-<section class="ds-section" id="activity"><h2>Activity bar and sidebar</h2><div class="ds-example"><div class="ds-example__head">PRIMARY DESTINATION / WORKSPACE HIERARCHY</div><div class="ds-example__stage ds-example__stage--flush"><div style="display:grid;grid-template-columns:3rem 15rem 1fr;min-height:20rem"><nav style="display:grid;align-content:start;gap:.5rem;padding:.5rem .35rem;border-right:1px solid var(--rf-color-line);background:var(--rf-color-void)" aria-label="Primary"><a class="rf-icon-button rf-button--ghost" href="#activity" aria-label="Learning home" style="color:var(--rf-color-primary);box-shadow:inset 2px 0 var(--rf-color-primary)"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M3 10.5 10 4l7 6.5V18H6v-7.5"/></svg></a><a class="rf-icon-button rf-button--ghost" href="#activity" aria-label="Current lesson"><svg class="rf-icon" viewBox="0 0 20 20"><path d="M4 3h9l3 3v11H4zM13 3v4h4"/></svg></a><a class="rf-icon-button rf-button--ghost" href="#activity" aria-label="System map"><svg class="rf-icon" viewBox="0 0 20 20"><circle cx="5" cy="10" r="2"/><circle cx="15" cy="5" r="2"/><circle cx="15" cy="15" r="2"/><path d="m7 9 6-3M7 11l6 3"/></svg></a></nav><aside style="border-right:1px solid var(--rf-color-line);background:var(--rf-color-surface-1)"><div class="rf-panel__header">LEARNING EXPLORER</div><ul class="rf-tree"><li><span class="rf-tree__item" aria-current="page">dashboard.rf</span></li><li><details open><summary>⌄ foundations</summary><ul><li><span class="rf-tree__item">order-workflow.md</span></li><li><span class="rf-tree__item">failure-recovery.md</span></li></ul></details></li></ul></aside><div class="rf-empty">Selected content opens in the workbench.</div></div></div></div></section>
-<section class="ds-section" id="breadcrumbs"><h2>Breadcrumbs</h2><div class="ds-example"><div class="ds-example__head">ANCESTRY / NOT HISTORY</div><div class="ds-example__stage ds-example__stage--flush"><nav class="rf-breadcrumbs" aria-label="Breadcrumb"><a href="#breadcrumbs">order-platform</a><span>›</span><a href="#breadcrumbs">foundations</a><span>›</span><strong>order-workflow.md</strong></nav></div></div><p>Breadcrumbs show stable content ancestry. Browser back/forward and explicit “Back to results” controls handle navigation history.</p></section>
-<section class="ds-section" id="states"><h2>State and responsive behavior</h2><table class="ds-token-table"><thead><tr><th>STATE</th><th>TREATMENT</th><th>SEMANTICS</th></tr></thead><tbody><tr><td>Current destination</td><td>Green edge + strong ink</td><td><code>aria-current="page"</code></td></tr><tr><td>Selected object</td><td>Active surface + green edge</td><td><code>aria-selected="true"</code></td></tr><tr><td>Open document</td><td>Tab exists; not necessarily selected</td><td>Managed by tablist</td></tr><tr><td>Collapsed phone nav</td><td>Drawer opened by labeled button</td><td>Focus stays in logical order</td></tr></tbody></table><p>Below 768px, the sidebar becomes a drawer and the activity bar may become a bottom destination bar. Required routes remain available.</p></section>
-<section class="ds-section" id="rules"><h2>Usage rules</h2><div class="ds-do-dont"><div class="ds-do"><strong>DO</strong><p>Keep global, hierarchical, document, and historical navigation visually distinct.</p></div><div class="ds-dont"><strong>DON'T</strong><p>Use tabs as links between unrelated routes or hide the only route behind hover.</p></div></div><div class="ds-requirements"><span class="ds-requirement">LRN-04</span><span class="ds-requirement">LRN-05</span><span class="ds-requirement">CODE-03</span><span class="ds-requirement">9.1 CONTEXT</span></div></section>
-</div></main><footer class="ds-statusbar" data-ds-status></footer></div></body></html>
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent navigation components." />
+    <title>Navigation — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/navigation">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C03</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span><strong>navigation.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C03</p>
+              <h1>Navigation</h1>
+              <p class="ds-hero__lede">
+                Global destinations, workspace hierarchy, open documents, and
+                local ancestry use distinct visual models so location remains
+                obvious in a dense interface.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C03</span>
+          </header>
+          <section class="ds-section" id="titlebar">
+            <h2>Titlebar</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">GLOBAL / 42PX</div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div class="rf-titlebar" style="padding-inline: 0.75rem">
+                  <a class="rf-brand" href="#titlebar"
+                    ><span class="rf-brand__mark">RF</span
+                    ><strong>RepoFluent</strong></a
+                  ><button class="rf-command-trigger" type="button">
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <circle cx="8.5" cy="8.5" r="5" />
+                      <path d="m12.5 12.5 4 4" /></svg
+                    ><span>Search curriculum, code, systems…</span
+                    ><kbd>Ctrl K</kbd>
+                  </button>
+                  <div class="ds-row" style="justify-content: flex-end">
+                    <span class="rf-status rf-status--success">synced</span
+                    ><button
+                      type="button"
+                      class="rf-icon-button rf-button--ghost"
+                      aria-label="Notifications"
+                    >
+                      <svg class="rf-icon" viewBox="0 0 20 20">
+                        <path
+                          d="M5 14h10l-1.5-2V8a3.5 3.5 0 0 0-7 0v4L5 14ZM8.5 17h3"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p>
+              The titlebar owns brand/home, global search, environment status,
+              notifications, and account. It never hosts page-specific actions.
+            </p>
+          </section>
+          <section class="ds-section" id="activity">
+            <h2>Activity bar and sidebar</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">
+                PRIMARY DESTINATION / WORKSPACE HIERARCHY
+              </div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 3rem 15rem 1fr;
+                    min-height: 20rem;
+                  "
+                >
+                  <nav
+                    style="
+                      display: grid;
+                      align-content: start;
+                      gap: 0.5rem;
+                      padding: 0.5rem 0.35rem;
+                      border-right: 1px solid var(--rf-color-line);
+                      background: var(--rf-color-void);
+                    "
+                    aria-label="Primary"
+                  >
+                    <a
+                      class="rf-icon-button rf-button--ghost"
+                      href="#activity"
+                      aria-label="Learning home"
+                      style="
+                        color: var(--rf-color-primary);
+                        box-shadow: inset 2px 0 var(--rf-color-primary);
+                      "
+                      ><svg class="rf-icon" viewBox="0 0 20 20">
+                        <path d="M3 10.5 10 4l7 6.5V18H6v-7.5" /></svg></a
+                    ><a
+                      class="rf-icon-button rf-button--ghost"
+                      href="#activity"
+                      aria-label="Current lesson"
+                      ><svg class="rf-icon" viewBox="0 0 20 20">
+                        <path d="M4 3h9l3 3v11H4zM13 3v4h4" /></svg></a
+                    ><a
+                      class="rf-icon-button rf-button--ghost"
+                      href="#activity"
+                      aria-label="System map"
+                      ><svg class="rf-icon" viewBox="0 0 20 20">
+                        <circle cx="5" cy="10" r="2" />
+                        <circle cx="15" cy="5" r="2" />
+                        <circle cx="15" cy="15" r="2" />
+                        <path d="m7 9 6-3M7 11l6 3" /></svg
+                    ></a>
+                  </nav>
+                  <aside
+                    aria-label="Learning explorer example"
+                    style="
+                      border-right: 1px solid var(--rf-color-line);
+                      background: var(--rf-color-surface-1);
+                    "
+                  >
+                    <div class="rf-panel__header">LEARNING EXPLORER</div>
+                    <ul class="rf-tree">
+                      <li>
+                        <span class="rf-tree__item" aria-current="page"
+                          >dashboard.rf</span
+                        >
+                      </li>
+                      <li>
+                        <details open>
+                          <summary>⌄ foundations</summary>
+                          <ul>
+                            <li>
+                              <span class="rf-tree__item"
+                                >order-workflow.md</span
+                              >
+                            </li>
+                            <li>
+                              <span class="rf-tree__item"
+                                >failure-recovery.md</span
+                              >
+                            </li>
+                          </ul>
+                        </details>
+                      </li>
+                    </ul>
+                  </aside>
+                  <div class="rf-empty">
+                    Selected content opens in the workbench.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="breadcrumbs">
+            <h2>Breadcrumbs</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">ANCESTRY / NOT HISTORY</div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <nav class="rf-breadcrumbs" aria-label="Breadcrumb">
+                  <a href="#breadcrumbs">order-platform</a><span>›</span
+                  ><a href="#breadcrumbs">foundations</a><span>›</span
+                  ><strong>order-workflow.md</strong>
+                </nav>
+              </div>
+            </div>
+            <p>
+              Breadcrumbs show stable content ancestry. Browser back/forward and
+              explicit “Back to results” controls handle navigation history.
+            </p>
+          </section>
+          <section class="ds-section" id="states">
+            <h2>State and responsive behavior</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>STATE</th>
+                  <th>TREATMENT</th>
+                  <th>SEMANTICS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Current destination</td>
+                  <td>Green edge + strong ink</td>
+                  <td><code>aria-current="page"</code></td>
+                </tr>
+                <tr>
+                  <td>Selected object</td>
+                  <td>Active surface + green edge</td>
+                  <td><code>aria-selected="true"</code></td>
+                </tr>
+                <tr>
+                  <td>Open document</td>
+                  <td>Tab exists; not necessarily selected</td>
+                  <td>Managed by tablist</td>
+                </tr>
+                <tr>
+                  <td>Collapsed phone nav</td>
+                  <td>Drawer opened by labeled button</td>
+                  <td>Focus stays in logical order</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              Below 768px, the sidebar becomes a drawer and the activity bar may
+              become a bottom destination bar. Required routes remain available.
+            </p>
+          </section>
+          <section class="ds-section" id="rules">
+            <h2>Usage rules</h2>
+            <div class="ds-do-dont">
+              <div class="ds-do">
+                <strong>DO</strong>
+                <p>
+                  Keep global, hierarchical, document, and historical navigation
+                  visually distinct.
+                </p>
+              </div>
+              <div class="ds-dont">
+                <strong>DON'T</strong>
+                <p>
+                  Use tabs as links between unrelated routes or hide the only
+                  route behind hover.
+                </p>
+              </div>
+            </div>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-04</span
+              ><span class="ds-requirement">LRN-05</span
+              ><span class="ds-requirement">CODE-03</span
+              ><span class="ds-requirement">9.1 CONTEXT</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

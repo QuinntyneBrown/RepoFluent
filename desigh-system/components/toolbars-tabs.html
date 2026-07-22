@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="RepoFluent toolbar and tab components." />
+    <title>Toolbars &amp; Tabs — RepoFluent Design System</title>
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/components.css" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-category="Components" data-page="components/toolbars-tabs">
+    <a class="ds-skip-link" href="#main-content">Skip to content</a>
+    <div class="ds-app">
+      <header class="ds-header" data-ds-header></header>
+      <aside class="ds-sidebar" aria-label="Design system sections">
+        <div class="ds-sidebar__head">
+          <span>DESIGN EXPLORER</span><span>C05</span>
+        </div>
+        <nav
+          class="ds-nav"
+          data-ds-nav
+          aria-label="Design system navigation"
+        ></nav>
+      </aside>
+      <main class="ds-main" id="main-content">
+        <div class="ds-page">
+          <div class="ds-breadcrumbs">
+            <a href="../index.html">design-system</a><span>›</span
+            ><span>components</span><span>›</span
+            ><strong>toolbar-tabs.rf</strong>
+          </div>
+          <header class="ds-hero">
+            <div>
+              <p class="ds-eyebrow">Component / C05</p>
+              <h1>Toolbars &amp; tabs</h1>
+              <p class="ds-hero__lede">
+                Toolbars operate on the visible object or view. Tabs preserve a
+                small working set of related documents without replacing
+                route-level navigation.
+              </p>
+            </div>
+            <span class="ds-page-id">RF-C05</span>
+          </header>
+          <section class="ds-section" id="toolbar">
+            <h2>Toolbar anatomy</h2>
+            <div class="ds-example">
+              <div class="ds-example__head">LOCAL VIEW ACTIONS</div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div class="rf-toolbar">
+                  <div
+                    class="rf-toggle-group"
+                    data-toggle-group
+                    role="group"
+                    aria-label="Lesson mode"
+                  >
+                    <button type="button" class="rf-button" aria-pressed="true">
+                      RENDERED</button
+                    ><button
+                      type="button"
+                      class="rf-button"
+                      aria-pressed="false"
+                    >
+                      SOURCE
+                    </button>
+                  </div>
+                  <span class="rf-toolbar__spacer"></span
+                  ><span class="rf-status rf-status--success">auto-saved</span
+                  ><button
+                    type="button"
+                    class="rf-icon-button rf-button--ghost"
+                    aria-label="More lesson actions"
+                  >
+                    <svg class="rf-icon" viewBox="0 0 20 20">
+                      <circle cx="4" cy="10" r="1" />
+                      <circle cx="10" cy="10" r="1" />
+                      <circle cx="16" cy="10" r="1" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <ol class="ds-anatomy-list">
+              <li>Left: view mode and navigation controls.</li>
+              <li>Center: optional title, query, or contextual status.</li>
+              <li>Right: save state and object-specific actions.</li>
+              <li>Overflow: infrequent commands in stable order.</li>
+            </ol>
+          </section>
+          <section class="ds-section" id="tabs">
+            <h2>Document tabs</h2>
+            <div class="ds-example" data-demo-tabs>
+              <div class="ds-example__head">ARROW KEYS MOVE BETWEEN TABS</div>
+              <div class="ds-example__stage ds-example__stage--flush">
+                <div
+                  class="rf-tabs"
+                  role="tablist"
+                  aria-label="Open learning views"
+                >
+                  <button
+                    type="button"
+                    class="rf-tab"
+                    role="tab"
+                    id="tab-dashboard"
+                    aria-controls="panel-dashboard"
+                    aria-selected="true"
+                  >
+                    <span style="color: var(--rf-color-primary)">RF</span
+                    >dashboard.rf</button
+                  ><button
+                    type="button"
+                    class="rf-tab"
+                    role="tab"
+                    id="tab-lesson"
+                    aria-controls="panel-lesson"
+                    aria-selected="false"
+                    tabindex="-1"
+                  >
+                    <span style="color: var(--rf-color-link)">M↓</span
+                    >order-workflow.md</button
+                  ><button
+                    type="button"
+                    class="rf-tab"
+                    role="tab"
+                    id="tab-map"
+                    aria-controls="panel-map"
+                    aria-selected="false"
+                    tabindex="-1"
+                  >
+                    <span style="color: var(--rf-color-warning)">◇</span
+                    >system-map.graph
+                  </button>
+                </div>
+                <div
+                  class="rf-tab-panel rf-empty"
+                  id="panel-dashboard"
+                  role="tabpanel"
+                  aria-labelledby="tab-dashboard"
+                >
+                  Learner dashboard document
+                </div>
+                <div
+                  class="rf-tab-panel rf-empty"
+                  id="panel-lesson"
+                  role="tabpanel"
+                  aria-labelledby="tab-lesson"
+                  hidden
+                >
+                  Lesson and source workspace document
+                </div>
+                <div
+                  class="rf-tab-panel rf-empty"
+                  id="panel-map"
+                  role="tabpanel"
+                  aria-labelledby="tab-map"
+                  hidden
+                >
+                  System map document
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="ds-section" id="states">
+            <h2>Tab states</h2>
+            <table class="ds-token-table">
+              <thead>
+                <tr>
+                  <th>STATE</th>
+                  <th>VISUAL</th>
+                  <th>BEHAVIOR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Active</td>
+                  <td>Canvas surface, strong ink, green top edge</td>
+                  <td>Associated panel is visible</td>
+                </tr>
+                <tr>
+                  <td>Open</td>
+                  <td>Surface 1, muted ink</td>
+                  <td>Retains document state but panel is hidden</td>
+                </tr>
+                <tr>
+                  <td>Modified</td>
+                  <td>Small dot after label</td>
+                  <td>Closing requests confirmation when loss is possible</td>
+                </tr>
+                <tr>
+                  <td>Stale</td>
+                  <td>Amber icon plus written tooltip</td>
+                  <td>Opens revision comparison or warning</td>
+                </tr>
+                <tr>
+                  <td>Overflow</td>
+                  <td>Horizontal scroll + tab list menu</td>
+                  <td>Every open tab stays keyboard reachable</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="ds-section" id="responsive">
+            <h2>Responsive behavior</h2>
+            <ul>
+              <li>
+                Keep the primary contextual action visible before moving actions
+                into overflow.
+              </li>
+              <li>
+                Let tabs scroll horizontally on compact tablet widths; never
+                shrink labels into unreadable fragments.
+              </li>
+              <li>
+                On phone widths, replace document tabs with the active title and
+                an “Open views” list.
+              </li>
+              <li>
+                Mode switches stay adjacent to the content they alter and
+                persist independently per document.
+              </li>
+            </ul>
+            <div class="ds-requirements">
+              <span class="ds-requirement">LRN-03</span
+              ><span class="ds-requirement">CODE-03</span
+              ><span class="ds-requirement">CODE-04</span
+              ><span class="ds-requirement">9.1 CONTEXT</span>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="ds-statusbar" data-ds-status></footer>
+    </div>
+  </body>
+</html>

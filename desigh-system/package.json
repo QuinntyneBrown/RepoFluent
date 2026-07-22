@@ -1,0 +1,16 @@
+{
+  "name": "repofluent-design-system-docs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static Code Command design-system documentation and optional QA tooling.",
+  "scripts": {
+    "format:check": "prettier --check \"**/*.{html,css,js,json,md}\"",
+    "test": "playwright test tests/smoke.spec.js --reporter=line",
+    "validate": "html-validate \"index.html\" \"foundations/*.html\" \"components/*.html\" \"patterns/*.html\""
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "html-validate": "11.4.0",
+    "prettier": "3.9.6"
+  }
+}
