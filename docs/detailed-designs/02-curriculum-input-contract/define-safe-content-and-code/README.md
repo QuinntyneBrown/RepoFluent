@@ -2,37 +2,33 @@
 
 ## Overview
 
-RepoFluent's Curriculum Input Contract subsystem defines the portable curriculum package, its compatibility rules, and its conformance artifacts. This feature
-brings *content block vocabulary*, *code references and tours* into one vertical slice. The slice preserves tenant,
-actor, version, authorization, and correlation context wherever the cited
-requirements apply.
+RepoFluent's Curriculum Input Contract defines a closed lesson-block vocabulary
+and revision-bound code evidence in the same portable package. The slice keeps
+structured prose, callouts, accessible diagrams, code references, ordered code
+tours, examples, glossary definitions, and knowledge checks inert by contract.
 
-The contract maintainer starts the outcome through Contract workbench.
-Contract Registry API applies server-side policy before state is read or changed.
-The external dependency and persistent technology remain `<TO SUPPLY>` where
-the requirements baseline does not select them.
+Authors exercise the contract through the existing curriculum upload and
+preview journey. The API applies schema-independent semantic safety rules before
+creating a draft, and the learner renderer uses only design-system tokens and
+semantic HTML to present accepted blocks.
 
 ## Description
 
-The greenfield slice introduces the following building blocks. The endpoint
-route, deployment topology, and unresolved provider choices remain `<TO SUPPLY>`.
+The implemented vertical slice uses these building blocks:
 
-- **`DefineSafeContentAndCodeWorkbench`** — .NET tool entry component that presents
-  the feature state and submits a typed intent.
-- **`ContractRegistryClient`** — typed client that carries tenant, actor, version,
-  idempotency, and correlation context required by the operation.
-- **`DefineSafeContentAndCodeController`** — ASP.NET Core boundary that authenticates
-  the caller, applies endpoint policy, and dispatches `DefineSafeContentAndCodeRequest`.
-- **`DefineSafeContentAndCodeRequest`** — application request containing scope, actor, target,
-  expected version, correlation identifier, and feature payload.
-- **`DefineSafeContentAndCodeHandler`** — application handler that loads authorized state,
-  invokes `DefineSafeContentAndCodePolicy`, and commits one result.
-- **`DefineSafeContentAndCodePolicy`** — domain policy that evaluates the cited L2 rules without
-  relying on client presentation state.
-- **`IDefineSafeContentAndCodeRepository`** — application abstraction for tenant-scoped reads,
-  writes, optimistic concurrency, and idempotency lookup.
-- **`DefineSafeContentAndCodeRecord`** — persisted feature record containing identity, tenant,
-  version, status, timestamps, and safe evidence references.
+- **`curriculum.schema.json`** — JSON Schema discriminator union for all eight
+  allow-listed blocks and the complete code-tour step contract.
+- **`Block` and `CodeTourStep`** — typed application records that preserve
+  accessible metadata, repository identity, optional branch and commit, line
+  anchors, excerpt classification, guidance, and provenance.
+- **`PackageValidator`** — server-owned allow-list, active-content and remote
+  resource rejection, repository-relative path checks, snapshot binding,
+  ordered-tour validation, and typed glossary and assessment references.
+- **`LessonRendererComponent`** — token-only Angular presentation using semantic
+  figures, complementary callouts, ordered lists, definitions, regions, and
+  escaped source excerpts.
+- **`SafeContentAndCodePage`** — Playwright Page Object that drives the
+  live-stack author preview and exact-path blocking-safety scenarios.
 
 ## Requirements
 
@@ -43,6 +39,19 @@ the first L1 identifier named by the source requirement as its primary parent.
 |-------|--------------|-------------|
 | `L2-CIC-04` | `L1-CIC-02` | The schema shall use a discriminated, allow-listed content-block model for structured prose, callouts, diagrams or accessible system maps, code references, code tours, examples, glossary links, and knowledge checks. Arbitrary active HTML, script, executable content, macro content, and undeclared remote resources shall be invalid. |
 | `L2-CIC-05` | `L1-CIC-09` | Code references shall require repository-relative paths and shall support repository identifier, optional commit, symbol, line/range anchors, language, supplied excerpt, content classification, and explanatory provenance. Code tours shall contain an ordered list of resolvable references with learner guidance at each step. |
+
+### Implementation evidence
+
+- `SafeContentAndCodeTests` executes the complete discriminator set and proves
+  non-disclosing `CIC_ACTIVE_CONTENT` and `CIC_UNDECLARED_RESOURCE` issues at
+  exact JSON Pointer paths.
+- The release conformance catalog replaces the representative lesson blocks
+  with the full safe vocabulary and runs them through `PackageValidator`.
+- `safe-content-and-code.spec.ts` uploads the package as an author, previews the
+  learner rendering, inspects revision-bound source context, verifies ordered
+  Angular and C# tour steps, and captures the token-conformant visual contract.
+- The contract release verifier binds the updated schema, ICD, validation
+  catalog, fixtures, and release notes into one regenerated SHA-256 checksum.
 
 ## Diagrams
 

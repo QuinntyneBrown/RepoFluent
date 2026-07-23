@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace RepoFluent.Application;
 
@@ -76,6 +77,14 @@ public sealed class PackageValidator
         }
 
         var repositoryIds = repositories.Select(repository => repository.Id).ToHashSet(StringComparer.Ordinal);
+        var repositoryById = new Dictionary<string, Repository>(StringComparer.Ordinal);
+        foreach (var repository in repositories)
+        {
+            if (!string.IsNullOrWhiteSpace(repository.Id))
+            {
+                repositoryById.TryAdd(repository.Id, repository);
+            }
+        }
         var systems = package.Systems ?? [];
         var systemIds = new HashSet<string>(StringComparer.Ordinal);
         var subsystemIds = new HashSet<string>(StringComparer.Ordinal);
@@ -127,13 +136,18 @@ public sealed class PackageValidator
         }
 
         var terminology = package.Terminology ?? [];
+        var terminologyTerms = new HashSet<string>(StringComparer.Ordinal);
         for (var termIndex = 0; termIndex < terminology.Count; termIndex++)
         {
             Require(!string.IsNullOrWhiteSpace(terminology[termIndex].Term), "CIC_REQUIRED", $"/terminology/{termIndex}/term", issues);
             Require(!string.IsNullOrWhiteSpace(terminology[termIndex].Definition), "CIC_REQUIRED", $"/terminology/{termIndex}/definition", issues);
+            terminologyTerms.Add(terminology[termIndex].Term);
         }
 
         var learningObjectiveIds = new HashSet<string>(StringComparer.Ordinal);
+        var assessmentIds = (package.Assessments ?? [])
+            .Select(assessment => assessment.Id)
+            .ToHashSet(StringComparer.Ordinal);
         var courses = package.Courses ?? [];
         for (var courseIndex = 0; courseIndex < courses.Count; courseIndex++)
         {
@@ -188,7 +202,13 @@ public sealed class PackageValidator
                         learningObjectiveIds,
                         issues);
                     Require(lesson.Blocks?.Count > 0, "CIC_REQUIRED", $"{lessonPath}/blocks", issues);
-                    ValidateBlocks(lesson.Blocks ?? [], lessonPath, repositoryIds, issues);
+                    ValidateBlocks(
+                        lesson.Blocks ?? [],
+                        lessonPath,
+                        repositoryById,
+                        terminologyTerms,
+                        assessmentIds,
+                        issues);
                 }
             }
         }
@@ -211,41 +231,242 @@ public sealed class PackageValidator
     private static void ValidateBlocks(
         IReadOnlyList<Block> blocks,
         string lessonPath,
-        HashSet<string> repositoryIds,
+        IReadOnlyDictionary<string, Repository> repositoryById,
+        HashSet<string> terminologyTerms,
+        HashSet<string> assessmentIds,
         List<ValidationIssue> issues)
     {
         for (var blockIndex = 0; blockIndex < blocks.Count; blockIndex++)
         {
             var block = blocks[blockIndex];
             var path = $"{lessonPath}/blocks/{blockIndex}";
-            if (block.Type is not ("prose" or "callout" or "codeReference"))
+            if (block.Type is not (
+                "prose"
+                or "callout"
+                or "diagram"
+                or "codeReference"
+                or "codeTour"
+                or "example"
+                or "glossaryLink"
+                or "knowledgeCheck"))
             {
-                issues.Add(Issue("CIC_UNSUPPORTED_BLOCK", "Content block type is not supported.", $"{path}/type"));
+                var code = block.Type is "script" or "html" or "executable" or "macro"
+                    ? "CIC_ACTIVE_CONTENT"
+                    : "CIC_UNSUPPORTED_BLOCK";
+                issues.Add(Issue(code, "Content block type is not supported.", $"{path}/type"));
                 continue;
             }
 
-            if (block.Type is "prose" or "callout")
+            if (!string.IsNullOrWhiteSpace(block.ResourceUrl))
             {
-                Require(!string.IsNullOrWhiteSpace(block.Text), "CIC_REQUIRED", $"{path}/text", issues);
+                issues.Add(Issue(
+                    "CIC_UNDECLARED_RESOURCE",
+                    "Remote resources must be declared by an approved contract extension.",
+                    $"{path}/resourceUrl"));
             }
 
-            if (block.Type != "codeReference")
+            switch (block.Type)
             {
-                continue;
+                case "prose":
+                    RequireSafeText(block.Text, $"{path}/text", issues);
+                    break;
+                case "callout":
+                    Require(
+                        block.Tone is "information" or "warning",
+                        "CIC_UNSUPPORTED_CALLOUT",
+                        $"{path}/tone",
+                        issues);
+                    RequireSafeText(block.Title, $"{path}/title", issues);
+                    RequireSafeText(block.Text, $"{path}/text", issues);
+                    break;
+                case "diagram":
+                    RequireSafeText(block.Title, $"{path}/title", issues);
+                    RequireSafeText(block.Description, $"{path}/description", issues);
+                    RequireSafeText(block.AlternativeText, $"{path}/alternativeText", issues);
+                    Require(block.Labels?.Count >= 2, "CIC_REQUIRED", $"{path}/labels", issues);
+                    for (var labelIndex = 0; labelIndex < (block.Labels?.Count ?? 0); labelIndex++)
+                    {
+                        RequireSafeText(
+                            block.Labels![labelIndex],
+                            $"{path}/labels/{labelIndex}",
+                            issues);
+                    }
+                    break;
+                case "codeReference":
+                    ValidateCodeReference(
+                        block.RepositoryId,
+                        block.Path,
+                        block.Branch,
+                        block.Commit,
+                        block.Language,
+                        block.StartLine,
+                        block.EndLine,
+                        block.Symbol,
+                        block.Excerpt,
+                        block.ContentClassification,
+                        block.Provenance,
+                        path,
+                        repositoryById,
+                        issues);
+                    RequireSafeText(block.Explanation, $"{path}/explanation", issues);
+                    break;
+                case "codeTour":
+                    RequireSafeText(block.Title, $"{path}/title", issues);
+                    var steps = block.Steps ?? [];
+                    Require(steps.Count >= 2, "CIC_REQUIRED", $"{path}/steps", issues);
+                    for (var stepIndex = 0; stepIndex < steps.Count; stepIndex++)
+                    {
+                        var step = steps[stepIndex];
+                        var stepPath = $"{path}/steps/{stepIndex}";
+                        Require(
+                            step.Order == stepIndex + 1,
+                            "CIC_INVALID_ORDER",
+                            $"{stepPath}/order",
+                            issues);
+                        RequireSafeText(step.Title, $"{stepPath}/title", issues);
+                        RequireSafeText(step.Guidance, $"{stepPath}/guidance", issues);
+                        ValidateCodeReference(
+                            step.RepositoryId,
+                            step.Path,
+                            step.Branch,
+                            step.Commit,
+                            step.Language,
+                            step.StartLine,
+                            step.EndLine,
+                            step.Symbol,
+                            step.Excerpt,
+                            step.ContentClassification,
+                            step.Provenance,
+                            stepPath,
+                            repositoryById,
+                            issues);
+                    }
+                    break;
+                case "example":
+                    RequireSafeText(block.Title, $"{path}/title", issues);
+                    RequireSafeText(block.Text, $"{path}/text", issues);
+                    break;
+                case "glossaryLink":
+                    RequireSafeText(block.Term, $"{path}/term", issues);
+                    RequireSafeText(block.Definition, $"{path}/definition", issues);
+                    Require(
+                        block.Term is not null && terminologyTerms.Contains(block.Term),
+                        "CIC_DANGLING_REFERENCE",
+                        $"{path}/term",
+                        issues);
+                    break;
+                case "knowledgeCheck":
+                    RequireSafeText(block.Prompt, $"{path}/prompt", issues);
+                    Require(
+                        block.AssessmentId is not null && assessmentIds.Contains(block.AssessmentId),
+                        "CIC_DANGLING_REFERENCE",
+                        $"{path}/assessmentId",
+                        issues);
+                    break;
             }
-
-            Require(
-                block.RepositoryId is not null && repositoryIds.Contains(block.RepositoryId),
-                "CIC_DANGLING_REPOSITORY",
-                $"{path}/repositoryId",
-                issues);
-            var sourcePath = block.Path ?? string.Empty;
-            var isForbiddenPath = IsRootedOnAnyPlatform(sourcePath)
-                || sourcePath.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries).Contains("..", StringComparer.Ordinal);
-            Require(!isForbiddenPath && sourcePath.Length > 0, "CIC_FORBIDDEN_PATH", $"{path}/path", issues);
-            Require(block.StartLine > 0 && block.EndLine >= block.StartLine, "CIC_INVALID_RANGE", path, issues);
         }
     }
+
+    private static void ValidateCodeReference(
+        string? repositoryId,
+        string? sourcePath,
+        string? branch,
+        string? commit,
+        string? language,
+        int? startLine,
+        int? endLine,
+        string? symbol,
+        string? excerpt,
+        string? contentClassification,
+        string? provenance,
+        string path,
+        IReadOnlyDictionary<string, Repository> repositoryById,
+        List<ValidationIssue> issues)
+    {
+        Repository? repository = null;
+        var repositoryFound =
+            repositoryId is not null
+            && repositoryById.TryGetValue(repositoryId, out repository);
+        Require(
+            repositoryFound,
+            "CIC_DANGLING_REPOSITORY",
+            $"{path}/repositoryId",
+            issues);
+        ValidateRelativePath(sourcePath, $"{path}/path", issues);
+        Require(
+            language is "csharp" or "typescript" or "html" or "scss",
+            "CIC_UNSUPPORTED_LANGUAGE",
+            $"{path}/language",
+            issues);
+        Require(
+            startLine > 0 && endLine >= startLine,
+            "CIC_INVALID_RANGE",
+            path,
+            issues);
+        RequireSafeText(symbol, $"{path}/symbol", issues);
+        RequireSafeText(excerpt, $"{path}/excerpt", issues, allowsCodeSyntax: true);
+        Require(
+            contentClassification is "public" or "internal" or "confidential",
+            "CIC_UNSUPPORTED_CLASSIFICATION",
+            $"{path}/contentClassification",
+            issues);
+        RequireSafeText(provenance, $"{path}/provenance", issues);
+
+        if (!repositoryFound)
+        {
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(branch))
+        {
+            Require(
+                string.Equals(branch, repository!.Branch, StringComparison.Ordinal),
+                "CIC_REVISION_MISMATCH",
+                $"{path}/branch",
+                issues);
+        }
+        if (!string.IsNullOrWhiteSpace(commit))
+        {
+            Require(
+                string.Equals(commit, repository!.Commit, StringComparison.Ordinal)
+                    || string.Equals(commit, repository.Revision, StringComparison.Ordinal),
+                "CIC_REVISION_MISMATCH",
+                $"{path}/commit",
+                issues);
+        }
+    }
+
+    private static void RequireSafeText(
+        string? value,
+        string path,
+        List<ValidationIssue> issues,
+        bool allowsCodeSyntax = false)
+    {
+        Require(!string.IsNullOrWhiteSpace(value), "CIC_REQUIRED", path, issues);
+        if (
+            !string.IsNullOrWhiteSpace(value)
+            && ContainsActiveContent(value, allowsCodeSyntax))
+        {
+            issues.Add(Issue(
+                "CIC_ACTIVE_CONTENT",
+                "Active or macro content is not allowed in curriculum blocks.",
+                path));
+        }
+    }
+
+    private static bool ContainsActiveContent(string value, bool allowsCodeSyntax) =>
+        Regex.IsMatch(
+            value,
+            @"<\s*/?\s*(script|iframe|object|embed|form|input|button|style|link|meta|svg|video|audio)\b|javascript\s*:|\bon[a-z]+\s*=|\{\{|\{%|<\?",
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant,
+            TimeSpan.FromMilliseconds(100))
+        || (
+            !allowsCodeSyntax
+            && Regex.IsMatch(
+                value,
+                @"<\s*/?\s*[a-z][a-z0-9-]*(?:\s+[^>]*)?>",
+                RegexOptions.CultureInvariant,
+                TimeSpan.FromMilliseconds(100)));
 
     private static void ValidateAssessments(
         IReadOnlyList<Assessment> assessments,

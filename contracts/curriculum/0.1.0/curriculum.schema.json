@@ -273,7 +273,12 @@
             "oneOf": [
               { "$ref": "#/$defs/proseBlock" },
               { "$ref": "#/$defs/calloutBlock" },
-              { "$ref": "#/$defs/codeReferenceBlock" }
+              { "$ref": "#/$defs/diagramBlock" },
+              { "$ref": "#/$defs/codeReferenceBlock" },
+              { "$ref": "#/$defs/codeTourBlock" },
+              { "$ref": "#/$defs/exampleBlock" },
+              { "$ref": "#/$defs/glossaryLinkBlock" },
+              { "$ref": "#/$defs/knowledgeCheckBlock" }
             ]
           }
         }
@@ -465,17 +470,140 @@
         "startLine",
         "endLine",
         "symbol",
-        "explanation"
+        "excerpt",
+        "contentClassification",
+        "explanation",
+        "provenance"
       ],
       "properties": {
         "type": { "const": "codeReference" },
         "repositoryId": { "$ref": "#/$defs/identifier" },
         "path": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "commit": { "type": "string", "minLength": 1, "maxLength": 160 },
         "language": { "enum": ["csharp", "typescript", "html", "scss"] },
         "startLine": { "type": "integer", "minimum": 1 },
         "endLine": { "type": "integer", "minimum": 1 },
         "symbol": { "type": "string", "minLength": 1, "maxLength": 300 },
-        "explanation": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "contentClassification": {
+          "enum": ["public", "internal", "confidential"]
+        },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "provenance": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "diagramBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "title",
+        "description",
+        "alternativeText",
+        "labels"
+      ],
+      "properties": {
+        "type": { "const": "diagram" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "alternativeText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "labels": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 20,
+          "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+        },
+        "resourceUrl": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2000
+        }
+      }
+    },
+    "codeTourBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "title", "steps"],
+      "properties": {
+        "type": { "const": "codeTour" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 20,
+          "items": { "$ref": "#/$defs/codeTourStep" }
+        }
+      }
+    },
+    "codeTourStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "title",
+        "guidance",
+        "repositoryId",
+        "path",
+        "language",
+        "startLine",
+        "endLine",
+        "symbol",
+        "excerpt",
+        "contentClassification",
+        "provenance"
+      ],
+      "properties": {
+        "order": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "guidance": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "repositoryId": { "$ref": "#/$defs/identifier" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "commit": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "language": { "enum": ["csharp", "typescript", "html", "scss"] },
+        "startLine": { "type": "integer", "minimum": 1 },
+        "endLine": { "type": "integer", "minimum": 1 },
+        "symbol": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "contentClassification": {
+          "enum": ["public", "internal", "confidential"]
+        },
+        "provenance": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "exampleBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "title", "text"],
+      "properties": {
+        "type": { "const": "example" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 5000 }
+      }
+    },
+    "glossaryLinkBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "term", "definition"],
+      "properties": {
+        "type": { "const": "glossaryLink" },
+        "term": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "definition": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "knowledgeCheckBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "prompt", "assessmentId"],
+      "properties": {
+        "type": { "const": "knowledgeCheck" },
+        "prompt": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "assessmentId": { "$ref": "#/$defs/identifier" }
       }
     }
   }

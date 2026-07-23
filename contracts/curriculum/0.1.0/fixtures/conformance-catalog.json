@@ -16,6 +16,99 @@
       "category": "successful",
       "title": "Representative C# and Angular curriculum",
       "fixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/courses/0/modules/0/lessons/0/blocks",
+          "value": [
+            {
+              "type": "prose",
+              "text": "A safe lesson connects structured explanation to revision-bound evidence."
+            },
+            {
+              "type": "callout",
+              "tone": "information",
+              "title": "Architecture note",
+              "text": "Publishing after persistence creates a durable handoff."
+            },
+            {
+              "type": "diagram",
+              "title": "Order submission flow",
+              "description": "Checkout submits an order to the API, which starts the durable workflow.",
+              "alternativeText": "Angular checkout flows to the Order API and then to the durable workflow.",
+              "labels": ["Angular checkout", "Order API", "Durable workflow"]
+            },
+            {
+              "type": "codeReference",
+              "repositoryId": "order-service",
+              "path": "src/Order.Api/Controllers/OrderController.cs",
+              "branch": "main",
+              "commit": "8f24c1a",
+              "language": "csharp",
+              "startLine": 53,
+              "endLine": 54,
+              "symbol": "OrderController.Create",
+              "excerpt": "await bus.Publish(new OrderSubmitted(order.Id));",
+              "contentClassification": "internal",
+              "explanation": "The controller publishes only after the order is durable.",
+              "provenance": "Captured from the declared order-service snapshot."
+            },
+            {
+              "type": "codeTour",
+              "title": "Checkout to durable order",
+              "steps": [
+                {
+                  "order": 1,
+                  "title": "Submit checkout",
+                  "guidance": "Start where Angular turns the basket into an order command.",
+                  "repositoryId": "storefront",
+                  "path": "src/app/checkout/checkout.service.ts",
+                  "branch": "release/checkout",
+                  "commit": "91be440",
+                  "language": "typescript",
+                  "startLine": 24,
+                  "endLine": 38,
+                  "symbol": "CheckoutService.submit",
+                  "excerpt": "return this.http.post<Order>(url, command);",
+                  "contentClassification": "internal",
+                  "provenance": "Captured from the declared storefront snapshot."
+                },
+                {
+                  "order": 2,
+                  "title": "Publish durable handoff",
+                  "guidance": "Continue where the API publishes work after persistence.",
+                  "repositoryId": "order-service",
+                  "path": "src/Order.Api/Controllers/OrderController.cs",
+                  "branch": "main",
+                  "commit": "8f24c1a",
+                  "language": "csharp",
+                  "startLine": 42,
+                  "endLine": 57,
+                  "symbol": "OrderController.Create",
+                  "excerpt": "await bus.Publish(new OrderSubmitted(order.Id));",
+                  "contentClassification": "internal",
+                  "provenance": "Captured from the declared order-service snapshot."
+                }
+              ]
+            },
+            {
+              "type": "example",
+              "title": "Worked example",
+              "text": "Persist first, publish second."
+            },
+            {
+              "type": "glossaryLink",
+              "term": "Durable order",
+              "definition": "An order committed before asynchronous processing begins."
+            },
+            {
+              "type": "knowledgeCheck",
+              "prompt": "Which boundary makes downstream processing safe to retry?",
+              "assessmentId": "order-workflow-checkpoint"
+            }
+          ]
+        }
+      ],
       "expected": {
         "outcome": "success",
         "issueCodes": []

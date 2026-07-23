@@ -17,9 +17,13 @@ Assessment pools carry selection rules, limits, mappings, grading definitions,
 rationales, and explicitly protected answers. Learning objectives have stable
 identifiers so assessment mappings are validated rather than merely labeled.
 
-Lessons support three allow-listed content blocks: `prose`, `callout`, and
-`codeReference`. Text is rendered as text; arbitrary HTML, scripts, remote
-resources, absolute paths, and path traversal are not supported.
+Lessons support eight allow-listed content blocks: `prose`, `callout`,
+`diagram`, `codeReference`, `codeTour`, `example`, `glossaryLink`, and
+`knowledgeCheck`. Text is rendered as text; arbitrary HTML, scripts, remote
+resources, absolute paths, and path traversal are not supported. Code
+references and ordered tour steps can carry a snapshot branch and commit,
+symbol and line range, supplied excerpt, content classification, learner
+guidance, and explanatory provenance.
 
 `curriculum.schema.json` is the author-facing structural contract. The server adds
 semantic validation for stable identifier uniqueness, repository and

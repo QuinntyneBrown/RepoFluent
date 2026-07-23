@@ -8,6 +8,9 @@ This prerelease establishes the first portable RepoFluent curriculum boundary.
 It includes:
 
 - package, source snapshot, architecture, learning, and assessment models;
+- eight inert, accessible lesson-block discriminators with revision-bound C#
+  and Angular code references and ordered tours;
+- exact-path rejection for active content and undeclared remote resources;
 - stable learning-objective and architecture mappings;
 - protected-answer classification and review-response redaction;
 - JSON Schema 2020-12 plus server-owned semantic validation;

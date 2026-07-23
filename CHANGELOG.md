@@ -31,3 +31,6 @@
 - Immutable curriculum contract release manifest, public checksummed artifact
   retrieval, semantic-version and migration policy, synchronized validation
   codes, and a ten-case executable conformance suite.
+- Eight allow-listed, accessible lesson blocks with revision-bound C# and
+  Angular code tours, supplied excerpt classification and provenance, plus
+  exact-path rejection of active and undeclared remote content.

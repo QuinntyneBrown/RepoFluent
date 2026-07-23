@@ -35,13 +35,42 @@
                 <p class="lesson-prose">{{ block.text }}</p>
               }
               @case ('callout') {
-                <aside class="rf-callout callout">
+                <aside
+                  class="rf-callout callout"
+                  role="complementary"
+                  [attr.aria-label]="block.title"
+                >
                   <span class="callout-mark" aria-hidden="true">↳</span>
                   <div>
                     <strong>{{ block.title }}</strong>
                     <p>{{ block.text }}</p>
                   </div>
                 </aside>
+              }
+              @case ('diagram') {
+                <figure class="lesson-diagram" [attr.aria-label]="block.title">
+                  <div class="lesson-diagram__header">
+                    <div>
+                      <span class="block-kicker">Accessible system map</span>
+                      <strong>{{ block.title }}</strong>
+                    </div>
+                    <span class="rf-badge">described</span>
+                  </div>
+                  <div class="rf-workflow" aria-hidden="true">
+                    @for (label of block.labels; track label; let last = $last) {
+                      <div class="rf-workflow__node">
+                        <strong>{{ label }}</strong>
+                      </div>
+                      @if (!last) {
+                        <i class="rf-workflow__edge"></i>
+                      }
+                    }
+                  </div>
+                  <figcaption>
+                    <span class="rf-visually-hidden">{{ block.alternativeText }}</span>
+                    {{ block.description }}
+                  </figcaption>
+                </figure>
               }
               @case ('codeReference') {
                 <button
@@ -63,6 +92,62 @@
                   </span>
                   <span class="rf-badge">open</span>
                 </button>
+              }
+              @case ('codeTour') {
+                <section class="code-tour" role="region" aria-label="Code tour {{ block.title }}">
+                  <header class="code-tour__header">
+                    <div>
+                      <span class="block-kicker">Multi-step code tour</span>
+                      <h2>{{ block.title }}</h2>
+                    </div>
+                    <span class="rf-badge">{{ block.steps?.length }} steps</span>
+                  </header>
+                  <ol>
+                    @for (step of block.steps; track step.order) {
+                      <li>
+                        <div class="tour-index">{{ step.order.toString().padStart(2, '0') }}</div>
+                        <div class="tour-copy">
+                          <strong
+                            >{{ step.order.toString().padStart(2, '0') }} · {{ step.title }}</strong
+                          >
+                          <p>{{ step.guidance }}</p>
+                          <code>{{ step.repositoryId }} · {{ step.path }}</code>
+                          <small>
+                            {{ step.branch }}&#64;{{ step.commit }} · {{ step.symbol }} · lines
+                            {{ step.startLine }}–{{ step.endLine }} · {{ step.language }}
+                          </small>
+                        </div>
+                      </li>
+                    }
+                  </ol>
+                </section>
+              }
+              @case ('example') {
+                <section class="lesson-example" role="region" [attr.aria-label]="block.title">
+                  <span class="block-kicker">Example</span>
+                  <h2>{{ block.title }}</h2>
+                  <p>{{ block.text }}</p>
+                </section>
+              }
+              @case ('glossaryLink') {
+                <dl class="glossary-block">
+                  <div>
+                    <dt>
+                      <dfn>{{ block.term }}</dfn>
+                    </dt>
+                    <dd role="definition">{{ block.definition }}</dd>
+                  </div>
+                </dl>
+              }
+              @case ('knowledgeCheck') {
+                <section class="knowledge-check" role="region" aria-label="Knowledge check">
+                  <div class="knowledge-check__mark" aria-hidden="true">?</div>
+                  <div>
+                    <span class="block-kicker">Knowledge check</span>
+                    <strong>{{ block.prompt }}</strong>
+                    <small>Assessment · {{ block.assessmentId }}</small>
+                  </div>
+                </section>
               }
               @default {
                 <div class="rf-callout rf-callout--danger block-error" role="status">
@@ -119,19 +204,22 @@
         <div class="source-location">
           <span>Source location</span>
           <strong>{{ block.symbol }}</strong>
-          <p>Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</p>
+          <p>
+            {{ block.branch }}&#64;{{ block.commit }} · Lines {{ block.startLine }}–{{
+              block.endLine
+            }}
+            · {{ block.language }} · {{ label(block.contentClassification) }}
+          </p>
         </div>
-        <div class="source-excerpt" role="note">
+        <div class="source-excerpt" role="region" aria-label="Supplied source excerpt">
           <span class="source-excerpt__line">{{ block.startLine }}</span>
-          <div>
-            <strong>Referenced source is linked by provenance.</strong>
-            <p>The curriculum package does not embed repository source text.</p>
-          </div>
+          <pre class="rf-code"><code>{{ block.excerpt }}</code></pre>
         </div>
         <div class="rf-callout rf-callout--success provenance">
           <span aria-hidden="true">✓</span>
           <div>
             <strong>Provenance · verified</strong>
+            <p>{{ block.provenance }}</p>
             <p>{{ block.explanation }}</p>
           </div>
         </div>

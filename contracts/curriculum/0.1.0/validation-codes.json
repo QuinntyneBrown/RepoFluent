@@ -2,6 +2,11 @@
   "contractVersion": "0.1.0",
   "codes": [
     {
+      "code": "CIC_ACTIVE_CONTENT",
+      "category": "security",
+      "meaning": "A lesson block contains active HTML, script, executable, or macro content."
+    },
+    {
       "code": "CIC_ANSWER_NOT_PROTECTED",
       "category": "assessment-rules",
       "meaning": "An assessment answer is not classified as protected."
@@ -102,9 +107,19 @@
       "meaning": "A required contract value is absent."
     },
     {
+      "code": "CIC_REVISION_MISMATCH",
+      "category": "references",
+      "meaning": "A code reference branch or commit does not match its declared source snapshot."
+    },
+    {
       "code": "CIC_SOURCE_REVISION_REQUIRED",
       "category": "required-fields",
       "meaning": "A source repository has no revision, branch, or commit identity."
+    },
+    {
+      "code": "CIC_UNDECLARED_RESOURCE",
+      "category": "security",
+      "meaning": "A lesson block refers to a remote resource that is not declared by an approved extension."
     },
     {
       "code": "CIC_UNSUPPORTED_ASSESSMENT",
@@ -115,6 +130,16 @@
       "code": "CIC_UNSUPPORTED_BLOCK",
       "category": "types",
       "meaning": "The lesson block type is not allow-listed."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_CALLOUT",
+      "category": "types",
+      "meaning": "The callout tone is not allow-listed."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_CLASSIFICATION",
+      "category": "security",
+      "meaning": "A supplied source excerpt has no supported content classification."
     },
     {
       "code": "CIC_UNSUPPORTED_DIFFICULTY",
@@ -130,6 +155,11 @@
       "code": "CIC_UNSUPPORTED_ITEM",
       "category": "assessment-rules",
       "meaning": "The assessment item type is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_LANGUAGE",
+      "category": "types",
+      "meaning": "A code reference language is not allow-listed."
     },
     {
       "code": "CIC_UNSUPPORTED_RELATIONSHIP",

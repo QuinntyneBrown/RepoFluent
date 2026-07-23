@@ -12,6 +12,7 @@ export * from './lib/performance-budget-adapter';
 export * from './lib/performance-measurement';
 export * from './lib/performance-measurement-profile';
 export * from './lib/renderable-block';
+export * from './lib/renderable-code-tour-step';
 export * from './lib/renderable-learning-objective';
 export * from './lib/renderable-lesson';
 export * from './lib/visualization-capability-adapter';

@@ -41,6 +41,22 @@ before publication and returns a path-addressed loss report. It does not
 silently regenerate identifiers, disclose protected answers, or downgrade
 protected content.
 
+## Safe content and code references
+
+Lesson blocks use the closed discriminator set `prose`, `callout`, `diagram`,
+`codeReference`, `codeTour`, `example`, `glossaryLink`, and `knowledgeCheck`.
+Renderers treat supplied values as text and preserve required diagram
+descriptions. Active HTML, script, executable and macro content is blocked at
+its exact property path. A remote resource is invalid unless a future approved
+extension declares its namespace, criticality, integrity, and retrieval policy.
+
+Code paths are relative to a declared repository. A reference may bind its
+declared branch and commit and carries language, symbol, line range, supplied
+excerpt, content classification, explanation, and provenance. A code tour has
+at least two consecutively ordered steps. Every step repeats enough
+revision-bound reference metadata to validate and render offline without a
+repository provider.
+
 ## Conformance
 
 `fixtures/conformance-catalog.json` declares two successful fixtures and eight

@@ -80,6 +80,11 @@ export class LessonRendererComponent {
     });
   }
 
+  protected label(value: string | undefined): string {
+    if (!value) return '';
+    return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+  }
+
   private readSourceIndex(): number | null {
     const value = this.experiencePlatform.readContext('source');
     if (value === null) return null;

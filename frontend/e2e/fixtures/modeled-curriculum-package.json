@@ -127,11 +127,16 @@
                   "type": "codeReference",
                   "repositoryId": "order-service",
                   "path": "src/Order.Api/Controllers/OrderController.cs",
+                  "branch": "main",
+                  "commit": "8f24c1a",
                   "language": "csharp",
                   "startLine": 42,
                   "endLine": 57,
                   "symbol": "OrderController.Create",
-                  "explanation": "The controller validates, persists, publishes, and returns."
+                  "excerpt": "await bus.Publish(new OrderSubmitted(order.Id));",
+                  "contentClassification": "internal",
+                  "explanation": "The controller validates, persists, publishes, and returns.",
+                  "provenance": "Captured from the declared order-service snapshot."
                 }
               ]
             }

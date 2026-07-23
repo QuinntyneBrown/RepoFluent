@@ -135,7 +135,7 @@ export class CurriculumPageComponent {
   }
 
   private async pollUntilValidated(id: string): Promise<void> {
-    for (let attempt = 0; attempt < 50; attempt++) {
+    for (let attempt = 0; attempt < 150; attempt++) {
       const value = await firstValueFrom(this.api.getImport(id));
       this.status.set(value);
       if (value.status === 'Draft' || value.status === 'ValidationFailed') return;

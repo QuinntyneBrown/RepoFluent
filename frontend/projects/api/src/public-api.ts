@@ -4,6 +4,7 @@ export * from './lib/assessment';
 export * from './lib/assessment-item';
 export * from './lib/assessment-mapping';
 export * from './lib/assessment-selection';
+export * from './lib/code-tour-step';
 export * from './lib/contract-artifact';
 export * from './lib/contract-compatibility';
 export * from './lib/contract-fixture-summary';
