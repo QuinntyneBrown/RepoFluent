@@ -98,6 +98,19 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         var entity = await dbContext.CurriculumImports.SingleAsync(
             item => item.TenantId == record.TenantId && item.Id == record.Id,
             cancellationToken);
+        var reviewDecisionJson = record.ReviewDecision is null
+            ? null
+            : JsonSerializer.Serialize(record.ReviewDecision, SerializerOptions);
+        if (reviewDecisionJson is not null
+            && entity.ReviewDecisionJson is not null
+            && !string.Equals(
+                reviewDecisionJson,
+                entity.ReviewDecisionJson,
+                StringComparison.Ordinal))
+        {
+            throw new ConcurrentReviewDecisionException();
+        }
+
         entity.Status = record.Status.ToString();
         entity.Title = record.Title;
         entity.PackageId = record.PackageId;
@@ -113,10 +126,16 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         entity.WarningAcknowledgementJson = record.WarningAcknowledgement is null
             ? null
             : JsonSerializer.Serialize(record.WarningAcknowledgement, SerializerOptions);
+        entity.ReviewDecisionJson = reviewDecisionJson;
         AddAudit(record.TenantId, actorId, auditAction, record.Id.ToString(), record.CorrelationId);
         try
         {
             await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException) when (record.ReviewDecision is not null)
+        {
+            dbContext.ChangeTracker.Clear();
+            throw new ConcurrentReviewDecisionException();
         }
         catch (DbUpdateException exception) when (
             exception.InnerException is SqliteException { SqliteErrorCode: 19 }
@@ -232,7 +251,8 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             ValidationIssuesJson = "[]",
             CreatedAt = record.CreatedAt,
             ValidationReportJson = null,
-            WarningAcknowledgementJson = null
+            WarningAcknowledgementJson = null,
+            ReviewDecisionJson = null
         };
 
     private static CurriculumRecord ToRecord(CurriculumImportEntity entity) =>
@@ -266,6 +286,11 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
                 ? null
                 : JsonSerializer.Deserialize<WarningAcknowledgement>(
                     entity.WarningAcknowledgementJson,
+                    SerializerOptions),
+            ReviewDecision = entity.ReviewDecisionJson is null
+                ? null
+                : JsonSerializer.Deserialize<ReviewDecision>(
+                    entity.ReviewDecisionJson,
                     SerializerOptions)
         };
 }

@@ -3,10 +3,10 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Preview and review a draft
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+Person(participant, "Authorized review participant", "Inspects a draft through learner-equivalent presentation")
+Person(reviewer, "Curriculum reviewer", "Approves or rejects one exact package and validation report")
+System(repofluent, "RepoFluent", "Protects draft answers and records one immutable tenant review decision")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(participant, repofluent, "Previews authorized draft", "HTTPS")
+Rel(reviewer, repofluent, "Acknowledges warnings and records decision", "HTTPS")
 @enduml

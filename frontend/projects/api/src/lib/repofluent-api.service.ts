@@ -36,10 +36,31 @@ export class RepoFluentApiService {
     return this.http.get<Preview>(`/api/curriculum-drafts/${id}/preview`);
   }
 
-  approve(id: string, checksum: string): Observable<ImportStatus> {
+  approve(
+    id: string,
+    checksum: string,
+    validationIssueChecksum: string,
+    rationale: string,
+  ): Observable<ImportStatus> {
     return this.http.post<ImportStatus>(`/api/curriculum-drafts/${id}/review-decisions`, {
       decision: 'approved',
       checksum,
+      validationIssueChecksum,
+      rationale,
+    });
+  }
+
+  reject(
+    id: string,
+    checksum: string,
+    validationIssueChecksum: string,
+    rationale: string,
+  ): Observable<ImportStatus> {
+    return this.http.post<ImportStatus>(`/api/curriculum-drafts/${id}/review-decisions`, {
+      decision: 'rejected',
+      checksum,
+      validationIssueChecksum,
+      rationale,
     });
   }
 

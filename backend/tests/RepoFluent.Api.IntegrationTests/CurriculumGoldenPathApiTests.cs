@@ -19,13 +19,21 @@ public sealed class CurriculumGoldenPathApiTests
         SetPersona(client, "author");
         var selfReview = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
-            new ReviewRequest("approved", draft.Checksum));
+            new ReviewRequest(
+                "approved",
+                draft.Checksum,
+                draft.ValidationReport!.IssueChecksum,
+                "Author attempted review."));
         Assert.Equal(HttpStatusCode.Forbidden, selfReview.StatusCode);
 
         SetPersona(client, "reviewer");
         var staleReview = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
-            new ReviewRequest("approved", "sha256:stale"));
+            new ReviewRequest(
+                "approved",
+                "sha256:stale",
+                draft.ValidationReport!.IssueChecksum,
+                "Reviewer checked the draft."));
         Assert.Equal(HttpStatusCode.Conflict, staleReview.StatusCode);
 
         var acknowledgementResponse = await client.PostAsJsonAsync(
@@ -38,7 +46,11 @@ public sealed class CurriculumGoldenPathApiTests
 
         var approvedResponse = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
-            new ReviewRequest("approved", draft.Checksum));
+            new ReviewRequest(
+                "approved",
+                draft.Checksum,
+                draft.ValidationReport!.IssueChecksum,
+                "Reviewer checked the exact draft and report."));
         approvedResponse.EnsureSuccessStatusCode();
 
         SetPersona(client, "reviewer");

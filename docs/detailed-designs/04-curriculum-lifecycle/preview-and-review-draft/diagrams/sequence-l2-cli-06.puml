@@ -5,53 +5,52 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "PreviewAndReviewDraftPage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Authorized review participant" as reviewParticipant
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "LessonRendererComponent" as renderer
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "PreviewAndReviewDraftController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "PreviewAndReviewDraftHandler" as handler
-  participant "PreviewAndReviewDraftPolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "PackagePresenter" as presenter
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IPreviewAndReviewDraftRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start preview and review a draft
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch PreviewAndReviewDraftRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-06
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+reviewParticipant -> page : Select Preview draft
+page -> client : Request current import preview
+client -> endpoints : GET /api/curriculum-drafts/{id}/preview
+endpoints -> workflow : GetPreviewAsync authorized actor
+workflow -> workflow : Apply L2-CLI-06 role and Draft or Approved gate
+workflow -> port : Load tenant lifecycle record
+port -> store : Read draft, validation report, and package
+store --> port : Authorized lifecycle row
+port --> workflow : Exact draft evidence
+workflow -> presenter : Remove protected answer values
+presenter --> workflow : Review-safe package
+workflow --> endpoints : Preview with package and issue checksums
+endpoints --> client : 200 typed preview
+client --> page : Protected package and draft evidence
+page -> renderer : Render first lesson through production component
+renderer --> page : Responsive content and shared fallbacks
+page --> reviewParticipant : Draft version, safeguards, and lesson
+
+note over workflow,store
+  Preview performs no assignment,
+  progress, or assessment write.
+end note
+
+alt Learner or unauthorized actor
+  endpoints -> workflow : GetPreviewAsync unauthorized actor
+  workflow --> endpoints : IAM_ROLE_REQUIRED
+  endpoints --> client : 403 Problem Details
+  client --> page : Safe access error
+  page --> reviewParticipant : No draft content
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
 @enduml

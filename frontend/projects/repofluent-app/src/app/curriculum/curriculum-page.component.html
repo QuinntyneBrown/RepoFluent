@@ -209,6 +209,64 @@
           </section>
         }
 
+        @if (current.reviewDecision; as decision) {
+          <section class="review-decision" aria-label="Review decision evidence">
+            <div class="review-decision__heading">
+              <div>
+                <p class="step">Immutable decision record</p>
+                <h3>Exact draft review</h3>
+              </div>
+              <span
+                class="rf-status"
+                [class.rf-status--success]="decision.decision === 'Approved'"
+                [class.rf-status--warning]="decision.decision === 'Rejected'"
+              >
+                {{ decision.decision }}
+              </span>
+            </div>
+            <div class="review-decision__grid">
+              <article>
+                <span>Reviewer</span>
+                <strong>{{ decision.reviewerId }}</strong>
+              </article>
+              <article>
+                <span>Package</span>
+                <strong>{{ decision.packageId }}</strong>
+              </article>
+              <article>
+                <span>Version candidate</span>
+                <strong>{{ decision.packageVersion }}</strong>
+              </article>
+              <article>
+                <span>Warning gate</span>
+                <strong>
+                  {{
+                    decision.warningAcknowledgement
+                      ? 'Warning acknowledgement bound'
+                      : 'No warning acknowledgement required'
+                  }}
+                </strong>
+              </article>
+            </div>
+            <dl class="review-decision__checksums">
+              <div>
+                <dt>Package checksum</dt>
+                <dd>{{ decision.packageChecksum }}</dd>
+              </div>
+              <div>
+                <dt>Validation report</dt>
+                <dd>{{ decision.validationIssueChecksum }}</dd>
+              </div>
+            </dl>
+            @if (decision.rationale) {
+              <p class="review-decision__rationale">
+                <span>Rationale</span>
+                {{ decision.rationale }}
+              </p>
+            }
+          </section>
+        }
+
         @if (current.issues.length) {
           <div
             class="issues"
@@ -263,6 +321,21 @@
           </div>
         }
 
+        @if (current.allowedActions.includes('review')) {
+          <label class="rf-field review-rationale">
+            <span class="rf-field__label">Review rationale</span>
+            <textarea
+              class="rf-input"
+              rows="3"
+              [(ngModel)]="reviewRationale"
+              placeholder="Record the evidence checked or explain a rejection."
+            ></textarea>
+            <span class="rf-field__hint">
+              Stored with this package checksum and validation report.
+            </span>
+          </label>
+        }
+
         <div class="actions">
           @if (current.status === 'Draft' || current.status === 'Approved') {
             <button class="rf-button" type="button" (click)="openPreview()">
@@ -275,6 +348,14 @@
           @if (current.allowedActions.includes('review')) {
             <button class="rf-button rf-button--primary" type="button" (click)="approve()">
               Approve this checksum
+            </button>
+            <button
+              class="rf-button"
+              type="button"
+              [disabled]="!reviewRationale.trim()"
+              (click)="reject()"
+            >
+              Reject this checksum
             </button>
           }
           @if (current.allowedActions.includes('publish')) {
@@ -327,13 +408,36 @@
 
 @if (preview(); as draft) {
   <app-contract-model-workbench [package]="draft.package" />
-  <section class="preview" aria-label="Draft preview workspace">
+  <section class="preview" aria-label="Draft preview evidence">
     <div class="preview-heading">
       <div>
         <p class="step">Human review</p>
         <h2 id="preview-title">Learner-equivalent preview</h2>
       </div>
-      <div class="draft-banner">Draft preview</div>
+      <div class="draft-banner">Draft {{ draft.package.version }}</div>
+    </div>
+    <div class="preview-safeguards" aria-label="Preview safeguards">
+      <article>
+        <span>Presentation path</span>
+        <strong>Production renderer</strong>
+      </article>
+      <article>
+        <span>Learner state</span>
+        <strong>Progress writes disabled</strong>
+      </article>
+      <article>
+        <span>Assessment state</span>
+        <strong>Assessment writes disabled</strong>
+      </article>
+      <article>
+        <span>Answer policy</span>
+        <strong>Protected answers withheld</strong>
+      </article>
+    </div>
+    <div class="preview-receipt">
+      <span>Draft preview</span>
+      <code>{{ draft.packageChecksum }}</code>
+      <code>{{ draft.validationReport.issueChecksum }}</code>
     </div>
     <rf-lesson-renderer [lesson]="draft.package.courses[0].modules[0].lessons[0]" />
   </section>

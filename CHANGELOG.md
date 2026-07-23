@@ -63,3 +63,6 @@
 - Idempotent curriculum draft import with tenant package-version uniqueness,
   exact-checksum receipt replay, changed-byte conflicts, correlated conversion
   attempts, and retry-safe complete draft persistence.
+- Learner-equivalent draft preview through the production renderer with
+  protected answers and no learner-state writes, plus immutable review decisions
+  bound to tenant, version, checksums, warning evidence, time, and rationale.

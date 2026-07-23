@@ -35,7 +35,9 @@ export class CurriculumImportsPage {
     }
 
     await this.page.getByRole('button', { name: 'Approve this checksum' }).click();
-    await expect(this.page.getByText('Approved', { exact: true })).toBeVisible();
+    const decision = this.page.getByRole('region', { name: 'Review decision evidence' });
+    await expect(decision).toBeVisible();
+    await expect(decision).toContainText('Approved');
   }
 
   async publish(): Promise<void> {

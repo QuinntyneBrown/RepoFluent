@@ -41,4 +41,6 @@ public sealed class CurriculumRecord
     public ValidationReport? ValidationReport { get; set; }
 
     public WarningAcknowledgement? WarningAcknowledgement { get; set; }
+
+    public ReviewDecision? ReviewDecision { get; set; }
 }

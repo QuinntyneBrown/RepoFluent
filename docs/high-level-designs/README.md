@@ -173,9 +173,12 @@ idempotent draft conversion, and asynchronous validation hosted inside the API.
 Tenant package-version uniqueness converges exact replays and retains retry
 attempt evidence on one lifecycle record. Versioned reports bind
 contract, validator, package, and issue checksums before warning acknowledgement
-and approval. Curriculum contract `0.1.0` and an acceptance-tested
-curriculum-to-learning path complete the current foundation. This foundation
-does not constitute the production infrastructure shown in the deployment view.
+and approval. Draft preview uses the production renderer without learner-state
+writes. Immutable decisions bind reviewer, tenant, version, checksums, warning
+acknowledgement, time, and rationale. Curriculum contract `0.1.0` and an
+acceptance-tested curriculum-to-learning path complete the current foundation.
+This foundation does not constitute the production infrastructure shown in the
+deployment view.
 
 ## Diagrams
 

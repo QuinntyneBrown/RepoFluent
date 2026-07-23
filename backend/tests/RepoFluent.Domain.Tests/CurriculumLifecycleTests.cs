@@ -41,6 +41,19 @@ public sealed class CurriculumLifecycleTests
     }
 
     [Fact]
+    public void AuthorWithExplicitReviewerGrantCanReviewTheirPackage()
+    {
+        var lifecycle = CurriculumLifecycle.Receive(Guid.NewGuid(), "author");
+        lifecycle.BeginValidation();
+        lifecycle.CompleteValidation(hasBlockingIssues: false);
+
+        lifecycle.Review("author", isApproved: true, canReviewOwnPackage: true);
+
+        Assert.Equal(CurriculumStatus.Approved, lifecycle.Status);
+        Assert.Equal("author", lifecycle.ReviewerId);
+    }
+
+    [Fact]
     public void PublishingIsIdempotentAfterApproval()
     {
         var lifecycle = CurriculumLifecycle.Receive(Guid.NewGuid(), "author");

@@ -29,6 +29,7 @@ export class CurriculumPageComponent {
   protected readonly lastReceiptWasReplay = signal(false);
   protected learnerId = 'learner';
   protected isRequired = false;
+  protected reviewRationale = '';
 
   constructor() {
     effect(() => {
@@ -90,13 +91,45 @@ export class CurriculumPageComponent {
 
   protected async approve(): Promise<void> {
     const current = this.status();
-    if (!current) return;
+    const report = current?.validationReport;
+    if (!current || !report) return;
     await this.run(
       async () => {
-        this.status.set(await firstValueFrom(this.api.approve(current.id, current.checksum)));
+        this.status.set(
+          await firstValueFrom(
+            this.api.approve(
+              current.id,
+              current.checksum,
+              report.issueChecksum,
+              this.reviewRationale,
+            ),
+          ),
+        );
       },
       'Approving curriculum checksum',
       'Curriculum checksum approved',
+    );
+  }
+
+  protected async reject(): Promise<void> {
+    const current = this.status();
+    const report = current?.validationReport;
+    if (!current || !report) return;
+    await this.run(
+      async () => {
+        this.status.set(
+          await firstValueFrom(
+            this.api.reject(
+              current.id,
+              current.checksum,
+              report.issueChecksum,
+              this.reviewRationale,
+            ),
+          ),
+        );
+      },
+      'Rejecting curriculum checksum',
+      'Curriculum checksum rejected',
     );
   }
 

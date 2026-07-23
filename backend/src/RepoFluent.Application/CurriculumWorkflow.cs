@@ -207,9 +207,15 @@ public sealed class CurriculumWorkflow(
             throw Conflict("CLI_PREVIEW_GATE", "Only a valid draft can be previewed.");
         }
 
+        var validationReport = record.ValidationReport
+            ?? throw Conflict(
+                "CLI_VALIDATION_REPORT_REQUIRED",
+                "The validation report is not available.");
         return new(
             record.Id,
             true,
+            record.Checksum,
+            validationReport,
             PackagePresenter.ForReview(PackageValidator.ReadTrusted(record.RawPackage)));
     }
 
@@ -221,9 +227,30 @@ public sealed class CurriculumWorkflow(
     {
         RequireRole(actor, "Reviewer");
         var record = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        if (record.ReviewDecision is not null)
+        {
+            throw Conflict(
+                "CLI_REVIEW_DECISION_IMMUTABLE",
+                "The draft already has an immutable review decision.");
+        }
+
         if (!string.Equals(record.Checksum, request.Checksum, StringComparison.Ordinal))
         {
             throw Conflict("CLI_STALE_CHECKSUM", "The review checksum no longer matches the draft.");
+        }
+
+        var report = record.ValidationReport
+            ?? throw Conflict(
+                "CLI_VALIDATION_REPORT_REQUIRED",
+                "The validation report is not available.");
+        if (!string.Equals(
+                report.IssueChecksum,
+                request.ValidationIssueChecksum,
+                StringComparison.Ordinal))
+        {
+            throw Conflict(
+                "CLI_STALE_VALIDATION_REPORT",
+                "The review validation report no longer matches the draft.");
         }
 
         var isApproved = string.Equals(request.Decision, "approved", StringComparison.OrdinalIgnoreCase);
@@ -231,6 +258,14 @@ public sealed class CurriculumWorkflow(
         if (!isApproved && !isRejected)
         {
             throw new WorkflowException(400, "CLI_INVALID_DECISION", "Decision must be approved or rejected.");
+        }
+
+        if (isRejected && string.IsNullOrWhiteSpace(request.Rationale))
+        {
+            throw new WorkflowException(
+                400,
+                "CLI_REVIEW_RATIONALE_REQUIRED",
+                "A rationale is required when rejecting a draft.");
         }
 
         if (isApproved && HasUnacknowledgedWarnings(record))
@@ -241,11 +276,36 @@ public sealed class CurriculumWorkflow(
         }
 
         var lifecycle = Rehydrate(record);
-        TryTransition(() => lifecycle.Review(actor.UserId, isApproved));
+        TryTransition(() => lifecycle.Review(actor.UserId, isApproved, canReviewOwnPackage: true));
         record.Status = lifecycle.Status;
         record.ReviewerId = lifecycle.ReviewerId;
         record.ReviewedAt = timeProvider.GetUtcNow();
-        await store.SaveImportAsync(record, isApproved ? "curriculum.approved" : "curriculum.rejected", actor.UserId, cancellationToken);
+        record.ReviewDecision = new(
+            actor.UserId,
+            actor.TenantId,
+            record.PackageId,
+            record.PackageVersion,
+            record.Checksum,
+            report.IssueChecksum,
+            record.Status.ToString(),
+            record.ReviewedAt.Value,
+            record.WarningAcknowledgement,
+            string.IsNullOrWhiteSpace(request.Rationale) ? null : request.Rationale.Trim());
+        try
+        {
+            await store.SaveImportAsync(
+                record,
+                isApproved ? "curriculum.approved" : "curriculum.rejected",
+                actor.UserId,
+                cancellationToken);
+        }
+        catch (ConcurrentReviewDecisionException)
+        {
+            throw Conflict(
+                "CLI_REVIEW_DECISION_IMMUTABLE",
+                "The draft already has an immutable review decision.");
+        }
+
         return ToStatus(actor, record);
     }
 
@@ -468,7 +528,8 @@ public sealed class CurriculumWorkflow(
             record.WarningAcknowledgement,
             record.PackageId,
             record.PackageVersion,
-            record.ValidationAttemptCount);
+            record.ValidationAttemptCount,
+            record.ReviewDecision);
     }
 
     private static bool HasUnacknowledgedWarnings(CurriculumRecord record)

@@ -39,4 +39,6 @@ internal sealed class CurriculumImportEntity
     public string? ValidationReportJson { get; set; }
 
     public string? WarningAcknowledgementJson { get; set; }
+
+    public string? ReviewDecisionJson { get; set; }
 }

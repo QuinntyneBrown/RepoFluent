@@ -11,48 +11,75 @@ skinparam class {
 }
 title Class structure — Preview and review a draft
 
-class PreviewAndReviewDraftRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class CurriculumWorkflow {
+  +GetPreviewAsync(actor, id): Task<Preview>
+  +ReviewAsync(actor, id, request): Task<ImportStatus>
 }
 
-class PreviewAndReviewDraftResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class Preview {
+  +Guid ImportId
+  +bool IsDraft
+  +string PackageChecksum
+  +ValidationReport ValidationReport
+  +Package Package
 }
 
-class PreviewAndReviewDraftRecord {
-  +string Id
+class ReviewRequest {
+  +string Decision
+  +string Checksum
+  +string ValidationIssueChecksum
+  +string? Rationale
+}
+
+class ReviewDecision {
+  +string ReviewerId
   +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: PreviewAndReviewDraftResult): void
+  +string PackageId
+  +string PackageVersion
+  +string PackageChecksum
+  +string ValidationIssueChecksum
+  +string Decision
+  +DateTimeOffset DecidedAt
+  +WarningAcknowledgement? WarningAcknowledgement
+  +string? Rationale
 }
 
-class PreviewAndReviewDraftPolicy {
-  +Evaluate(request: PreviewAndReviewDraftRequest, current: PreviewAndReviewDraftRecord): PreviewAndReviewDraftResult
+class CurriculumRecord {
+  +Guid Id
+  +string TenantId
+  +string Checksum
+  +CurriculumStatus Status
+  +ValidationReport? ValidationReport
+  +WarningAcknowledgement? WarningAcknowledgement
+  +ReviewDecision? ReviewDecision
 }
 
-interface IPreviewAndReviewDraftRepository {
-  +Load(scopeId: string, targetId: string): Task<PreviewAndReviewDraftRecord>
-  +Save(record: PreviewAndReviewDraftRecord, expectedVersion: long): Task
+class PackagePresenter {
+  {static} +ForReview(package): Package
 }
 
-class PreviewAndReviewDraftHandler {
-  +Handle(request: PreviewAndReviewDraftRequest): Task<PreviewAndReviewDraftResult>
+class CurriculumLifecycle {
+  +Review(reviewerId, isApproved, canReviewOwnPackage): void
 }
 
-PreviewAndReviewDraftHandler ..> PreviewAndReviewDraftRequest : handles
-PreviewAndReviewDraftHandler ..> PreviewAndReviewDraftPolicy : invokes
-PreviewAndReviewDraftHandler ..> IPreviewAndReviewDraftRepository : uses
-IPreviewAndReviewDraftRepository --> PreviewAndReviewDraftRecord : loads / saves
-PreviewAndReviewDraftPolicy ..> PreviewAndReviewDraftRecord : evaluates
-PreviewAndReviewDraftPolicy ..> PreviewAndReviewDraftResult : creates
-PreviewAndReviewDraftRecord ..> PreviewAndReviewDraftResult : applies
+interface ICurriculumStore {
+  +GetImportAsync(tenantId, id): Task<CurriculumRecord?>
+  +SaveImportAsync(record, action, actorId): Task
+}
+
+class CurriculumStore
+class ConcurrentReviewDecisionException
+
+CurriculumWorkflow ..> Preview : returns
+CurriculumWorkflow ..> ReviewRequest : validates
+CurriculumWorkflow ..> ReviewDecision : creates
+CurriculumWorkflow ..> PackagePresenter : protects answers through
+CurriculumWorkflow --> CurriculumLifecycle : transitions through
+CurriculumWorkflow --> ICurriculumStore : loads and saves through
+ICurriculumStore <|.. CurriculumStore
+CurriculumStore ..> ConcurrentReviewDecisionException : raises on decision race
+CurriculumWorkflow ..> ConcurrentReviewDecisionException : converts to immutable conflict
+ICurriculumStore --> CurriculumRecord : stores
+CurriculumRecord *-- ReviewDecision
+ReviewDecision o-- "0..1" WarningAcknowledgement
 @enduml

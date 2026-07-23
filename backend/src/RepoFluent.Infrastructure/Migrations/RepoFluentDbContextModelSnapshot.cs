@@ -135,6 +135,10 @@ namespace RepoFluent.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ReviewDecisionJson")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTimeOffset?>("ReviewedAt")
                         .HasColumnType("TEXT");
 

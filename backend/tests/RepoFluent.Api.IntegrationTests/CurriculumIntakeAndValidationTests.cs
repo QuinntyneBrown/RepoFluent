@@ -48,7 +48,11 @@ public sealed class CurriculumIntakeAndValidationTests
         SetPersona(client, "reviewer");
         var gatedReview = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
-            new ReviewRequest("approved", draft.Checksum));
+            new ReviewRequest(
+                "approved",
+                draft.Checksum,
+                report.IssueChecksum,
+                "Reviewed the exact draft."));
         var gatedProblem = await gatedReview.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal(HttpStatusCode.Conflict, gatedReview.StatusCode);
         Assert.Equal(

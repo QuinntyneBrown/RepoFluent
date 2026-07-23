@@ -92,7 +92,12 @@ export class ResponsiveNavigationPage {
       `${this.apiBaseUrl}/curriculum-drafts/${receipt.id}/review-decisions`,
       {
         headers: this.personaHeaders('reviewer'),
-        data: { decision: 'approved', checksum: draft!.checksum },
+        data: {
+          decision: 'approved',
+          checksum: draft!.checksum,
+          validationIssueChecksum: draft!.validationReport.issueChecksum,
+          rationale: 'Reviewed production rendering and the exact validation evidence.',
+        },
       },
     );
     expect(review.ok()).toBeTruthy();

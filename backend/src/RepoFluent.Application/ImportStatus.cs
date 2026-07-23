@@ -15,4 +15,5 @@ public sealed record ImportStatus(
     WarningAcknowledgement? WarningAcknowledgement,
     string PackageId,
     string PackageVersion,
-    int ValidationAttemptCount);
+    int ValidationAttemptCount,
+    ReviewDecision? ReviewDecision);

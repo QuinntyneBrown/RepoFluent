@@ -27,11 +27,11 @@ and deployment views](../) define the shared runtime around this module.
 
 | Deployment unit | Component | Responsibility | Delivery state |
 | --- | --- | --- | --- |
-| `repofluent-app` | `Curriculum Workspace` | Presents upload, validation, preview, review, publication, comparison, and retirement | Intake evidence, draft identity, replay, and warning gate implemented |
-| `repofluent-app` | `Learner-equivalent Preview` | Renders a draft through production lesson components and access policy | Foundation implemented |
-| `RepoFluent.Api` | `CurriculumEndpoints` | Exposes role-gated lifecycle commands and status queries | Intake, status, acknowledgement, and golden path implemented |
-| `RepoFluent.Api` | `CurriculumWorkflow` | Coordinates authorization, state transitions, persistence, and audit evidence | Intake, idempotent draft import, validation reports, warning gates, and golden path implemented |
-| `RepoFluent.Api` | `CurriculumLifecycle` | Enforces legal status transitions and immutable publication | Foundation implemented |
+| `repofluent-app` | `Curriculum Workspace` | Presents upload, validation, preview, review, publication, comparison, and retirement | Intake, draft identity, replay, preview, warning gate, and review evidence implemented |
+| `repofluent-app` | `Learner-equivalent Preview` | Renders a draft through production lesson components and access policy | Production renderer, protected answers, draft context, and write suppression implemented |
+| `RepoFluent.Api` | `CurriculumEndpoints` | Exposes role-gated lifecycle commands and status queries | Intake, status, preview, acknowledgement, review decision, and golden path implemented |
+| `RepoFluent.Api` | `CurriculumWorkflow` | Coordinates authorization, state transitions, persistence, and audit evidence | Intake, idempotent import, validation, preview, warning gates, and immutable review implemented |
+| `RepoFluent.Api` | `CurriculumLifecycle` | Enforces legal status transitions and immutable publication | Review grant and publication foundation implemented |
 | `RepoFluent.Worker` | `CurriculumValidationProcessor` | Scans, validates, normalizes, and imports packages idempotently | API-hosted retryable import and versioned validation implemented |
 | `RepoFluent.Worker` | `PublicationProjector` | Builds learner and search projections after publication | Target platform |
 
@@ -60,7 +60,7 @@ and deployment views](../) define the shared runtime around this module.
 - The current API-hosted validation loop moves to `RepoFluent.Worker` for production isolation and independent scaling.
 - Semantic comparison and visual editing remain post-foundation capabilities within the same lifecycle boundary.
 
-`CurriculumEndpoints`, `CurriculumWorkflow`, `PackageIntakeScanner`, `PackageValidator`, `CurriculumStore`, EF Core migrations, and `CurriculumValidationWorker` implement the intake and golden-path foundation with SQLite. Tenant package-version uniqueness converges identical uploads and rejects changed bytes. Retry attempts remain attached to one lifecycle record. Reports bind contract, validator, package, and issue checksums. Reviewer acknowledgements bind the exact warning set before approval. Production infrastructure and the separate worker executable remain target architecture.
+`CurriculumEndpoints`, `CurriculumWorkflow`, `PackageIntakeScanner`, `PackageValidator`, `PackagePresenter`, `CurriculumStore`, EF Core migrations, and `CurriculumValidationWorker` implement the lifecycle foundation with SQLite. Tenant package-version uniqueness converges identical uploads and rejects changed bytes. Retry attempts remain attached to one lifecycle record. Reports bind contract, validator, package, and issue checksums. Preview removes protected answers and performs no learner-state write. `ReviewDecision` binds reviewer, tenant, version, decision, checksums, warning acknowledgement, time, and rationale once. Production infrastructure and the separate worker executable remain target architecture.
 
 ## Diagrams
 

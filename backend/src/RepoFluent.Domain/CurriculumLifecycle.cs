@@ -48,10 +48,10 @@ public sealed class CurriculumLifecycle
         Status = hasBlockingIssues ? CurriculumStatus.ValidationFailed : CurriculumStatus.Draft;
     }
 
-    public void Review(string reviewerId, bool isApproved)
+    public void Review(string reviewerId, bool isApproved, bool canReviewOwnPackage = false)
     {
         Require(CurriculumStatus.Draft, "Only a valid draft can be reviewed.");
-        if (string.Equals(AuthorId, reviewerId, StringComparison.Ordinal))
+        if (!canReviewOwnPackage && string.Equals(AuthorId, reviewerId, StringComparison.Ordinal))
         {
             throw new CurriculumLifecycleException("An author cannot approve their own package.");
         }
