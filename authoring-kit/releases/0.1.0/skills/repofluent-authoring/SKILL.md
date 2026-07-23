@@ -14,12 +14,17 @@ revision, exclusions, output location, and data-handling constraints.
 3. Run `node scripts/preflight.mjs <scope.json>` and stop on any blocking
    finding.
 4. Read `contracts/ICD.md` and `contracts/curriculum.schema.json`.
-5. Follow `prompts/generate-curriculum.md`.
-6. Use `examples/valid/order-processing.json` as a shape example, not as source
+5. Read `guides/citations-and-uncertainty.md`.
+6. Follow `prompts/generate-curriculum.md`.
+7. Use `examples/valid/order-processing.json` as a shape example, not as source
    evidence.
-7. Write the generated package to the declared output location.
-8. Run `node scripts/validate.mjs <package.json>`.
-9. Return validation issues with stable paths. Do not include source excerpts,
+8. Write a structured evidence report that binds each claim and objective to
+   the approved snapshot and preserves material uncertainty in the package.
+9. Run
+   `node scripts/validate-evidence.mjs <evidence-report.json> <scope.json>`.
+10. Write the generated package to the declared output location.
+11. Run `node scripts/validate.mjs <package.json>`.
+12. Return validation issues with stable paths. Do not include source excerpts,
    answers, secrets, or personal data in issue messages.
 
 Network access is unnecessary for schema resolution and validation. Optional

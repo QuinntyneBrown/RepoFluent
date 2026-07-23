@@ -9,49 +9,41 @@ skinparam rectangle {
   BorderColor #344054
   FontColor #101828
 }
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "CiteSourcesAndUncertaintyCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum authoring agent" as agent
+box "Frontend — Acquired authoring-kit command" #E0F2FE
+  participant "validate-evidence.mjs" as command
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "CiteSourcesAndUncertaintyController" as controller
+box "Backend — Agent Authoring Kit Application and Domain" #D1FADF
+  participant "Uncertainty validator" as uncertainty
+  participant "Citation resolver" as citations
+  participant "Report writer" as report
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "CiteSourcesAndUncertaintyHandler" as handler
-  participant "CiteSourcesAndUncertaintyPolicy" as policy
+box "Backend — Evidence report Infrastructure" #FFF4E5
+  collections "Structured uncertainty report" as ledger
+  database "Approved repository snapshot" as repository
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "ICiteSourcesAndUncertaintyRepository" as repository
-  database "Authoring workspace" as store
-end box
-actor -> entry : Start cite sources and uncertainty
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch CiteSourcesAndUncertaintyRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-06
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+agent -> command : Validate evidence report
+command -> ledger : Read confidence and uncertainty collections
+ledger --> command : Assumptions, conflicts, missing context,\nomissions, and unresolved questions
+command -> uncertainty : Apply L2-AAK-06
+loop Every uncertainty entry
+  uncertainty -> uncertainty : Check confidence, material decision,\nand related claim identifiers
+  alt Entry is a conflict
+    uncertainty -> citations : Require at least two citations
+    citations -> repository : Verify each approved snapshot source
+    repository --> citations : Source bytes
+    citations --> uncertainty : Valid sources or safe findings
+  end
+  alt Entry is material and represented in package
+    uncertainty -> report : Count visible package representation
+  else Material entry lacks package representation
+    uncertainty -> report : AAK_UNCERTAINTY_UNREPRESENTED\nat exact JSON path
+  end
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+report --> command : Counts and safe findings
+command --> agent : valid=true + exit 0
+opt Blocking finding exists
+  command --> agent : valid=false + exit 1
+end
 @enduml

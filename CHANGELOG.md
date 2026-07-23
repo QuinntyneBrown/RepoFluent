@@ -46,3 +46,5 @@
 - Deny-by-default authoring scope preflight with root-to-directory repository
   guidance, declared-source enforcement, explicit exclusions, and redacted
   secret-pattern stops before analysis.
+- Snapshot-bound authoring citations with explicit claim classification and an
+  offline uncertainty ledger that blocks unrepresented material conflicts.

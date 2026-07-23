@@ -36,6 +36,18 @@ exclusions, requires the repository revision and document scope, and scans the
 effective files for suspected credentials. A blocking report contains paths and
 safe codes but not the suspected value.
 
+Validate source associations and uncertainty before package validation:
+
+```sh
+node scripts/validate-evidence.mjs \
+  examples/evidence/valid-evidence-report.json \
+  examples/scope/approved-scope.json
+```
+
+The command reruns scope preflight, binds citations to repository revisions,
+effective paths, file hashes, and line ranges, then requires structured material
+uncertainty to remain visible in the package.
+
 ## Offline boundary
 
 Schema resolution, examples, instructions, validation, checksums, and

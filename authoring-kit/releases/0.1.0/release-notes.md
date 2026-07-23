@@ -11,6 +11,8 @@ This prerelease includes:
 - local artifact and aggregate checksum verification;
 - declared-scope preflight with directory guidance precedence, exclusion
   reporting, access boundaries, and redacted secret-pattern findings;
+- snapshot-bound citation and structured uncertainty guidance, examples, and
+  offline validation with material-conflict enforcement;
 - an explicit offline policy with optional network features disabled by default.
 
 There is no preceding authoring-kit release to migrate.

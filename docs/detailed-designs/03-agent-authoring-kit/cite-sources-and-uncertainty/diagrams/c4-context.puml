@@ -3,10 +3,11 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Cite sources and uncertainty
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+Person(agent, "Curriculum authoring agent", "Associates curriculum claims with approved evidence")
+System(kit, "Acquired RepoFluent authoring kit", "Validates snapshot citations and structured uncertainty locally")
+System_Ext(repository, "Approved repository snapshot", "Provides effective documents and source files")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(agent, kit, "Submits evidence ledger and scope", "Local command")
+Rel(kit, repository, "Resolves admitted citations against", "Local file access")
+Rel(kit, agent, "Returns safe validation findings", "Standard output")
 @enduml

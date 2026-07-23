@@ -3,16 +3,31 @@
 LAYOUT_WITH_LEGEND()
 title Components — Cite sources and uncertainty
 
-Container_Boundary(api, "Local Validator") {
-  Component(controller, "CiteSourcesAndUncertaintyController", ".NET boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "CiteSourcesAndUncertaintyHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "CiteSourcesAndUncertaintyPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "ICiteSourcesAndUncertaintyRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Authoring workspace", "File system", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(policyView, "AuthoringEvidencePolicyComponent", "Angular component", "Presents source associations and uncertainty posture")
 }
+Container_Boundary(command, "Evidence validator") {
+  Component(orchestrator, "validate-evidence.mjs", "Node.js command", "Coordinates one local evidence validation")
+  Component(preflight, "preflight.mjs", "Node.js command", "Returns effective files and revisions")
+  Component(claims, "Claim validator", "Local function", "Checks identifiers, objective links, and classifications")
+  Component(citations, "Citation resolver", "Local function", "Checks repository, revision, path, SHA-256, and line range")
+  Component(uncertainty, "Uncertainty validator", "Local function", "Checks categories, confidence, conflicts, and representations")
+  Component(report, "Report writer", "Local function", "Emits counts, cited paths, and safe findings")
+}
+Container_Boundary(tooling, "Repository release tooling") {
+  Component(builder, "build_authoring_kit.mjs", "Node.js build command", "Generates fixture and hashes artifacts")
+  Component(gate, "verify_authoring_kits.mjs", "Node.js CI gate", "Executes accepted and blocked evidence cases")
+}
+ContainerDb(files, "Local release and approved snapshot", "Files", "Evidence JSON, scope JSON, documents, and source")
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(policyView, orchestrator, "Documents invocation of")
+Rel(orchestrator, preflight, "Executes")
+Rel(orchestrator, claims, "Validates through")
+Rel(orchestrator, citations, "Resolves through")
+Rel(orchestrator, uncertainty, "Validates through")
+Rel(orchestrator, report, "Emits through")
+Rel(preflight, files, "Calculates effective paths from")
+Rel(citations, files, "Reads admitted bytes from")
+Rel(builder, files, "Builds and hashes")
+Rel(gate, orchestrator, "Executes offline")
 @enduml

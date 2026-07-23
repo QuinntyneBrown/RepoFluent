@@ -9,50 +9,91 @@ skinparam class {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-title Class structure — Cite sources and uncertainty
+title Information structure — Cite sources and uncertainty
 
-class CiteSourcesAndUncertaintyRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class EvidenceReport {
+  +reportVersion: string
+  +scopeId: string
 }
 
-class CiteSourcesAndUncertaintyResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class ClaimEvidence {
+  +id: string
+  +statement: string
+  +classification: ClaimClassification
+  +objectiveIds: string[]
 }
 
-class CiteSourcesAndUncertaintyRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: CiteSourcesAndUncertaintyResult): void
+enum ClaimClassification {
+  direct-evidence
+  synthesis
+  interpretation
 }
 
-class CiteSourcesAndUncertaintyPolicy {
-  +Evaluate(request: CiteSourcesAndUncertaintyRequest, current: CiteSourcesAndUncertaintyRecord): CiteSourcesAndUncertaintyResult
+class Citation {
+  +repositoryId: string
+  +revision: string
+  +path: string
+  +sourceSha256: string
 }
 
-interface ICiteSourcesAndUncertaintyRepository {
-  +Load(scopeId: string, targetId: string): Task<CiteSourcesAndUncertaintyRecord>
-  +Save(record: CiteSourcesAndUncertaintyRecord, expectedVersion: long): Task
+class LineLocator {
+  +kind: "line-range"
+  +startLine: integer
+  +endLine: integer
 }
 
-class CiteSourcesAndUncertaintyHandler {
-  +Handle(request: CiteSourcesAndUncertaintyRequest): Task<CiteSourcesAndUncertaintyResult>
+class UncertaintyReport {
+  +overallConfidence: Confidence
+  +assumptions: UncertaintyEntry[]
+  +conflicts: UncertaintyEntry[]
+  +missingContext: UncertaintyEntry[]
+  +omissions: UncertaintyEntry[]
+  +unresolvedQuestions: UncertaintyEntry[]
 }
 
-CiteSourcesAndUncertaintyHandler ..> CiteSourcesAndUncertaintyRequest : handles
-CiteSourcesAndUncertaintyHandler ..> CiteSourcesAndUncertaintyPolicy : invokes
-CiteSourcesAndUncertaintyHandler ..> ICiteSourcesAndUncertaintyRepository : uses
-ICiteSourcesAndUncertaintyRepository --> CiteSourcesAndUncertaintyRecord : loads / saves
-CiteSourcesAndUncertaintyPolicy ..> CiteSourcesAndUncertaintyRecord : evaluates
-CiteSourcesAndUncertaintyPolicy ..> CiteSourcesAndUncertaintyResult : creates
-CiteSourcesAndUncertaintyRecord ..> CiteSourcesAndUncertaintyResult : applies
+class UncertaintyEntry {
+  +id: string
+  +summary: string
+  +confidence: Confidence
+  +material: boolean
+  +relatedClaimIds: string[]
+}
+
+enum Confidence {
+  high
+  medium
+  low
+}
+
+class PackageRepresentation {
+  +entityType: string
+  +entityId: string
+  +field: string
+}
+
+class EvidenceValidationResult {
+  +valid: boolean
+  +scopeId: string
+  +citedPaths: string[]
+  +findings: Finding[]
+}
+
+class Finding {
+  +code: string
+  +severity: "error"
+  +isBlocking: true
+  +path: string
+  +message: string
+}
+
+EvidenceReport "1" *-- "1..*" ClaimEvidence
+EvidenceReport "1" *-- "1" UncertaintyReport
+ClaimEvidence --> ClaimClassification
+ClaimEvidence "1" *-- "1..*" Citation
+Citation "1" *-- "1" LineLocator
+UncertaintyReport "1" *-- "0..*" UncertaintyEntry
+UncertaintyEntry --> Confidence
+UncertaintyEntry "0..*" o-- "0..*" Citation
+UncertaintyEntry "1" *-- "0..*" PackageRepresentation
+EvidenceValidationResult "1" *-- "0..*" Finding
 @enduml

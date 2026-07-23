@@ -3,16 +3,22 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Cite sources and uncertainty
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Authoring Kit CLI", ".NET tool", "Offline authoring and validation interface")
-  Container(api, "Local Validator", ".NET", "Applies application and domain policy")
-  ContainerDb(store, "Authoring workspace", "File system", "Stores tenant-scoped state and evidence")
+Person(agent, "Curriculum authoring agent", "Creates claims and structured uncertainty")
+System_Boundary(repofluent, "RepoFluent authoring workflow") {
+  Container(policyView, "Evidence-ledger policy view", "Angular", "Explains citations, classifications, and material uncertainty")
+  Container(evidenceValidator, "Evidence validator", "Dependency-free Node.js 22 command", "Validates the evidence ledger and emits safe findings")
+  Container(preflight, "Source-scope preflight", "Dependency-free Node.js 22 command", "Calculates approved effective files")
+  ContainerDb(release, "Acquired authoring-kit release", "Versioned files", "Guide, reports, commands, and checksums")
 }
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+System_Ext(scope, "Source-scope declaration", "Approved repositories, revisions, files, and data rules")
+System_Ext(repository, "Approved repository snapshot", "Local source bytes for snapshot-bound citations")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(agent, policyView, "Reviews policy")
+Rel(agent, evidenceValidator, "Invokes", "Local process")
+Rel(evidenceValidator, preflight, "Reruns before citation access")
+Rel(evidenceValidator, release, "Reads guide and evidence report from")
+Rel(preflight, scope, "Validates")
+Rel(preflight, repository, "Calculates effective files from")
+Rel(evidenceValidator, repository, "Hashes and locates admitted citations in")
+Rel(evidenceValidator, agent, "Returns JSON and exit status", "Standard output")
 @enduml

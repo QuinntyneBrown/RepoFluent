@@ -6,7 +6,7 @@
       "id": "order-platform",
       "root": "../fixtures/repositories/order-platform",
       "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
-      "documents": ["docs/architecture.md"],
+      "documents": ["docs/architecture.md", "docs/operations.md"],
       "include": ["docs/**", "src/**"],
       "exclude": ["src/generated/**"]
     }

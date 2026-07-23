@@ -1,0 +1,66 @@
+<section class="rf-panel authoring-evidence-policy" aria-label="Authoring evidence policy">
+  <div class="rf-panel__header">
+    <span>03 · Evidence ledger</span>
+    <span class="rf-badge">snapshot bound</span>
+  </div>
+
+  <div class="rf-panel__body evidence-policy__body">
+    <div class="evidence-policy__heading">
+      <div>
+        <span class="micro-label">Claims with receipts</span>
+        <h2>Evidence ledger</h2>
+        <p>
+          Bind what the curriculum says to approved source bytes, and keep every consequential
+          unknown visible.
+        </p>
+      </div>
+      <span class="rf-status rf-status--success">Traceable</span>
+    </div>
+
+    <div class="evidence-policy__grid">
+      <article class="evidence-card">
+        <span class="micro-label">Source-bound citations</span>
+        <h3>Repository · revision · path · locator</h3>
+        <div class="citation-path" aria-label="Example snapshot citation">
+          <span>order-platform</span>
+          <code>7d9d2e9 · docs/architecture.md:L3–4</code>
+        </div>
+        <p>Whole-file SHA-256 keeps each line range attached to exact source bytes.</p>
+      </article>
+
+      <article class="evidence-card">
+        <span class="micro-label">Claim classification</span>
+        <h3>Direct evidence · synthesis · interpretation</h3>
+        <ul class="classification-list">
+          <li><span class="classification-mark"></span>Source states the claim</li>
+          <li><span class="classification-mark"></span>Multiple observations combined</li>
+          <li><span class="classification-mark"></span>Implication identified</li>
+        </ul>
+      </article>
+
+      <article class="evidence-card evidence-card--uncertainty">
+        <span class="micro-label">Structured uncertainty</span>
+        <h3>Assumptions · conflicts · omissions</h3>
+        <div class="conflict-row">
+          <span aria-hidden="true">!</span>
+          <div>
+            <strong>Conflicting evidence</strong>
+            <p>Retain both sources · confidence low</p>
+          </div>
+        </div>
+        <p>Missing context and unresolved questions remain reviewable records.</p>
+      </article>
+    </div>
+
+    <div class="evidence-policy__command">
+      <div>
+        <span class="micro-label">Review posture</span>
+        <strong>Material uncertainty stays visible</strong>
+      </div>
+      <code
+        ><span aria-hidden="true">$</span> node scripts/validate-evidence.mjs evidence-report.json
+        scope.json</code
+      >
+    </div>
+  </div>
+</section>

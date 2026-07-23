@@ -16,9 +16,13 @@ preflight reports a blocking finding.
 During generation:
 
 - derive stable identifiers from semantic source scope, not display wording;
-- bind claims to declared snapshot documents when direct evidence exists;
-- represent assumptions, omissions, conflicts, and unresolved questions
-  explicitly;
+- follow `guides/citations-and-uncertainty.md`;
+- bind claims and objectives to repository, revision, path, file hash, and line
+  range;
+- classify each claim as direct evidence, synthesis, or interpretation;
+- preserve assumptions, confidence, conflicting evidence, missing context,
+  omissions, and unresolved questions in the evidence report;
+- represent material uncertainty in the package for learners and reviewers;
 - keep protected assessment answers out of learner-visible content;
 - minimize excerpts, honor classification and redaction metadata, and stop on
   suspected secret exposure without reproducing the value;
@@ -28,6 +32,7 @@ During generation:
 After generation, run:
 
 ```sh
+node scripts/validate-evidence.mjs <evidence-report.json> <scope.json>
 node scripts/validate.mjs <package.json>
 ```
 

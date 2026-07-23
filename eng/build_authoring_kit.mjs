@@ -29,6 +29,9 @@ const esbuild = frontendRequire("esbuild");
 await mkdir(path.join(releaseRoot, "contracts"), { recursive: true });
 await mkdir(path.join(releaseRoot, "examples", "valid"), { recursive: true });
 await mkdir(path.join(releaseRoot, "examples", "invalid"), { recursive: true });
+await mkdir(path.join(releaseRoot, "examples", "evidence"), {
+  recursive: true,
+});
 await mkdir(path.join(releaseRoot, "scripts"), { recursive: true });
 
 await copyFile(
@@ -54,6 +57,28 @@ delete invalidPackage.title;
 await writeFile(
   path.join(releaseRoot, "examples", "invalid", "missing-title.json"),
   `${JSON.stringify(invalidPackage, null, 2)}\n`,
+);
+
+const invalidEvidenceReport = JSON.parse(
+  await readFile(
+    path.join(
+      releaseRoot,
+      "examples",
+      "evidence",
+      "valid-evidence-report.json",
+    ),
+    "utf8",
+  ),
+);
+invalidEvidenceReport.uncertainty.conflicts[0].packageRepresentations = [];
+await writeFile(
+  path.join(
+    releaseRoot,
+    "examples",
+    "evidence",
+    "invalid-unrepresented-conflict.json",
+  ),
+  `${JSON.stringify(invalidEvidenceReport, null, 2)}\n`,
 );
 
 const schema = JSON.parse(
@@ -94,6 +119,11 @@ const artifactDefinitions = [
   ["Generation prompt", "prompts/generate-curriculum.md", "text/markdown"],
   ["Authoring skill", "skills/repofluent-authoring/SKILL.md", "text/markdown"],
   [
+    "Citation and uncertainty guide",
+    "guides/citations-and-uncertainty.md",
+    "text/markdown",
+  ],
+  [
     "Curriculum JSON Schema",
     "contracts/curriculum.schema.json",
     "application/schema+json",
@@ -124,6 +154,16 @@ const artifactDefinitions = [
     "application/json",
   ],
   [
+    "Valid evidence and uncertainty report",
+    "examples/evidence/valid-evidence-report.json",
+    "application/json",
+  ],
+  [
+    "Unrepresented-conflict evidence report",
+    "examples/evidence/invalid-unrepresented-conflict.json",
+    "application/json",
+  ],
+  [
     "Approved repository instructions",
     "examples/fixtures/repositories/order-platform/AGENTS.md",
     "text/markdown",
@@ -131,6 +171,11 @@ const artifactDefinitions = [
   [
     "Approved architecture document",
     "examples/fixtures/repositories/order-platform/docs/architecture.md",
+    "text/markdown",
+  ],
+  [
+    "Conflicting operations document",
+    "examples/fixtures/repositories/order-platform/docs/operations.md",
     "text/markdown",
   ],
   [
@@ -169,6 +214,11 @@ const artifactDefinitions = [
     "text/plain",
   ],
   ["Source-scope preflight", "scripts/preflight.mjs", "text/javascript"],
+  [
+    "Evidence and uncertainty validator",
+    "scripts/validate-evidence.mjs",
+    "text/javascript",
+  ],
   ["Local validation command", "scripts/validate.mjs", "text/javascript"],
   [
     "Compiled offline validator",

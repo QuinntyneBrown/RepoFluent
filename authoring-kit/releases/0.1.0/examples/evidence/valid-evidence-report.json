@@ -1,0 +1,161 @@
+{
+  "reportVersion": "0.1.0",
+  "scopeId": "approved-order-platform",
+  "claims": [
+    {
+      "id": "claim.order-platform.responsibility",
+      "statement": "The order platform delegates payment authorization to the payments subsystem.",
+      "classification": "direct-evidence",
+      "objectiveIds": ["objective.trace-payment-authorization"],
+      "citations": [
+        {
+          "repositoryId": "order-platform",
+          "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
+          "path": "docs/architecture.md",
+          "sourceSha256": "sha256:fecac7ca2a16abf92278c715a5e0840395e46bc6bf824d01f71bc276c2c0e62d",
+          "locator": {
+            "kind": "line-range",
+            "startLine": 3,
+            "endLine": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "claim.payment-handler.code-path",
+      "statement": "The payment handler returns an authorization result for an order identifier.",
+      "classification": "direct-evidence",
+      "objectiveIds": ["objective.trace-payment-authorization"],
+      "citations": [
+        {
+          "repositoryId": "order-platform",
+          "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
+          "path": "src/payments/handler.ts",
+          "sourceSha256": "sha256:97b0f2692d8d18b01790eabee2e0d3b00dd399961f47f4c063e0a0b6bcb68f11",
+          "locator": {
+            "kind": "line-range",
+            "startLine": 1,
+            "endLine": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "claim.payment-boundary.conflict",
+      "statement": "Approved sources disagree about the active runtime payment dependency.",
+      "classification": "synthesis",
+      "objectiveIds": ["objective.compare-payment-boundaries"],
+      "citations": [
+        {
+          "repositoryId": "order-platform",
+          "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
+          "path": "docs/architecture.md",
+          "sourceSha256": "sha256:fecac7ca2a16abf92278c715a5e0840395e46bc6bf824d01f71bc276c2c0e62d",
+          "locator": {
+            "kind": "line-range",
+            "startLine": 3,
+            "endLine": 4
+          }
+        },
+        {
+          "repositoryId": "order-platform",
+          "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
+          "path": "docs/operations.md",
+          "sourceSha256": "sha256:10b77f2929b29e417ac9f33ead2e5a69223adfc5e418cb50947108f32ae37199",
+          "locator": {
+            "kind": "line-range",
+            "startLine": 3,
+            "endLine": 4
+          }
+        }
+      ]
+    }
+  ],
+  "uncertainty": {
+    "overallConfidence": "medium",
+    "assumptions": [
+      {
+        "id": "assumption.fixture-represents-approved-snapshot",
+        "summary": "The supplied fixture represents the approved revision.",
+        "confidence": "high",
+        "material": false,
+        "relatedClaimIds": ["claim.order-platform.responsibility"],
+        "citations": [],
+        "packageRepresentations": []
+      }
+    ],
+    "conflicts": [
+      {
+        "id": "conflict.payment-runtime-dependency",
+        "summary": "Architecture and operations sources identify different payment dependencies.",
+        "confidence": "low",
+        "material": true,
+        "relatedClaimIds": ["claim.payment-boundary.conflict"],
+        "citations": [
+          {
+            "repositoryId": "order-platform",
+            "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
+            "path": "docs/architecture.md",
+            "sourceSha256": "sha256:fecac7ca2a16abf92278c715a5e0840395e46bc6bf824d01f71bc276c2c0e62d",
+            "locator": {
+              "kind": "line-range",
+              "startLine": 3,
+              "endLine": 4
+            }
+          },
+          {
+            "repositoryId": "order-platform",
+            "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
+            "path": "docs/operations.md",
+            "sourceSha256": "sha256:10b77f2929b29e417ac9f33ead2e5a69223adfc5e418cb50947108f32ae37199",
+            "locator": {
+              "kind": "line-range",
+              "startLine": 3,
+              "endLine": 4
+            }
+          }
+        ],
+        "packageRepresentations": [
+          {
+            "entityType": "lesson",
+            "entityId": "lesson.payment-boundary",
+            "field": "contentBlocks/2"
+          }
+        ]
+      }
+    ],
+    "missingContext": [
+      {
+        "id": "missing-context.migration-timeline",
+        "summary": "The approved scope does not identify the migration completion date.",
+        "confidence": "high",
+        "material": false,
+        "relatedClaimIds": ["claim.payment-boundary.conflict"],
+        "citations": [],
+        "packageRepresentations": []
+      }
+    ],
+    "omissions": [
+      {
+        "id": "omission.bank-gateway-implementation",
+        "summary": "The bank gateway implementation is not present in the approved scope.",
+        "confidence": "high",
+        "material": false,
+        "relatedClaimIds": ["claim.payment-boundary.conflict"],
+        "citations": [],
+        "packageRepresentations": []
+      }
+    ],
+    "unresolvedQuestions": [
+      {
+        "id": "question.active-payment-boundary",
+        "summary": "Which dependency is active at the declared revision?",
+        "confidence": "low",
+        "material": false,
+        "relatedClaimIds": ["claim.payment-boundary.conflict"],
+        "citations": [],
+        "packageRepresentations": []
+      }
+    ]
+  }
+}

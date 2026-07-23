@@ -21,9 +21,17 @@ the parent repository's engineering instructions.
    and redaction metadata, and stop without reproducing a suspected credential.
 8. Write output only to the declared authoring workspace.
 9. Run `node scripts/preflight.mjs <scope.json>` before source analysis.
-10. Use `prompts/generate-curriculum.md` and the bundled contract artifacts.
-11. Run `node scripts/validate.mjs <package.json>` before returning a package.
-12. Preserve citations, uncertainty, stable identifiers, and protected-answer
-   boundaries. Do not invent evidence.
-13. Do not require network access for scope preflight, schema resolution, or
-    validation.
+10. Follow `guides/citations-and-uncertainty.md`. Bind every citation to the
+    approved repository revision, effective path, file hash, and line range.
+11. Classify claims as direct evidence, synthesis, or interpretation. Preserve
+    material assumptions, conflicts, missing context, omissions, and unresolved
+    questions in the package.
+12. Run
+    `node scripts/validate-evidence.mjs <evidence-report.json> <scope.json>`
+    before package validation.
+13. Use `prompts/generate-curriculum.md` and the bundled contract artifacts.
+14. Run `node scripts/validate.mjs <package.json>` before returning a package.
+15. Preserve stable identifiers and protected-answer boundaries. Do not invent
+    evidence.
+16. Do not require network access for scope preflight, evidence validation,
+    schema resolution, or package validation.

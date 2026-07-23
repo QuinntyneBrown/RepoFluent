@@ -14,14 +14,18 @@ const requiredArtifacts = new Set([
   "AGENTS.md",
   "prompts/generate-curriculum.md",
   "skills/repofluent-authoring/SKILL.md",
+  "guides/citations-and-uncertainty.md",
   "contracts/curriculum.schema.json",
   "contracts/ICD.md",
   "examples/valid/order-processing.json",
   "examples/invalid/missing-title.json",
   "examples/scope/approved-scope.json",
   "examples/scope/secret-exposure-scope.json",
+  "examples/evidence/valid-evidence-report.json",
+  "examples/evidence/invalid-unrepresented-conflict.json",
   "examples/fixtures/repositories/order-platform/AGENTS.md",
   "examples/fixtures/repositories/order-platform/docs/architecture.md",
+  "examples/fixtures/repositories/order-platform/docs/operations.md",
   "examples/fixtures/repositories/order-platform/src/app.ts",
   "examples/fixtures/repositories/order-platform/src/payments/AGENTS.md",
   "examples/fixtures/repositories/order-platform/src/payments/handler.ts",
@@ -30,6 +34,7 @@ const requiredArtifacts = new Set([
   "examples/fixtures/repositories/secret-exposure/docs/architecture.md",
   "examples/fixtures/repositories/secret-exposure/src/config/application.env",
   "scripts/preflight.mjs",
+  "scripts/validate-evidence.mjs",
   "scripts/validate.mjs",
   "scripts/curriculum.validator.mjs",
   "scripts/verify-release.mjs",
@@ -121,6 +126,7 @@ async function verifyRelease(version) {
   const runtimeSource = await Promise.all(
     [
       "scripts/preflight.mjs",
+      "scripts/validate-evidence.mjs",
       "scripts/validate.mjs",
       "scripts/curriculum.validator.mjs",
     ].map((relativePath) =>
@@ -225,12 +231,81 @@ async function verifyRelease(version) {
       `${version}: suspected secret did not stop with a redacted report`,
     );
   }
+
+  const validEvidence = runEvidenceValidation(
+    releaseRoot,
+    path.join(
+      releaseRoot,
+      "examples",
+      "evidence",
+      "valid-evidence-report.json",
+    ),
+  );
+  const validEvidenceReport = parseReport(
+    version,
+    "valid evidence report",
+    validEvidence.stdout,
+  );
+  if (
+    validEvidence.status !== 0 ||
+    validEvidenceReport?.valid !== true ||
+    validEvidenceReport?.claims?.directEvidence !== 2 ||
+    validEvidenceReport?.claims?.synthesis !== 1 ||
+    validEvidenceReport?.uncertainty?.conflicts !== 1 ||
+    validEvidenceReport?.uncertainty?.materialRepresentations !== 1
+  ) {
+    errors.push(
+      `${version}: valid evidence report did not preserve source and uncertainty`,
+    );
+  }
+
+  const invalidEvidence = runEvidenceValidation(
+    releaseRoot,
+    path.join(
+      releaseRoot,
+      "examples",
+      "evidence",
+      "invalid-unrepresented-conflict.json",
+    ),
+  );
+  const invalidEvidenceReport = parseReport(
+    version,
+    "invalid evidence report",
+    invalidEvidence.stdout,
+  );
+  if (
+    invalidEvidence.status !== 1 ||
+    !invalidEvidenceReport?.findings?.some(
+      (finding) =>
+        finding.code === "AAK_UNCERTAINTY_UNREPRESENTED" &&
+        finding.path === "/uncertainty/conflicts/0/packageRepresentations" &&
+        finding.isBlocking === true,
+    )
+  ) {
+    errors.push(`${version}: unrepresented material conflict did not block`);
+  }
 }
 
 function runPreflight(releaseRoot, scopePath) {
   return spawnSync(
     process.execPath,
     [path.join(releaseRoot, "scripts", "preflight.mjs"), scopePath],
+    {
+      cwd: releaseRoot,
+      encoding: "utf8",
+      env: { ...process.env, REPOFLUENT_OFFLINE: "true" },
+    },
+  );
+}
+
+function runEvidenceValidation(releaseRoot, reportPath) {
+  return spawnSync(
+    process.execPath,
+    [
+      path.join(releaseRoot, "scripts", "validate-evidence.mjs"),
+      reportPath,
+      path.join(releaseRoot, "examples", "scope", "approved-scope.json"),
+    ],
     {
       cwd: releaseRoot,
       encoding: "utf8",
