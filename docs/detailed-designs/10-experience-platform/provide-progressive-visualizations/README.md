@@ -4,12 +4,15 @@
 
 RepoFluent's Experience Platform subsystem provides design-system,
 accessibility, responsive, capability, and performance foundations. This
-feature keeps visualization content operable when GPU or visual presentation is unavailable. It covers *progressive gpu capability*, *accessible visualization companion*, *text alternatives and media*.
+feature keeps visualization content operable when GPU or visual presentation is unavailable. It covers _progressive gpu capability_, _accessible visualization companion_, _text alternatives and media_.
 
 The checked-in reference implementation is the static `desigh-system/` site.
 Its HTML, CSS, and JavaScript work from `file://` without a runtime dependency.
-The production Angular consumer, telemetry integration, supported-browser
-matrix, and production measurement profile remain `<TO SUPPLY>`.
+The production Angular consumer now applies capability detection, bounded
+enhancement initialization, equivalent semantic relationships, synchronized
+selection/filtering, and extended descriptions. Production telemetry and
+supported-browser policy are implemented by their dedicated detailed-design
+features.
 
 ## Description
 
@@ -20,12 +23,13 @@ The feature uses the following checked-in assets and planned integration seam.
 - **`desigh-system/assets/components.css`** — shared visual and accessible companion presentation contracts.
 - **`desigh-system/assets/docs.js`** — keyboard graph selection and synchronized inspector examples.
 - **`desigh-system/foundations/accessibility.html`** — text-alternative and equivalent-interaction guidance.
-- **`ExperiencePlatformAdapter`** — planned Angular library boundary that maps
-  the accepted `.rf-*` contracts into product components; implementation remains
-  `<TO SUPPLY>` because `frontend/angular.json` contains no application project.
+- **`VisualizationCapabilityAdapter`** — Angular library boundary that applies
+  policy, unsupported, timeout, and failure fallbacks before any optional
+  enhancement can affect semantic content or controls.
 - **`ExperienceConformanceSuite`** — quality boundary composed from Playwright,
-  `html-validate`, Prettier, accessibility checks, and production performance
-  gates. Production performance and browser-matrix checks remain `<TO SUPPLY>`.
+  `html-validate`, Prettier, accessibility checks, capability failure tests,
+  visual regression, and production performance gates. Production performance
+  and browser-matrix checks remain owned by their dedicated features.
 
 The structural diagram models source artifacts as typed contracts. It does not
 claim that the current static JavaScript defines application classes.
@@ -90,3 +94,22 @@ The reference assets apply `L2-EXP-05` through a semantic contract and an access
 The reference assets apply `L2-EXP-11` through a semantic contract and an accessible fallback. The conformance suite checks the available reference behavior before the contract is consumed by the production application.
 
 ![Sequence diagram for text alternatives and media](diagrams/sequence-l2-exp-11.png)
+
+### Implementation evidence
+
+Status: **Implemented**
+
+- `VisualizationCapabilityAdapter` time-bounds WebGPU adapter probing and
+  deterministically selects semantic fallback for policy disablement,
+  unsupported browsers, timeouts, and initialization failures.
+- Capability choice is reflected in a visible status, an HTML contract
+  attribute, and a non-sensitive `repofluent:capability` event.
+- `/systems` presents seven typed nodes and seven directional relationships.
+  Companion-table selection updates the visual node and inspector, while the
+  shared layer filter updates both representations.
+- The visual map has a concise alternative; a visible extended description and
+  captioned relationship table communicate the complete learning content when
+  graphics are unavailable.
+- `progressive-visualization.spec.ts` starts from a Page Object, forces policy
+  and initialization failures, verifies equivalent controls/data, and records
+  desktop and narrow fallback baselines on Windows and Linux.

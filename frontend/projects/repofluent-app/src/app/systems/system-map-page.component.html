@@ -1,0 +1,139 @@
+<header class="page-heading">
+  <p class="eyebrow">System topology / progressive visualization</p>
+  <h1>Order processing system map</h1>
+  <p class="page-heading__lede">
+    Explore seven systems and their directional relationships without making enhanced graphics a
+    prerequisite.
+  </p>
+</header>
+
+<div class="map-toolbar">
+  <label class="rf-field layer-filter">
+    <span class="rf-field__label">System layer</span>
+    <select class="rf-select" [value]="selectedLayer()" (change)="filterLayer($event)">
+      <option value="all">All layers</option>
+      <option value="experience">Experience layer</option>
+      <option value="core">Core services</option>
+      <option value="data">Data stores</option>
+      <option value="platform">Platform</option>
+      <option value="external">External systems</option>
+    </select>
+  </label>
+  <p
+    class="rf-status rf-status--info capability-status"
+    role="status"
+    aria-label="Visualization capability"
+  >
+    @if (capability.state() === 'enhanced') {
+      Enhanced visualization active
+    } @else if (capability.state() === 'fallback') {
+      Semantic visualization active · {{ capability.reason() }}
+    } @else {
+      Checking visualization capability
+    }
+  </p>
+</div>
+
+<section class="map-layout" aria-label="System map workspace">
+  <div class="map-visual" role="group" aria-label="Interactive system nodes">
+    <div
+      class="map-diagram"
+      role="img"
+      aria-label="Order processing systems and directional relationships"
+      aria-describedby="system-map-description"
+    >
+      <span class="map-connector map-connector--one" aria-hidden="true"></span>
+      <span class="map-connector map-connector--two" aria-hidden="true"></span>
+      <span class="map-connector map-connector--three" aria-hidden="true"></span>
+    </div>
+    <div class="map-nodes">
+      @for (node of visibleNodes(); track node.id) {
+        <button
+          class="map-node"
+          type="button"
+          data-testid="system-map-visual-node"
+          [attr.aria-pressed]="selectedNodeId() === node.id"
+          (click)="selectNode(node.id)"
+        >
+          <small>{{ node.kind }}</small>
+          <strong>{{ node.name }}</strong>
+          <span>{{ node.technology }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <aside class="rf-panel node-inspector" aria-label="Selected system details">
+    <div class="rf-panel__header">
+      Node inspector
+      <span class="rf-status rf-status--success">{{ selectedNode().status }}</span>
+    </div>
+    <div class="rf-panel__body">
+      <p class="inspector-kind">{{ selectedNode().kind }}</p>
+      <h2>{{ selectedNode().name }} details</h2>
+      <p>{{ selectedNode().description }}</p>
+      <dl class="rf-property-list">
+        <div>
+          <dt>Runtime</dt>
+          <dd>{{ selectedNode().technology }}</dd>
+        </div>
+        <div>
+          <dt>Relationships</dt>
+          <dd>{{ selectedRelationshipCount() }}</dd>
+        </div>
+      </dl>
+      <button class="rf-button rf-button--primary rf-button--wide" type="button">
+        Open related learning
+      </button>
+    </div>
+  </aside>
+</section>
+
+<p id="system-map-description" class="map-description">
+  Storefront sends an HTTPS order command to Order API. Order API writes the durable order to Orders
+  DB and publishes OrderSubmitted to Message bus. Message bus delivers that event to Order
+  Processor, which reserves Inventory and requests Notification. Inventory confirms reservation
+  state in Orders DB.
+</p>
+
+<section class="rf-panel relationship-panel" aria-labelledby="relationships-title">
+  <div class="rf-panel__header">
+    <h2 id="relationships-title">Accessible relationship companion</h2>
+    <span>{{ visibleEdges().length }} relationships</span>
+  </div>
+  <div class="rf-table-wrap">
+    <table class="rf-table">
+      <caption>
+        Order processing relationships
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
+          <th scope="col">Relationship</th>
+          <th scope="col">Direction</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (edge of visibleEdges(); track edge.from + edge.to) {
+          <tr>
+            <td>
+              <button class="table-node" type="button" (click)="selectNode(edge.from)">
+                Select {{ nodeName(edge.from) }}
+              </button>
+            </td>
+            <td>
+              <button class="table-node" type="button" (click)="selectNode(edge.to)">
+                Select {{ nodeName(edge.to) }}
+              </button>
+            </td>
+            <td>{{ edge.relationship }}</td>
+            <td>{{ edge.direction }}</td>
+            <td>{{ edge.status }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

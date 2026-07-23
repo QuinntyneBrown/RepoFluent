@@ -17,3 +17,5 @@
   announcements, described validation errors, and persistent live status.
 - URL-backed lesson source context with restored focus, desktop split and
   narrow drawer profiles, and progressive large-lesson rendering.
+- Progressive system visualization with bounded WebGPU fallback, synchronized
+  semantic relationships, and equivalent extended descriptions.

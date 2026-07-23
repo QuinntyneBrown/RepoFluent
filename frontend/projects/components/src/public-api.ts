@@ -3,3 +3,5 @@ export * from './lib/experience-theme';
 export * from './lib/lesson-renderer.component';
 export * from './lib/renderable-block';
 export * from './lib/renderable-lesson';
+export * from './lib/visualization-capability-adapter';
+export * from './lib/visualization-capability-state';
