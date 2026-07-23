@@ -9,50 +9,89 @@ skinparam class {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-title Class structure — Generate stable curriculum
+title Information structure — Generate stable curriculum
 
-class GenerateStableCurriculumRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class IdentityInput {
+  +identityVersion: string
 }
 
-class GenerateStableCurriculumResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class IdentityNamespace {
+  +organization: string
+  +product: string
+  +sourceScopeId: string
+  +majorVersion: integer
 }
 
-class GenerateStableCurriculumRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: GenerateStableCurriculumResult): void
+class SemanticEntity {
+  +kind: EntityKind
+  +semanticKey: string
+  +semanticFingerprint: string
+  +title: string
 }
 
-class GenerateStableCurriculumPolicy {
-  +Evaluate(request: GenerateStableCurriculumRequest, current: GenerateStableCurriculumRecord): GenerateStableCurriculumResult
+enum EntityKind {
+  package
+  system
+  course
+  lesson
+  objective
+  code-reference
+  assessment
 }
 
-interface IGenerateStableCurriculumRepository {
-  +Load(scopeId: string, targetId: string): Task<GenerateStableCurriculumRecord>
-  +Save(record: GenerateStableCurriculumRecord, expectedVersion: long): Task
+class GeneratedIdentity {
+  +kind: EntityKind
+  +semanticKey: string
+  +id: string
 }
 
-class GenerateStableCurriculumHandler {
-  +Handle(request: GenerateStableCurriculumRequest): Task<GenerateStableCurriculumResult>
+class CompletedGenerationRun {
+  +manifestVersion: string
+  +startedAt: timestamp
+  +completedAt: timestamp
+  +identityInput: string
+  +evidenceReport: string
 }
 
-GenerateStableCurriculumHandler ..> GenerateStableCurriculumRequest : handles
-GenerateStableCurriculumHandler ..> GenerateStableCurriculumPolicy : invokes
-GenerateStableCurriculumHandler ..> IGenerateStableCurriculumRepository : uses
-IGenerateStableCurriculumRepository --> GenerateStableCurriculumRecord : loads / saves
-GenerateStableCurriculumPolicy ..> GenerateStableCurriculumRecord : evaluates
-GenerateStableCurriculumPolicy ..> GenerateStableCurriculumResult : creates
-GenerateStableCurriculumRecord ..> GenerateStableCurriculumResult : applies
+class ToolIdentity {
+  +id: string
+  +version: string
+}
+
+class SourceSnapshot {
+  +scopeId: string
+  +repositories: RepositoryRevision[]
+}
+
+class PackageReceipt {
+  +path: string
+  +sha256: string
+}
+
+class GenerationManifest {
+  +manifestVersion: string
+  +kitVersion: string
+  +contractVersion: string
+  +startedAt: timestamp
+  +completedAt: timestamp
+  +options: object
+}
+
+class ValidationSummary {
+  +valid: boolean
+  +issueCount: integer
+}
+
+IdentityInput "1" *-- "1" IdentityNamespace
+IdentityInput "1" *-- "1..*" SemanticEntity
+SemanticEntity --> EntityKind
+GeneratedIdentity --> EntityKind
+CompletedGenerationRun "1" *-- "1" ToolIdentity : tool
+CompletedGenerationRun "1" o-- "0..1" ToolIdentity : model
+CompletedGenerationRun "1" *-- "1" SourceSnapshot
+GenerationManifest "1" *-- "1" ToolIdentity : tool
+GenerationManifest "1" o-- "0..1" ToolIdentity : model
+GenerationManifest "1" *-- "1" SourceSnapshot
+GenerationManifest "1" *-- "1" PackageReceipt
+GenerationManifest "1" *-- "1" ValidationSummary
 @enduml

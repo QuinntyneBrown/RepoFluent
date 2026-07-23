@@ -48,3 +48,6 @@
   secret-pattern stops before analysis.
 - Snapshot-bound authoring citations with explicit claim classification and an
   offline uncertainty ledger that blocks unrepresented material conflicts.
+- Prose-independent authoring identities for seven curriculum entity kinds,
+  collision stops, and a private-data-safe generation manifest with exact
+  package checksum and validation receipt.

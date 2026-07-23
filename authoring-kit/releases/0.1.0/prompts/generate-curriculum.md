@@ -15,7 +15,11 @@ preflight reports a blocking finding.
 
 During generation:
 
-- derive stable identifiers from semantic source scope, not display wording;
+- follow `guides/stable-generation.md`;
+- derive stable identifiers from organization, product, source scope, major
+  version, entity kind, and semantic key, not display wording;
+- stop and report a semantic-key collision instead of overwriting either
+  entity;
 - follow `guides/citations-and-uncertainty.md`;
 - bind claims and objectives to repository, revision, path, file hash, and line
   range;
@@ -33,9 +37,11 @@ After generation, run:
 
 ```sh
 node scripts/validate-evidence.mjs <evidence-report.json> <scope.json>
+node scripts/generate-identities.mjs <identities.json>
 node scripts/validate.mjs <package.json>
+node scripts/finalize-generation.mjs <completed-run.json> <package.json>
 ```
 
-Return the package only when validation reports `valid: true`. Otherwise return
-the path-addressed issues without copying source or protected values into the
-issue text.
+Return the package and safe generation manifest only when validation reports
+`valid: true`. Otherwise return path-addressed issues without copying source or
+protected values into the issue text.

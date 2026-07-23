@@ -10,7 +10,7 @@
     "version": ">=22.0.0"
   },
   "checksumAlgorithm": "sha256",
-  "releaseChecksum": "sha256:0ad4f02707862788a6a8904ef02203f95dfbd01029301f379f65533af41b0c0e",
+  "releaseChecksum": "sha256:851edf711f3d94e27c8f58960f7e736701b53b1bc11b6484c72582d606ead533",
   "checksumInput": "Artifact path and SHA-256 pairs sorted by ordinal path and terminated by LF.",
   "offline": {
     "supported": true,
@@ -25,31 +25,37 @@
       "name": "Quick start",
       "path": "README.md",
       "mediaType": "text/markdown",
-      "sha256": "3e694633456b295cc34032437d9615c8153ef78b65ef9324dcb9cedb4b51a6c7"
+      "sha256": "ef883ebde9552671346cffd4845a400acd8d0ed5aac2f973aa8fbc7381571bc8"
     },
     {
       "name": "Agent instructions",
       "path": "AGENTS.md",
       "mediaType": "text/markdown",
-      "sha256": "c1957edbb8f908949dde1dec48803eeaa801db827a18848b4b46fc2bfce86062"
+      "sha256": "6745c79c51ee4b18521d5cbdf62a684c9c8be63fedf7a12aa8a61cf50bc8158e"
     },
     {
       "name": "Generation prompt",
       "path": "prompts/generate-curriculum.md",
       "mediaType": "text/markdown",
-      "sha256": "882715e852f0614b4bb206a8b8ecdc2b335af06a2ae46178351844d5785636b8"
+      "sha256": "36855d94b984ab8c7036a0d3832e19e6100c242dc5171a8a9d4fcf292475cfbb"
     },
     {
       "name": "Authoring skill",
       "path": "skills/repofluent-authoring/SKILL.md",
       "mediaType": "text/markdown",
-      "sha256": "9efd0c26fc4c11107ee9374088178465676c6c6ab5175811d8e4d0a6028c8b8a"
+      "sha256": "fbdef711e214dffe330072e83e4fbffa4244f53ce2d323f5fc18cc4b172c1742"
     },
     {
       "name": "Citation and uncertainty guide",
       "path": "guides/citations-and-uncertainty.md",
       "mediaType": "text/markdown",
       "sha256": "826f6cda3f1ca7e60b1ac6a43d7f2b4900e164628c0ceeda0cf7df8ddb631b02"
+    },
+    {
+      "name": "Stable generation guide",
+      "path": "guides/stable-generation.md",
+      "mediaType": "text/markdown",
+      "sha256": "e16cd503ddb1209b2c845f97996396a4da30c070a4fd4306eaa1ac51d1d7dda8"
     },
     {
       "name": "Curriculum JSON Schema",
@@ -98,6 +104,30 @@
       "path": "examples/evidence/invalid-unrepresented-conflict.json",
       "mediaType": "application/json",
       "sha256": "fd27f3808fac6430f5294f29978c4d399b90eb824578c5899df33bb05c20c2f6"
+    },
+    {
+      "name": "First deterministic identity run",
+      "path": "examples/identities/regeneration-a.json",
+      "mediaType": "application/json",
+      "sha256": "bf76444cfae948f47bf533c11c8b5c315aa4cdbe2cb8d1ae35bc5cc9eb7a7440"
+    },
+    {
+      "name": "Reworded deterministic identity run",
+      "path": "examples/identities/regeneration-b.json",
+      "mediaType": "application/json",
+      "sha256": "44537942fe9b9652a67b54249c162621f0c8243bfd78d35f4d705b6ec3de06f9"
+    },
+    {
+      "name": "Colliding identity run",
+      "path": "examples/identities/collision.json",
+      "mediaType": "application/json",
+      "sha256": "e87c8773495edd2766c5b147cf446a2da5e450cd74e16516f173aa09770e5005"
+    },
+    {
+      "name": "Completed generation run",
+      "path": "examples/generation/completed-run.json",
+      "mediaType": "application/json",
+      "sha256": "fcf09beca4435f784bce8837935d77ad8d108ac7559713cc879cc597174dbe6e"
     },
     {
       "name": "Approved repository instructions",
@@ -172,6 +202,18 @@
       "sha256": "eb1c212829eaead2443e64e7b18fb6cfb9ab30589848e7b7b4dbb13b82372012"
     },
     {
+      "name": "Deterministic identity generator",
+      "path": "scripts/generate-identities.mjs",
+      "mediaType": "text/javascript",
+      "sha256": "7711e6df998596ff3ed21f847473e56c238c3697e7815bd457db60274a6b29c8"
+    },
+    {
+      "name": "Generation manifest finalizer",
+      "path": "scripts/finalize-generation.mjs",
+      "mediaType": "text/javascript",
+      "sha256": "0e07626e671f3b40ecd8b1fc5cd6058971e5830a578a8c71a4a2e91c06903839"
+    },
+    {
       "name": "Local validation command",
       "path": "scripts/validate.mjs",
       "mediaType": "text/javascript",
@@ -193,13 +235,13 @@
       "name": "Release notes",
       "path": "release-notes.md",
       "mediaType": "text/markdown",
-      "sha256": "951542c80ac4076bd3f09d01e41927170f628c08c96a50d3f6205bfecf07ecd0"
+      "sha256": "59ab7e1ba410c341e2f5439176e223b535e8e07458e84006022ef6d155960433"
     },
     {
       "name": "Artifact checksums",
       "path": "checksums.sha256",
       "mediaType": "text/plain",
-      "sha256": "dd2ff6e40ddaa02310f67f9860ba320e5499cbbba4250a1991739bc646e945d2"
+      "sha256": "86ef31d523de0ca25056ac8ebd40c72b1bb81a4e6218e7e170d0d0f8252c230e"
     }
   ]
 }

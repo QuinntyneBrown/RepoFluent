@@ -9,49 +9,33 @@ skinparam rectangle {
   BorderColor #344054
   FontColor #101828
 }
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "GenerateStableCurriculumCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum authoring agent" as agent
+box "Frontend — Acquired authoring-kit command" #E0F2FE
+  participant "generate-identities.mjs" as command
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "GenerateStableCurriculumController" as controller
+box "Backend — Agent Authoring Kit Application and Domain" #D1FADF
+  participant "Namespace normalizer" as normalizer
+  participant "Identity hasher" as hasher
+  participant "Collision detector" as collision
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "GenerateStableCurriculumHandler" as handler
-  participant "GenerateStableCurriculumPolicy" as policy
+box "Backend — Authoring workspace Infrastructure" #FFF4E5
+  collections "Semantic identity input" as input
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IGenerateStableCurriculumRepository" as repository
-  database "Authoring workspace" as store
-end box
-actor -> entry : Start generate stable curriculum
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch GenerateStableCurriculumRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-07
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+agent -> command : Generate stable identifiers
+command -> input : Read namespace and semantic entities
+input --> command : Stable inputs plus display titles
+command -> normalizer : Apply L2-AAK-07 NFKC,\ncase, whitespace, and separators
+normalizer --> command : Canonical namespace values
+loop Every semantic entity
+  command -> hasher : Hash namespace + kind + semantic key
+  hasher --> command : Kind-prefixed stable identifier
+  command -> collision : Compare identifier fingerprint
+  alt Identifier is new or fingerprint matches
+    collision --> command : Accepted generated identity
+  else Distinct fingerprint shares identifier
+    collision --> command : AAK_IDENTITY_COLLISION\nwithout overwrite
+  end
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+command --> agent : Identities + safe findings + exit status
 @enduml

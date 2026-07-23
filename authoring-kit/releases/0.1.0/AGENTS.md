@@ -30,8 +30,13 @@ the parent repository's engineering instructions.
     `node scripts/validate-evidence.mjs <evidence-report.json> <scope.json>`
     before package validation.
 13. Use `prompts/generate-curriculum.md` and the bundled contract artifacts.
-14. Run `node scripts/validate.mjs <package.json>` before returning a package.
-15. Preserve stable identifiers and protected-answer boundaries. Do not invent
-    evidence.
-16. Do not require network access for scope preflight, evidence validation,
+14. Follow `guides/stable-generation.md`. Derive identifiers from the stable
+    namespace, entity kind, and semantic key; never from display wording alone.
+15. Stop and report identity collisions instead of overwriting an entity.
+16. Run `node scripts/validate.mjs <package.json>` before returning a package.
+17. Run
+    `node scripts/finalize-generation.mjs <completed-run.json> <package.json>`
+    and return the safe generation manifest with the package.
+18. Preserve protected-answer boundaries. Do not invent evidence.
+19. Do not require network access for scope preflight, evidence validation,
     schema resolution, or package validation.

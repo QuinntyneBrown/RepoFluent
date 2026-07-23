@@ -1,0 +1,89 @@
+<section class="rf-panel authoring-generation-policy" aria-label="Authoring generation policy">
+  <div class="rf-panel__header">
+    <span>04 · Deterministic generation</span>
+    <span class="rf-badge">reproducible</span>
+  </div>
+
+  <div class="rf-panel__body generation-policy__body">
+    <div class="generation-policy__heading">
+      <div>
+        <span class="micro-label">Semantic identity · safe receipt</span>
+        <h2>Deterministic generation</h2>
+        <p>
+          Keep unchanged curriculum entities stable across rewording, then seal the completed run
+          with an allow-listed manifest.
+        </p>
+      </div>
+      <span class="rf-status rf-status--success">Trace sealed</span>
+    </div>
+
+    <div class="generation-policy__grid">
+      <article class="identity-card">
+        <div class="card-heading">
+          <span class="micro-label">Identity procedure</span>
+          <span>SHA-256 · 20</span>
+        </div>
+        <ol>
+          <li>
+            <span class="step-index">01</span>
+            <div>
+              <strong>Stable namespace</strong>
+              <p>Scope · kind · semantic key</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-index">02</span>
+            <div>
+              <strong>Prose-independent IDs</strong>
+              <p>Regeneration preserves identity</p>
+            </div>
+          </li>
+          <li class="collision-step">
+            <span class="step-index">!</span>
+            <div>
+              <strong>Collision stop</strong>
+              <p>Report · never overwrite</p>
+            </div>
+          </li>
+        </ol>
+      </article>
+
+      <article class="manifest-card">
+        <div class="card-heading">
+          <span class="micro-label">Safe generation manifest</span>
+          <span>0.1.0</span>
+        </div>
+        <h3>Tool · inputs · time · checksum</h3>
+        <dl>
+          <div>
+            <dt>source</dt>
+            <dd>scope + revisions</dd>
+          </div>
+          <div>
+            <dt>package</dt>
+            <dd>sha256:0ad4…b0c0e</dd>
+          </div>
+          <div>
+            <dt>validation</dt>
+            <dd class="manifest-valid">valid · 0 issues</dd>
+          </div>
+        </dl>
+        <div class="private-boundary">
+          <span aria-hidden="true">×</span>
+          <strong>No hidden reasoning · no credentials · no full prompts</strong>
+        </div>
+      </article>
+    </div>
+
+    <div class="generation-policy__commands" aria-label="Stable generation commands">
+      <code
+        ><span aria-hidden="true">$</span> node scripts/generate-identities.mjs
+        identities.json</code
+      >
+      <code
+        ><span aria-hidden="true">$</span> node scripts/finalize-generation.mjs run.json
+        package.json</code
+      >
+    </div>
+  </div>
+</section>

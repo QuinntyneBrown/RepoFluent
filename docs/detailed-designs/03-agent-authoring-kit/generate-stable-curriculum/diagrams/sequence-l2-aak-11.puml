@@ -9,49 +9,33 @@ skinparam rectangle {
   BorderColor #344054
   FontColor #101828
 }
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "GenerateStableCurriculumCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum authoring agent" as agent
+box "Frontend — Acquired authoring-kit command" #E0F2FE
+  participant "finalize-generation.mjs" as finalizer
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "GenerateStableCurriculumController" as controller
+box "Backend — Agent Authoring Kit Application and Domain" #D1FADF
+  participant "Run validator" as runValidator
+  participant "validate.mjs" as packageValidator
+  participant "Manifest projector" as projector
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "GenerateStableCurriculumHandler" as handler
-  participant "GenerateStableCurriculumPolicy" as policy
+box "Backend — Authoring workspace Infrastructure" #FFF4E5
+  collections "Completed-run metadata" as run
+  database "Generated package and bundled contract" as files
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IGenerateStableCurriculumRepository" as repository
-  database "Authoring workspace" as store
-end box
-actor -> entry : Start generate stable curriculum
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch GenerateStableCurriculumRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-11
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
-end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+agent -> finalizer : Finalize run and package
+finalizer -> run : Read local metadata
+run --> finalizer : Tool, model, versions, source,\ntime, inputs, and options
+finalizer -> runValidator : Apply L2-AAK-11 required fields
+runValidator --> finalizer : Accepted safe run fields
+finalizer -> packageValidator : Validate package path offline
+packageValidator -> files : Read package and bundled contract
+files --> packageValidator : Local bytes
+packageValidator --> finalizer : valid=true + zero issues
+finalizer -> projector : Project allow-listed manifest
+projector -> files : Hash exact package bytes
+files --> projector : Package bytes
+projector -> projector : Exclude reasoning, credentials,\nand full prompt transcripts
+projector --> finalizer : Manifest with package SHA-256
+finalizer --> agent : Manifest JSON + exit 0
 @enduml

@@ -3,16 +3,32 @@
 LAYOUT_WITH_LEGEND()
 title Components — Generate stable curriculum
 
-Container_Boundary(api, "Local Validator") {
-  Component(controller, "GenerateStableCurriculumController", ".NET boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "GenerateStableCurriculumHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "GenerateStableCurriculumPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IGenerateStableCurriculumRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Authoring workspace", "File system", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(policyView, "AuthoringGenerationPolicyComponent", "Angular component", "Presents deterministic identity and safe manifest policy")
 }
+Container_Boundary(identityCommand, "Identity generator") {
+  Component(identityEntry, "generate-identities.mjs", "Node.js command", "Coordinates identity generation")
+  Component(normalizer, "Namespace normalizer", "Local function", "Canonicalizes stable semantic inputs")
+  Component(hasher, "Identity hasher", "Local function", "Derives kind-prefixed SHA-256 identifiers")
+  Component(collision, "Collision detector", "Local function", "Stops distinct semantic fingerprints sharing one identifier")
+}
+Container_Boundary(finalizerCommand, "Generation finalizer") {
+  Component(finalizer, "finalize-generation.mjs", "Node.js command", "Coordinates one completed-run manifest")
+  Component(runValidator, "Run validator", "Local function", "Checks tool, versions, source, time, inputs, and options")
+  Component(packageValidator, "validate.mjs", "Bundled command", "Validates package JSON locally")
+  Component(projector, "Manifest projector", "Local function", "Allow-lists fields and computes package SHA-256")
+}
+ContainerDb(files, "Approved local files", "Files", "Identity input, run metadata, package, and contract")
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(policyView, identityEntry, "Documents invocation of")
+Rel(policyView, finalizer, "Documents invocation of")
+Rel(identityEntry, normalizer, "Canonicalizes through")
+Rel(identityEntry, hasher, "Derives through")
+Rel(identityEntry, collision, "Checks through")
+Rel(normalizer, files, "Reads identity input from")
+Rel(finalizer, runValidator, "Validates through")
+Rel(finalizer, packageValidator, "Executes")
+Rel(finalizer, projector, "Builds manifest through")
+Rel(packageValidator, files, "Reads package and contract from")
+Rel(projector, files, "Hashes package bytes from")
 @enduml

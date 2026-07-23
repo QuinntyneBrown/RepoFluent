@@ -2,13 +2,18 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@ang
 import { AuthoringKitRelease, RepoFluentApiService } from 'api';
 import { firstValueFrom } from 'rxjs';
 import { AuthoringEvidencePolicyComponent } from './authoring-evidence-policy.component';
+import { AuthoringGenerationPolicyComponent } from './authoring-generation-policy.component';
 import { AuthoringScopePolicyComponent } from './authoring-scope-policy.component';
 
 @Component({
   selector: 'app-authoring-kit-page',
   templateUrl: './authoring-kit-page.component.html',
   styleUrl: './authoring-kit-page.component.scss',
-  imports: [AuthoringScopePolicyComponent, AuthoringEvidencePolicyComponent],
+  imports: [
+    AuthoringScopePolicyComponent,
+    AuthoringEvidencePolicyComponent,
+    AuthoringGenerationPolicyComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthoringKitPageComponent implements OnInit {

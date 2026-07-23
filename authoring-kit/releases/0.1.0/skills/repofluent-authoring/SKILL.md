@@ -22,9 +22,14 @@ revision, exclusions, output location, and data-handling constraints.
    the approved snapshot and preserves material uncertainty in the package.
 9. Run
    `node scripts/validate-evidence.mjs <evidence-report.json> <scope.json>`.
-10. Write the generated package to the declared output location.
-11. Run `node scripts/validate.mjs <package.json>`.
-12. Return validation issues with stable paths. Do not include source excerpts,
+10. Read `guides/stable-generation.md` and run
+    `node scripts/generate-identities.mjs <identities.json>`.
+11. Write the generated package to the declared output location.
+12. Run `node scripts/validate.mjs <package.json>`.
+13. Run
+    `node scripts/finalize-generation.mjs <completed-run.json> <package.json>`.
+14. Return the package and safe generation manifest. Return validation issues
+    with stable paths. Do not include source excerpts,
    answers, secrets, or personal data in issue messages.
 
 Network access is unnecessary for schema resolution and validation. Optional

@@ -48,6 +48,19 @@ The command reruns scope preflight, binds citations to repository revisions,
 effective paths, file hashes, and line ranges, then requires structured material
 uncertainty to remain visible in the package.
 
+Generate stable identifiers and finalize a safe generation manifest:
+
+```sh
+node scripts/generate-identities.mjs examples/identities/regeneration-a.json
+node scripts/finalize-generation.mjs \
+  examples/generation/completed-run.json \
+  examples/valid/order-processing.json
+```
+
+Identity inputs exclude display titles from the namespace hash. The manifest
+allow-lists tool, model, version, source snapshot, time, checksum, options, and
+validation fields without hidden reasoning, credentials, or full prompts.
+
 ## Offline boundary
 
 Schema resolution, examples, instructions, validation, checksums, and

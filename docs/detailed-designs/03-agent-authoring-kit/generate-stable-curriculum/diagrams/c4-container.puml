@@ -3,16 +3,23 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Generate stable curriculum
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Authoring Kit CLI", ".NET tool", "Offline authoring and validation interface")
-  Container(api, "Local Validator", ".NET", "Applies application and domain policy")
-  ContainerDb(store, "Authoring workspace", "File system", "Stores tenant-scoped state and evidence")
+Person(agent, "Curriculum authoring agent", "Creates semantic inputs and completes generation")
+System_Boundary(repofluent, "RepoFluent authoring workflow") {
+  Container(policyView, "Generation policy view", "Angular", "Explains stable identity and safe manifest boundaries")
+  Container(identity, "Identity generator", "Dependency-free Node.js 22 command", "Derives stable IDs and detects collisions")
+  Container(finalizer, "Generation finalizer", "Dependency-free Node.js 22 command", "Validates and hashes the package, then emits a safe manifest")
+  Container(validator, "Package validator", "Bundled Node.js command", "Validates package bytes against contract 0.1.0")
+  ContainerDb(release, "Acquired authoring-kit release", "Versioned files", "Guide, fixtures, commands, validator, and checksums")
 }
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+System_Ext(workspace, "Approved authoring workspace", "Identity input, completed-run metadata, and package JSON")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(agent, policyView, "Reviews policy")
+Rel(agent, identity, "Generates identities", "Local process")
+Rel(agent, finalizer, "Finalizes completed run", "Local process")
+Rel(identity, workspace, "Reads semantic identity input from")
+Rel(finalizer, workspace, "Reads run metadata and package bytes from")
+Rel(finalizer, validator, "Executes offline")
+Rel(validator, release, "Loads bundled contract from")
+Rel(identity, release, "Runs from verified")
+Rel(finalizer, agent, "Returns allow-listed manifest", "Standard output")
 @enduml

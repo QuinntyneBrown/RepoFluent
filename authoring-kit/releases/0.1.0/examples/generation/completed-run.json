@@ -1,0 +1,30 @@
+{
+  "manifestVersion": "0.1.0",
+  "tool": {
+    "id": "repofluent-authoring-agent",
+    "version": "0.1.0"
+  },
+  "model": {
+    "id": "approved-model",
+    "version": "2026-07"
+  },
+  "kitVersion": "0.1.0",
+  "contractVersion": "0.1.0",
+  "sourceSnapshot": {
+    "scopeId": "approved-order-platform",
+    "repositories": [
+      {
+        "id": "order-platform",
+        "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8"
+      }
+    ]
+  },
+  "startedAt": "2026-07-23T16:00:00.000Z",
+  "completedAt": "2026-07-23T16:04:12.000Z",
+  "options": {
+    "language": "en-CA",
+    "profile": "dotnet-angular"
+  },
+  "identityInput": "examples/identities/regeneration-a.json",
+  "evidenceReport": "examples/evidence/valid-evidence-report.json"
+}

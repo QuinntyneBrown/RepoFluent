@@ -123,6 +123,7 @@ const artifactDefinitions = [
     "guides/citations-and-uncertainty.md",
     "text/markdown",
   ],
+  ["Stable generation guide", "guides/stable-generation.md", "text/markdown"],
   [
     "Curriculum JSON Schema",
     "contracts/curriculum.schema.json",
@@ -161,6 +162,26 @@ const artifactDefinitions = [
   [
     "Unrepresented-conflict evidence report",
     "examples/evidence/invalid-unrepresented-conflict.json",
+    "application/json",
+  ],
+  [
+    "First deterministic identity run",
+    "examples/identities/regeneration-a.json",
+    "application/json",
+  ],
+  [
+    "Reworded deterministic identity run",
+    "examples/identities/regeneration-b.json",
+    "application/json",
+  ],
+  [
+    "Colliding identity run",
+    "examples/identities/collision.json",
+    "application/json",
+  ],
+  [
+    "Completed generation run",
+    "examples/generation/completed-run.json",
     "application/json",
   ],
   [
@@ -217,6 +238,16 @@ const artifactDefinitions = [
   [
     "Evidence and uncertainty validator",
     "scripts/validate-evidence.mjs",
+    "text/javascript",
+  ],
+  [
+    "Deterministic identity generator",
+    "scripts/generate-identities.mjs",
+    "text/javascript",
+  ],
+  [
+    "Generation manifest finalizer",
+    "scripts/finalize-generation.mjs",
     "text/javascript",
   ],
   ["Local validation command", "scripts/validate.mjs", "text/javascript"],

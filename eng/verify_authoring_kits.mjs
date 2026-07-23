@@ -15,6 +15,7 @@ const requiredArtifacts = new Set([
   "prompts/generate-curriculum.md",
   "skills/repofluent-authoring/SKILL.md",
   "guides/citations-and-uncertainty.md",
+  "guides/stable-generation.md",
   "contracts/curriculum.schema.json",
   "contracts/ICD.md",
   "examples/valid/order-processing.json",
@@ -23,6 +24,10 @@ const requiredArtifacts = new Set([
   "examples/scope/secret-exposure-scope.json",
   "examples/evidence/valid-evidence-report.json",
   "examples/evidence/invalid-unrepresented-conflict.json",
+  "examples/identities/regeneration-a.json",
+  "examples/identities/regeneration-b.json",
+  "examples/identities/collision.json",
+  "examples/generation/completed-run.json",
   "examples/fixtures/repositories/order-platform/AGENTS.md",
   "examples/fixtures/repositories/order-platform/docs/architecture.md",
   "examples/fixtures/repositories/order-platform/docs/operations.md",
@@ -35,6 +40,8 @@ const requiredArtifacts = new Set([
   "examples/fixtures/repositories/secret-exposure/src/config/application.env",
   "scripts/preflight.mjs",
   "scripts/validate-evidence.mjs",
+  "scripts/generate-identities.mjs",
+  "scripts/finalize-generation.mjs",
   "scripts/validate.mjs",
   "scripts/curriculum.validator.mjs",
   "scripts/verify-release.mjs",
@@ -127,6 +134,8 @@ async function verifyRelease(version) {
     [
       "scripts/preflight.mjs",
       "scripts/validate-evidence.mjs",
+      "scripts/generate-identities.mjs",
+      "scripts/finalize-generation.mjs",
       "scripts/validate.mjs",
       "scripts/curriculum.validator.mjs",
     ].map((relativePath) =>
@@ -284,6 +293,81 @@ async function verifyRelease(version) {
   ) {
     errors.push(`${version}: unrepresented material conflict did not block`);
   }
+
+  const firstIdentities = runIdentityGeneration(
+    releaseRoot,
+    "regeneration-a.json",
+  );
+  const secondIdentities = runIdentityGeneration(
+    releaseRoot,
+    "regeneration-b.json",
+  );
+  const firstIdentityReport = parseReport(
+    version,
+    "first identity run",
+    firstIdentities.stdout,
+  );
+  const secondIdentityReport = parseReport(
+    version,
+    "reworded identity run",
+    secondIdentities.stdout,
+  );
+  if (
+    firstIdentities.status !== 0 ||
+    secondIdentities.status !== 0 ||
+    firstIdentityReport?.entities?.length !== 7 ||
+    JSON.stringify(firstIdentityReport?.entities) !==
+      JSON.stringify(secondIdentityReport?.entities)
+  ) {
+    errors.push(
+      `${version}: prose-only changes did not preserve stable identities`,
+    );
+  }
+
+  const collision = runIdentityGeneration(releaseRoot, "collision.json");
+  const collisionReport = parseReport(
+    version,
+    "identity collision",
+    collision.stdout,
+  );
+  if (
+    collision.status !== 1 ||
+    !collisionReport?.findings?.some(
+      (finding) =>
+        finding.code === "AAK_IDENTITY_COLLISION" &&
+        finding.path === "/entities/1/semanticKey",
+    )
+  ) {
+    errors.push(`${version}: semantic identity collision did not block`);
+  }
+
+  const finalized = spawnSync(
+    process.execPath,
+    [
+      path.join(releaseRoot, "scripts", "finalize-generation.mjs"),
+      path.join(releaseRoot, "examples", "generation", "completed-run.json"),
+      path.join(releaseRoot, "examples", "valid", "order-processing.json"),
+    ],
+    {
+      cwd: releaseRoot,
+      encoding: "utf8",
+      env: { ...process.env, REPOFLUENT_OFFLINE: "true" },
+    },
+  );
+  const generationManifest = parseReport(
+    version,
+    "generation manifest",
+    finalized.stdout,
+  );
+  if (
+    finalized.status !== 0 ||
+    generationManifest?.kitVersion !== version ||
+    generationManifest?.validation?.valid !== true ||
+    !/^sha256:[a-f0-9]{64}$/.test(generationManifest?.package?.sha256 ?? "") ||
+    /chain.?of.?thought|credential|full.?prompt/i.test(finalized.stdout)
+  ) {
+    errors.push(`${version}: safe generation manifest did not finalize`);
+  }
 }
 
 function runPreflight(releaseRoot, scopePath) {
@@ -305,6 +389,21 @@ function runEvidenceValidation(releaseRoot, reportPath) {
       path.join(releaseRoot, "scripts", "validate-evidence.mjs"),
       reportPath,
       path.join(releaseRoot, "examples", "scope", "approved-scope.json"),
+    ],
+    {
+      cwd: releaseRoot,
+      encoding: "utf8",
+      env: { ...process.env, REPOFLUENT_OFFLINE: "true" },
+    },
+  );
+}
+
+function runIdentityGeneration(releaseRoot, fixtureName) {
+  return spawnSync(
+    process.execPath,
+    [
+      path.join(releaseRoot, "scripts", "generate-identities.mjs"),
+      path.join(releaseRoot, "examples", "identities", fixtureName),
     ],
     {
       cwd: releaseRoot,

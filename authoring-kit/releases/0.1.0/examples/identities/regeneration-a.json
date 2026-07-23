@@ -1,0 +1,53 @@
+{
+  "identityVersion": "0.1.0",
+  "namespace": {
+    "organization": "repo-fluent-pilot",
+    "product": "order-platform",
+    "sourceScopeId": "approved-order-platform",
+    "majorVersion": 1
+  },
+  "entities": [
+    {
+      "kind": "package",
+      "semanticKey": "curriculum/order-platform",
+      "semanticFingerprint": "scope:approved-order-platform",
+      "title": "Order Platform Curriculum"
+    },
+    {
+      "kind": "system",
+      "semanticKey": "system/order-platform",
+      "semanticFingerprint": "docs/architecture.md#order-platform",
+      "title": "Order Platform"
+    },
+    {
+      "kind": "course",
+      "semanticKey": "course/payment-boundaries",
+      "semanticFingerprint": "architecture:payment-boundaries",
+      "title": "Payment Boundaries"
+    },
+    {
+      "kind": "lesson",
+      "semanticKey": "lesson/payment-authorization-flow",
+      "semanticFingerprint": "src/payments/handler.ts#authorizePayment",
+      "title": "Trace Payment Authorization"
+    },
+    {
+      "kind": "objective",
+      "semanticKey": "objective/trace-payment-authorization",
+      "semanticFingerprint": "objective:trace:payment-authorization",
+      "title": "Trace an order through payment authorization"
+    },
+    {
+      "kind": "code-reference",
+      "semanticKey": "code-reference/payment-handler",
+      "semanticFingerprint": "src/payments/handler.ts#authorizePayment",
+      "title": "Payment handler source"
+    },
+    {
+      "kind": "assessment",
+      "semanticKey": "assessment/payment-boundary-check",
+      "semanticFingerprint": "assessment:payment-boundary:check",
+      "title": "Check payment boundary knowledge"
+    }
+  ]
+}

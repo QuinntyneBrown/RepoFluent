@@ -1,0 +1,23 @@
+{
+  "identityVersion": "0.1.0",
+  "namespace": {
+    "organization": "repo-fluent-pilot",
+    "product": "order-platform",
+    "sourceScopeId": "approved-order-platform",
+    "majorVersion": 1
+  },
+  "entities": [
+    {
+      "kind": "lesson",
+      "semanticKey": "lesson/payment-boundary",
+      "semanticFingerprint": "docs/architecture.md#payment-boundary",
+      "title": "Architecture Payment Boundary"
+    },
+    {
+      "kind": "lesson",
+      "semanticKey": "lesson/payment-boundary",
+      "semanticFingerprint": "docs/operations.md#payment-boundary",
+      "title": "Operations Payment Boundary"
+    }
+  ]
+}

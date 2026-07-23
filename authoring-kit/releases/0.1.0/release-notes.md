@@ -13,6 +13,8 @@ This prerelease includes:
   reporting, access boundaries, and redacted secret-pattern findings;
 - snapshot-bound citation and structured uncertainty guidance, examples, and
   offline validation with material-conflict enforcement;
+- deterministic package/entity identity generation with collision stops and a
+  safe, checksummed generation manifest finalizer;
 - an explicit offline policy with optional network features disabled by default.
 
 There is no preceding authoring-kit release to migrate.
