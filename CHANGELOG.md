@@ -60,3 +60,6 @@
 - Guarded curriculum intake with executable-signature and malformed-JSON
   rejection, eleven-category versioned validation receipts, exact issue-set
   warning acknowledgement, and cross-platform visual evidence.
+- Idempotent curriculum draft import with tenant package-version uniqueness,
+  exact-checksum receipt replay, changed-byte conflicts, correlated conversion
+  attempts, and retry-safe complete draft persistence.

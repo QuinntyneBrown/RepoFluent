@@ -11,48 +11,53 @@ skinparam class {
 }
 title Class structure — Import a draft idempotently
 
-class ImportDraftIdempotentlyRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
+class CurriculumWorkflow {
+  +ReceiveAsync(actor, fileName, contentType, bytes, correlationId): Task<ImportReceipt>
+  +ValidateNextAsync(): Task
+  -ResolveExistingReceiptAsync(actor, existing, checksum, correlationId): Task<ImportReceipt>
+}
+
+class PackageIntakeScanner {
+  {static} +ReadIdentity(json: string): (PackageId, PackageVersion)
+}
+
+class ImportReceipt {
+  +Guid Id
+  +string Checksum
+  +CurriculumStatus Status
   +string CorrelationId
-  +object Payload
+  +string StatusUrl
+  +bool IsReplay
 }
 
-class ImportDraftIdempotentlyResult {
-  +string Outcome
-  +long Version
-  +string SupportId
-}
-
-class ImportDraftIdempotentlyRecord {
-  +string Id
+class CurriculumRecord {
+  +Guid Id
   +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: ImportDraftIdempotentlyResult): void
+  +string PackageId
+  +string PackageVersion
+  +string Checksum
+  +CurriculumStatus Status
+  +int ValidationAttemptCount
+  +ValidationReport? ValidationReport
 }
 
-class ImportDraftIdempotentlyPolicy {
-  +Evaluate(request: ImportDraftIdempotentlyRequest, current: ImportDraftIdempotentlyRecord): ImportDraftIdempotentlyResult
+interface ICurriculumStore {
+  +GetImportByPackageIdentityAsync(tenantId, packageId, packageVersion): Task<CurriculumRecord?>
+  +AddImportAsync(record): Task
+  +ClaimReceivedAsync(): Task<CurriculumRecord?>
+  +SaveImportAsync(record, action, actorId): Task
 }
 
-interface IImportDraftIdempotentlyRepository {
-  +Load(scopeId: string, targetId: string): Task<ImportDraftIdempotentlyRecord>
-  +Save(record: ImportDraftIdempotentlyRecord, expectedVersion: long): Task
-}
+class CurriculumStore
+class CurriculumValidationWorker
+class ConcurrentPackageIdentityException
 
-class ImportDraftIdempotentlyHandler {
-  +Handle(request: ImportDraftIdempotentlyRequest): Task<ImportDraftIdempotentlyResult>
-}
-
-ImportDraftIdempotentlyHandler ..> ImportDraftIdempotentlyRequest : handles
-ImportDraftIdempotentlyHandler ..> ImportDraftIdempotentlyPolicy : invokes
-ImportDraftIdempotentlyHandler ..> IImportDraftIdempotentlyRepository : uses
-IImportDraftIdempotentlyRepository --> ImportDraftIdempotentlyRecord : loads / saves
-ImportDraftIdempotentlyPolicy ..> ImportDraftIdempotentlyRecord : evaluates
-ImportDraftIdempotentlyPolicy ..> ImportDraftIdempotentlyResult : creates
-ImportDraftIdempotentlyRecord ..> ImportDraftIdempotentlyResult : applies
+CurriculumWorkflow ..> PackageIntakeScanner : reads identity through
+CurriculumWorkflow ..> ImportReceipt : returns
+CurriculumWorkflow --> ICurriculumStore : resolves and saves through
+ICurriculumStore <|.. CurriculumStore
+CurriculumStore ..> ConcurrentPackageIdentityException : raises on unique race
+CurriculumWorkflow ..> ConcurrentPackageIdentityException : converges
+CurriculumValidationWorker --> CurriculumWorkflow : retries validation
+ICurriculumStore --> CurriculumRecord : stores
 @enduml

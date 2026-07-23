@@ -5,53 +5,57 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "ImportDraftIdempotentlyPage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum author" as author
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "ImportDraftIdempotentlyController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "ImportDraftIdempotentlyHandler" as handler
-  participant "ImportDraftIdempotentlyPolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "PackageIntakeScanner" as scanner
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IImportDraftIdempotentlyRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start import a draft idempotently
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch ImportDraftIdempotentlyRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-12
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+author -> page : Upload package again
+page -> client : Send multipart bytes
+client -> endpoints : POST /api/curriculum-imports
+endpoints -> workflow : Receive authorized tenant bytes
+workflow -> scanner : Read screened package identity and version
+scanner --> workflow : Stable identity tuple
+workflow -> workflow : Compute package SHA-256
+workflow -> port : Apply L2-CLI-12 tenant identity lookup
+port -> store : Query tenant, package identity, and version
+store --> port : Existing lifecycle record
+port --> workflow : Existing checksum and status
+
+alt Checksum is identical
+  workflow -> port : Record upload-replayed audit
+  port -> store : Append replay evidence
+  store --> port : Durable audit
+  port --> workflow : Audit recorded
+  workflow --> endpoints : Existing ImportReceipt with IsReplay
+  endpoints --> client : 202 existing result
+  client --> page : Same identifier and checksum
+  page --> author : Present Existing receipt
+else Checksum differs
+  workflow -> port : Record package-version-conflict audit
+  port -> store : Append conflict evidence
+  store --> port : Durable audit
+  port --> workflow : Audit recorded
+  workflow --> endpoints : CLI_PACKAGE_VERSION_CONFLICT
+  endpoints --> client : 409 Problem Details
+  client --> page : New version guidance
+  page --> author : Present safe conflict
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+note over workflow,store
+  A concurrent unique-index race returns
+  to the same replay or conflict decision.
+end note
 @enduml

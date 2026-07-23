@@ -22,6 +22,8 @@ internal sealed class CurriculumImportEntity
 
     public required string PackageVersion { get; set; }
 
+    public int ValidationAttemptCount { get; set; }
+
     public required string ValidationIssuesJson { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }

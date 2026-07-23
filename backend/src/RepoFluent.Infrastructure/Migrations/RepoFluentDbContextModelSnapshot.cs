@@ -163,6 +163,9 @@ namespace RepoFluent.Infrastructure.Migrations
                     b.Property<string>("ValidationReportJson")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ValidationAttemptCount")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("WarningAcknowledgementJson")
                         .HasColumnType("TEXT");
 
@@ -170,6 +173,10 @@ namespace RepoFluent.Infrastructure.Migrations
 
                     b.HasIndex("TenantId", "Id")
                         .IsUnique();
+
+                    b.HasIndex("TenantId", "PackageId", "PackageVersion")
+                        .IsUnique()
+                        .HasFilter("\"PackageId\" <> '' AND \"PackageVersion\" <> ''");
 
                     b.HasIndex("TenantId", "PublishedVersionId")
                         .IsUnique();

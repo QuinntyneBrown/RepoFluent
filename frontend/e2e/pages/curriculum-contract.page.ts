@@ -1,10 +1,19 @@
 import { expect, type Page } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 
 export class CurriculumContractPage {
   constructor(private readonly page: Page) {}
 
   async inspectModeledPackage(packagePath: string): Promise<void> {
-    await this.page.getByLabel('Curriculum package').setInputFiles(packagePath);
+    const curriculumPackage = JSON.parse(await readFile(packagePath, 'utf8')) as {
+      packageId: string;
+    };
+    curriculumPackage.packageId = 'modeled-curriculum-foundations';
+    await this.page.getByLabel('Curriculum package').setInputFiles({
+      name: 'modeled-curriculum-package.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(curriculumPackage)),
+    });
     await this.page.getByRole('button', { name: 'Upload and validate' }).click();
     await expect(this.page.getByText('Ready for review', { exact: true })).toBeVisible();
     await this.page.getByRole('button', { name: 'Inspect contract model' }).click();
@@ -15,7 +24,7 @@ export class CurriculumContractPage {
     const metadata = this.page.getByRole('region', {
       name: 'Package metadata and source snapshot',
     });
-    await expect(metadata).toContainText('order-processing-foundations');
+    await expect(metadata).toContainText('modeled-curriculum-foundations');
     await expect(metadata).toContainText('0.1.0');
     await expect(metadata).toContainText('1.0.0');
     await expect(metadata).toContainText('Platform Enablement');

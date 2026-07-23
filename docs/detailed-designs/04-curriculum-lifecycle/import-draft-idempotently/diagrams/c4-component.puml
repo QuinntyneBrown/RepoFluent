@@ -3,16 +3,29 @@
 LAYOUT_WITH_LEGEND()
 title Components — Import a draft idempotently
 
-Container_Boundary(api, "Curriculum Lifecycle API") {
-  Component(controller, "ImportDraftIdempotentlyController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "ImportDraftIdempotentlyHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "ImportDraftIdempotentlyPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IImportDraftIdempotentlyRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Curriculum store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(page, "CurriculumPageComponent", "Angular component", "Presents portable and platform identities with replay state")
+  Component(client, "RepoFluentApiService", "Angular API client", "Receives typed ImportReceipt replay evidence")
 }
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Container_Boundary(api, "RepoFluent API") {
+  Component(endpoints, "CurriculumEndpoints", "ASP.NET Core endpoints", "Maps authorized intake and status routes")
+  Component(workflow, "CurriculumWorkflow", "Application service", "Resolves identity, checksum replay, conflicts, and retryable validation")
+  Component(scanner, "PackageIntakeScanner", "Application scanner", "Reads bounded identity from screened JSON")
+  Component(worker, "CurriculumValidationWorker", "Hosted service", "Retries received or validating records")
+  Component(port, "ICurriculumStore", "Application port", "Defines identity lookup, claim, save, and audit operations")
+  Component(concurrency, "ConcurrentPackageIdentityException", "Application signal", "Converges a unique-index race through existing-result resolution")
+}
+
+ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Stores one tenant record per package identity and version")
+
+Rel(page, client, "Invokes")
+Rel(client, endpoints, "Calls", "JSON and multipart HTTPS")
+Rel(endpoints, workflow, "Dispatches to")
+Rel(workflow, scanner, "Reads identity through")
+Rel(worker, workflow, "Runs retryable validation through")
+Rel(workflow, port, "Looks up, creates, and saves through")
+Rel(port, store, "Persists through CurriculumStore")
+Rel(store, concurrency, "Signals unique race through")
+Rel(concurrency, workflow, "Triggers replay resolution in")
 @enduml

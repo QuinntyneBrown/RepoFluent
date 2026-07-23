@@ -18,7 +18,7 @@ test('declared evidence, uncertainty, stable identities, and canonical values re
 }) => {
   const appShell = new AppShellPage(page);
   const provenance = new ProvenanceAndIdentitiesPage(page);
-  const packageBody = await buildProvenancePackage();
+  const packageBody = await buildProvenancePackage('provenance-portable-foundations');
 
   await appShell.open();
   await appShell.actAs('author');
@@ -37,7 +37,7 @@ test('invalid citations, duplicate identities, and non-canonical primitives repo
   await appShell.open();
   await appShell.actAs('author');
 
-  const invalidCitation = await buildProvenancePackage();
+  const invalidCitation = await buildProvenancePackage('provenance-invalid-citation');
   invalidCitation.courses[0].modules[0].lessons[0].blocks[0].evidence.citations[0].sourceId =
     'undeclared-repository';
   await provenance.uploadAndExpectIssues(JSON.stringify(invalidCitation), [
@@ -47,14 +47,14 @@ test('invalid citations, duplicate identities, and non-canonical primitives repo
     },
   ]);
 
-  const duplicateIdentity = await buildProvenancePackage();
+  const duplicateIdentity = await buildProvenancePackage('provenance-duplicate-identity');
   duplicateIdentity.courses[0].modules[0].id = duplicateIdentity.courses[0].id;
   await provenance.uploadAndExpectIssues(JSON.stringify(duplicateIdentity), [
     { code: 'CIC_DUPLICATE_ID', path: '/courses/0/id' },
     { code: 'CIC_DUPLICATE_ID', path: '/courses/0/modules/0/id' },
   ]);
 
-  const nonCanonical = await buildProvenancePackage();
+  const nonCanonical = await buildProvenancePackage('provenance-noncanonical-values');
   nonCanonical.packageId = 'Order_Processing';
   nonCanonical.locale = 'en-ca';
   nonCanonical.createdAt = '2026-07-23T08:00:00-04:00';
@@ -65,8 +65,9 @@ test('invalid citations, duplicate identities, and non-canonical primitives repo
   ]);
 });
 
-async function buildProvenancePackage() {
+async function buildProvenancePackage(packageId: string) {
   const packageBody = JSON.parse(await readFile(packagePath, 'utf8'));
+  packageBody.packageId = packageId;
   const evidence = {
     confidence: 'high',
     citations: [

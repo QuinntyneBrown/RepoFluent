@@ -16,7 +16,7 @@ test.describe.configure({ timeout: 60_000 });
 test('safe lesson blocks and revision-bound code tours remain portable', async ({ page }) => {
   const appShell = new AppShellPage(page);
   const safeContent = new SafeContentAndCodePage(page);
-  const packageBody = await buildSafePackage();
+  const packageBody = await buildSafePackage('safe-content-code-portable');
 
   await appShell.open();
   await appShell.actAs('author');
@@ -32,7 +32,7 @@ test('active and undeclared remote content is rejected at the exact block path',
 }) => {
   const appShell = new AppShellPage(page);
   const safeContent = new SafeContentAndCodePage(page);
-  const activeContent = await buildSafePackage();
+  const activeContent = await buildSafePackage('safe-content-active-rejection');
   activeContent.courses[0].modules[0].lessons[0].blocks[1].text =
     '<script>window.location = "https://untrusted.example"</script>';
 
@@ -44,7 +44,7 @@ test('active and undeclared remote content is rejected at the exact block path',
     '/courses/0/modules/0/lessons/0/blocks/1/text',
   );
 
-  const remoteContent = await buildSafePackage();
+  const remoteContent = await buildSafePackage('safe-content-remote-rejection');
   remoteContent.courses[0].modules[0].lessons[0].blocks[2].resourceUrl =
     'https://untrusted.example/order-flow.svg';
   await safeContent.uploadAndExpectBlockingIssue(
@@ -54,8 +54,9 @@ test('active and undeclared remote content is rejected at the exact block path',
   );
 });
 
-async function buildSafePackage() {
+async function buildSafePackage(packageId: string) {
   const packageBody = JSON.parse(await readFile(packagePath, 'utf8'));
+  packageBody.packageId = packageId;
   packageBody.courses[0].modules[0].lessons[0].blocks = [
     {
       type: 'prose',

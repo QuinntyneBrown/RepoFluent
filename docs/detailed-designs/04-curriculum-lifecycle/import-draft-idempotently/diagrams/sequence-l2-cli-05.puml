@@ -5,53 +5,67 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "ImportDraftIdempotentlyPage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum author" as author
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "ImportDraftIdempotentlyController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
+  participant "CurriculumValidationWorker" as worker
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "ImportDraftIdempotentlyHandler" as handler
-  participant "ImportDraftIdempotentlyPolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "PackageValidator" as validator
+  participant "CurriculumLifecycle" as lifecycle
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IImportDraftIdempotentlyRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start import a draft idempotently
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch ImportDraftIdempotentlyRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-05
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+worker -> workflow : Process accepted receipt
+workflow -> port : Claim Received record
+port -> store : Mark Validating and increment attempt
+store --> port : Attempt 1 committed
+port --> workflow : Claimed package
+workflow -> validator : Apply L2-CLI-05 blocking checks
+validator --> workflow : Valid package and warning issues
+workflow -> lifecycle : Complete validation without blockers
+lifecycle --> workflow : Draft status
+
+alt Complete persistence succeeds
+  workflow -> port : Save metadata, issues, report, status, and audit
+  port -> store : Commit one row transaction
+  store --> port : Durable complete draft
+  port --> workflow : Saved outcome
+else Persistence is interrupted
+  port --> workflow : Failure without partial draft status
+  worker -> workflow : Retry validation work
+  workflow -> port : Claim existing Validating record
+  port -> store : Increment correlated attempt
+  store --> port : Same record, attempt 2
+  port --> workflow : Retryable package
+  workflow -> validator : Re-run deterministic checks
+  validator --> workflow : Same valid result
+  workflow -> lifecycle : Complete validation
+  lifecycle --> workflow : Draft status
+  workflow -> port : Save complete outcome
+  port -> store : Commit one row transaction
+  store --> port : One complete draft
+  port --> workflow : Saved retry
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+author -> page : View draft status
+page -> client : Read opaque import identifier
+client -> endpoints : GET /api/curriculum-imports/{id}
+endpoints -> workflow : Read authorized record
+workflow -> port : Load tenant draft
+port -> store : Read one lifecycle row
+store --> port : Complete draft and attempt count
+port --> workflow : Draft evidence
+workflow --> endpoints : ImportStatus
+endpoints --> client : 200 typed draft
+client --> page : Portable and platform identities
+page --> author : Present complete draft
 @enduml

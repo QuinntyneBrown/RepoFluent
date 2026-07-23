@@ -11,6 +11,12 @@ public interface ICurriculumStore
         Guid id,
         CancellationToken cancellationToken);
 
+    Task<CurriculumRecord?> GetImportByPackageIdentityAsync(
+        string tenantId,
+        string packageId,
+        string packageVersion,
+        CancellationToken cancellationToken);
+
     Task<CurriculumRecord?> ClaimReceivedAsync(
         CancellationToken cancellationToken);
 

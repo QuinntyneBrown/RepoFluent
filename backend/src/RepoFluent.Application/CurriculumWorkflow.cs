@@ -71,8 +71,27 @@ public sealed class CurriculumWorkflow(
             throw;
         }
 
-        var id = Guid.NewGuid();
         var checksum = $"sha256:{Convert.ToHexStringLower(SHA256.HashData(bytes))}";
+        var (packageId, packageVersion) = PackageIntakeScanner.ReadIdentity(rawPackage);
+        if (!string.IsNullOrEmpty(packageId) && !string.IsNullOrEmpty(packageVersion))
+        {
+            var existing = await store.GetImportByPackageIdentityAsync(
+                actor.TenantId,
+                packageId,
+                packageVersion,
+                cancellationToken);
+            if (existing is not null)
+            {
+                return await ResolveExistingReceiptAsync(
+                    actor,
+                    existing,
+                    checksum,
+                    correlationId,
+                    cancellationToken);
+            }
+        }
+
+        var id = Guid.NewGuid();
         var record = new CurriculumRecord
         {
             Id = id,
@@ -82,10 +101,40 @@ public sealed class CurriculumWorkflow(
             Checksum = checksum,
             CorrelationId = correlationId,
             CreatedAt = timeProvider.GetUtcNow(),
-            Status = CurriculumStatus.Received
+            Status = CurriculumStatus.Received,
+            PackageId = packageId,
+            PackageVersion = packageVersion
         };
-        await store.AddImportAsync(record, cancellationToken);
-        return new(id, checksum, CurriculumStatus.Received, correlationId, $"/api/curriculum-imports/{id}");
+        try
+        {
+            await store.AddImportAsync(record, cancellationToken);
+        }
+        catch (ConcurrentPackageIdentityException)
+        {
+            var existing = await store.GetImportByPackageIdentityAsync(
+                actor.TenantId,
+                packageId,
+                packageVersion,
+                cancellationToken)
+                ?? throw new WorkflowException(
+                    503,
+                    "CLI_INTAKE_RETRY",
+                    "The package identity is being received. Retry the request.");
+            return await ResolveExistingReceiptAsync(
+                actor,
+                existing,
+                checksum,
+                correlationId,
+                cancellationToken);
+        }
+
+        return new(
+            id,
+            checksum,
+            CurriculumStatus.Received,
+            correlationId,
+            $"/api/curriculum-imports/{id}",
+            false);
     }
 
     public async Task<ImportStatus> GetStatusAsync(
@@ -416,7 +465,10 @@ public sealed class CurriculumWorkflow(
             actions,
             record.CorrelationId,
             record.ValidationReport,
-            record.WarningAcknowledgement);
+            record.WarningAcknowledgement,
+            record.PackageId,
+            record.PackageVersion,
+            record.ValidationAttemptCount);
     }
 
     private static bool HasUnacknowledgedWarnings(CurriculumRecord record)
@@ -451,6 +503,43 @@ public sealed class CurriculumWorkflow(
         CancellationToken cancellationToken) =>
         await store.GetImportAsync(tenantId, id, cancellationToken)
         ?? throw new WorkflowException(404, "CLI_IMPORT_NOT_FOUND", "The curriculum import is not available.");
+
+    private async Task<ImportReceipt> ResolveExistingReceiptAsync(
+        ActorContext actor,
+        CurriculumRecord existing,
+        string checksum,
+        string correlationId,
+        CancellationToken cancellationToken)
+    {
+        if (!string.Equals(existing.Checksum, checksum, StringComparison.Ordinal))
+        {
+            await store.RecordAuditAsync(
+                actor.TenantId,
+                actor.UserId,
+                "curriculum.package-version-conflict",
+                existing.Id.ToString(),
+                correlationId,
+                cancellationToken);
+            throw Conflict(
+                "CLI_PACKAGE_VERSION_CONFLICT",
+                "This package identity and version already exist with different bytes. Use a new version.");
+        }
+
+        await store.RecordAuditAsync(
+            actor.TenantId,
+            actor.UserId,
+            "curriculum.upload-replayed",
+            existing.Id.ToString(),
+            correlationId,
+            cancellationToken);
+        return new(
+            existing.Id,
+            existing.Checksum,
+            existing.Status,
+            existing.CorrelationId,
+            $"/api/curriculum-imports/{existing.Id}",
+            true);
+    }
 
     private static CurriculumLifecycle Rehydrate(CurriculumRecord record) =>
         CurriculumLifecycle.Rehydrate(

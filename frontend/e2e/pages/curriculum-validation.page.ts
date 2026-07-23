@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { expect, type Page } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 
 export class CurriculumValidationPage {
   constructor(private readonly page: Page) {}
@@ -15,7 +16,15 @@ export class CurriculumValidationPage {
       '..',
       'contracts/curriculum/0.1.0/fixtures/order-processing.json',
     );
-    await this.page.getByLabel('Curriculum package').setInputFiles(packagePath);
+    const curriculumPackage = JSON.parse(await readFile(packagePath, 'utf8')) as {
+      packageId: string;
+    };
+    curriculumPackage.packageId = 'validation-evidence-foundations';
+    await this.page.getByLabel('Curriculum package').setInputFiles({
+      name: 'validation-evidence.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(curriculumPackage)),
+    });
     await this.page.getByRole('button', { name: 'Upload and validate' }).click();
     await expect(this.page.getByText('Ready for review', { exact: true })).toBeVisible();
   }

@@ -45,6 +45,15 @@ public static class PackageIntakeScanner
         }
     }
 
+    public static (string PackageId, string PackageVersion) ReadIdentity(string json)
+    {
+        using var document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+        var packageId = ReadBoundedString(root, "packageId", 120);
+        var packageVersion = ReadBoundedString(root, "version", 40);
+        return (packageId, packageVersion);
+    }
+
     private static bool HasUnsafeSignature(byte[] bytes) =>
         bytes.AsSpan().StartsWith("MZ"u8)
         || bytes.AsSpan().StartsWith(new byte[] { 0x7f, (byte)'E', (byte)'L', (byte)'F' })
@@ -55,4 +64,19 @@ public static class PackageIntakeScanner
         400,
         "CLI_MALFORMED_PACKAGE",
         "The upload is not a well-formed UTF-8 JSON object.");
+
+    private static string ReadBoundedString(
+        JsonElement root,
+        string propertyName,
+        int maximumLength)
+    {
+        if (!root.TryGetProperty(propertyName, out var value)
+            || value.ValueKind != JsonValueKind.String)
+        {
+            return string.Empty;
+        }
+
+        var text = value.GetString() ?? string.Empty;
+        return text.Length <= maximumLength ? text : string.Empty;
+    }
 }

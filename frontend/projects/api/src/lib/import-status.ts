@@ -14,4 +14,7 @@ export interface ImportStatus {
   correlationId: string;
   validationReport: ValidationReport | null;
   warningAcknowledgement: WarningAcknowledgement | null;
+  packageId: string;
+  packageVersion: string;
+  validationAttemptCount: number;
 }

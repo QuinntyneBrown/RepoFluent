@@ -26,6 +26,7 @@ export class CurriculumPageComponent {
   protected readonly error = signal('');
   protected readonly packageError = signal('');
   protected readonly operationStatus = signal('Ready for a curriculum package');
+  protected readonly lastReceiptWasReplay = signal(false);
   protected learnerId = 'learner';
   protected isRequired = false;
 
@@ -56,12 +57,16 @@ export class CurriculumPageComponent {
     await this.run(
       async () => {
         const receipt = await firstValueFrom(this.api.upload(this.selectedFile!));
+        this.lastReceiptWasReplay.set(receipt.isReplay);
         localStorage.setItem(importStorageKey, receipt.id);
         this.operationStatus.set('Validating curriculum package');
         await this.pollUntilValidated(receipt.id);
       },
       'Uploading curriculum package',
-      'Curriculum package is ready for review',
+      () =>
+        this.lastReceiptWasReplay()
+          ? 'Existing draft reused'
+          : 'Curriculum package is ready for review',
     );
   }
 
@@ -172,7 +177,7 @@ export class CurriculumPageComponent {
   private async run(
     action: () => Promise<void>,
     startingStatus: string,
-    completedStatus: string,
+    completedStatus: string | (() => string),
   ): Promise<void> {
     if (this.isBusy()) return;
     this.isBusy.set(true);
@@ -181,7 +186,9 @@ export class CurriculumPageComponent {
     this.operationStatus.set(startingStatus);
     try {
       await action();
-      this.operationStatus.set(completedStatus);
+      this.operationStatus.set(
+        typeof completedStatus === 'string' ? completedStatus : completedStatus(),
+      );
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'The request could not be completed.';

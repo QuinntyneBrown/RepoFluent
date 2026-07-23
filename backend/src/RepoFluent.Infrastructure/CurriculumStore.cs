@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text.Json;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RepoFluent.Application;
 using RepoFluent.Domain;
@@ -30,6 +31,22 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         return entity is null ? null : ToRecord(entity);
     }
 
+    public async Task<CurriculumRecord?> GetImportByPackageIdentityAsync(
+        string tenantId,
+        string packageId,
+        string packageVersion,
+        CancellationToken cancellationToken)
+    {
+        var entity = await dbContext.CurriculumImports
+            .AsNoTracking()
+            .SingleOrDefaultAsync(
+                item => item.TenantId == tenantId
+                    && item.PackageId == packageId
+                    && item.PackageVersion == packageVersion,
+                cancellationToken);
+        return entity is null ? null : ToRecord(entity);
+    }
+
     public async Task<CurriculumRecord?> ClaimReceivedAsync(
         CancellationToken cancellationToken)
     {
@@ -57,9 +74,17 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
                 entity.PublishedVersionId);
             lifecycle.BeginValidation();
             entity.Status = lifecycle.Status.ToString();
-            AddAudit(entity.TenantId, "system", "curriculum.validation-started", entity.Id.ToString(), entity.CorrelationId);
-            await dbContext.SaveChangesAsync(cancellationToken);
         }
+        entity.ValidationAttemptCount++;
+        AddAudit(
+            entity.TenantId,
+            "system",
+            entity.ValidationAttemptCount == 1
+                ? "curriculum.validation-started"
+                : "curriculum.validation-retried",
+            entity.Id.ToString(),
+            entity.CorrelationId);
+        await dbContext.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
         return ToRecord(entity);
     }
@@ -89,7 +114,18 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             ? null
             : JsonSerializer.Serialize(record.WarningAcknowledgement, SerializerOptions);
         AddAudit(record.TenantId, actorId, auditAction, record.Id.ToString(), record.CorrelationId);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (
+            exception.InnerException is SqliteException { SqliteErrorCode: 19 }
+            && !string.IsNullOrEmpty(record.PackageId)
+            && !string.IsNullOrEmpty(record.PackageVersion))
+        {
+            dbContext.ChangeTracker.Clear();
+            throw new ConcurrentPackageIdentityException();
+        }
     }
 
     public Task<bool> AssignmentExistsAsync(
@@ -192,6 +228,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             Title = record.Title,
             PackageId = record.PackageId,
             PackageVersion = record.PackageVersion,
+            ValidationAttemptCount = record.ValidationAttemptCount,
             ValidationIssuesJson = "[]",
             CreatedAt = record.CreatedAt,
             ValidationReportJson = null,
@@ -212,6 +249,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             Title = entity.Title,
             PackageId = entity.PackageId,
             PackageVersion = entity.PackageVersion,
+            ValidationAttemptCount = entity.ValidationAttemptCount,
             ReviewerId = entity.ReviewerId,
             ReviewedAt = entity.ReviewedAt,
             PublishedVersionId = entity.PublishedVersionId,

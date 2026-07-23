@@ -169,7 +169,9 @@ restore evidence before production promotion.
 
 The repository contains the Angular 21 application, .NET 10 layered backend,
 SQLite migrations, development persona authentication, guarded package intake,
-and asynchronous validation hosted inside the API. Versioned reports bind
+idempotent draft conversion, and asynchronous validation hosted inside the API.
+Tenant package-version uniqueness converges exact replays and retains retry
+attempt evidence on one lifecycle record. Versioned reports bind
 contract, validator, package, and issue checksums before warning acknowledgement
 and approval. Curriculum contract `0.1.0` and an acceptance-tested
 curriculum-to-learning path complete the current foundation. This foundation

@@ -1,4 +1,5 @@
 import { expect, type APIRequestContext, type Page } from '@playwright/test';
+import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 
 export class ResponsiveNavigationPage {
@@ -26,7 +27,7 @@ export class ResponsiveNavigationPage {
         }>;
       }>;
     };
-    curriculumPackage.packageId = 'responsive-navigation-foundations';
+    curriculumPackage.packageId = `responsive-navigation-${randomUUID()}`;
     curriculumPackage.title = 'Responsive Navigation Foundations';
     curriculumPackage.courses[0]!.title = 'Responsive Navigation Foundations';
     const lesson = curriculumPackage.courses[0]!.modules[0]!.lessons[0]!;

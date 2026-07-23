@@ -3,10 +3,10 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Import a draft idempotently
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+Person(author, "Curriculum author", "Uploads portable curriculum packages and receives tenant draft results")
+System(repofluent, "RepoFluent", "Converges package replays and converts valid content into one complete tenant draft")
+System_Ext(source, "Approved package source", "Provides stable package identity, semantic version, and JSON bytes")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(author, source, "Obtains approved package from")
+Rel(author, repofluent, "Uploads or replays package")
 @enduml

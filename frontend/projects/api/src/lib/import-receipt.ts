@@ -6,4 +6,5 @@ export interface ImportReceipt {
   status: CurriculumStatus;
   correlationId: string;
   statusUrl: string;
+  isReplay: boolean;
 }

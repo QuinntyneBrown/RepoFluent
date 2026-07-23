@@ -26,6 +26,8 @@ public sealed class CurriculumRecord
 
     public string PackageVersion { get; set; } = string.Empty;
 
+    public int ValidationAttemptCount { get; set; }
+
     public string? ReviewerId { get; set; }
 
     public DateTimeOffset? ReviewedAt { get; set; }

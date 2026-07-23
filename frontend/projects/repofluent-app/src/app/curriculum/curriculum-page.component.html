@@ -115,6 +115,41 @@
           </div>
         </dl>
 
+        @if (current.packageId && current.packageVersion) {
+          <section class="draft-identity" aria-label="Draft identity">
+            <div class="draft-identity__heading">
+              <div>
+                <p class="step">Atomic draft import</p>
+                <h3>Stable package, separate platform identity</h3>
+              </div>
+              <span class="rf-badge">
+                {{ lastReceiptWasReplay() ? 'Existing receipt' : 'Original receipt' }}
+              </span>
+            </div>
+            <p class="draft-identity__description">
+              Package identity remains portable. The opaque platform identifier stays tenant-scoped.
+            </p>
+            <div class="draft-identity__grid">
+              <article>
+                <span>Package identity</span>
+                <strong>{{ current.packageId }}</strong>
+              </article>
+              <article>
+                <span>Package version</span>
+                <strong>{{ current.packageVersion }}</strong>
+              </article>
+              <article>
+                <span>Platform draft</span>
+                <strong data-testid="platform-draft-id">{{ current.id }}</strong>
+              </article>
+              <article>
+                <span>Validation attempts</span>
+                <strong>{{ current.validationAttemptCount }}</strong>
+              </article>
+            </div>
+          </section>
+        }
+
         @if (current.validationReport; as report) {
           <section class="validation-evidence" aria-label="Validation evidence">
             <div class="validation-evidence__heading">

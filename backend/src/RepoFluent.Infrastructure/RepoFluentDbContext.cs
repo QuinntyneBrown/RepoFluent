@@ -25,6 +25,9 @@ public sealed class RepoFluentDbContext(DbContextOptions<RepoFluentDbContext> op
             entity.Property(item => item.PackageId).HasMaxLength(120);
             entity.Property(item => item.PackageVersion).HasMaxLength(40);
             entity.HasIndex(item => new { item.TenantId, item.Id }).IsUnique();
+            entity.HasIndex(item => new { item.TenantId, item.PackageId, item.PackageVersion })
+                .IsUnique()
+                .HasFilter("\"PackageId\" <> '' AND \"PackageVersion\" <> ''");
             entity.HasIndex(item => new { item.TenantId, item.PublishedVersionId }).IsUnique();
         });
 

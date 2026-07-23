@@ -7,4 +7,5 @@ public sealed record ImportReceipt(
     string Checksum,
     CurriculumStatus Status,
     string CorrelationId,
-    string StatusUrl);
+    string StatusUrl,
+    bool IsReplay);

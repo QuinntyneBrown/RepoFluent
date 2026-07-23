@@ -12,4 +12,7 @@ public sealed record ImportStatus(
     IReadOnlyList<string> AllowedActions,
     string CorrelationId,
     ValidationReport? ValidationReport,
-    WarningAcknowledgement? WarningAcknowledgement);
+    WarningAcknowledgement? WarningAcknowledgement,
+    string PackageId,
+    string PackageVersion,
+    int ValidationAttemptCount);

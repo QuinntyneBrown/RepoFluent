@@ -3,16 +3,16 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Import a draft idempotently
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
+Person(author, "Curriculum author", "Uploads approved curriculum JSON")
 System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Curriculum administration", "Angular 21", "Curriculum lifecycle interface")
-  Container(api, "Curriculum Lifecycle API", "ASP.NET Core", "Applies application and domain policy")
-  ContainerDb(store, "Curriculum store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+  Container(web, "Curriculum workspace", "Angular 21", "Shows package identity, platform draft, attempts, and replay state")
+  Container(api, "RepoFluent API", "ASP.NET Core on .NET 10", "Resolves receipt replay or version conflict")
+  Container(worker, "Curriculum validation hosted service", ".NET background service", "Retries claimed validation and commits complete outcomes")
+  ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Enforces tenant package-version uniqueness and stores lifecycle evidence")
 }
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(author, web, "Uploads package", "HTTPS")
+Rel(web, api, "Sends multipart intake and status queries", "HTTPS")
+Rel(api, store, "Resolves or creates receipt", "EF Core")
+Rel(worker, store, "Claims retryable records and commits draft", "EF Core")
 @enduml

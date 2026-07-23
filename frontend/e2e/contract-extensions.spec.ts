@@ -18,7 +18,7 @@ test('unsupported noncritical extensions warn without changing core interpretati
 }) => {
   const appShell = new AppShellPage(page);
   const extensions = new ContractExtensionsPage(page);
-  const packageBody = await buildPackageWithExtension(false);
+  const packageBody = await buildPackageWithExtension(false, 'extension-noncritical-foundations');
 
   await appShell.open();
   await appShell.actAs('author');
@@ -36,14 +36,14 @@ test('unsupported critical extensions and core-field redefinitions block exact p
   await appShell.open();
   await appShell.actAs('author');
 
-  const critical = await buildPackageWithExtension(true);
+  const critical = await buildPackageWithExtension(true, 'extension-critical-rejection');
   await extensions.uploadAndExpectBlockingIssue(
     JSON.stringify(critical),
     'CIC_UNSUPPORTED_CRITICAL_EXTENSION',
     '/extensions/0/namespace',
   );
 
-  const redefinition = await buildPackageWithExtension(false);
+  const redefinition = await buildPackageWithExtension(false, 'extension-core-redefinition');
   redefinition.extensions[0].data.title = 'Replacement core title';
   await extensions.uploadAndExpectBlockingIssue(
     JSON.stringify(redefinition),
@@ -52,8 +52,9 @@ test('unsupported critical extensions and core-field redefinitions block exact p
   );
 });
 
-async function buildPackageWithExtension(critical: boolean) {
+async function buildPackageWithExtension(critical: boolean, packageId: string) {
   const packageBody = JSON.parse(await readFile(packagePath, 'utf8'));
+  packageBody.packageId = packageId;
   packageBody.extensions = [
     {
       namespace: 'com.acme.learning.insights',
