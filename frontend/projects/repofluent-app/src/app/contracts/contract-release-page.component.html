@@ -1,0 +1,29 @@
+<header class="page-heading">
+  <p class="eyebrow">&gt; contract.release --version 0.1.0 --verify</p>
+  <h1>Published curriculum contract</h1>
+  <p class="page-heading__lede">
+    Retrieve one immutable release unit with its interface policy, stable validation codes, and
+    executable conformance evidence.
+  </p>
+</header>
+
+@if (release(); as publishedRelease) {
+  <app-contract-release-panel [release]="publishedRelease" />
+} @else if (error()) {
+  <div class="rf-callout rf-callout--danger release-error" role="alert">
+    <div>
+      <strong>Contract release unavailable</strong>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
+} @else {
+  <section class="rf-panel loading-panel" aria-label="Loading contract release">
+    <div class="rf-panel__header">
+      <span>00 · Published contract</span>
+      <span class="rf-status rf-status--info">verifying</span>
+    </div>
+    <div class="rf-panel__body">
+      <p role="status">Verifying release checksum and artifact inventory…</p>
+    </div>
+  </section>
+}

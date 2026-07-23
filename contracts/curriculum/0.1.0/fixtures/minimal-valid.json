@@ -1,0 +1,151 @@
+{
+  "contractVersion": "0.1.0",
+  "packageId": "minimal-valid-curriculum",
+  "version": "1.0.0",
+  "title": "Minimal valid curriculum",
+  "description": "The smallest complete RepoFluent curriculum conformance package.",
+  "owner": "Contract maintainers",
+  "locale": "en-CA",
+  "createdAt": "2026-07-23T12:00:00Z",
+  "createdBy": "contract-release",
+  "sourceSnapshot": {
+    "repositories": [
+      {
+        "id": "sample-repository",
+        "name": "Sample repository",
+        "relativeRoot": "src",
+        "commit": "abc123",
+        "documents": ["README.md"],
+        "capturedAt": "2026-07-23T11:00:00Z"
+      }
+    ]
+  },
+  "systems": [
+    {
+      "id": "sample-client",
+      "name": "Sample client",
+      "responsibility": "Submit a sample request.",
+      "boundary": "Client",
+      "subsystems": []
+    },
+    {
+      "id": "sample-service",
+      "name": "Sample service",
+      "responsibility": "Handle a sample request.",
+      "boundary": "Service",
+      "subsystems": []
+    }
+  ],
+  "relationships": [
+    {
+      "id": "client-calls-service",
+      "sourceId": "sample-client",
+      "targetId": "sample-service",
+      "type": "calls",
+      "description": "Submits the sample request."
+    }
+  ],
+  "terminology": [
+    {
+      "term": "Sample request",
+      "definition": "A request used only to prove contract conformance."
+    }
+  ],
+  "courses": [
+    {
+      "id": "sample-course",
+      "title": "Sample course",
+      "description": "A minimal course.",
+      "difficulty": "foundational",
+      "estimatedMinutes": 5,
+      "audience": ["Engineers"],
+      "tags": ["sample"],
+      "isRequired": false,
+      "order": 1,
+      "prerequisites": ["None"],
+      "completionRules": ["Read the lesson"],
+      "objectives": [
+        {
+          "id": "understand-sample",
+          "statement": "Explain the sample request."
+        }
+      ],
+      "modules": [
+        {
+          "id": "sample-module",
+          "title": "Sample module",
+          "order": 1,
+          "lessons": [
+            {
+              "id": "sample-lesson",
+              "title": "Sample lesson",
+              "estimatedMinutes": 5,
+              "difficulty": "foundational",
+              "audience": ["Engineers"],
+              "tags": ["sample"],
+              "isRequired": true,
+              "order": 1,
+              "prerequisites": ["None"],
+              "completionRules": ["Read the content"],
+              "objectives": [
+                {
+                  "id": "locate-sample",
+                  "statement": "Locate the sample request."
+                }
+              ],
+              "blocks": [
+                {
+                  "type": "prose",
+                  "text": "The client submits a request to the service."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "assessments": [
+    {
+      "id": "sample-checkpoint",
+      "title": "Sample checkpoint",
+      "purpose": "formative",
+      "selection": {
+        "mode": "fixed",
+        "itemCount": 1,
+        "poolIds": ["sample-pool"]
+      },
+      "thresholdPercent": 100,
+      "maximumAttempts": 1,
+      "feedbackRelease": "after-submission",
+      "mappings": {
+        "objectiveIds": ["understand-sample"],
+        "systemIds": ["sample-service"],
+        "subsystemIds": []
+      },
+      "pools": [
+        {
+          "id": "sample-pool",
+          "title": "Sample questions",
+          "items": [
+            {
+              "id": "sample-question",
+              "type": "single-choice",
+              "prompt": "Who handles the sample request?",
+              "options": ["Sample client", "Sample service"],
+              "rationale": "The service handles requests from the client.",
+              "grading": {
+                "strategy": "exact-match",
+                "points": 1
+              },
+              "answer": {
+                "visibility": "protected",
+                "value": "Sample service"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -91,3 +91,6 @@ jobs:
 
       - name: Validate detailed designs
         run: python eng/verify_detailed_designs.py
+
+      - name: Validate contract releases
+        run: node eng/verify_contract_releases.mjs

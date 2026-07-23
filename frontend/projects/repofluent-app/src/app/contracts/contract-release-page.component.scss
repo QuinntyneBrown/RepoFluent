@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.page-heading {
+  border-bottom: 1px solid var(--rf-color-line);
+  margin-bottom: var(--rf-space-6);
+  padding-bottom: var(--rf-space-6);
+}
+
+.eyebrow {
+  color: var(--rf-color-primary);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
+  text-transform: uppercase;
+}
+
+h1 {
+  font: var(--rf-type-page-title);
+  margin: var(--rf-space-2) 0 var(--rf-space-3);
+}
+
+.page-heading__lede,
+.loading-panel p,
+.release-error p {
+  color: var(--rf-color-ink-muted);
+  margin: 0;
+  max-width: var(--rf-layout-reading);
+}
+
+.loading-panel .rf-panel__body {
+  padding: var(--rf-space-5);
+}

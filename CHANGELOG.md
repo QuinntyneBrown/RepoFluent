@@ -28,3 +28,6 @@
 - Complete curriculum package modeling for source provenance, architecture,
   ordered learning, and governed assessments, with protected answer values
   removed from review responses and a token-conformant contract workbench.
+- Immutable curriculum contract release manifest, public checksummed artifact
+  retrieval, semantic-version and migration policy, synchronized validation
+  codes, and a ten-case executable conformance suite.

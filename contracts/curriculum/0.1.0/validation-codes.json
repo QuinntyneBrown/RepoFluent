@@ -1,0 +1,150 @@
+{
+  "contractVersion": "0.1.0",
+  "codes": [
+    {
+      "code": "CIC_ANSWER_NOT_PROTECTED",
+      "category": "assessment-rules",
+      "meaning": "An assessment answer is not classified as protected."
+    },
+    {
+      "code": "CIC_CONTRACT_ARTIFACT_NOT_FOUND",
+      "category": "release",
+      "meaning": "The requested artifact is not declared by the contract release."
+    },
+    {
+      "code": "CIC_CONTRACT_ARTIFACT_PATH",
+      "category": "security",
+      "meaning": "A requested artifact path escapes its contract release."
+    },
+    {
+      "code": "CIC_CONTRACT_RELEASE_INVALID",
+      "category": "release",
+      "meaning": "A published contract release failed checksum or manifest verification."
+    },
+    {
+      "code": "CIC_CONTRACT_VERSION_UNSUPPORTED",
+      "category": "compatibility",
+      "meaning": "The requested contract release is not published."
+    },
+    {
+      "code": "CIC_DANGLING_REFERENCE",
+      "category": "references",
+      "meaning": "A typed identifier does not resolve to a declared target."
+    },
+    {
+      "code": "CIC_DANGLING_RELATIONSHIP",
+      "category": "references",
+      "meaning": "An architecture relationship endpoint is not declared."
+    },
+    {
+      "code": "CIC_DANGLING_REPOSITORY",
+      "category": "references",
+      "meaning": "A code reference points to an undeclared repository."
+    },
+    {
+      "code": "CIC_DUPLICATE_ID",
+      "category": "identifiers",
+      "meaning": "A stable identifier is duplicated in the package."
+    },
+    {
+      "code": "CIC_EMPTY_PACKAGE",
+      "category": "required-fields",
+      "meaning": "Package content is absent."
+    },
+    {
+      "code": "CIC_FORBIDDEN_PATH",
+      "category": "security",
+      "meaning": "A source path is absolute or traverses outside its repository root."
+    },
+    {
+      "code": "CIC_INVALID_ATTEMPTS",
+      "category": "assessment-rules",
+      "meaning": "The maximum assessment attempts are outside the supported range."
+    },
+    {
+      "code": "CIC_INVALID_DURATION",
+      "category": "limits",
+      "meaning": "A duration or time limit is outside the supported range."
+    },
+    {
+      "code": "CIC_INVALID_JSON",
+      "category": "types",
+      "meaning": "Content cannot be deserialized as the versioned package contract."
+    },
+    {
+      "code": "CIC_INVALID_ORDER",
+      "category": "ordering",
+      "meaning": "An ordering value is outside the supported range."
+    },
+    {
+      "code": "CIC_INVALID_POINTS",
+      "category": "assessment-rules",
+      "meaning": "A grading points value is outside the supported range."
+    },
+    {
+      "code": "CIC_INVALID_RANGE",
+      "category": "limits",
+      "meaning": "A source line range is invalid."
+    },
+    {
+      "code": "CIC_INVALID_SELECTION",
+      "category": "assessment-rules",
+      "meaning": "Assessment item selection is empty or outside the supported range."
+    },
+    {
+      "code": "CIC_INVALID_THRESHOLD",
+      "category": "limits",
+      "meaning": "An assessment threshold is outside zero through 100 percent."
+    },
+    {
+      "code": "CIC_REQUIRED",
+      "category": "required-fields",
+      "meaning": "A required contract value is absent."
+    },
+    {
+      "code": "CIC_SOURCE_REVISION_REQUIRED",
+      "category": "required-fields",
+      "meaning": "A source repository has no revision, branch, or commit identity."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_ASSESSMENT",
+      "category": "assessment-rules",
+      "meaning": "The assessment purpose is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_BLOCK",
+      "category": "types",
+      "meaning": "The lesson block type is not allow-listed."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_DIFFICULTY",
+      "category": "types",
+      "meaning": "The learning difficulty is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_FEEDBACK_RELEASE",
+      "category": "assessment-rules",
+      "meaning": "The assessment feedback-release policy is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_ITEM",
+      "category": "assessment-rules",
+      "meaning": "The assessment item type is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_RELATIONSHIP",
+      "category": "references",
+      "meaning": "The architecture relationship type is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_SELECTION",
+      "category": "assessment-rules",
+      "meaning": "The assessment selection mode is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_VERSION",
+      "category": "compatibility",
+      "meaning": "The package contract version is outside the supported version window."
+    }
+  ]
+}

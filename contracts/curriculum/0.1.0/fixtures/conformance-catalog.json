@@ -1,0 +1,160 @@
+{
+  "contractVersion": "0.1.0",
+  "cases": [
+    {
+      "id": "minimal-valid",
+      "category": "successful",
+      "title": "Minimal valid package",
+      "fixture": "minimal-valid.json",
+      "expected": {
+        "outcome": "success",
+        "issueCodes": []
+      }
+    },
+    {
+      "id": "representative-csharp-angular",
+      "category": "successful",
+      "title": "Representative C# and Angular curriculum",
+      "fixture": "order-processing.json",
+      "expected": {
+        "outcome": "success",
+        "issueCodes": []
+      }
+    },
+    {
+      "id": "invalid-required-field",
+      "category": "required-fields",
+      "title": "Required owner is absent",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "remove",
+          "path": "/owner"
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_REQUIRED"]
+      }
+    },
+    {
+      "id": "invalid-type",
+      "category": "types",
+      "title": "Course duration has the wrong type",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/courses/0/estimatedMinutes",
+          "value": "forty-five"
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_INVALID_JSON"]
+      }
+    },
+    {
+      "id": "invalid-identifier",
+      "category": "identifiers",
+      "title": "System identifier is duplicated",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/systems/1/id",
+          "value": "storefront-system"
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_DUPLICATE_ID"]
+      }
+    },
+    {
+      "id": "invalid-reference",
+      "category": "references",
+      "title": "Relationship target is absent",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/relationships/0/targetId",
+          "value": "missing-system"
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_DANGLING_RELATIONSHIP"]
+      }
+    },
+    {
+      "id": "invalid-ordering",
+      "category": "ordering",
+      "title": "Course order is outside the supported range",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/courses/0/order",
+          "value": 0
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_INVALID_ORDER"]
+      }
+    },
+    {
+      "id": "invalid-security",
+      "category": "security",
+      "title": "Repository root is absolute",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/sourceSnapshot/repositories/0/relativeRoot",
+          "value": "/srv/order"
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_FORBIDDEN_PATH"]
+      }
+    },
+    {
+      "id": "invalid-assessment-rule",
+      "category": "assessment-rules",
+      "title": "Answer is learner visible",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/assessments/0/pools/0/items/0/answer/visibility",
+          "value": "learner-visible"
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_ANSWER_NOT_PROTECTED"]
+      }
+    },
+    {
+      "id": "invalid-limit",
+      "category": "limits",
+      "title": "Assessment threshold exceeds 100 percent",
+      "baseFixture": "order-processing.json",
+      "mutations": [
+        {
+          "operation": "replace",
+          "path": "/assessments/0/thresholdPercent",
+          "value": 101
+        }
+      ],
+      "expected": {
+        "outcome": "failure",
+        "issueCodes": ["CIC_INVALID_THRESHOLD"]
+      }
+    }
+  ]
+}

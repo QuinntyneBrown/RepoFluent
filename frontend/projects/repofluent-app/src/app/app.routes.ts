@@ -16,6 +16,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'contracts',
+    loadComponent: () =>
+      import('./contracts/contract-release-page.component').then(
+        (module) => module.ContractReleasePageComponent,
+      ),
+  },
+  {
     path: 'learning/versions/:versionId/courses/:courseId',
     loadComponent: () =>
       import('./learning/course-page.component').then((module) => module.CoursePageComponent),

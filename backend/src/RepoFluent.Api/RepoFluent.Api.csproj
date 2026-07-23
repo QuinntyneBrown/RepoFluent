@@ -18,6 +18,13 @@
     <InternalsVisibleTo Include="RepoFluent.Api.IntegrationTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\..\contracts\curriculum\**\*">
+      <Link>contracts\curriculum\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>

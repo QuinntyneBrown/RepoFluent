@@ -20,6 +20,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton<ContractReleaseCatalog>();
 builder.Services.AddScoped<CurriculumWorkflow>();
 builder.Services.AddRepoFluentInfrastructure(builder.Configuration);
 builder.Services.AddHostedService<CurriculumValidationWorker>();
@@ -60,6 +61,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("E2E"))
 }
 
 app.MapCurriculumEndpoints();
+app.MapContractEndpoints();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import type { ContractRelease } from './contract-release';
 import type { CourseView } from './course-view';
 import type { ImportReceipt } from './import-receipt';
 import type { ImportStatus } from './import-status';
@@ -11,6 +12,10 @@ import type { Preview } from './preview';
 @Injectable({ providedIn: 'root' })
 export class RepoFluentApiService {
   private readonly http = inject(HttpClient);
+
+  getContractRelease(version = '0.1.0'): Observable<ContractRelease> {
+    return this.http.get<ContractRelease>(`/api/contracts/curriculum/releases/${version}`);
+  }
 
   upload(file: File): Observable<ImportReceipt> {
     const body = new FormData();

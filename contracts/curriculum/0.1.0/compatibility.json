@@ -1,0 +1,33 @@
+{
+  "contractVersion": "0.1.0",
+  "semanticVersion": {
+    "major": "Breaking package-shape or semantic changes that require an explicit migration.",
+    "minor": "Backward-compatible additions that older consumers may ignore safely.",
+    "patch": "Clarifications, fixture corrections, and validation fixes that do not change accepted semantics."
+  },
+  "supportedVersionWindow": {
+    "expression": ">=0.1.0 <0.2.0",
+    "minimum": "0.1.0",
+    "maximumExclusive": "0.2.0"
+  },
+  "backwardCompatibility": {
+    "status": "Backward compatible",
+    "policy": "A 0.1.x consumer accepts packages produced for 0.1.0 when required semantics are unchanged."
+  },
+  "forwardCompatibility": {
+    "status": "Forward compatible",
+    "policy": "A 0.1.0 consumer rejects unknown required semantics and may ignore only declared optional extensions."
+  },
+  "deprecationNoticeDays": 180,
+  "unsupportedVersions": {
+    "issueCode": "CIC_UNSUPPORTED_VERSION",
+    "major": "Reject before import and identify the supported major line.",
+    "minor": "Reject unsupported required semantics and identify the supported version window."
+  },
+  "migration": {
+    "responsibility": "Contract maintainers",
+    "preserves": ["Stable identifiers", "Protected semantics"],
+    "lossBehavior": "Loss report",
+    "policy": "A migration preserves stable identifiers and protected semantics. Any unavoidable loss is returned as an explicit, path-addressed loss report before publication."
+  }
+}

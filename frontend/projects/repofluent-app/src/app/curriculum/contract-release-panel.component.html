@@ -1,0 +1,156 @@
+<section
+  class="rf-panel contract-release"
+  aria-label="Published contract release"
+  data-testid="contract-release-panel"
+>
+  <div class="rf-panel__header">
+    <span>00 · Published contract</span>
+    <span class="rf-badge">{{ release().status }}</span>
+  </div>
+  <div class="rf-panel__body release-body">
+    <header class="release-heading">
+      <div>
+        <p class="step">Portable release unit</p>
+        <h2>Curriculum contract {{ release().version }}</h2>
+        <p>
+          Schema, policy, codes, fixtures, and notes are independently retrievable from one
+          checksummed release.
+        </p>
+      </div>
+      <div class="release-state" aria-label="Release verification">
+        <span class="rf-status rf-status--success">Immutable</span>
+        <span class="rf-status rf-status--success">Checksum verified</span>
+      </div>
+    </header>
+
+    <dl class="release-metadata">
+      <div>
+        <dt>Release checksum</dt>
+        <dd data-testid="contract-release-checksum">{{ release().releaseChecksum }}</dd>
+      </div>
+      <div>
+        <dt>Published</dt>
+        <dd>{{ release().publishedAt }}</dd>
+      </div>
+      <div>
+        <dt>Algorithm</dt>
+        <dd>{{ release().checksumAlgorithm }}</dd>
+      </div>
+    </dl>
+
+    <section class="artifact-section" aria-labelledby="release-artifacts-title">
+      <div class="section-heading">
+        <div>
+          <p class="step">Release contents</p>
+          <h3 id="release-artifacts-title">Checksummed artifacts</h3>
+        </div>
+        <span class="rf-badge">{{ release().artifacts.length }} files</span>
+      </div>
+      <div class="artifact-grid">
+        @for (artifact of release().artifacts; track artifact.path) {
+          <a class="artifact-card" [href]="artifact.url" [attr.aria-label]="artifact.name">
+            <span class="artifact-card__type">{{ artifact.mediaType }}</span>
+            <strong>{{ artifact.name }}</strong>
+            <code>{{ artifact.path }}</code>
+            <span class="artifact-card__action">Retrieve artifact →</span>
+          </a>
+        }
+      </div>
+    </section>
+
+    <div class="policy-grid">
+      <section class="policy-section" aria-label="Compatibility and migration policy">
+        <div class="section-heading">
+          <div>
+            <p class="step">ICD compatibility</p>
+            <h3>Supported version window</h3>
+          </div>
+          <code class="version-window">{{ release().compatibility.supportedVersionWindow }}</code>
+        </div>
+
+        <div class="semantic-grid">
+          @for (entry of release().compatibility.semanticVersion | keyvalue; track entry.key) {
+            <article>
+              <strong>{{ titleCase(entry.key) }}</strong>
+              <p>{{ entry.value }}</p>
+            </article>
+          }
+        </div>
+
+        <dl class="compatibility-list">
+          <div>
+            <dt>{{ release().compatibility.backwardCompatibilityStatus }}</dt>
+            <dd>{{ release().compatibility.backwardCompatibilityPolicy }}</dd>
+          </div>
+          <div>
+            <dt>{{ release().compatibility.forwardCompatibilityStatus }}</dt>
+            <dd>{{ release().compatibility.forwardCompatibilityPolicy }}</dd>
+          </div>
+          <div>
+            <dt>Deprecation notice</dt>
+            <dd>{{ release().compatibility.deprecationNoticeDays }} days</dd>
+          </div>
+          <div>
+            <dt>Unsupported versions</dt>
+            <dd>
+              <code>{{ release().compatibility.unsupportedIssueCode }}</code>
+              {{ release().compatibility.unsupportedMajorBehavior }}
+              {{ release().compatibility.unsupportedMinorBehavior }}
+            </dd>
+          </div>
+        </dl>
+
+        <div class="rf-callout rf-callout--information migration-callout">
+          <div>
+            <strong>Migration owner · {{ release().compatibility.migrationResponsibility }}</strong>
+            <p>
+              {{ release().compatibility.migrationPreserves.join(' · ') }} ·
+              {{ release().compatibility.migrationLossBehavior }}
+            </p>
+            <p>{{ release().compatibility.migrationPolicy }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="policy-section" aria-label="Conformance fixture suite">
+        <div class="section-heading">
+          <div>
+            <p class="step">Executable conformance</p>
+            <h3>{{ release().fixtureSummary.total }} cases</h3>
+          </div>
+          <span class="rf-status rf-status--success">declared outcomes</span>
+        </div>
+
+        <div class="fixture-counts">
+          <article [attr.aria-label]="release().fixtureSummary.successful + ' successful'">
+            <strong>{{ release().fixtureSummary.successful }}</strong>
+            <span>successful</span>
+          </article>
+          <article
+            [attr.aria-label]="release().fixtureSummary.expectedFailures + ' expected failures'"
+          >
+            <strong>{{ release().fixtureSummary.expectedFailures }}</strong>
+            <span>expected failures</span>
+          </article>
+        </div>
+
+        <div class="coverage-list">
+          <p class="step">Invalid fixture coverage</p>
+          <div>
+            @for (category of release().fixtureSummary.categories; track category) {
+              <span>{{ titleCase(category) }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="release-rule">
+          <span aria-hidden="true">◆</span>
+          <p>
+            Every case declares a successful outcome or stable issue code. The release verifier
+            rejects missing files, stale codes, changed bytes, or incomplete coverage.
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

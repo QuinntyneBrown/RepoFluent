@@ -1,0 +1,74 @@
+{
+  "contract": "repofluent-curriculum",
+  "version": "0.1.0",
+  "status": "prerelease",
+  "publishedAt": "2026-07-23T12:00:00Z",
+  "checksumAlgorithm": "sha256",
+  "releaseChecksum": "sha256:ab605846f181cc04e18f3121d040f0153a13283169ec7b5fa244471579b12f9c",
+  "checksumInput": "Artifact path and SHA-256 pairs sorted by ordinal path and terminated by LF.",
+  "artifacts": [
+    {
+      "name": "JSON Schema",
+      "path": "curriculum.schema.json",
+      "mediaType": "application/schema+json",
+      "sha256": "84f65157a989b6de2a69064cbe41783dfb167b85b96104783430cfd0b373fe2f"
+    },
+    {
+      "name": "Interface control document",
+      "path": "ICD.md",
+      "mediaType": "text/markdown",
+      "sha256": "7791de122c779123188bfd02d7bb1feccd1c44ab1da0e4b04a24a6ebe0bc65c3"
+    },
+    {
+      "name": "Compatibility declaration",
+      "path": "compatibility.json",
+      "mediaType": "application/json",
+      "sha256": "b698480e5f8fc8e207c5cb97178ddb1073967c920a9f7a220e40f6faf125f584"
+    },
+    {
+      "name": "Validation code catalog",
+      "path": "validation-codes.json",
+      "mediaType": "application/json",
+      "sha256": "dad5f2d2739277a1a9ab3144ff2099da887f0eabff607a11a69bf13fe46d779e"
+    },
+    {
+      "name": "Minimal valid fixture",
+      "path": "fixtures/minimal-valid.json",
+      "mediaType": "application/json",
+      "sha256": "3790212575e0baa79da29d852e11d15deaae92d0239081b9a59afd38abc78a4e"
+    },
+    {
+      "name": "Representative C# and Angular fixture",
+      "path": "fixtures/order-processing.json",
+      "mediaType": "application/json",
+      "sha256": "a2b3038892108a3c4d9347d2113ceef0b0b66c329285d48c040e1c1d45664042"
+    },
+    {
+      "name": "Conformance fixtures",
+      "path": "fixtures/conformance-catalog.json",
+      "mediaType": "application/json",
+      "sha256": "2aab5149e11f50aaa3fe795157621e419821a62e9c9170f25bd3cb6272c5089a"
+    },
+    {
+      "name": "Release notes",
+      "path": "release-notes.md",
+      "mediaType": "text/markdown",
+      "sha256": "4796e1ca5c2dbe3c9e3fa321a8f8df29ce9b9bedf58ab791d70d9b5be177f086"
+    }
+  ],
+  "fixtureSummary": {
+    "total": 10,
+    "successful": 2,
+    "expectedFailures": 8,
+    "categories": [
+      "required-fields",
+      "types",
+      "identifiers",
+      "references",
+      "ordering",
+      "security",
+      "assessment-rules",
+      "limits"
+    ]
+  }
+}
