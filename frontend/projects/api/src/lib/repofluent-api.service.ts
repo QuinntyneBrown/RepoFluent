@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import type { AuthoringKitRelease } from './authoring-kit-release';
 import type { ContractRelease } from './contract-release';
 import type { CourseView } from './course-view';
 import type { ImportReceipt } from './import-receipt';
@@ -15,6 +16,10 @@ export class RepoFluentApiService {
 
   getContractRelease(version = '0.1.0'): Observable<ContractRelease> {
     return this.http.get<ContractRelease>(`/api/contracts/curriculum/releases/${version}`);
+  }
+
+  getAuthoringKitRelease(version = '0.1.0'): Observable<AuthoringKitRelease> {
+    return this.http.get<AuthoringKitRelease>(`/api/authoring-kits/releases/${version}`);
   }
 
   upload(file: File): Observable<ImportReceipt> {

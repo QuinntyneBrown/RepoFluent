@@ -33,6 +33,7 @@ one experience, and humans approve agent-generated material before publication.
 | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
 | [`backend/`](backend/)                                 | .NET 10 domain, application, SQLite infrastructure, API, migrations, and tests                                                   |
 | [`frontend/`](frontend/)                               | Angular 21 application shell, API/components libraries, unit tests, and Playwright journey                                       |
+| [`authoring-kit/`](authoring-kit/)                     | Checksummed, offline-capable curriculum authoring-kit releases, examples, prompts, skills, and local validation                  |
 | [`contracts/`](contracts/)                             | Versioned curriculum schema, contract notes, and conformance fixtures                                                            |
 | [`docs/PRD.md`](docs/PRD.md)                           | Product vision, users, journeys, requirements, release scope, risks, and open decisions                                          |
 | [`docs/specs/`](docs/specs/)                           | L1 outcome requirements and traceable L2 acceptance requirements organized by subsystem                                          |
@@ -78,6 +79,8 @@ identity design are approved.
 dotnet restore backend/RepoFluent.sln
 dotnet build backend/RepoFluent.sln --no-restore
 dotnet test backend/RepoFluent.sln --no-build
+
+node eng/verify_authoring_kits.mjs
 
 Set-Location frontend
 npm ci

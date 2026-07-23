@@ -1,0 +1,111 @@
+<header class="page-heading">
+  <p class="eyebrow">&gt; authoring-kit.release --version 0.1.0 --offline</p>
+  <h1>Authoring kit</h1>
+  <p class="page-heading__lede">
+    Acquire one checksummed authoring boundary with local instructions, contract artifacts,
+    examples, and dependency-free validation.
+  </p>
+</header>
+
+@if (release(); as kit) {
+  <section
+    class="rf-panel authoring-kit-release"
+    aria-label="Authoring kit release"
+    data-testid="authoring-kit-release"
+  >
+    <div class="rf-panel__header">
+      <span>01 · Distribution manifest</span>
+      <span class="rf-badge">checksum verified</span>
+    </div>
+    <div class="rf-panel__body">
+      <div class="release-heading">
+        <div>
+          <span class="micro-label">Portable authoring boundary</span>
+          <h2>Release manifest</h2>
+          <p>Every declared file travels with the kit and resolves from the acquired directory.</p>
+        </div>
+        <span class="rf-status rf-status--success">Offline ready</span>
+      </div>
+
+      <div class="version-grid" aria-label="Authoring kit versions">
+        <article>
+          <span>Kit</span>
+          <strong>{{ kit.kitVersion }}</strong>
+        </article>
+        <article>
+          <span>Contract</span>
+          <strong>{{ kit.contractVersion }}</strong>
+        </article>
+        <article>
+          <span>Validator</span>
+          <strong>{{ kit.validatorVersion }}</strong>
+        </article>
+        <article>
+          <span>Runtime</span>
+          <strong>{{ kit.runtime }}</strong>
+        </article>
+      </div>
+
+      <div class="offline-boundary">
+        <span aria-hidden="true">✓</span>
+        <div>
+          <span class="micro-label">Acquired workspace</span>
+          <strong>Network optional · disabled</strong>
+          <p>Schema resolution, fixtures, documentation, checksums, and validation stay local.</p>
+        </div>
+        <code>{{ shortChecksum(kit.releaseChecksum) }}</code>
+      </div>
+
+      <div class="artifact-heading">
+        <div>
+          <span class="micro-label">Release inventory</span>
+          <h3>{{ kit.artifacts.length }} portable artifacts</h3>
+        </div>
+        <span>SHA-256 · ordinal aggregate</span>
+      </div>
+      <div class="rf-table-wrap artifact-table">
+        <table class="rf-table" aria-label="Authoring kit artifacts">
+          <thead>
+            <tr>
+              <th>Artifact</th>
+              <th>Release path</th>
+              <th>Integrity</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (artifact of kit.artifacts; track artifact.path) {
+              <tr>
+                <td>
+                  <a [href]="artifact.downloadUrl">{{ artifact.name }}</a>
+                </td>
+                <td>
+                  <code>{{ artifact.path }}</code>
+                </td>
+                <td>
+                  <code>{{ shortChecksum(artifact.sha256) }}</code>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+} @else if (error()) {
+  <div class="rf-callout rf-callout--danger release-error" role="alert">
+    <div>
+      <strong>Authoring kit unavailable</strong>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
+} @else {
+  <section class="rf-panel loading-panel" aria-label="Loading authoring kit">
+    <div class="rf-panel__header">
+      <span>00 · Authoring kit</span>
+      <span class="rf-status rf-status--info">verifying</span>
+    </div>
+    <div class="rf-panel__body">
+      <p role="status">Verifying the offline release and artifact inventory…</p>
+    </div>
+  </section>
+}

@@ -2,6 +2,13 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'authoring-kit',
+    loadComponent: () =>
+      import('./authoring-kit/authoring-kit-page.component').then(
+        (module) => module.AuthoringKitPageComponent,
+      ),
+  },
+  {
     path: '',
     loadComponent: () =>
       import('./curriculum/curriculum-page.component').then(

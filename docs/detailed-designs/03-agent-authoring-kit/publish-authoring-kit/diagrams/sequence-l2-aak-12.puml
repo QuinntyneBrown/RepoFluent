@@ -14,44 +14,34 @@ skinparam package {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "PublishAuthoringKitCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum author" as author
+box "Frontend — Acquired authoring workspace" #E0F2FE
+  participant "verify-release.mjs" as verifier
 end box
 box "Backend — Local Validator application" #D1FADF
-  participant "PublishAuthoringKitController" as controller
+  participant "validate.mjs" as command
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "PublishAuthoringKitHandler" as handler
-  participant "PublishAuthoringKitPolicy" as policy
+box "Backend — Bundled contract Application and Domain" #ECFDF3
+  participant "curriculum.validator.mjs" as validator
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IPublishAuthoringKitRepository" as repository
-  database "Authoring workspace" as store
+box "Backend — Acquired release Infrastructure" #FFF4E5
+  database "Local release directory" as files
 end box
-actor -> entry : Start publish the authoring kit
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch PublishAuthoringKitRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-12
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+author -> verifier : Verify acquired release
+verifier -> files : Read manifest and every artifact
+files --> verifier : Local bytes
+verifier -> verifier : Apply L2-AAK-12 artifact and aggregate checksums
+verifier --> author : Verified offline release
+author -> command : Validate package.json
+command -> files : Read local UTF-8 JSON
+files --> command : Package data
+command -> validator : Validate against compiled bundled schema
+alt Package conforms
+  validator --> command : valid true
+  command --> author : Exit 0 with no issues
+else Package does not conform
+  validator --> command : Schema errors
+  command --> author : Exit 1 with safe JSON Pointer issues
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
 @enduml

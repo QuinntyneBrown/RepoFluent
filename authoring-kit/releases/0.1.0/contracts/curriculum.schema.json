@@ -1,0 +1,723 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repofluent.example/contracts/curriculum/0.1.0/curriculum.schema.json",
+  "title": "RepoFluent Curriculum Package 0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "packageId",
+    "version",
+    "title",
+    "description",
+    "owner",
+    "locale",
+    "createdAt",
+    "createdBy",
+    "sourceSnapshot",
+    "systems",
+    "relationships",
+    "terminology",
+    "courses",
+    "assessments"
+  ],
+  "properties": {
+    "contractVersion": { "const": "0.1.0" },
+    "packageId": { "$ref": "#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 40 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "owner": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "locale": { "enum": ["en-CA", "en-US"] },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,7})?Z$"
+    },
+    "createdBy": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "evidence": { "$ref": "#/$defs/evidenceMetadata" },
+    "extensions": {
+      "type": "array",
+      "maxItems": 50,
+      "items": { "$ref": "#/$defs/contractExtension" }
+    },
+    "sourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repositories"],
+      "properties": {
+        "repositories": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/repository" }
+        }
+      }
+    },
+    "systems": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/system" }
+    },
+    "relationships": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/relationship" }
+    },
+    "terminology": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/terminology" }
+    },
+    "courses": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/course" }
+    },
+    "assessments": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/assessment" }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "evidenceMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confidence",
+        "citations",
+        "assumptions",
+        "omissions",
+        "conflictingSources",
+        "unresolvedQuestions"
+      ],
+      "properties": {
+        "confidence": { "enum": ["high", "medium", "low", "unknown"] },
+        "citations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": { "$ref": "#/$defs/sourceCitation" }
+        },
+        "assumptions": { "$ref": "#/$defs/evidenceNotes" },
+        "omissions": { "$ref": "#/$defs/evidenceNotes" },
+        "conflictingSources": { "$ref": "#/$defs/evidenceNotes" },
+        "unresolvedQuestions": { "$ref": "#/$defs/evidenceNotes" }
+      }
+    },
+    "sourceCitation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId", "document", "locator", "evidenceType"],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/identifier" },
+        "document": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "evidenceType": {
+          "enum": ["direct", "synthesis", "interpretation"]
+        }
+      }
+    },
+    "evidenceNotes": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+    },
+    "contractExtension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "version", "critical", "data"],
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 160,
+          "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z](?:[a-z0-9-]*[a-z0-9])?){2,}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+        },
+        "critical": { "type": "boolean" },
+        "data": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 50,
+          "propertyNames": {
+            "not": {
+              "enum": [
+                "contractVersion",
+                "packageId",
+                "version",
+                "title",
+                "description",
+                "owner",
+                "locale",
+                "createdAt",
+                "createdBy",
+                "sourceSnapshot",
+                "systems",
+                "relationships",
+                "terminology",
+                "courses",
+                "assessments",
+                "evidence",
+                "extensions"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "relativeRoot",
+        "documents",
+        "capturedAt"
+      ],
+      "anyOf": [
+        {
+          "required": ["revision"],
+          "properties": {
+            "revision": { "type": "string", "minLength": 1, "maxLength": 160 }
+          }
+        },
+        {
+          "required": ["branch"],
+          "properties": {
+            "branch": { "type": "string", "minLength": 1, "maxLength": 300 }
+          }
+        },
+        {
+          "required": ["commit"],
+          "properties": {
+            "commit": { "type": "string", "minLength": 1, "maxLength": 160 }
+          }
+        }
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "revision": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "relativeRoot": { "$ref": "#/$defs/relativePath" },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "commit": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "documents": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/relativePath" }
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,7})?Z$"
+        }
+      }
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "responsibility", "boundary", "subsystems"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "responsibility": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "boundary": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "subsystems": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/subsystem" }
+        }
+      }
+    },
+    "subsystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "responsibility", "boundary"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "responsibility": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "boundary": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sourceId", "targetId", "type", "description"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "sourceId": { "$ref": "#/$defs/identifier" },
+        "targetId": { "$ref": "#/$defs/identifier" },
+        "type": {
+          "enum": ["depends-on", "calls", "publishes-to", "reads-from", "contains"]
+        },
+        "description": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "terminology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["term", "definition"],
+      "properties": {
+        "term": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "definition": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "course": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "description",
+        "difficulty",
+        "estimatedMinutes",
+        "audience",
+        "tags",
+        "isRequired",
+        "order",
+        "prerequisites",
+        "completionRules",
+        "objectives",
+        "modules"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "difficulty": { "enum": ["foundational", "intermediate", "advanced"] },
+        "estimatedMinutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "audience": { "$ref": "#/$defs/nonEmptyStrings" },
+        "tags": { "$ref": "#/$defs/nonEmptyStrings" },
+        "isRequired": { "type": "boolean" },
+        "order": { "type": "integer", "minimum": 1 },
+        "prerequisites": { "$ref": "#/$defs/nonEmptyStrings" },
+        "completionRules": { "$ref": "#/$defs/nonEmptyStrings" },
+        "objectives": { "$ref": "#/$defs/objectives" },
+        "modules": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/module" }
+        }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "order", "lessons"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "order": { "type": "integer", "minimum": 1 },
+        "lessons": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/lesson" }
+        }
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "estimatedMinutes",
+        "difficulty",
+        "audience",
+        "tags",
+        "isRequired",
+        "order",
+        "prerequisites",
+        "completionRules",
+        "objectives",
+        "blocks"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "estimatedMinutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "difficulty": { "enum": ["foundational", "intermediate", "advanced"] },
+        "audience": { "$ref": "#/$defs/nonEmptyStrings" },
+        "tags": { "$ref": "#/$defs/nonEmptyStrings" },
+        "isRequired": { "type": "boolean" },
+        "order": { "type": "integer", "minimum": 1 },
+        "prerequisites": { "$ref": "#/$defs/nonEmptyStrings" },
+        "completionRules": { "$ref": "#/$defs/nonEmptyStrings" },
+        "objectives": { "$ref": "#/$defs/objectives" },
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/proseBlock" },
+              { "$ref": "#/$defs/calloutBlock" },
+              { "$ref": "#/$defs/diagramBlock" },
+              { "$ref": "#/$defs/codeReferenceBlock" },
+              { "$ref": "#/$defs/codeTourBlock" },
+              { "$ref": "#/$defs/exampleBlock" },
+              { "$ref": "#/$defs/glossaryLinkBlock" },
+              { "$ref": "#/$defs/knowledgeCheckBlock" }
+            ]
+          }
+        }
+      }
+    },
+    "objectives": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/learningObjective" }
+    },
+    "learningObjective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "purpose",
+        "selection",
+        "thresholdPercent",
+        "maximumAttempts",
+        "feedbackRelease",
+        "mappings",
+        "pools"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "purpose": { "enum": ["formative", "summative"] },
+        "selection": { "$ref": "#/$defs/assessmentSelection" },
+        "thresholdPercent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "maximumAttempts": { "type": "integer", "minimum": 1 },
+        "timeLimitMinutes": { "type": "integer", "minimum": 1 },
+        "feedbackRelease": {
+          "enum": ["immediate", "after-submission", "after-close", "never"]
+        },
+        "mappings": { "$ref": "#/$defs/assessmentMappings" },
+        "pools": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/questionPool" }
+        }
+      }
+    },
+    "assessmentSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "itemCount", "poolIds"],
+      "properties": {
+        "mode": { "enum": ["fixed", "random"] },
+        "itemCount": { "type": "integer", "minimum": 1 },
+        "poolIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" }
+        }
+      }
+    },
+    "assessmentMappings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveIds", "systemIds", "subsystemIds"],
+      "properties": {
+        "objectiveIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" }
+        },
+        "systemIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" }
+        },
+        "subsystemIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" }
+        }
+      }
+    },
+    "questionPool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "items"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/assessmentItem" }
+        }
+      }
+    },
+    "assessmentItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "prompt",
+        "rationale",
+        "grading",
+        "answer"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "type": {
+          "enum": [
+            "single-choice",
+            "multiple-choice",
+            "true-false",
+            "short-answer",
+            "code"
+          ]
+        },
+        "prompt": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        },
+        "rationale": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "grading": { "$ref": "#/$defs/gradingDefinition" },
+        "answer": { "$ref": "#/$defs/protectedAnswer" },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "gradingDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy", "points"],
+      "properties": {
+        "strategy": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "points": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "protectedAnswer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["visibility", "value"],
+      "properties": {
+        "visibility": { "const": "protected" },
+        "value": { "type": "string", "minLength": 1, "maxLength": 10000 }
+      }
+    },
+    "proseBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "text"],
+      "properties": {
+        "type": { "const": "prose" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "calloutBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "tone", "title", "text"],
+      "properties": {
+        "type": { "const": "callout" },
+        "tone": { "enum": ["information", "warning"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "codeReferenceBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "repositoryId",
+        "path",
+        "language",
+        "startLine",
+        "endLine",
+        "symbol",
+        "excerpt",
+        "contentClassification",
+        "explanation",
+        "provenance"
+      ],
+      "properties": {
+        "type": { "const": "codeReference" },
+        "repositoryId": { "$ref": "#/$defs/identifier" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "commit": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "language": { "enum": ["csharp", "typescript", "html", "scss"] },
+        "startLine": { "type": "integer", "minimum": 1 },
+        "endLine": { "type": "integer", "minimum": 1 },
+        "symbol": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "contentClassification": {
+          "enum": ["public", "internal", "confidential"]
+        },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "provenance": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "diagramBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "title",
+        "description",
+        "alternativeText",
+        "labels"
+      ],
+      "properties": {
+        "type": { "const": "diagram" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "alternativeText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "labels": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 20,
+          "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+        },
+        "resourceUrl": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2000
+        },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "codeTourBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "title", "steps"],
+      "properties": {
+        "type": { "const": "codeTour" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 20,
+          "items": { "$ref": "#/$defs/codeTourStep" }
+        },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "codeTourStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "title",
+        "guidance",
+        "repositoryId",
+        "path",
+        "language",
+        "startLine",
+        "endLine",
+        "symbol",
+        "excerpt",
+        "contentClassification",
+        "provenance"
+      ],
+      "properties": {
+        "order": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "guidance": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "repositoryId": { "$ref": "#/$defs/identifier" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "commit": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "language": { "enum": ["csharp", "typescript", "html", "scss"] },
+        "startLine": { "type": "integer", "minimum": 1 },
+        "endLine": { "type": "integer", "minimum": 1 },
+        "symbol": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "contentClassification": {
+          "enum": ["public", "internal", "confidential"]
+        },
+        "provenance": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "exampleBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "title", "text"],
+      "properties": {
+        "type": { "const": "example" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "glossaryLinkBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "term", "definition"],
+      "properties": {
+        "type": { "const": "glossaryLink" },
+        "term": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "definition": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    },
+    "knowledgeCheckBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "prompt", "assessmentId"],
+      "properties": {
+        "type": { "const": "knowledgeCheck" },
+        "prompt": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "assessmentId": { "$ref": "#/$defs/identifier" },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
+      }
+    }
+  }
+}

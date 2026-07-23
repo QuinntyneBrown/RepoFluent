@@ -1,0 +1,312 @@
+{
+  "contractVersion": "0.1.0",
+  "packageId": "order-processing-foundations",
+  "version": "1.0.0",
+  "description": "Learn how an Angular checkout becomes a durable .NET workflow.",
+  "owner": "Platform Enablement",
+  "locale": "en-CA",
+  "createdAt": "2026-07-23T12:00:00Z",
+  "createdBy": "curriculum-agent",
+  "evidence": {
+    "confidence": "high",
+    "citations": [
+      {
+        "sourceId": "order-service",
+        "document": "docs/orders.md",
+        "locator": "durable-handoff",
+        "evidenceType": "direct"
+      }
+    ],
+    "assumptions": [
+      "The supplied snapshot describes the persistence boundary."
+    ],
+    "omissions": [
+      "Payment orchestration is outside this package."
+    ],
+    "conflictingSources": [
+      "The legacy runbook describes publication before persistence."
+    ],
+    "unresolvedQuestions": [
+      "Which retry policy owns terminal failures?"
+    ]
+  },
+  "extensions": [
+    {
+      "namespace": "com.acme.learning.insights",
+      "version": "1.2.0",
+      "critical": false,
+      "data": {
+        "dashboardLabel": "Order flow insight",
+        "cohortGrouping": "platform-engineering"
+      }
+    }
+  ],
+  "sourceSnapshot": {
+    "repositories": [
+      {
+        "id": "order-service",
+        "name": "Order Service",
+        "revision": "8f24c1a",
+        "relativeRoot": "services/order",
+        "branch": "main",
+        "commit": "8f24c1a",
+        "documents": [
+          "docs/orders.md"
+        ],
+        "capturedAt": "2026-07-22T18:30:00Z"
+      },
+      {
+        "id": "storefront",
+        "name": "Angular Storefront",
+        "revision": "91be440",
+        "relativeRoot": "apps/storefront",
+        "branch": "release/checkout",
+        "commit": "91be440",
+        "documents": [
+          "docs/checkout.md"
+        ],
+        "capturedAt": "2026-07-22T18:31:00Z"
+      }
+    ]
+  },
+  "systems": [
+    {
+      "id": "storefront-system",
+      "name": "Storefront",
+      "responsibility": "Collect and submit customer checkout intent.",
+      "boundary": "Browser application",
+      "subsystems": [
+        {
+          "id": "checkout-subsystem",
+          "name": "Checkout",
+          "responsibility": "Validate a basket and create an order request.",
+          "boundary": "Angular checkout feature"
+        }
+      ]
+    },
+    {
+      "id": "order-system",
+      "name": "Order Service",
+      "responsibility": "Persist orders and start durable processing.",
+      "boundary": ".NET service",
+      "subsystems": []
+    }
+  ],
+  "relationships": [
+    {
+      "id": "storefront-calls-orders",
+      "sourceId": "storefront-system",
+      "targetId": "order-system",
+      "type": "calls",
+      "description": "Submits validated checkout intent."
+    }
+  ],
+  "terminology": [
+    {
+      "term": "Durable order",
+      "definition": "An order committed before asynchronous processing begins."
+    }
+  ],
+  "courses": [
+    {
+      "id": "order-processing-course",
+      "title": "Order Processing Foundations",
+      "description": "Trace an order across the browser, API, and asynchronous workflow.",
+      "difficulty": "foundational",
+      "estimatedMinutes": 45,
+      "audience": [
+        "Product engineers"
+      ],
+      "tags": [
+        "angular",
+        "dotnet",
+        "workflows"
+      ],
+      "isRequired": true,
+      "order": 1,
+      "prerequisites": [
+        "HTTP request fundamentals"
+      ],
+      "completionRules": [
+        "Complete every lesson",
+        "Score at least 80% on the checkpoint"
+      ],
+      "objectives": [
+        {
+          "id": "trace-order",
+          "statement": "Trace an order from checkout to durable workflow",
+          "evidence": {
+            "confidence": "high",
+            "citations": [
+              {
+                "sourceId": "order-service",
+                "document": "docs/orders.md",
+                "locator": "durable-handoff",
+                "evidenceType": "direct"
+              }
+            ],
+            "assumptions": [],
+            "omissions": [],
+            "conflictingSources": [],
+            "unresolvedQuestions": []
+          }
+        },
+        {
+          "id": "explain-boundary",
+          "statement": "Explain the asynchronous processing boundary"
+        }
+      ],
+      "modules": [
+        {
+          "id": "order-workflow-module",
+          "title": "The order workflow",
+          "order": 1,
+          "lessons": [
+            {
+              "id": "order-becomes-workflow",
+              "title": "How an order becomes a workflow",
+              "estimatedMinutes": 12,
+              "difficulty": "foundational",
+              "audience": [
+                "Product engineers"
+              ],
+              "tags": [
+                "messages"
+              ],
+              "isRequired": true,
+              "order": 1,
+              "prerequisites": [
+                "trace-order"
+              ],
+              "completionRules": [
+                "Read every content block"
+              ],
+              "objectives": [
+                {
+                  "id": "locate-handoff",
+                  "statement": "Locate the HTTP-to-message handoff"
+                },
+                {
+                  "id": "explain-wait",
+                  "statement": "Explain why downstream work can wait"
+                }
+              ],
+              "blocks": [
+                {
+                  "type": "prose",
+                  "text": "The API accepts the customer's intent, persists an order, and then publishes a message for downstream processing.",
+                  "evidence": {
+                    "confidence": "high",
+                    "citations": [
+                      {
+                        "sourceId": "order-service",
+                        "document": "docs/orders.md",
+                        "locator": "durable-handoff",
+                        "evidenceType": "direct"
+                      }
+                    ],
+                    "assumptions": [],
+                    "omissions": [],
+                    "conflictingSources": [],
+                    "unresolvedQuestions": []
+                  }
+                },
+                {
+                  "type": "callout",
+                  "tone": "information",
+                  "title": "Architecture note",
+                  "text": "Publishing after persistence gives the workflow a durable order to retrieve."
+                },
+                {
+                  "type": "codeReference",
+                  "repositoryId": "order-service",
+                  "path": "src/Order.Api/Controllers/OrderController.cs",
+                  "branch": "main",
+                  "commit": "8f24c1a",
+                  "language": "csharp",
+                  "startLine": 42,
+                  "endLine": 57,
+                  "symbol": "OrderController.Create",
+                  "excerpt": "await bus.Publish(new OrderSubmitted(order.Id));",
+                  "contentClassification": "internal",
+                  "explanation": "The controller validates, persists, publishes, and returns.",
+                  "provenance": "Captured from the declared order-service snapshot."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "assessments": [
+    {
+      "id": "order-workflow-checkpoint",
+      "title": "Order workflow checkpoint",
+      "purpose": "formative",
+      "selection": {
+        "mode": "fixed",
+        "itemCount": 1,
+        "poolIds": [
+          "order-workflow-pool"
+        ]
+      },
+      "thresholdPercent": 80,
+      "maximumAttempts": 2,
+      "timeLimitMinutes": 10,
+      "feedbackRelease": "after-submission",
+      "mappings": {
+        "objectiveIds": [
+          "trace-order"
+        ],
+        "systemIds": [
+          "order-system"
+        ],
+        "subsystemIds": [
+          "checkout-subsystem"
+        ]
+      },
+      "pools": [
+        {
+          "id": "order-workflow-pool",
+          "title": "Order workflow questions",
+          "items": [
+            {
+              "id": "durable-order-sequence",
+              "type": "single-choice",
+              "prompt": "Which sequence gives downstream processing a durable order?",
+              "options": [
+                "Publish the message, then persist the order",
+                "Persist the order, then publish the message"
+              ],
+              "rationale": "Downstream work must be able to retrieve a committed order.",
+              "grading": {
+                "strategy": "exact-match",
+                "points": 1
+              },
+              "answer": {
+                "visibility": "protected",
+                "value": "Persist the order, then publish the message"
+              },
+              "evidence": {
+                "confidence": "high",
+                "citations": [
+                  {
+                    "sourceId": "order-service",
+                    "document": "docs/orders.md",
+                    "locator": "durable-handoff",
+                    "evidenceType": "direct"
+                  }
+                ],
+                "assumptions": [],
+                "omissions": [],
+                "conflictingSources": [],
+                "unresolvedQuestions": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

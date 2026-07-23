@@ -14,44 +14,35 @@ skinparam package {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "PublishAuthoringKitCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum author" as author
+box "Frontend — RepoFluent Angular application" #E0F2FE
+  participant "AuthoringKitPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "PublishAuthoringKitController" as controller
+box "Backend — RepoFluent API application" #D1FADF
+  participant "AuthoringKitEndpoints" as endpoints
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "PublishAuthoringKitHandler" as handler
-  participant "PublishAuthoringKitPolicy" as policy
+box "Backend — Authoring Kit Application and Domain" #ECFDF3
+  participant "AuthoringKitReleaseCatalog" as catalog
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IPublishAuthoringKitRepository" as repository
-  database "Authoring workspace" as store
+box "Backend — Release filesystem Infrastructure" #FFF4E5
+  database "Authoring-kit release directory" as files
 end box
-actor -> entry : Start publish the authoring kit
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch PublishAuthoringKitRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-01
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+author -> page : Open authoring-kit release
+page -> client : Request release 0.1.0
+client -> endpoints : GET /api/authoring-kits/releases/0.1.0
+endpoints -> catalog : GetRelease(version)
+catalog -> files : Read manifest
+files --> catalog : Version and artifact declarations
+loop Every L2-AAK-01 artifact
+  catalog -> files : Read allow-listed artifact bytes
+  files --> catalog : Artifact bytes
+  catalog -> catalog : Verify SHA-256 and safe release path
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+catalog -> catalog : Verify ordinal aggregate checksum
+catalog --> endpoints : AuthoringKitReleaseView
+endpoints --> client : 200 OK + release
+client --> page : Typed release
+page --> author : Present versions, offline policy, and inventory
 @enduml

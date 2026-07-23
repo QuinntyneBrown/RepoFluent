@@ -3,10 +3,11 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Publish the authoring kit
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+Person(author, "Curriculum author", "Acquires the kit and produces curriculum packages")
+System(repofluent, "RepoFluent", "Publishes verified authoring-kit releases")
+System_Ext(workspace, "Acquired authoring workspace", "Runs the unpacked kit without network access")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(author, repofluent, "Inspects and acquires a release")
+Rel(author, workspace, "Authors and validates packages using")
+Rel(repofluent, workspace, "Supplies checksummed release artifacts to")
 @enduml

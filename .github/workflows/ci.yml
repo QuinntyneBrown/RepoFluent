@@ -94,3 +94,6 @@ jobs:
 
       - name: Validate contract releases
         run: node eng/verify_contract_releases.mjs
+
+      - name: Validate authoring-kit releases
+        run: node eng/verify_authoring_kits.mjs

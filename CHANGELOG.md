@@ -40,3 +40,6 @@
 - Versioned reverse-domain contract extensions with isolated payloads,
   noncritical warning semantics, exact-path critical rejection, and a
   token-conformant extension-policy workbench.
+- Checksummed authoring-kit `0.1.0` distribution with bundled instructions,
+  prompt, skill, contract artifacts, examples, dependency-free offline
+  validation, public artifact retrieval, and a token-conformant release view.

@@ -3,16 +3,30 @@
 LAYOUT_WITH_LEGEND()
 title Components — Publish the authoring kit
 
-Container_Boundary(api, "Local Validator") {
-  Component(controller, "PublishAuthoringKitController", ".NET boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "PublishAuthoringKitHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "PublishAuthoringKitPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IPublishAuthoringKitRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Authoring workspace", "File system", "Persists feature state and safe evidence")
+Container_Boundary(spa, "RepoFluent Angular application") {
+  Component(page, "AuthoringKitPageComponent", "Angular component", "Presents version, offline, checksum, and inventory evidence")
+  Component(client, "RepoFluentApiService", "Angular HTTP client", "Retrieves the authoring-kit release")
+}
+Container_Boundary(api, "RepoFluent API") {
+  Component(endpoints, "AuthoringKitEndpoints", "ASP.NET Core endpoints", "Exposes release and artifact routes")
+  Component(catalog, "AuthoringKitReleaseCatalog", "Release catalog", "Verifies manifest, paths, and checksums")
+}
+Container_Boundary(tooling, "Repository release tooling") {
+  Component(builder, "build_authoring_kit.mjs", "Node.js build command", "Copies, bundles, and hashes release artifacts")
+  Component(gate, "verify_authoring_kits.mjs", "Node.js CI gate", "Checks versions, offline boundary, and examples")
+}
+Container_Boundary(release, "Acquired authoring-kit release") {
+  Component(localValidator, "validate.mjs", "Node.js command", "Validates a package with the bundled schema")
+  Component(releaseVerifier, "verify-release.mjs", "Node.js command", "Verifies every artifact and aggregate checksum")
+  ComponentDb(files, "Release directory", "Versioned files", "Manifest, instructions, contract, examples, and compiled validator")
 }
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(page, client, "Loads release through")
+Rel(client, endpoints, "Calls", "HTTPS")
+Rel(endpoints, catalog, "Delegates to")
+Rel(catalog, files, "Verifies and reads")
+Rel(builder, files, "Builds")
+Rel(gate, files, "Verifies")
+Rel(localValidator, files, "Reads package and bundled validator from")
+Rel(releaseVerifier, files, "Hashes")
 @enduml

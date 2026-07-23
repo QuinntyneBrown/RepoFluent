@@ -11,48 +11,55 @@ skinparam class {
 }
 title Class structure — Publish the authoring kit
 
-class PublishAuthoringKitRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class AuthoringKitReleaseCatalog {
+  +GetRelease(version: string): AuthoringKitReleaseView
+  +GetArtifact(version: string, artifactPath: string): AuthoringKitArtifact
+  -OpenVerifiedManifest(version: string): JsonDocument
 }
 
-class PublishAuthoringKitResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class AuthoringKitReleaseView {
+  +string Kit
+  +string KitVersion
+  +string ContractVersion
+  +string ValidatorVersion
+  +string ReleaseChecksum
+  +AuthoringKitOfflinePolicyView Offline
+  +IReadOnlyList<AuthoringKitArtifactView> Artifacts
 }
 
-class PublishAuthoringKitRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: PublishAuthoringKitResult): void
+class AuthoringKitOfflinePolicyView {
+  +bool Supported
+  +bool ValidationRequiresNetwork
+  +bool OptionalNetworkFeaturesEnabledByDefault
+  +IReadOnlyList<string> OptionalNetworkFeatures
 }
 
-class PublishAuthoringKitPolicy {
-  +Evaluate(request: PublishAuthoringKitRequest, current: PublishAuthoringKitRecord): PublishAuthoringKitResult
+class AuthoringKitArtifactView {
+  +string Name
+  +string Path
+  +string MediaType
+  +string Sha256
+  +string DownloadUrl
 }
 
-interface IPublishAuthoringKitRepository {
-  +Load(scopeId: string, targetId: string): Task<PublishAuthoringKitRecord>
-  +Save(record: PublishAuthoringKitRecord, expectedVersion: long): Task
+class AuthoringKitArtifact {
+  +string Path
+  +string MediaType
+  +byte[] Content
 }
 
-class PublishAuthoringKitHandler {
-  +Handle(request: PublishAuthoringKitRequest): Task<PublishAuthoringKitResult>
+class AuthoringKitEndpoints {
+  +MapAuthoringKitEndpoints(endpoints): IEndpointRouteBuilder
 }
 
-PublishAuthoringKitHandler ..> PublishAuthoringKitRequest : handles
-PublishAuthoringKitHandler ..> PublishAuthoringKitPolicy : invokes
-PublishAuthoringKitHandler ..> IPublishAuthoringKitRepository : uses
-IPublishAuthoringKitRepository --> PublishAuthoringKitRecord : loads / saves
-PublishAuthoringKitPolicy ..> PublishAuthoringKitRecord : evaluates
-PublishAuthoringKitPolicy ..> PublishAuthoringKitResult : creates
-PublishAuthoringKitRecord ..> PublishAuthoringKitResult : applies
+class RepoFluentApiService {
+  +getAuthoringKitRelease(version: string): Observable<AuthoringKitRelease>
+}
+
+AuthoringKitEndpoints ..> AuthoringKitReleaseCatalog : delegates
+AuthoringKitReleaseCatalog ..> AuthoringKitReleaseView : creates
+AuthoringKitReleaseCatalog ..> AuthoringKitArtifact : creates
+AuthoringKitReleaseView *-- AuthoringKitOfflinePolicyView : owns
+AuthoringKitReleaseView *-- "1..*" AuthoringKitArtifactView : owns
+RepoFluentApiService ..> AuthoringKitReleaseView : mirrors
 @enduml
