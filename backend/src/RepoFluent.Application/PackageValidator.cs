@@ -106,12 +106,21 @@ public sealed class PackageValidator
                 $"{path}/repositoryId",
                 issues);
             var sourcePath = block.Path ?? string.Empty;
-            var isForbiddenPath = Path.IsPathRooted(sourcePath)
+            var isForbiddenPath = IsRootedOnAnyPlatform(sourcePath)
                 || sourcePath.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries).Contains("..", StringComparer.Ordinal);
             Require(!isForbiddenPath && sourcePath.Length > 0, "CIC_FORBIDDEN_PATH", $"{path}/path", issues);
             Require(block.StartLine > 0 && block.EndLine >= block.StartLine, "CIC_INVALID_RANGE", path, issues);
         }
     }
+
+    private static bool IsRootedOnAnyPlatform(string path) =>
+        Path.IsPathRooted(path)
+        || path.StartsWith('\\')
+        || path.StartsWith('/')
+        || (path.Length >= 3
+            && char.IsAsciiLetter(path[0])
+            && path[1] == ':'
+            && path[2] is '\\' or '/');
 
     private static void AddIdentifier(
         string identifier,
