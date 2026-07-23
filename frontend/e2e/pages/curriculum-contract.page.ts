@@ -66,7 +66,14 @@ export class CurriculumContractPage {
     const workbench = this.page.getByTestId('contract-model-workbench');
     await workbench.scrollIntoViewIfNeeded();
     await this.page.addStyleTag({
-      content: '.statusbar { visibility: hidden !important; }',
+      content: `
+        .statusbar { visibility: hidden !important; }
+        [data-testid='contract-model-workbench'] {
+          box-sizing: border-box !important;
+          height: 1664px !important;
+          overflow: hidden !important;
+        }
+      `,
     });
     await expect(workbench).toHaveScreenshot('model-curriculum-package-workbench.png', {
       animations: 'disabled',
