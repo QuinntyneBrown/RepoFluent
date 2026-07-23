@@ -32,8 +32,8 @@ h1 {
 
 .dashboard {
   background-image:
-    linear-gradient(rgb(38 50 61 / 18%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(38 50 61 / 18%) 1px, transparent 1px);
+    linear-gradient(var(--rf-color-grid-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rf-color-grid-faint) 1px, transparent 1px);
   background-size: 1rem 1rem;
   margin: calc(var(--rf-space-4) * -1);
   padding: var(--rf-space-4);

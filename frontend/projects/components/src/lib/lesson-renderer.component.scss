@@ -115,7 +115,7 @@ h1 {
 }
 
 .source-excerpt {
-  background: rgb(77 224 148 / 8%);
+  background: var(--rf-color-primary-wash);
   border-left: 2px solid var(--rf-color-primary);
   display: grid;
   gap: var(--rf-space-4);

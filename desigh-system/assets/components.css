@@ -671,17 +671,17 @@ summary {
 }
 .rf-status--info {
   color: var(--rf-color-info);
-  border-color: #27677a;
+  border-color: var(--rf-color-info-border);
   background: var(--rf-color-info-dim);
 }
 .rf-status--warning {
   color: var(--rf-color-warning);
-  border-color: #7b5b2e;
+  border-color: var(--rf-color-warning-border);
   background: var(--rf-color-warning-dim);
 }
 .rf-status--danger {
   color: var(--rf-color-danger);
-  border-color: #824146;
+  border-color: var(--rf-color-danger-border);
   background: var(--rf-color-danger-dim);
 }
 .rf-progress {
@@ -750,7 +750,7 @@ summary {
   background: linear-gradient(
     90deg,
     transparent,
-    rgb(255 255 255 / 7%),
+    var(--rf-color-skeleton-highlight),
     transparent
   );
   transform: translateX(-100%);
@@ -903,11 +903,11 @@ summary {
   user-select: none;
 }
 .rf-code__line--focus {
-  background: rgb(77 224 148 / 9%);
+  background: var(--rf-color-primary-wash);
   box-shadow: inset 2px 0 var(--rf-color-primary);
 }
 .rf-syntax-keyword {
-  color: #b692f6;
+  color: var(--rf-color-syntax-keyword);
 }
 .rf-syntax-type {
   color: var(--rf-color-info);
@@ -1036,7 +1036,7 @@ summary {
 }
 .rf-mini-shell__status {
   grid-column: 1/-1;
-  background: #15232b;
+  background: var(--rf-color-statusbar);
 }
 .rf-workflow {
   display: grid;
@@ -1098,7 +1098,11 @@ summary {
   overflow: hidden;
   border: 1px solid var(--rf-color-line);
   background:
-    radial-gradient(circle at 50% 45%, rgb(77 224 148 / 7%), transparent 18rem),
+    radial-gradient(
+      circle at 50% 45%,
+      var(--rf-color-primary-wash),
+      transparent 18rem
+    ),
     var(--rf-color-void);
 }
 .rf-graph::before {
@@ -1125,7 +1129,7 @@ summary {
   border-color: var(--rf-color-primary);
   box-shadow:
     0 0 0 1px var(--rf-color-primary),
-    0 0 20px rgb(77 224 148 / 18%);
+    0 0 20px var(--rf-color-graph-glow);
 }
 .rf-graph__node small {
   display: block;

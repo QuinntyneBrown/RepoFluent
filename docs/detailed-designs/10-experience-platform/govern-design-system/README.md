@@ -4,12 +4,14 @@
 
 RepoFluent's Experience Platform subsystem provides design-system,
 accessibility, responsive, capability, and performance foundations. This
-feature maintains semantic tokens, reusable component states, and reduced-motion behavior as one versioned interface contract. It covers *design-token contract*, *component state coverage*, *motion and reduced motion*.
+feature maintains semantic tokens, reusable component states, and reduced-motion behavior as one versioned interface contract. It covers _design-token contract_, _component state coverage_, _motion and reduced motion_.
 
 The checked-in reference implementation is the static `desigh-system/` site.
 Its HTML, CSS, and JavaScript work from `file://` without a runtime dependency.
-The production Angular consumer, telemetry integration, supported-browser
-matrix, and production measurement profile remain `<TO SUPPLY>`.
+The production Angular consumer now imports the same contract through
+`ExperiencePlatformAdapter`. Telemetry, supported-browser policy, and
+production measurement are implemented by their dedicated detailed-design
+features.
 
 ## Description
 
@@ -20,12 +22,14 @@ The feature uses the following checked-in assets and planned integration seam.
 - **`desigh-system/assets/docs.js`** — documentation navigation and progressively enhanced component examples.
 - **`desigh-system/foundations/`** — reference pages for color, type, spacing, motion, and accessibility.
 - **`desigh-system/tests/smoke.spec.js`** — Playwright checks for loading, keyboard behavior, focus restoration, and narrow layouts.
-- **`ExperiencePlatformAdapter`** — planned Angular library boundary that maps
-  the accepted `.rf-*` contracts into product components; implementation remains
-  `<TO SUPPLY>` because `frontend/angular.json` contains no application project.
+- **`ExperiencePlatformAdapter`** — Angular library boundary that publishes the
+  contract version, selects an approved theme, reflects reduced-motion
+  preference, and maps the accepted `.rf-*` contracts into product components.
 - **`ExperienceConformanceSuite`** — quality boundary composed from Playwright,
-  `html-validate`, Prettier, accessibility checks, and production performance
-  gates. Production performance and browser-matrix checks remain `<TO SUPPLY>`.
+  `html-validate`, Prettier, semantic-token enforcement, visual regression,
+  accessibility checks, and production performance gates. Production
+  performance and browser-matrix checks remain owned by their dedicated
+  experience-platform features.
 
 The structural diagram models source artifacts as typed contracts. It does not
 claim that the current static JavaScript defines application classes.
@@ -90,3 +94,17 @@ The reference assets apply `L2-EXP-02` through a semantic contract and an access
 The reference assets apply `L2-EXP-03` through a semantic contract and an accessible fallback. The conformance suite checks the available reference behavior before the contract is consumed by the production application.
 
 ![Sequence diagram for motion and reduced motion](diagrams/sequence-l2-exp-03.png)
+
+### Implementation evidence
+
+Status: **Implemented**
+
+- `ExperiencePlatformAdapter` publishes design-system version `0.1.0`, selects
+  the approved default or tenant theme, and reflects reduced-motion preference.
+- The Angular application consumes the authoritative token and component assets
+  directly; `npm run design:check` rejects product raw colors, `.ds-*` usage,
+  missing contract imports, and missing token categories.
+- `design-system-conformance.spec.ts` and its Page Object verify both themes,
+  high-zoom keyboard focus, reduced motion, and desktop visual baselines.
+- The static design-system suite verifies state semantics and WCAG contrast for
+  default and tenant themes.

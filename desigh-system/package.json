@@ -4,7 +4,7 @@
   "private": true,
   "description": "Static Code Command design-system documentation and optional QA tooling.",
   "scripts": {
-    "format:check": "prettier --check \"**/*.{html,css,js,json,md}\"",
+    "format:check": "prettier --check \"*.{html,json,md}\" \"assets/*.{css,js}\" \"foundations/*.html\" \"components/*.html\" \"patterns/*.html\" \"tests/*.js\"",
     "test": "playwright test tests/smoke.spec.js --reporter=line",
     "validate": "html-validate \"index.html\" \"foundations/*.html\" \"components/*.html\" \"patterns/*.html\""
   },

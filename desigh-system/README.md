@@ -4,6 +4,14 @@ Static HTML documentation for RepoFluent's **Code Command** product language. Th
 system treats foundations, reusable components, and cross-product patterns as a
 versioned interface contract rather than a collection of screenshots.
 
+The current contract version is **0.1.0**. Product consumers import
+`assets/tokens.css` and `assets/components.css` directly and expose the active
+contract version in their rendered root. Additive tokens, component states, and
+documentation corrections are backward-compatible minor or patch changes.
+Removing or renaming an `--rf-*` token or `.rf-*` contract, or changing its
+documented semantics, requires a major version with migration notes. Deprecated
+contracts remain available for at least one minor release before removal.
+
 Open `index.html` directly in a browser. Every page works over `file://`; there is
 no build step, package manager, webfont request, or runtime dependency.
 

@@ -174,7 +174,7 @@
 
 .statusbar {
   align-items: center;
-  background: #15232b;
+  background: var(--rf-color-statusbar);
   bottom: 0;
   color: var(--rf-color-ink-muted);
   display: grid;

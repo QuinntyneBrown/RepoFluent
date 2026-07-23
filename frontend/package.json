@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve repofluent-app",
     "build": "ng build repofluent-app && ng build api && ng build components",
-    "format:check": "prettier --check \"projects/**/*.{ts,html,scss,json}\" \"e2e/**/*.ts\" \"*.{ts,json}\"",
+    "design:check": "node scripts/verify-design-system.mjs",
+    "format:check": "prettier --check \"projects/**/*.{ts,html,scss,json}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \"*.{ts,json}\"",
     "test": "ng test repofluent-app --watch=false && ng test api --watch=false && ng test components --watch=false",
     "e2e": "playwright test"
   },

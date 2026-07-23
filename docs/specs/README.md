@@ -54,13 +54,14 @@ This table records bounded scenario evidence, not blanket implementation of an
 entire L2 requirement. Requirements remain draft until all of their acceptance and
 production-readiness conditions are satisfied.
 
-| Scenario                                                                              | Requirement coverage                          | Evidence                                               | Status                                 |
-| ------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
-| Valid JSON upload creates a tenant receipt and asynchronous draft                     | L2-CLI-01, L2-CLI-05; supporting L2-CIC-02–05 | SQLite API integration test and Playwright golden path | Implemented scenario                   |
-| Forbidden source path is blocked with stable code and exact JSON Pointer              | L2-CIC-05, L2-CIC-10; supporting L2-CLI-03    | `CurriculumGoldenPathApiTests`                         | Implemented scenario                   |
-| Separate reviewer previews and approves the exact checksum                            | L2-CLI-06, L2-CLI-07; supporting L2-ITA-05    | Domain/API tests and Playwright golden path            | Implemented scenario                   |
-| Administrator publishes and directly assigns one learner                              | L2-CLI-08; partial L2-ATO-05                  | API integration test and Playwright golden path        | Implemented direct-assignment scenario |
-| Learner sees assigned learning and renders hierarchy, safe blocks, and code reference | L2-LEX-01, L2-LEX-03, L2-LEX-04               | Angular component test and Playwright golden path      | Implemented scenario                   |
+| Scenario                                                                               | Requirement coverage                          | Evidence                                               | Status                                 |
+| -------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| Valid JSON upload creates a tenant receipt and asynchronous draft                      | L2-CLI-01, L2-CLI-05; supporting L2-CIC-02–05 | SQLite API integration test and Playwright golden path | Implemented scenario                   |
+| Forbidden source path is blocked with stable code and exact JSON Pointer               | L2-CIC-05, L2-CIC-10; supporting L2-CLI-03    | `CurriculumGoldenPathApiTests`                         | Implemented scenario                   |
+| Separate reviewer previews and approves the exact checksum                             | L2-CLI-06, L2-CLI-07; supporting L2-ITA-05    | Domain/API tests and Playwright golden path            | Implemented scenario                   |
+| Administrator publishes and directly assigns one learner                               | L2-CLI-08; partial L2-ATO-05                  | API integration test and Playwright golden path        | Implemented direct-assignment scenario |
+| Learner sees assigned learning and renders hierarchy, safe blocks, and code reference  | L2-LEX-01, L2-LEX-03, L2-LEX-04               | Angular component test and Playwright golden path      | Implemented scenario                   |
+| Angular consumes versioned default/tenant tokens and preserves state under zoom/motion | L2-EXP-01–03                                  | Consumer guard, static conformance, Playwright visuals | Implemented scenarios                  |
 
 ## Open decisions before baseline approval
 

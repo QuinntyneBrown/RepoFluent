@@ -50,6 +50,10 @@ jobs:
         working-directory: frontend
         run: npm run format:check
 
+      - name: Verify design-system consumer contract
+        working-directory: frontend
+        run: npm run design:check
+
       - name: Build frontend
         working-directory: frontend
         run: npm run build
@@ -69,6 +73,10 @@ jobs:
       - name: Restore design-system QA tools
         working-directory: desigh-system
         run: npm install --no-package-lock
+
+      - name: Check design-system formatting
+        working-directory: desigh-system
+        run: npm run format:check
 
       - name: Validate design-system HTML
         working-directory: desigh-system

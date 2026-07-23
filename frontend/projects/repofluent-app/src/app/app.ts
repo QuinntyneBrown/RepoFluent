@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { DevPersonaService, Persona } from 'api';
+import { ExperiencePlatformAdapter } from 'components';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,11 @@ import { DevPersonaService, Persona } from 'api';
 })
 export class App {
   protected readonly personas = inject(DevPersonaService);
+  private readonly experiencePlatform = inject(ExperiencePlatformAdapter);
+
+  constructor() {
+    this.experiencePlatform.initialize();
+  }
 
   protected setPersona(event: Event): void {
     this.personas.set((event.target as HTMLSelectElement).value as Persona);

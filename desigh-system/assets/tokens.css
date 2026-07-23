@@ -32,6 +32,15 @@
   --rf-color-danger-dim: #3a1c20;
   --rf-color-focus: #52c7e8;
   --rf-color-scrim: rgb(0 0 0 / 68%);
+  --rf-color-statusbar: #15232b;
+  --rf-color-info-border: #27677a;
+  --rf-color-warning-border: #7b5b2e;
+  --rf-color-danger-border: #824146;
+  --rf-color-skeleton-highlight: rgb(255 255 255 / 7%);
+  --rf-color-primary-wash: rgb(77 224 148 / 9%);
+  --rf-color-grid-faint: rgb(38 50 61 / 18%);
+  --rf-color-graph-glow: rgb(77 224 148 / 18%);
+  --rf-color-syntax-keyword: #b692f6;
 
   /* Data visualization: fixed order, never recycled within one chart. */
   --rf-chart-1: #52c7e8;
@@ -120,6 +129,22 @@
   --rf-z-overlay: 80;
   --rf-z-toast: 100;
   --rf-z-skip: 120;
+}
+
+:root[data-rf-theme="tenant"] {
+  --rf-color-primary: #55d6a8;
+  --rf-color-primary-hover: #75e2b9;
+  --rf-color-primary-pressed: #3bc18f;
+  --rf-color-primary-dim: #18372c;
+  --rf-color-primary-border: #3b8066;
+  --rf-color-primary-wash: rgb(85 214 168 / 9%);
+  --rf-color-graph-glow: rgb(85 214 168 / 18%);
+}
+
+:root[data-rf-motion="reduced"] {
+  --rf-motion-fast: 1ms;
+  --rf-motion-base: 1ms;
+  --rf-motion-slow: 1ms;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -10,3 +10,6 @@
   references backed by immutable published curriculum versions.
 - Curriculum contract `0.1.0`, SQLite persistence, development-only personas,
   layered automated tests, and a Page Object Model live-stack acceptance journey.
+- Versioned design-system consumption with default and tenant themes,
+  semantic-token enforcement, reduced-motion behavior, and visual conformance
+  evidence.

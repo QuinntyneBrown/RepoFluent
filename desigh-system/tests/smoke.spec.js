@@ -92,3 +92,86 @@ test("phone layout keeps the document within the viewport", async ({
     expect(overflow, relativePath).toBeLessThanOrEqual(1);
   }
 });
+
+test("default and tenant themes retain readable primary actions and visible focus", async ({
+  page,
+}) => {
+  await page.goto(url("components/buttons.html"));
+
+  for (const theme of ["default", "tenant"]) {
+    await page.locator("html").evaluate((root, selectedTheme) => {
+      root.dataset.rfTheme = selectedTheme;
+    }, theme);
+
+    const primary = page.locator(".rf-button--primary").first();
+    await primary.focus();
+    const ratios = await primary.evaluate((element) => {
+      function luminance(color) {
+        const channels = color
+          .match(/\d+(?:\.\d+)?/g)
+          .slice(0, 3)
+          .map(Number);
+        const normalized = channels.map((channel) => {
+          const value = channel / 255;
+          return value <= 0.04045
+            ? value / 12.92
+            : ((value + 0.055) / 1.055) ** 2.4;
+        });
+        return (
+          0.2126 * normalized[0] +
+          0.7152 * normalized[1] +
+          0.0722 * normalized[2]
+        );
+      }
+
+      function contrast(first, second) {
+        const lighter = Math.max(luminance(first), luminance(second));
+        const darker = Math.min(luminance(first), luminance(second));
+        return (lighter + 0.05) / (darker + 0.05);
+      }
+
+      const style = getComputedStyle(element);
+      return {
+        focus: contrast(
+          style.outlineColor,
+          getComputedStyle(document.body).backgroundColor,
+        ),
+        text: contrast(style.color, style.backgroundColor),
+      };
+    });
+
+    expect(
+      ratios.text,
+      `${theme} primary action contrast`,
+    ).toBeGreaterThanOrEqual(4.5);
+    expect(ratios.focus, `${theme} focus contrast`).toBeGreaterThanOrEqual(3);
+  }
+});
+
+test("component states remain semantic at high zoom and reduced motion", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 640, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(url("components/buttons.html"));
+
+  const unavailable = page.getByRole("button", { name: "UNAVAILABLE" });
+  const busy = page.getByRole("button", { name: "SAVING" });
+  await expect(unavailable).toBeDisabled();
+  await expect(busy).toHaveAttribute("aria-busy", "true");
+  await expect(busy).toContainText("SAVING");
+
+  const transitionDurations = await page
+    .getByRole("button", { name: "DEFAULT" })
+    .evaluate((element) => getComputedStyle(element).transitionDuration);
+  expect(
+    transitionDurations
+      .split(",")
+      .every((duration) => duration.trim() === "0.001s"),
+  ).toBeTruthy();
+
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+});
