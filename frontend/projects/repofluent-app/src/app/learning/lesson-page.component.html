@@ -1,0 +1,13 @@
+@if (lesson(); as view) {
+  <nav class="lesson-nav" aria-label="Lesson context">
+    <a [routerLink]="['/learning/versions', view.publishedVersionId, 'courses', courseId]">
+      ← {{ view.courseTitle }}
+    </a>
+    <span>Published version</span>
+  </nav>
+  <rf-lesson-renderer [lesson]="view.lesson" />
+} @else if (error()) {
+  <p role="alert">{{ error() }}</p>
+} @else {
+  <p role="status">Loading lesson…</p>
+}

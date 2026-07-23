@@ -1,14 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  CourseView,
-  ImportReceipt,
-  ImportStatus,
-  LearningAssignment,
-  LessonView,
-  Preview,
-} from './api.models';
+import type { CourseView } from './course-view';
+import type { ImportReceipt } from './import-receipt';
+import type { ImportStatus } from './import-status';
+import type { LearningAssignment } from './learning-assignment';
+import type { LessonView } from './lesson-view';
+import type { Preview } from './preview';
 
 @Injectable({ providedIn: 'root' })
 export class RepoFluentApiService {

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Persona } from './api.models';
+import type { Persona } from './persona';
 
 const storageKey = 'repofluent-development-persona';
 

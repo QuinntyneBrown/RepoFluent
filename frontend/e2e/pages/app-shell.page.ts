@@ -1,6 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-
-export type DevelopmentPersona = 'author' | 'reviewer' | 'administrator' | 'learner';
+import type { DevelopmentPersona } from './development-persona';
 
 export class AppShellPage {
   constructor(private readonly page: Page) {}

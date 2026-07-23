@@ -3,19 +3,19 @@ namespace RepoFluent.Application;
 public interface ICurriculumStore
 {
     Task AddImportAsync(
-        CurriculumStoreModels.CurriculumRecord record,
+        CurriculumRecord record,
         CancellationToken cancellationToken);
 
-    Task<CurriculumStoreModels.CurriculumRecord?> GetImportAsync(
+    Task<CurriculumRecord?> GetImportAsync(
         string tenantId,
         Guid id,
         CancellationToken cancellationToken);
 
-    Task<CurriculumStoreModels.CurriculumRecord?> ClaimReceivedAsync(
+    Task<CurriculumRecord?> ClaimReceivedAsync(
         CancellationToken cancellationToken);
 
     Task SaveImportAsync(
-        CurriculumStoreModels.CurriculumRecord record,
+        CurriculumRecord record,
         string auditAction,
         string actorId,
         CancellationToken cancellationToken);
@@ -27,17 +27,17 @@ public interface ICurriculumStore
         CancellationToken cancellationToken);
 
     Task AddAssignmentAsync(
-        CurriculumStoreModels.AssignmentRecord assignment,
+        AssignmentRecord assignment,
         string actorId,
         string correlationId,
         CancellationToken cancellationToken);
 
-    Task<IReadOnlyList<CurriculumStoreModels.AssignmentRecord>> GetAssignmentsAsync(
+    Task<IReadOnlyList<AssignmentRecord>> GetAssignmentsAsync(
         string tenantId,
         string learnerId,
         CancellationToken cancellationToken);
 
-    Task<CurriculumStoreModels.CurriculumRecord?> GetPublishedAsync(
+    Task<CurriculumRecord?> GetPublishedAsync(
         string tenantId,
         Guid publishedVersionId,
         CancellationToken cancellationToken);

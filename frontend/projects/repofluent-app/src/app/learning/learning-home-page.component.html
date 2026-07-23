@@ -1,0 +1,44 @@
+<header class="page-heading">
+  <p class="eyebrow">Recommended next</p>
+  <h1>My learning</h1>
+  <p>Continue assigned codebase learning from one trusted place.</p>
+</header>
+
+@if (isLoading()) {
+  <p role="status">Loading assigned learning…</p>
+} @else if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+} @else if (assignments().length === 0) {
+  <section class="empty">
+    <h2>No learning assigned</h2>
+    <p>Your assigned published curricula will appear here.</p>
+  </section>
+} @else {
+  <section class="assignment-list" aria-label="Assigned learning">
+    @for (assignment of assignments(); track assignment.id) {
+      <article class="assignment-card">
+        <div class="assignment-card__status">
+          <span>{{ assignment.isRequired ? 'Required' : 'Optional' }}</span>
+          <span>Not started</span>
+        </div>
+        <h2>{{ assignment.title }}</h2>
+        <p>{{ assignment.description }}</p>
+        <div class="next-action">
+          <span>Why this is next</span>
+          <strong>{{ assignment.nextAction }}</strong>
+        </div>
+        <a
+          class="primary-link"
+          [routerLink]="[
+            '/learning/versions',
+            assignment.publishedVersionId,
+            'courses',
+            assignment.firstCourseId,
+          ]"
+        >
+          Start course
+        </a>
+      </article>
+    }
+  </section>
+}

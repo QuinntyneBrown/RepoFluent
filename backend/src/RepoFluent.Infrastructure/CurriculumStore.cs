@@ -11,7 +11,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
     private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web);
 
     public async Task AddImportAsync(
-        CurriculumStoreModels.CurriculumRecord record,
+        CurriculumRecord record,
         CancellationToken cancellationToken)
     {
         dbContext.CurriculumImports.Add(ToEntity(record));
@@ -19,7 +19,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<CurriculumStoreModels.CurriculumRecord?> GetImportAsync(
+    public async Task<CurriculumRecord?> GetImportAsync(
         string tenantId,
         Guid id,
         CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         return entity is null ? null : ToRecord(entity);
     }
 
-    public async Task<CurriculumStoreModels.CurriculumRecord?> ClaimReceivedAsync(
+    public async Task<CurriculumRecord?> ClaimReceivedAsync(
         CancellationToken cancellationToken)
     {
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
@@ -65,7 +65,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
     }
 
     public async Task SaveImportAsync(
-        CurriculumStoreModels.CurriculumRecord record,
+        CurriculumRecord record,
         string auditAction,
         string actorId,
         CancellationToken cancellationToken)
@@ -98,7 +98,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             cancellationToken);
 
     public async Task AddAssignmentAsync(
-        CurriculumStoreModels.AssignmentRecord assignment,
+        AssignmentRecord assignment,
         string actorId,
         string correlationId,
         CancellationToken cancellationToken)
@@ -116,7 +116,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyList<CurriculumStoreModels.AssignmentRecord>> GetAssignmentsAsync(
+    public async Task<IReadOnlyList<AssignmentRecord>> GetAssignmentsAsync(
         string tenantId,
         string learnerId,
         CancellationToken cancellationToken) =>
@@ -124,7 +124,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             .AsNoTracking()
             .Where(item => item.TenantId == tenantId && item.LearnerId == learnerId)
             .OrderBy(item => item.Id)
-            .Select(item => new CurriculumStoreModels.AssignmentRecord
+            .Select(item => new AssignmentRecord
             {
                 Id = item.Id,
                 TenantId = item.TenantId,
@@ -135,7 +135,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             })
             .ToListAsync(cancellationToken);
 
-    public async Task<CurriculumStoreModels.CurriculumRecord?> GetPublishedAsync(
+    public async Task<CurriculumRecord?> GetPublishedAsync(
         string tenantId,
         Guid publishedVersionId,
         CancellationToken cancellationToken)
@@ -161,7 +161,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             OccurredAt = timeProvider.GetUtcNow()
         });
 
-    private static CurriculumImportEntity ToEntity(CurriculumStoreModels.CurriculumRecord record) =>
+    private static CurriculumImportEntity ToEntity(CurriculumRecord record) =>
         new()
         {
             Id = record.Id,
@@ -178,7 +178,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             CreatedAt = record.CreatedAt
         };
 
-    private static CurriculumStoreModels.CurriculumRecord ToRecord(CurriculumImportEntity entity) =>
+    private static CurriculumRecord ToRecord(CurriculumImportEntity entity) =>
         new()
         {
             Id = entity.Id,
@@ -196,7 +196,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             ReviewedAt = entity.ReviewedAt,
             PublishedVersionId = entity.PublishedVersionId,
             PublishedAt = entity.PublishedAt,
-            Issues = JsonSerializer.Deserialize<IReadOnlyList<CurriculumContracts.ValidationIssue>>(
+            Issues = JsonSerializer.Deserialize<IReadOnlyList<ValidationIssue>>(
                 entity.ValidationIssuesJson,
                 SerializerOptions) ?? []
         };

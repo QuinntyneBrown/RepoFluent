@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { LessonRendererComponent, RenderableLesson } from './lesson-renderer.component';
+import { LessonRendererComponent } from './lesson-renderer.component';
+import type { RenderableLesson } from './renderable-lesson';
 
 describe('LessonRendererComponent', () => {
   it('keeps valid content usable when an unknown block fails safely', async () => {

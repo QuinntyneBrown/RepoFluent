@@ -10,7 +10,7 @@ using RepoFluent.Infrastructure;
 namespace RepoFluent.Infrastructure.Migrations
 {
     [DbContext(typeof(RepoFluentDbContext))]
-    partial class RepoFluentDbContextModelSnapshot : ModelSnapshot
+    class RepoFluentDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

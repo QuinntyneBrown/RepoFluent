@@ -19,18 +19,18 @@ public sealed class CurriculumGoldenPathApiTests
         SetPersona(client, "author");
         var selfReview = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
-            new CurriculumContracts.ReviewRequest("approved", draft.Checksum));
+            new ReviewRequest("approved", draft.Checksum));
         Assert.Equal(HttpStatusCode.Forbidden, selfReview.StatusCode);
 
         SetPersona(client, "reviewer");
         var staleReview = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
-            new CurriculumContracts.ReviewRequest("approved", "sha256:stale"));
+            new ReviewRequest("approved", "sha256:stale"));
         Assert.Equal(HttpStatusCode.Conflict, staleReview.StatusCode);
 
         var approvedResponse = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
-            new CurriculumContracts.ReviewRequest("approved", draft.Checksum));
+            new ReviewRequest("approved", draft.Checksum));
         approvedResponse.EnsureSuccessStatusCode();
 
         SetPersona(client, "reviewer");
@@ -44,16 +44,16 @@ public sealed class CurriculumGoldenPathApiTests
             $"/api/curriculum-drafts/{receipt.Id}/publish",
             new { });
         publishedResponse.EnsureSuccessStatusCode();
-        var published = await publishedResponse.Content.ReadFromJsonAsync<CurriculumContracts.ImportStatus>();
+        var published = await publishedResponse.Content.ReadFromJsonAsync<ImportStatus>();
         Assert.NotNull(published?.PublishedVersionId);
 
         var assignmentResponse = await client.PostAsJsonAsync(
             "/api/assignments",
-            new CurriculumContracts.AssignmentRequest(published.PublishedVersionId.Value, "learner", true));
+            new AssignmentRequest(published.PublishedVersionId.Value, "learner", true));
         Assert.Equal(HttpStatusCode.Created, assignmentResponse.StatusCode);
 
         SetPersona(client, "learner");
-        var assignments = await client.GetFromJsonAsync<IReadOnlyList<CurriculumContracts.Assignment>>(
+        var assignments = await client.GetFromJsonAsync<IReadOnlyList<Assignment>>(
             "/api/learning/assignments");
         var assignment = Assert.Single(assignments!);
         Assert.True(assignment.IsRequired);
@@ -79,7 +79,7 @@ public sealed class CurriculumGoldenPathApiTests
         Assert.True(issue.IsBlocking);
     }
 
-    private static async Task<CurriculumContracts.ImportReceipt> UploadAsync(
+    private static async Task<ImportReceipt> UploadAsync(
         HttpClient client,
         string? json = null)
     {
@@ -91,10 +91,10 @@ public sealed class CurriculumGoldenPathApiTests
         content.Add(package, "package", "order-processing.json");
         var response = await client.PostAsync("/api/curriculum-imports", content);
         Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
-        return (await response.Content.ReadFromJsonAsync<CurriculumContracts.ImportReceipt>())!;
+        return (await response.Content.ReadFromJsonAsync<ImportReceipt>())!;
     }
 
-    private static async Task<CurriculumContracts.ImportStatus> WaitForStatusAsync(
+    private static async Task<ImportStatus> WaitForStatusAsync(
         HttpClient client,
         Guid id,
         CurriculumStatus expected)
@@ -102,7 +102,7 @@ public sealed class CurriculumGoldenPathApiTests
         SetPersona(client, "author");
         for (var attempt = 0; attempt < 50; attempt++)
         {
-            var status = await client.GetFromJsonAsync<CurriculumContracts.ImportStatus>(
+            var status = await client.GetFromJsonAsync<ImportStatus>(
                 $"/api/curriculum-imports/{id}");
             if (status?.Status == expected)
             {

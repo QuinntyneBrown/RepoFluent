@@ -1,0 +1,46 @@
+<article class="lesson">
+  <header>
+    <p class="lesson__meta">Lesson · {{ lesson().estimatedMinutes }} min</p>
+    <h1>{{ lesson().title }}</h1>
+    <section class="lesson__objectives" aria-labelledby="objectives-title">
+      <h2 id="objectives-title">By the end, you can</h2>
+      <ul>
+        @for (objective of lesson().objectives; track objective) {
+          <li>{{ objective }}</li>
+        }
+      </ul>
+    </section>
+  </header>
+
+  <div class="lesson__body">
+    @for (block of lesson().blocks; track $index) {
+      @switch (block.type) {
+        @case ('prose') {
+          <p>{{ block.text }}</p>
+        }
+        @case ('callout') {
+          <aside class="callout">
+            <strong>{{ block.title }}</strong>
+            <p>{{ block.text }}</p>
+          </aside>
+        }
+        @case ('codeReference') {
+          <section class="code-reference" aria-label="Source code reference">
+            <div>
+              <span>Source reference</span>
+              <strong>{{ block.symbol }}</strong>
+            </div>
+            <code>{{ block.path }}</code>
+            <p>Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</p>
+            <p>{{ block.explanation }}</p>
+          </section>
+        }
+        @default {
+          <div class="block-error" role="status">
+            This content block is unavailable. Support code LEX-BLOCK-UNSUPPORTED.
+          </div>
+        }
+      }
+    }
+  </div>
+</article>

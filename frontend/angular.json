@@ -5,11 +5,20 @@
     "packageManager": "npm"
   },
   "newProjectRoot": "projects",
+  "schematics": {
+    "@schematics/angular:component": {
+      "inlineStyle": false,
+      "inlineTemplate": false,
+      "style": "scss"
+    }
+  },
   "projects": {
     "repofluent-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "inlineStyle": false,
+          "inlineTemplate": false,
           "style": "scss"
         }
       },

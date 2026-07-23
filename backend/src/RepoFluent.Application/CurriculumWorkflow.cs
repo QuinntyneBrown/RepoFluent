@@ -11,7 +11,7 @@ public sealed class CurriculumWorkflow(
 {
     public const int MaximumPackageBytes = 512 * 1024;
 
-    public async Task<CurriculumContracts.ImportReceipt> ReceiveAsync(
+    public async Task<ImportReceipt> ReceiveAsync(
         ActorContext actor,
         string fileName,
         string contentType,
@@ -33,7 +33,7 @@ public sealed class CurriculumWorkflow(
 
         var id = Guid.NewGuid();
         var checksum = $"sha256:{Convert.ToHexStringLower(SHA256.HashData(bytes))}";
-        var record = new CurriculumStoreModels.CurriculumRecord
+        var record = new CurriculumRecord
         {
             Id = id,
             TenantId = actor.TenantId,
@@ -48,7 +48,7 @@ public sealed class CurriculumWorkflow(
         return new(id, checksum, CurriculumStatus.Received, correlationId, $"/api/curriculum-imports/{id}");
     }
 
-    public async Task<CurriculumContracts.ImportStatus> GetStatusAsync(
+    public async Task<ImportStatus> GetStatusAsync(
         ActorContext actor,
         Guid id,
         CancellationToken cancellationToken)
@@ -58,7 +58,7 @@ public sealed class CurriculumWorkflow(
         return ToStatus(actor, record);
     }
 
-    public async Task<CurriculumContracts.Preview> GetPreviewAsync(
+    public async Task<Preview> GetPreviewAsync(
         ActorContext actor,
         Guid id,
         CancellationToken cancellationToken)
@@ -73,10 +73,10 @@ public sealed class CurriculumWorkflow(
         return new(record.Id, true, PackageValidator.ReadTrusted(record.RawPackage));
     }
 
-    public async Task<CurriculumContracts.ImportStatus> ReviewAsync(
+    public async Task<ImportStatus> ReviewAsync(
         ActorContext actor,
         Guid id,
-        CurriculumContracts.ReviewRequest request,
+        ReviewRequest request,
         CancellationToken cancellationToken)
     {
         RequireRole(actor, "Reviewer");
@@ -102,7 +102,7 @@ public sealed class CurriculumWorkflow(
         return ToStatus(actor, record);
     }
 
-    public async Task<CurriculumContracts.ImportStatus> PublishAsync(
+    public async Task<ImportStatus> PublishAsync(
         ActorContext actor,
         Guid id,
         CancellationToken cancellationToken)
@@ -124,9 +124,9 @@ public sealed class CurriculumWorkflow(
         return ToStatus(actor, record);
     }
 
-    public async Task<CurriculumContracts.Assignment> AssignAsync(
+    public async Task<Assignment> AssignAsync(
         ActorContext actor,
-        CurriculumContracts.AssignmentRequest request,
+        AssignmentRequest request,
         string correlationId,
         CancellationToken cancellationToken)
     {
@@ -141,7 +141,7 @@ public sealed class CurriculumWorkflow(
         if (!await store.AssignmentExistsAsync(actor.TenantId, request.LearnerId, request.PublishedVersionId, cancellationToken))
         {
             await store.AddAssignmentAsync(
-                new CurriculumStoreModels.AssignmentRecord
+                new AssignmentRecord
                 {
                     Id = Guid.NewGuid(),
                     TenantId = actor.TenantId,
@@ -161,13 +161,13 @@ public sealed class CurriculumWorkflow(
         return ToAssignment(assignment, package);
     }
 
-    public async Task<IReadOnlyList<CurriculumContracts.Assignment>> GetLearningAssignmentsAsync(
+    public async Task<IReadOnlyList<Assignment>> GetLearningAssignmentsAsync(
         ActorContext actor,
         CancellationToken cancellationToken)
     {
         RequireRole(actor, "Learner");
         var assignments = await store.GetAssignmentsAsync(actor.TenantId, actor.UserId, cancellationToken);
-        var results = new List<CurriculumContracts.Assignment>();
+        var results = new List<Assignment>();
         foreach (var assignment in assignments)
         {
             var curriculum = await store.GetPublishedAsync(actor.TenantId, assignment.PublishedVersionId, cancellationToken);
@@ -180,7 +180,7 @@ public sealed class CurriculumWorkflow(
         return results;
     }
 
-    public async Task<CurriculumContracts.CourseView> GetCourseAsync(
+    public async Task<CourseView> GetCourseAsync(
         ActorContext actor,
         Guid versionId,
         string courseId,
@@ -192,7 +192,7 @@ public sealed class CurriculumWorkflow(
         return new(versionId, course);
     }
 
-    public async Task<CurriculumContracts.LessonView> GetLessonAsync(
+    public async Task<LessonView> GetLessonAsync(
         ActorContext actor,
         Guid versionId,
         string courseId,
@@ -230,7 +230,7 @@ public sealed class CurriculumWorkflow(
         await store.SaveImportAsync(record, "curriculum.validation-completed", "system", cancellationToken);
     }
 
-    private async Task<CurriculumPackageContract.Package> GetAssignedPackageAsync(
+    private async Task<Package> GetAssignedPackageAsync(
         ActorContext actor,
         Guid versionId,
         CancellationToken cancellationToken)
@@ -246,9 +246,9 @@ public sealed class CurriculumWorkflow(
         return PackageValidator.ReadTrusted(record.RawPackage);
     }
 
-    private static CurriculumContracts.Assignment ToAssignment(
-        CurriculumStoreModels.AssignmentRecord assignment,
-        CurriculumPackageContract.Package package) =>
+    private static Assignment ToAssignment(
+        AssignmentRecord assignment,
+        Package package) =>
         new(
             assignment.Id,
             assignment.PublishedVersionId,
@@ -259,9 +259,9 @@ public sealed class CurriculumWorkflow(
             assignment.IsRequired ? "Begin your required course" : "Explore this course",
             package.Courses[0].Id);
 
-    private static CurriculumContracts.ImportStatus ToStatus(
+    private static ImportStatus ToStatus(
         ActorContext actor,
-        CurriculumStoreModels.CurriculumRecord record)
+        CurriculumRecord record)
     {
         var actions = new List<string>();
         if (record.Status is CurriculumStatus.Draft or CurriculumStatus.Approved
@@ -296,14 +296,14 @@ public sealed class CurriculumWorkflow(
             record.CorrelationId);
     }
 
-    private async Task<CurriculumStoreModels.CurriculumRecord> GetImportAsync(
+    private async Task<CurriculumRecord> GetImportAsync(
         string tenantId,
         Guid id,
         CancellationToken cancellationToken) =>
         await store.GetImportAsync(tenantId, id, cancellationToken)
         ?? throw new WorkflowException(404, "CLI_IMPORT_NOT_FOUND", "The curriculum import is not available.");
 
-    private static CurriculumLifecycle Rehydrate(CurriculumStoreModels.CurriculumRecord record) =>
+    private static CurriculumLifecycle Rehydrate(CurriculumRecord record) =>
         CurriculumLifecycle.Rehydrate(
             record.Id,
             record.AuthorId,

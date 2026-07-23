@@ -68,7 +68,7 @@ public static class CurriculumEndpoints
 
     private static async Task<IResult> ReviewAsync(
         Guid id,
-        CurriculumContracts.ReviewRequest request,
+        ReviewRequest request,
         HttpContext context,
         CurriculumWorkflow workflow,
         CancellationToken cancellationToken) =>
@@ -82,7 +82,7 @@ public static class CurriculumEndpoints
         Results.Ok(await workflow.PublishAsync(context.GetActor(), id, cancellationToken));
 
     private static async Task<IResult> AssignAsync(
-        CurriculumContracts.AssignmentRequest request,
+        AssignmentRequest request,
         HttpContext context,
         CurriculumWorkflow workflow,
         CancellationToken cancellationToken)

@@ -1,0 +1,51 @@
+<a class="back-link" routerLink="/learning">← My learning</a>
+@if (course(); as view) {
+  <header class="course-heading">
+    <div>
+      <p class="eyebrow">{{ view.course.difficulty }} · {{ view.course.estimatedMinutes }} min</p>
+      <h1>{{ view.course.title }}</h1>
+      <p>{{ view.course.description }}</p>
+    </div>
+    <section aria-labelledby="outcomes-title">
+      <h2 id="outcomes-title">Course outcomes</h2>
+      <ul>
+        @for (objective of view.course.objectives; track objective) {
+          <li>{{ objective }}</li>
+        }
+      </ul>
+    </section>
+  </header>
+
+  <section class="outline" aria-labelledby="outline-title">
+    <h2 id="outline-title">Course outline</h2>
+    @for (module of view.course.modules; track module.id; let moduleIndex = $index) {
+      <div class="module">
+        <p>Module {{ moduleIndex + 1 }}</p>
+        <h3>{{ module.title }}</h3>
+        <ol>
+          @for (lesson of module.lessons; track lesson.id) {
+            <li>
+              <a
+                [routerLink]="[
+                  '/learning/versions',
+                  view.publishedVersionId,
+                  'courses',
+                  view.course.id,
+                  'lessons',
+                  lesson.id,
+                ]"
+              >
+                <strong>{{ lesson.title }}</strong>
+                <span>{{ lesson.estimatedMinutes }} min</span>
+              </a>
+            </li>
+          }
+        </ol>
+      </div>
+    }
+  </section>
+} @else if (error()) {
+  <p role="alert">{{ error() }}</p>
+} @else {
+  <p role="status">Loading course…</p>
+}

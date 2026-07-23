@@ -9,13 +9,13 @@ public sealed class PackageValidator
         PropertyNameCaseInsensitive = true
     };
 
-    public static (CurriculumPackageContract.Package? Package, IReadOnlyList<CurriculumContracts.ValidationIssue> Issues)
+    public static (Package? Package, IReadOnlyList<ValidationIssue> Issues)
         Validate(string json)
     {
-        CurriculumPackageContract.Package? package;
+        Package? package;
         try
         {
-            package = JsonSerializer.Deserialize<CurriculumPackageContract.Package>(json, SerializerOptions);
+            package = JsonSerializer.Deserialize<Package>(json, SerializerOptions);
         }
         catch (JsonException exception)
         {
@@ -29,7 +29,7 @@ public sealed class PackageValidator
             return (null, [Issue("CIC_EMPTY_PACKAGE", "Package content is required.", string.Empty)]);
         }
 
-        var issues = new List<CurriculumContracts.ValidationIssue>();
+        var issues = new List<ValidationIssue>();
         Require(package.ContractVersion == "0.1.0", "CIC_UNSUPPORTED_VERSION", "/contractVersion", issues);
         Require(!string.IsNullOrWhiteSpace(package.PackageId), "CIC_REQUIRED", "/packageId", issues);
         Require(!string.IsNullOrWhiteSpace(package.Title), "CIC_REQUIRED", "/title", issues);
@@ -70,15 +70,15 @@ public sealed class PackageValidator
         return (package, issues.OrderBy(issue => issue.Path, StringComparer.Ordinal).ThenBy(issue => issue.Code, StringComparer.Ordinal).ToArray());
     }
 
-    public static CurriculumPackageContract.Package ReadTrusted(string json) =>
-        JsonSerializer.Deserialize<CurriculumPackageContract.Package>(json, SerializerOptions)
+    public static Package ReadTrusted(string json) =>
+        JsonSerializer.Deserialize<Package>(json, SerializerOptions)
         ?? throw new InvalidOperationException("Stored curriculum package could not be read.");
 
     private static void ValidateBlocks(
-        IReadOnlyList<CurriculumPackageContract.Block> blocks,
+        IReadOnlyList<Block> blocks,
         string lessonPath,
         HashSet<string> repositoryIds,
-        List<CurriculumContracts.ValidationIssue> issues)
+        List<ValidationIssue> issues)
     {
         for (var blockIndex = 0; blockIndex < blocks.Count; blockIndex++)
         {
@@ -117,7 +117,7 @@ public sealed class PackageValidator
         string identifier,
         string path,
         HashSet<string> identifiers,
-        List<CurriculumContracts.ValidationIssue> issues)
+        List<ValidationIssue> issues)
     {
         if (string.IsNullOrWhiteSpace(identifier))
         {
@@ -133,7 +133,7 @@ public sealed class PackageValidator
         bool condition,
         string code,
         string path,
-        List<CurriculumContracts.ValidationIssue> issues)
+        List<ValidationIssue> issues)
     {
         if (!condition)
         {
@@ -141,6 +141,6 @@ public sealed class PackageValidator
         }
     }
 
-    private static CurriculumContracts.ValidationIssue Issue(string code, string message, string path) =>
+    private static ValidationIssue Issue(string code, string message, string path) =>
         new(code, "error", true, message, path);
 }
