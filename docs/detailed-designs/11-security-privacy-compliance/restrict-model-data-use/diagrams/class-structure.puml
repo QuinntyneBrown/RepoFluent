@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Restrict model data use
+
+class RestrictModelDataUseRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RestrictModelDataUseResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RestrictModelDataUseRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RestrictModelDataUseResult): void
+}
+
+class RestrictModelDataUsePolicy {
+  +Evaluate(request: RestrictModelDataUseRequest, current: RestrictModelDataUseRecord): RestrictModelDataUseResult
+}
+
+interface IRestrictModelDataUseRepository {
+  +Load(scopeId: string, targetId: string): Task<RestrictModelDataUseRecord>
+  +Save(record: RestrictModelDataUseRecord, expectedVersion: long): Task
+}
+
+class RestrictModelDataUseHandler {
+  +Handle(request: RestrictModelDataUseRequest): Task<RestrictModelDataUseResult>
+}
+
+RestrictModelDataUseHandler ..> RestrictModelDataUseRequest : handles
+RestrictModelDataUseHandler ..> RestrictModelDataUsePolicy : invokes
+RestrictModelDataUseHandler ..> IRestrictModelDataUseRepository : uses
+IRestrictModelDataUseRepository --> RestrictModelDataUseRecord : loads / saves
+RestrictModelDataUsePolicy ..> RestrictModelDataUseRecord : evaluates
+RestrictModelDataUsePolicy ..> RestrictModelDataUseResult : creates
+RestrictModelDataUseRecord ..> RestrictModelDataUseResult : applies
+@enduml

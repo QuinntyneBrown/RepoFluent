@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Manage users, groups, and roles
+
+class ManageUsersGroupsAndRolesRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ManageUsersGroupsAndRolesResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ManageUsersGroupsAndRolesRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ManageUsersGroupsAndRolesResult): void
+}
+
+class ManageUsersGroupsAndRolesPolicy {
+  +Evaluate(request: ManageUsersGroupsAndRolesRequest, current: ManageUsersGroupsAndRolesRecord): ManageUsersGroupsAndRolesResult
+}
+
+interface IManageUsersGroupsAndRolesRepository {
+  +Load(scopeId: string, targetId: string): Task<ManageUsersGroupsAndRolesRecord>
+  +Save(record: ManageUsersGroupsAndRolesRecord, expectedVersion: long): Task
+}
+
+class ManageUsersGroupsAndRolesHandler {
+  +Handle(request: ManageUsersGroupsAndRolesRequest): Task<ManageUsersGroupsAndRolesResult>
+}
+
+ManageUsersGroupsAndRolesHandler ..> ManageUsersGroupsAndRolesRequest : handles
+ManageUsersGroupsAndRolesHandler ..> ManageUsersGroupsAndRolesPolicy : invokes
+ManageUsersGroupsAndRolesHandler ..> IManageUsersGroupsAndRolesRepository : uses
+IManageUsersGroupsAndRolesRepository --> ManageUsersGroupsAndRolesRecord : loads / saves
+ManageUsersGroupsAndRolesPolicy ..> ManageUsersGroupsAndRolesRecord : evaluates
+ManageUsersGroupsAndRolesPolicy ..> ManageUsersGroupsAndRolesResult : creates
+ManageUsersGroupsAndRolesRecord ..> ManageUsersGroupsAndRolesResult : applies
+@enduml

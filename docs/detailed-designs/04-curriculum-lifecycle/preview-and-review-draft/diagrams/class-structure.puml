@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Preview and review a draft
+
+class PreviewAndReviewDraftRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class PreviewAndReviewDraftResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class PreviewAndReviewDraftRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: PreviewAndReviewDraftResult): void
+}
+
+class PreviewAndReviewDraftPolicy {
+  +Evaluate(request: PreviewAndReviewDraftRequest, current: PreviewAndReviewDraftRecord): PreviewAndReviewDraftResult
+}
+
+interface IPreviewAndReviewDraftRepository {
+  +Load(scopeId: string, targetId: string): Task<PreviewAndReviewDraftRecord>
+  +Save(record: PreviewAndReviewDraftRecord, expectedVersion: long): Task
+}
+
+class PreviewAndReviewDraftHandler {
+  +Handle(request: PreviewAndReviewDraftRequest): Task<PreviewAndReviewDraftResult>
+}
+
+PreviewAndReviewDraftHandler ..> PreviewAndReviewDraftRequest : handles
+PreviewAndReviewDraftHandler ..> PreviewAndReviewDraftPolicy : invokes
+PreviewAndReviewDraftHandler ..> IPreviewAndReviewDraftRepository : uses
+IPreviewAndReviewDraftRepository --> PreviewAndReviewDraftRecord : loads / saves
+PreviewAndReviewDraftPolicy ..> PreviewAndReviewDraftRecord : evaluates
+PreviewAndReviewDraftPolicy ..> PreviewAndReviewDraftResult : creates
+PreviewAndReviewDraftRecord ..> PreviewAndReviewDraftResult : applies
+@enduml

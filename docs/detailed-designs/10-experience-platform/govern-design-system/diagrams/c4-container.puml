@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Govern the design system
+
+Person(actor, "Product contributor", "Maintains and reviews the shared design contract")
+System_Boundary(repofluent, "RepoFluent Experience Platform") {
+  Container(reference, "Design-system reference", "Static HTML/CSS/JavaScript", "Documents and demonstrates accepted interaction contracts")
+  Container(application, "RepoFluent web application", "Angular 21 — <TO SUPPLY>", "Consumes accepted product-facing contracts")
+  Container(quality, "Experience conformance tooling", "Playwright, html-validate, Prettier", "Checks reference behavior and source quality")
+  ContainerDb(source, "Design-system source", "Repository files", "Stores tokens, component CSS, pages, scripts, and tests")
+}
+System_Ext(browser, "Browser platform", "Renders semantic content and capability fallbacks")
+
+Rel(actor, reference, "Reviews or operates", "file:// or HTTP")
+Rel(reference, source, "Loads")
+Rel(application, source, "Consumes accepted .rf-* contracts from")
+Rel(quality, source, "Validates")
+Rel(reference, browser, "Runs within")
+Rel(application, browser, "Runs within")
+@enduml

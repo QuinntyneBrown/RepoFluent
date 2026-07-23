@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Isolate tenants and identifiers
+
+class IsolateTenantsAndIdentifiersRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class IsolateTenantsAndIdentifiersResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class IsolateTenantsAndIdentifiersRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: IsolateTenantsAndIdentifiersResult): void
+}
+
+class IsolateTenantsAndIdentifiersPolicy {
+  +Evaluate(request: IsolateTenantsAndIdentifiersRequest, current: IsolateTenantsAndIdentifiersRecord): IsolateTenantsAndIdentifiersResult
+}
+
+interface IIsolateTenantsAndIdentifiersRepository {
+  +Load(scopeId: string, targetId: string): Task<IsolateTenantsAndIdentifiersRecord>
+  +Save(record: IsolateTenantsAndIdentifiersRecord, expectedVersion: long): Task
+}
+
+class IsolateTenantsAndIdentifiersHandler {
+  +Handle(request: IsolateTenantsAndIdentifiersRequest): Task<IsolateTenantsAndIdentifiersResult>
+}
+
+IsolateTenantsAndIdentifiersHandler ..> IsolateTenantsAndIdentifiersRequest : handles
+IsolateTenantsAndIdentifiersHandler ..> IsolateTenantsAndIdentifiersPolicy : invokes
+IsolateTenantsAndIdentifiersHandler ..> IIsolateTenantsAndIdentifiersRepository : uses
+IIsolateTenantsAndIdentifiersRepository --> IsolateTenantsAndIdentifiersRecord : loads / saves
+IsolateTenantsAndIdentifiersPolicy ..> IsolateTenantsAndIdentifiersRecord : evaluates
+IsolateTenantsAndIdentifiersPolicy ..> IsolateTenantsAndIdentifiersResult : creates
+IsolateTenantsAndIdentifiersRecord ..> IsolateTenantsAndIdentifiersResult : applies
+@enduml

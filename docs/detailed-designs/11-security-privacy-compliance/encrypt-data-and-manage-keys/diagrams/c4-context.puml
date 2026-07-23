@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Encrypt data and manage keys
+
+Person(actor, "Security administrator", "Reviews controls, evidence, and exceptions within authorized scope")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(dependency, "Key and secret management service", "Protects approved keys, credentials, and cryptographic operations")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, dependency, "Uses through an approved boundary")
+@enduml

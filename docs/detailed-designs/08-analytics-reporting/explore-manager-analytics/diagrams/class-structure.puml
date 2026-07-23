@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Explore manager analytics
+
+class ExploreManagerAnalyticsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ExploreManagerAnalyticsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ExploreManagerAnalyticsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ExploreManagerAnalyticsResult): void
+}
+
+class ExploreManagerAnalyticsPolicy {
+  +Evaluate(request: ExploreManagerAnalyticsRequest, current: ExploreManagerAnalyticsRecord): ExploreManagerAnalyticsResult
+}
+
+interface IExploreManagerAnalyticsRepository {
+  +Load(scopeId: string, targetId: string): Task<ExploreManagerAnalyticsRecord>
+  +Save(record: ExploreManagerAnalyticsRecord, expectedVersion: long): Task
+}
+
+class ExploreManagerAnalyticsHandler {
+  +Handle(request: ExploreManagerAnalyticsRequest): Task<ExploreManagerAnalyticsResult>
+}
+
+ExploreManagerAnalyticsHandler ..> ExploreManagerAnalyticsRequest : handles
+ExploreManagerAnalyticsHandler ..> ExploreManagerAnalyticsPolicy : invokes
+ExploreManagerAnalyticsHandler ..> IExploreManagerAnalyticsRepository : uses
+IExploreManagerAnalyticsRepository --> ExploreManagerAnalyticsRecord : loads / saves
+ExploreManagerAnalyticsPolicy ..> ExploreManagerAnalyticsRecord : evaluates
+ExploreManagerAnalyticsPolicy ..> ExploreManagerAnalyticsResult : creates
+ExploreManagerAnalyticsRecord ..> ExploreManagerAnalyticsResult : applies
+@enduml

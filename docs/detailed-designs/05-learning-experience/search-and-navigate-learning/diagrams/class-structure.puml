@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Search and navigate learning
+
+class SearchAndNavigateLearningRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class SearchAndNavigateLearningResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class SearchAndNavigateLearningRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: SearchAndNavigateLearningResult): void
+}
+
+class SearchAndNavigateLearningPolicy {
+  +Evaluate(request: SearchAndNavigateLearningRequest, current: SearchAndNavigateLearningRecord): SearchAndNavigateLearningResult
+}
+
+interface ISearchAndNavigateLearningRepository {
+  +Load(scopeId: string, targetId: string): Task<SearchAndNavigateLearningRecord>
+  +Save(record: SearchAndNavigateLearningRecord, expectedVersion: long): Task
+}
+
+class SearchAndNavigateLearningHandler {
+  +Handle(request: SearchAndNavigateLearningRequest): Task<SearchAndNavigateLearningResult>
+}
+
+SearchAndNavigateLearningHandler ..> SearchAndNavigateLearningRequest : handles
+SearchAndNavigateLearningHandler ..> SearchAndNavigateLearningPolicy : invokes
+SearchAndNavigateLearningHandler ..> ISearchAndNavigateLearningRepository : uses
+ISearchAndNavigateLearningRepository --> SearchAndNavigateLearningRecord : loads / saves
+SearchAndNavigateLearningPolicy ..> SearchAndNavigateLearningRecord : evaluates
+SearchAndNavigateLearningPolicy ..> SearchAndNavigateLearningResult : creates
+SearchAndNavigateLearningRecord ..> SearchAndNavigateLearningResult : applies
+@enduml

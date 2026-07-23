@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Show source snapshot drift
+
+class ShowSourceSnapshotDriftRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ShowSourceSnapshotDriftResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ShowSourceSnapshotDriftRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ShowSourceSnapshotDriftResult): void
+}
+
+class ShowSourceSnapshotDriftPolicy {
+  +Evaluate(request: ShowSourceSnapshotDriftRequest, current: ShowSourceSnapshotDriftRecord): ShowSourceSnapshotDriftResult
+}
+
+interface IShowSourceSnapshotDriftRepository {
+  +Load(scopeId: string, targetId: string): Task<ShowSourceSnapshotDriftRecord>
+  +Save(record: ShowSourceSnapshotDriftRecord, expectedVersion: long): Task
+}
+
+class ShowSourceSnapshotDriftHandler {
+  +Handle(request: ShowSourceSnapshotDriftRequest): Task<ShowSourceSnapshotDriftResult>
+}
+
+ShowSourceSnapshotDriftHandler ..> ShowSourceSnapshotDriftRequest : handles
+ShowSourceSnapshotDriftHandler ..> ShowSourceSnapshotDriftPolicy : invokes
+ShowSourceSnapshotDriftHandler ..> IShowSourceSnapshotDriftRepository : uses
+IShowSourceSnapshotDriftRepository --> ShowSourceSnapshotDriftRecord : loads / saves
+ShowSourceSnapshotDriftPolicy ..> ShowSourceSnapshotDriftRecord : evaluates
+ShowSourceSnapshotDriftPolicy ..> ShowSourceSnapshotDriftResult : creates
+ShowSourceSnapshotDriftRecord ..> ShowSourceSnapshotDriftResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Define safe content and code
+
+class DefineSafeContentAndCodeRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class DefineSafeContentAndCodeResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class DefineSafeContentAndCodeRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: DefineSafeContentAndCodeResult): void
+}
+
+class DefineSafeContentAndCodePolicy {
+  +Evaluate(request: DefineSafeContentAndCodeRequest, current: DefineSafeContentAndCodeRecord): DefineSafeContentAndCodeResult
+}
+
+interface IDefineSafeContentAndCodeRepository {
+  +Load(scopeId: string, targetId: string): Task<DefineSafeContentAndCodeRecord>
+  +Save(record: DefineSafeContentAndCodeRecord, expectedVersion: long): Task
+}
+
+class DefineSafeContentAndCodeHandler {
+  +Handle(request: DefineSafeContentAndCodeRequest): Task<DefineSafeContentAndCodeResult>
+}
+
+DefineSafeContentAndCodeHandler ..> DefineSafeContentAndCodeRequest : handles
+DefineSafeContentAndCodeHandler ..> DefineSafeContentAndCodePolicy : invokes
+DefineSafeContentAndCodeHandler ..> IDefineSafeContentAndCodeRepository : uses
+IDefineSafeContentAndCodeRepository --> DefineSafeContentAndCodeRecord : loads / saves
+DefineSafeContentAndCodePolicy ..> DefineSafeContentAndCodeRecord : evaluates
+DefineSafeContentAndCodePolicy ..> DefineSafeContentAndCodeResult : creates
+DefineSafeContentAndCodeRecord ..> DefineSafeContentAndCodeResult : applies
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Recommend remediation and review
+
+Person(actor, "Learner", "Studies assigned curriculum and records learning activity")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Learner application", "Angular 21", "Responsive course and lesson interface")
+  Container(api, "Learning API", "ASP.NET Core", "Applies application and domain policy")
+  ContainerDb(store, "Learning record store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Search service", "Indexes permitted published learning content")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

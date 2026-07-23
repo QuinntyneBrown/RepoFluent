@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Meet performance budgets
+
+Container_Boundary(reference, "Design-system reference") {
+  Component(tokens, "assets/tokens.css", "CSS contract", "Defines authoritative --rf-* semantic tokens")
+  Component(components, "assets/components.css", "CSS contract", "Defines reusable product-facing .rf-* classes")
+  Component(pages, "foundations/, components/, patterns/", "Static HTML", "Documents foundations and reference states")
+  Component(runtime, "assets/docs.js", "JavaScript", "Adds navigation and progressive example behavior")
+  Component(tests, "tests/smoke.spec.js", "Playwright", "Checks page loading, keyboard behavior, focus, and narrow layout")
+}
+
+Rel(pages, tokens, "Uses")
+Rel(pages, components, "Uses")
+Rel(pages, runtime, "Enhances through")
+Rel(tests, pages, "Exercises in Chrome")
+@enduml

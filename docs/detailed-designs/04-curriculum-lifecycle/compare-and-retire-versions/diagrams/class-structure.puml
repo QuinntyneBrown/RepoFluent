@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Compare and retire versions
+
+class CompareAndRetireVersionsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class CompareAndRetireVersionsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class CompareAndRetireVersionsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: CompareAndRetireVersionsResult): void
+}
+
+class CompareAndRetireVersionsPolicy {
+  +Evaluate(request: CompareAndRetireVersionsRequest, current: CompareAndRetireVersionsRecord): CompareAndRetireVersionsResult
+}
+
+interface ICompareAndRetireVersionsRepository {
+  +Load(scopeId: string, targetId: string): Task<CompareAndRetireVersionsRecord>
+  +Save(record: CompareAndRetireVersionsRecord, expectedVersion: long): Task
+}
+
+class CompareAndRetireVersionsHandler {
+  +Handle(request: CompareAndRetireVersionsRequest): Task<CompareAndRetireVersionsResult>
+}
+
+CompareAndRetireVersionsHandler ..> CompareAndRetireVersionsRequest : handles
+CompareAndRetireVersionsHandler ..> CompareAndRetireVersionsPolicy : invokes
+CompareAndRetireVersionsHandler ..> ICompareAndRetireVersionsRepository : uses
+ICompareAndRetireVersionsRepository --> CompareAndRetireVersionsRecord : loads / saves
+CompareAndRetireVersionsPolicy ..> CompareAndRetireVersionsRecord : evaluates
+CompareAndRetireVersionsPolicy ..> CompareAndRetireVersionsResult : creates
+CompareAndRetireVersionsRecord ..> CompareAndRetireVersionsResult : applies
+@enduml

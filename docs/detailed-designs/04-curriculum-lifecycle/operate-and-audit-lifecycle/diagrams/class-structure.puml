@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Operate and audit the lifecycle
+
+class OperateAndAuditLifecycleRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class OperateAndAuditLifecycleResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class OperateAndAuditLifecycleRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: OperateAndAuditLifecycleResult): void
+}
+
+class OperateAndAuditLifecyclePolicy {
+  +Evaluate(request: OperateAndAuditLifecycleRequest, current: OperateAndAuditLifecycleRecord): OperateAndAuditLifecycleResult
+}
+
+interface IOperateAndAuditLifecycleRepository {
+  +Load(scopeId: string, targetId: string): Task<OperateAndAuditLifecycleRecord>
+  +Save(record: OperateAndAuditLifecycleRecord, expectedVersion: long): Task
+}
+
+class OperateAndAuditLifecycleHandler {
+  +Handle(request: OperateAndAuditLifecycleRequest): Task<OperateAndAuditLifecycleResult>
+}
+
+OperateAndAuditLifecycleHandler ..> OperateAndAuditLifecycleRequest : handles
+OperateAndAuditLifecycleHandler ..> OperateAndAuditLifecyclePolicy : invokes
+OperateAndAuditLifecycleHandler ..> IOperateAndAuditLifecycleRepository : uses
+IOperateAndAuditLifecycleRepository --> OperateAndAuditLifecycleRecord : loads / saves
+OperateAndAuditLifecyclePolicy ..> OperateAndAuditLifecycleRecord : evaluates
+OperateAndAuditLifecyclePolicy ..> OperateAndAuditLifecycleResult : creates
+OperateAndAuditLifecycleRecord ..> OperateAndAuditLifecycleResult : applies
+@enduml

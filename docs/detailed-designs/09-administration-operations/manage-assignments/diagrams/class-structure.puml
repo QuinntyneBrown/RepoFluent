@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Manage assignments
+
+class ManageAssignmentsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ManageAssignmentsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ManageAssignmentsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ManageAssignmentsResult): void
+}
+
+class ManageAssignmentsPolicy {
+  +Evaluate(request: ManageAssignmentsRequest, current: ManageAssignmentsRecord): ManageAssignmentsResult
+}
+
+interface IManageAssignmentsRepository {
+  +Load(scopeId: string, targetId: string): Task<ManageAssignmentsRecord>
+  +Save(record: ManageAssignmentsRecord, expectedVersion: long): Task
+}
+
+class ManageAssignmentsHandler {
+  +Handle(request: ManageAssignmentsRequest): Task<ManageAssignmentsResult>
+}
+
+ManageAssignmentsHandler ..> ManageAssignmentsRequest : handles
+ManageAssignmentsHandler ..> ManageAssignmentsPolicy : invokes
+ManageAssignmentsHandler ..> IManageAssignmentsRepository : uses
+IManageAssignmentsRepository --> ManageAssignmentsRecord : loads / saves
+ManageAssignmentsPolicy ..> ManageAssignmentsRecord : evaluates
+ManageAssignmentsPolicy ..> ManageAssignmentsResult : creates
+ManageAssignmentsRecord ..> ManageAssignmentsResult : applies
+@enduml

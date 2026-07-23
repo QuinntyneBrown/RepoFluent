@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Publish an immutable version
+
+class PublishImmutableVersionRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class PublishImmutableVersionResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class PublishImmutableVersionRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: PublishImmutableVersionResult): void
+}
+
+class PublishImmutableVersionPolicy {
+  +Evaluate(request: PublishImmutableVersionRequest, current: PublishImmutableVersionRecord): PublishImmutableVersionResult
+}
+
+interface IPublishImmutableVersionRepository {
+  +Load(scopeId: string, targetId: string): Task<PublishImmutableVersionRecord>
+  +Save(record: PublishImmutableVersionRecord, expectedVersion: long): Task
+}
+
+class PublishImmutableVersionHandler {
+  +Handle(request: PublishImmutableVersionRequest): Task<PublishImmutableVersionResult>
+}
+
+PublishImmutableVersionHandler ..> PublishImmutableVersionRequest : handles
+PublishImmutableVersionHandler ..> PublishImmutableVersionPolicy : invokes
+PublishImmutableVersionHandler ..> IPublishImmutableVersionRepository : uses
+IPublishImmutableVersionRepository --> PublishImmutableVersionRecord : loads / saves
+PublishImmutableVersionPolicy ..> PublishImmutableVersionRecord : evaluates
+PublishImmutableVersionPolicy ..> PublishImmutableVersionResult : creates
+PublishImmutableVersionRecord ..> PublishImmutableVersionResult : applies
+@enduml

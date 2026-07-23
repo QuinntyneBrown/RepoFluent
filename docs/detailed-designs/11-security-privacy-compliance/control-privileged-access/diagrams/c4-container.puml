@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Control privileged access
+
+Person(actor, "Security administrator", "Reviews controls, evidence, and exceptions within authorized scope")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Security administration", "Angular 21", "Security and privacy control interface")
+  Container(api, "Security Control API", "ASP.NET Core", "Applies application and domain policy")
+  ContainerDb(store, "Security evidence store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Key and secret management service", "Protects approved keys, credentials, and cryptographic operations")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

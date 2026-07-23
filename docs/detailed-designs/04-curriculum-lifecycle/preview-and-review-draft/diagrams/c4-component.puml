@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Preview and review a draft
+
+Container_Boundary(api, "Curriculum Lifecycle API") {
+  Component(controller, "PreviewAndReviewDraftController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "PreviewAndReviewDraftHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "PreviewAndReviewDraftPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "IPreviewAndReviewDraftRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Curriculum store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

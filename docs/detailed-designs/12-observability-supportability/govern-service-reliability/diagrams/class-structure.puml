@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Govern service reliability
+
+class GovernServiceReliabilityRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GovernServiceReliabilityResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GovernServiceReliabilityRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GovernServiceReliabilityResult): void
+}
+
+class GovernServiceReliabilityPolicy {
+  +Evaluate(request: GovernServiceReliabilityRequest, current: GovernServiceReliabilityRecord): GovernServiceReliabilityResult
+}
+
+interface IGovernServiceReliabilityRepository {
+  +Load(scopeId: string, targetId: string): Task<GovernServiceReliabilityRecord>
+  +Save(record: GovernServiceReliabilityRecord, expectedVersion: long): Task
+}
+
+class GovernServiceReliabilityHandler {
+  +Handle(request: GovernServiceReliabilityRequest): Task<GovernServiceReliabilityResult>
+}
+
+GovernServiceReliabilityHandler ..> GovernServiceReliabilityRequest : handles
+GovernServiceReliabilityHandler ..> GovernServiceReliabilityPolicy : invokes
+GovernServiceReliabilityHandler ..> IGovernServiceReliabilityRepository : uses
+IGovernServiceReliabilityRepository --> GovernServiceReliabilityRecord : loads / saves
+GovernServiceReliabilityPolicy ..> GovernServiceReliabilityRecord : evaluates
+GovernServiceReliabilityPolicy ..> GovernServiceReliabilityResult : creates
+GovernServiceReliabilityRecord ..> GovernServiceReliabilityResult : applies
+@enduml

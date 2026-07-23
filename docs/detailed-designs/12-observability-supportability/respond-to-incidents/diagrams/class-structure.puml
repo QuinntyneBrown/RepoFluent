@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Respond to incidents
+
+class RespondToIncidentsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RespondToIncidentsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RespondToIncidentsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RespondToIncidentsResult): void
+}
+
+class RespondToIncidentsPolicy {
+  +Evaluate(request: RespondToIncidentsRequest, current: RespondToIncidentsRecord): RespondToIncidentsResult
+}
+
+interface IRespondToIncidentsRepository {
+  +Load(scopeId: string, targetId: string): Task<RespondToIncidentsRecord>
+  +Save(record: RespondToIncidentsRecord, expectedVersion: long): Task
+}
+
+class RespondToIncidentsHandler {
+  +Handle(request: RespondToIncidentsRequest): Task<RespondToIncidentsResult>
+}
+
+RespondToIncidentsHandler ..> RespondToIncidentsRequest : handles
+RespondToIncidentsHandler ..> RespondToIncidentsPolicy : invokes
+RespondToIncidentsHandler ..> IRespondToIncidentsRepository : uses
+IRespondToIncidentsRepository --> RespondToIncidentsRecord : loads / saves
+RespondToIncidentsPolicy ..> RespondToIncidentsRecord : evaluates
+RespondToIncidentsPolicy ..> RespondToIncidentsResult : creates
+RespondToIncidentsRecord ..> RespondToIncidentsResult : applies
+@enduml

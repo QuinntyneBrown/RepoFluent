@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Publish an immutable version
+
+Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Curriculum administration", "Angular 21", "Curriculum lifecycle interface")
+  Container(api, "Curriculum Lifecycle API", "ASP.NET Core", "Applies application and domain policy")
+  ContainerDb(store, "Curriculum store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

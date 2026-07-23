@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Present the learning home
+
+class PresentLearningHomeRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class PresentLearningHomeResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class PresentLearningHomeRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: PresentLearningHomeResult): void
+}
+
+class PresentLearningHomePolicy {
+  +Evaluate(request: PresentLearningHomeRequest, current: PresentLearningHomeRecord): PresentLearningHomeResult
+}
+
+interface IPresentLearningHomeRepository {
+  +Load(scopeId: string, targetId: string): Task<PresentLearningHomeRecord>
+  +Save(record: PresentLearningHomeRecord, expectedVersion: long): Task
+}
+
+class PresentLearningHomeHandler {
+  +Handle(request: PresentLearningHomeRequest): Task<PresentLearningHomeResult>
+}
+
+PresentLearningHomeHandler ..> PresentLearningHomeRequest : handles
+PresentLearningHomeHandler ..> PresentLearningHomePolicy : invokes
+PresentLearningHomeHandler ..> IPresentLearningHomeRepository : uses
+IPresentLearningHomeRepository --> PresentLearningHomeRecord : loads / saves
+PresentLearningHomePolicy ..> PresentLearningHomeRecord : evaluates
+PresentLearningHomePolicy ..> PresentLearningHomeResult : creates
+PresentLearningHomeRecord ..> PresentLearningHomeResult : applies
+@enduml

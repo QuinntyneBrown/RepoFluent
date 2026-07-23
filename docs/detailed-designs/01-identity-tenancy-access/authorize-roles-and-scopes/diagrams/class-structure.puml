@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Authorize roles and scopes
+
+class AuthorizeRolesAndScopesRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class AuthorizeRolesAndScopesResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class AuthorizeRolesAndScopesRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: AuthorizeRolesAndScopesResult): void
+}
+
+class AuthorizeRolesAndScopesPolicy {
+  +Evaluate(request: AuthorizeRolesAndScopesRequest, current: AuthorizeRolesAndScopesRecord): AuthorizeRolesAndScopesResult
+}
+
+interface IAuthorizeRolesAndScopesRepository {
+  +Load(scopeId: string, targetId: string): Task<AuthorizeRolesAndScopesRecord>
+  +Save(record: AuthorizeRolesAndScopesRecord, expectedVersion: long): Task
+}
+
+class AuthorizeRolesAndScopesHandler {
+  +Handle(request: AuthorizeRolesAndScopesRequest): Task<AuthorizeRolesAndScopesResult>
+}
+
+AuthorizeRolesAndScopesHandler ..> AuthorizeRolesAndScopesRequest : handles
+AuthorizeRolesAndScopesHandler ..> AuthorizeRolesAndScopesPolicy : invokes
+AuthorizeRolesAndScopesHandler ..> IAuthorizeRolesAndScopesRepository : uses
+IAuthorizeRolesAndScopesRepository --> AuthorizeRolesAndScopesRecord : loads / saves
+AuthorizeRolesAndScopesPolicy ..> AuthorizeRolesAndScopesRecord : evaluates
+AuthorizeRolesAndScopesPolicy ..> AuthorizeRolesAndScopesResult : creates
+AuthorizeRolesAndScopesRecord ..> AuthorizeRolesAndScopesResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Moderate learning discussion
+
+class ModerateLearningDiscussionRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ModerateLearningDiscussionResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ModerateLearningDiscussionRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ModerateLearningDiscussionResult): void
+}
+
+class ModerateLearningDiscussionPolicy {
+  +Evaluate(request: ModerateLearningDiscussionRequest, current: ModerateLearningDiscussionRecord): ModerateLearningDiscussionResult
+}
+
+interface IModerateLearningDiscussionRepository {
+  +Load(scopeId: string, targetId: string): Task<ModerateLearningDiscussionRecord>
+  +Save(record: ModerateLearningDiscussionRecord, expectedVersion: long): Task
+}
+
+class ModerateLearningDiscussionHandler {
+  +Handle(request: ModerateLearningDiscussionRequest): Task<ModerateLearningDiscussionResult>
+}
+
+ModerateLearningDiscussionHandler ..> ModerateLearningDiscussionRequest : handles
+ModerateLearningDiscussionHandler ..> ModerateLearningDiscussionPolicy : invokes
+ModerateLearningDiscussionHandler ..> IModerateLearningDiscussionRepository : uses
+IModerateLearningDiscussionRepository --> ModerateLearningDiscussionRecord : loads / saves
+ModerateLearningDiscussionPolicy ..> ModerateLearningDiscussionRecord : evaluates
+ModerateLearningDiscussionPolicy ..> ModerateLearningDiscussionResult : creates
+ModerateLearningDiscussionRecord ..> ModerateLearningDiscussionResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Govern sessions and access reviews
+
+class GovernSessionsAndAccessReviewsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GovernSessionsAndAccessReviewsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GovernSessionsAndAccessReviewsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GovernSessionsAndAccessReviewsResult): void
+}
+
+class GovernSessionsAndAccessReviewsPolicy {
+  +Evaluate(request: GovernSessionsAndAccessReviewsRequest, current: GovernSessionsAndAccessReviewsRecord): GovernSessionsAndAccessReviewsResult
+}
+
+interface IGovernSessionsAndAccessReviewsRepository {
+  +Load(scopeId: string, targetId: string): Task<GovernSessionsAndAccessReviewsRecord>
+  +Save(record: GovernSessionsAndAccessReviewsRecord, expectedVersion: long): Task
+}
+
+class GovernSessionsAndAccessReviewsHandler {
+  +Handle(request: GovernSessionsAndAccessReviewsRequest): Task<GovernSessionsAndAccessReviewsResult>
+}
+
+GovernSessionsAndAccessReviewsHandler ..> GovernSessionsAndAccessReviewsRequest : handles
+GovernSessionsAndAccessReviewsHandler ..> GovernSessionsAndAccessReviewsPolicy : invokes
+GovernSessionsAndAccessReviewsHandler ..> IGovernSessionsAndAccessReviewsRepository : uses
+IGovernSessionsAndAccessReviewsRepository --> GovernSessionsAndAccessReviewsRecord : loads / saves
+GovernSessionsAndAccessReviewsPolicy ..> GovernSessionsAndAccessReviewsRecord : evaluates
+GovernSessionsAndAccessReviewsPolicy ..> GovernSessionsAndAccessReviewsResult : creates
+GovernSessionsAndAccessReviewsRecord ..> GovernSessionsAndAccessReviewsResult : applies
+@enduml

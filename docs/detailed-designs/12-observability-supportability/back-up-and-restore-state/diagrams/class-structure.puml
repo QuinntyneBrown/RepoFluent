@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Back up and restore state
+
+class BackUpAndRestoreStateRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class BackUpAndRestoreStateResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class BackUpAndRestoreStateRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: BackUpAndRestoreStateResult): void
+}
+
+class BackUpAndRestoreStatePolicy {
+  +Evaluate(request: BackUpAndRestoreStateRequest, current: BackUpAndRestoreStateRecord): BackUpAndRestoreStateResult
+}
+
+interface IBackUpAndRestoreStateRepository {
+  +Load(scopeId: string, targetId: string): Task<BackUpAndRestoreStateRecord>
+  +Save(record: BackUpAndRestoreStateRecord, expectedVersion: long): Task
+}
+
+class BackUpAndRestoreStateHandler {
+  +Handle(request: BackUpAndRestoreStateRequest): Task<BackUpAndRestoreStateResult>
+}
+
+BackUpAndRestoreStateHandler ..> BackUpAndRestoreStateRequest : handles
+BackUpAndRestoreStateHandler ..> BackUpAndRestoreStatePolicy : invokes
+BackUpAndRestoreStateHandler ..> IBackUpAndRestoreStateRepository : uses
+IBackUpAndRestoreStateRepository --> BackUpAndRestoreStateRecord : loads / saves
+BackUpAndRestoreStatePolicy ..> BackUpAndRestoreStateRecord : evaluates
+BackUpAndRestoreStatePolicy ..> BackUpAndRestoreStateResult : creates
+BackUpAndRestoreStateRecord ..> BackUpAndRestoreStateResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Administer curricula and status
+
+class AdministerCurriculaAndStatusRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class AdministerCurriculaAndStatusResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class AdministerCurriculaAndStatusRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: AdministerCurriculaAndStatusResult): void
+}
+
+class AdministerCurriculaAndStatusPolicy {
+  +Evaluate(request: AdministerCurriculaAndStatusRequest, current: AdministerCurriculaAndStatusRecord): AdministerCurriculaAndStatusResult
+}
+
+interface IAdministerCurriculaAndStatusRepository {
+  +Load(scopeId: string, targetId: string): Task<AdministerCurriculaAndStatusRecord>
+  +Save(record: AdministerCurriculaAndStatusRecord, expectedVersion: long): Task
+}
+
+class AdministerCurriculaAndStatusHandler {
+  +Handle(request: AdministerCurriculaAndStatusRequest): Task<AdministerCurriculaAndStatusResult>
+}
+
+AdministerCurriculaAndStatusHandler ..> AdministerCurriculaAndStatusRequest : handles
+AdministerCurriculaAndStatusHandler ..> AdministerCurriculaAndStatusPolicy : invokes
+AdministerCurriculaAndStatusHandler ..> IAdministerCurriculaAndStatusRepository : uses
+IAdministerCurriculaAndStatusRepository --> AdministerCurriculaAndStatusRecord : loads / saves
+AdministerCurriculaAndStatusPolicy ..> AdministerCurriculaAndStatusRecord : evaluates
+AdministerCurriculaAndStatusPolicy ..> AdministerCurriculaAndStatusResult : creates
+AdministerCurriculaAndStatusRecord ..> AdministerCurriculaAndStatusResult : applies
+@enduml

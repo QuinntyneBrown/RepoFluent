@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Start governed attempts
+
+Container_Boundary(api, "Assessment API") {
+  Component(controller, "StartGovernedAttemptsController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "StartGovernedAttemptsHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "StartGovernedAttemptsPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "IStartGovernedAttemptsRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Assessment evidence store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

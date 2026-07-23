@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Navigate tenant administration
+
+class NavigateTenantAdministrationRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class NavigateTenantAdministrationResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class NavigateTenantAdministrationRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: NavigateTenantAdministrationResult): void
+}
+
+class NavigateTenantAdministrationPolicy {
+  +Evaluate(request: NavigateTenantAdministrationRequest, current: NavigateTenantAdministrationRecord): NavigateTenantAdministrationResult
+}
+
+interface INavigateTenantAdministrationRepository {
+  +Load(scopeId: string, targetId: string): Task<NavigateTenantAdministrationRecord>
+  +Save(record: NavigateTenantAdministrationRecord, expectedVersion: long): Task
+}
+
+class NavigateTenantAdministrationHandler {
+  +Handle(request: NavigateTenantAdministrationRequest): Task<NavigateTenantAdministrationResult>
+}
+
+NavigateTenantAdministrationHandler ..> NavigateTenantAdministrationRequest : handles
+NavigateTenantAdministrationHandler ..> NavigateTenantAdministrationPolicy : invokes
+NavigateTenantAdministrationHandler ..> INavigateTenantAdministrationRepository : uses
+INavigateTenantAdministrationRepository --> NavigateTenantAdministrationRecord : loads / saves
+NavigateTenantAdministrationPolicy ..> NavigateTenantAdministrationRecord : evaluates
+NavigateTenantAdministrationPolicy ..> NavigateTenantAdministrationResult : creates
+NavigateTenantAdministrationRecord ..> NavigateTenantAdministrationResult : applies
+@enduml

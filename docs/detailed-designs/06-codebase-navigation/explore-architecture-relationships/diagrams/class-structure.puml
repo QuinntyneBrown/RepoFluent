@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Explore architecture relationships
+
+class ExploreArchitectureRelationshipsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ExploreArchitectureRelationshipsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ExploreArchitectureRelationshipsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ExploreArchitectureRelationshipsResult): void
+}
+
+class ExploreArchitectureRelationshipsPolicy {
+  +Evaluate(request: ExploreArchitectureRelationshipsRequest, current: ExploreArchitectureRelationshipsRecord): ExploreArchitectureRelationshipsResult
+}
+
+interface IExploreArchitectureRelationshipsRepository {
+  +Load(scopeId: string, targetId: string): Task<ExploreArchitectureRelationshipsRecord>
+  +Save(record: ExploreArchitectureRelationshipsRecord, expectedVersion: long): Task
+}
+
+class ExploreArchitectureRelationshipsHandler {
+  +Handle(request: ExploreArchitectureRelationshipsRequest): Task<ExploreArchitectureRelationshipsResult>
+}
+
+ExploreArchitectureRelationshipsHandler ..> ExploreArchitectureRelationshipsRequest : handles
+ExploreArchitectureRelationshipsHandler ..> ExploreArchitectureRelationshipsPolicy : invokes
+ExploreArchitectureRelationshipsHandler ..> IExploreArchitectureRelationshipsRepository : uses
+IExploreArchitectureRelationshipsRepository --> ExploreArchitectureRelationshipsRecord : loads / saves
+ExploreArchitectureRelationshipsPolicy ..> ExploreArchitectureRelationshipsRecord : evaluates
+ExploreArchitectureRelationshipsPolicy ..> ExploreArchitectureRelationshipsResult : creates
+ExploreArchitectureRelationshipsRecord ..> ExploreArchitectureRelationshipsResult : applies
+@enduml

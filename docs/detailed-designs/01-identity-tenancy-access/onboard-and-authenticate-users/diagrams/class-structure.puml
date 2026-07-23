@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Onboard and authenticate users
+
+class OnboardAndAuthenticateUsersRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class OnboardAndAuthenticateUsersResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class OnboardAndAuthenticateUsersRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: OnboardAndAuthenticateUsersResult): void
+}
+
+class OnboardAndAuthenticateUsersPolicy {
+  +Evaluate(request: OnboardAndAuthenticateUsersRequest, current: OnboardAndAuthenticateUsersRecord): OnboardAndAuthenticateUsersResult
+}
+
+interface IOnboardAndAuthenticateUsersRepository {
+  +Load(scopeId: string, targetId: string): Task<OnboardAndAuthenticateUsersRecord>
+  +Save(record: OnboardAndAuthenticateUsersRecord, expectedVersion: long): Task
+}
+
+class OnboardAndAuthenticateUsersHandler {
+  +Handle(request: OnboardAndAuthenticateUsersRequest): Task<OnboardAndAuthenticateUsersResult>
+}
+
+OnboardAndAuthenticateUsersHandler ..> OnboardAndAuthenticateUsersRequest : handles
+OnboardAndAuthenticateUsersHandler ..> OnboardAndAuthenticateUsersPolicy : invokes
+OnboardAndAuthenticateUsersHandler ..> IOnboardAndAuthenticateUsersRepository : uses
+IOnboardAndAuthenticateUsersRepository --> OnboardAndAuthenticateUsersRecord : loads / saves
+OnboardAndAuthenticateUsersPolicy ..> OnboardAndAuthenticateUsersRecord : evaluates
+OnboardAndAuthenticateUsersPolicy ..> OnboardAndAuthenticateUsersResult : creates
+OnboardAndAuthenticateUsersRecord ..> OnboardAndAuthenticateUsersResult : applies
+@enduml

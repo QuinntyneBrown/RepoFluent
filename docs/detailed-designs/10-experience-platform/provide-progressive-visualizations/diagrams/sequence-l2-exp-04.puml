@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Progressive GPU capability
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Learner" as actor
+box "Frontend — Design-system reference" #E0F2FE
+  participant "ReferencePage" as page
+  participant "BrowserRuntime" as browser
+end box
+box "Backend — Experience quality tooling" #D1FADF
+  participant "ExperienceConformanceSuite" as suite
+end box
+box "Backend — Experience contract" #ECFDF3
+  participant "TokenContract" as tokens
+  participant "ComponentContract" as components
+end box
+box "Backend — Repository infrastructure" #FFF4E5
+  database "Design-system source files" as files
+end box
+actor -> page : Open provide progressive visualizations reference
+page -> files : Load semantic HTML and .rf-* assets
+files --> page : Versioned reference assets
+page -> browser : Initialize progressive enhancement
+browser -> tokens : Apply L2-EXP-04 token and capability policy
+tokens --> browser : Semantic values and fallback
+browser -> components : Apply component state and interaction contract
+alt Capability and interaction are supported
+  components --> browser : Enhanced accessible presentation
+else Capability is unavailable or reduced
+  components --> browser : Semantic fallback presentation
+end
+browser --> page : Rendered state
+page --> actor : Perceivable and operable outcome
+opt Conformance gate
+  suite -> files : Read the same source assets
+  files --> suite : HTML, CSS, JavaScript, and test sources
+  suite -> page : Exercise reference behavior for L2-EXP-04
+  page --> suite : Observable result
+end
+@enduml

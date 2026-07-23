@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Publish a versioned contract
+
+Person(actor, "Contract maintainer", "Publishes and validates curriculum contract releases")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Contract workbench", ".NET tool", "Contract authoring and conformance interface")
+  Container(api, "Contract Registry API", "ASP.NET Core", "Applies application and domain policy")
+  ContainerDb(store, "Contract artifact store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Artifact distribution service", "Distributes checksummed schema, ICD, fixture, and release artifacts")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Govern metric definitions
+
+class GovernMetricDefinitionsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GovernMetricDefinitionsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GovernMetricDefinitionsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GovernMetricDefinitionsResult): void
+}
+
+class GovernMetricDefinitionsPolicy {
+  +Evaluate(request: GovernMetricDefinitionsRequest, current: GovernMetricDefinitionsRecord): GovernMetricDefinitionsResult
+}
+
+interface IGovernMetricDefinitionsRepository {
+  +Load(scopeId: string, targetId: string): Task<GovernMetricDefinitionsRecord>
+  +Save(record: GovernMetricDefinitionsRecord, expectedVersion: long): Task
+}
+
+class GovernMetricDefinitionsHandler {
+  +Handle(request: GovernMetricDefinitionsRequest): Task<GovernMetricDefinitionsResult>
+}
+
+GovernMetricDefinitionsHandler ..> GovernMetricDefinitionsRequest : handles
+GovernMetricDefinitionsHandler ..> GovernMetricDefinitionsPolicy : invokes
+GovernMetricDefinitionsHandler ..> IGovernMetricDefinitionsRepository : uses
+IGovernMetricDefinitionsRepository --> GovernMetricDefinitionsRecord : loads / saves
+GovernMetricDefinitionsPolicy ..> GovernMetricDefinitionsRecord : evaluates
+GovernMetricDefinitionsPolicy ..> GovernMetricDefinitionsResult : creates
+GovernMetricDefinitionsRecord ..> GovernMetricDefinitionsResult : applies
+@enduml

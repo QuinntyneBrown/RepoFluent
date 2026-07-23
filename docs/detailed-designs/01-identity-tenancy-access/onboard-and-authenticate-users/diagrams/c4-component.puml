@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Onboard and authenticate users
+
+Container_Boundary(api, "RepoFluent Identity API") {
+  Component(controller, "OnboardAndAuthenticateUsersController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "OnboardAndAuthenticateUsersHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "OnboardAndAuthenticateUsersPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "IOnboardAndAuthenticateUsersRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Identity and access store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

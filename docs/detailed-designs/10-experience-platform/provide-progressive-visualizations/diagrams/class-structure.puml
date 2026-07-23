@@ -1,0 +1,60 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Provide progressive visualizations
+
+class "assets/tokens.css" as TokenContract <<CSS contract>> {
+  +string SemanticColorTokens
+  +string TypographyTokens
+  +string SpacingAndSizingTokens
+  +duration MotionTokens
+  +ApplyReducedMotion(preference: MediaQuery): void
+}
+
+class "assets/components.css" as ComponentContract <<CSS contract>> {
+  +string ProductClassPrefix = ".rf-"
+  +DefineStates(component: string): StateSet
+  +ApplyResponsiveLayout(profile: ViewportProfile): void
+}
+
+class "reference HTML pages" as ReferencePage <<HTML contract>> {
+  +string Category
+  +string PageId
+  +RenderSemanticExample(): HTMLElement
+}
+
+class "assets/docs.js" as DocumentationRuntime <<JavaScript module>> {
+  +RegisterNavigation(): void
+  +RegisterKeyboardPatterns(): void
+  +RestoreDialogFocus(): void
+  +SynchronizeGraphSelection(): void
+}
+
+class ExperiencePlatformAdapter <<planned Angular library>> {
+  +MapTokens(contract: TokenContract): Theme
+  +CreateComponent(contract: ComponentContract): Component
+  +SelectFallback(capabilities: CapabilitySet): Presentation
+}
+
+class ExperienceConformanceSuite <<quality boundary>> {
+  +ValidateHtml(): Result
+  +RunSmokeTests(): Result
+  +MeasurePerformance(profile: MeasurementProfile): Result
+}
+
+ReferencePage ..> TokenContract : uses
+ReferencePage ..> ComponentContract : uses
+DocumentationRuntime ..> ReferencePage : enhances
+ExperiencePlatformAdapter ..> TokenContract : consumes
+ExperiencePlatformAdapter ..> ComponentContract : consumes
+ExperienceConformanceSuite ..> ReferencePage : verifies
+ExperienceConformanceSuite ..> ExperiencePlatformAdapter : verifies when supplied
+@enduml

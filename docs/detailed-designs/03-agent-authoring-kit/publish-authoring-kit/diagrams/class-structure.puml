@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Publish the authoring kit
+
+class PublishAuthoringKitRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class PublishAuthoringKitResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class PublishAuthoringKitRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: PublishAuthoringKitResult): void
+}
+
+class PublishAuthoringKitPolicy {
+  +Evaluate(request: PublishAuthoringKitRequest, current: PublishAuthoringKitRecord): PublishAuthoringKitResult
+}
+
+interface IPublishAuthoringKitRepository {
+  +Load(scopeId: string, targetId: string): Task<PublishAuthoringKitRecord>
+  +Save(record: PublishAuthoringKitRecord, expectedVersion: long): Task
+}
+
+class PublishAuthoringKitHandler {
+  +Handle(request: PublishAuthoringKitRequest): Task<PublishAuthoringKitResult>
+}
+
+PublishAuthoringKitHandler ..> PublishAuthoringKitRequest : handles
+PublishAuthoringKitHandler ..> PublishAuthoringKitPolicy : invokes
+PublishAuthoringKitHandler ..> IPublishAuthoringKitRepository : uses
+IPublishAuthoringKitRepository --> PublishAuthoringKitRecord : loads / saves
+PublishAuthoringKitPolicy ..> PublishAuthoringKitRecord : evaluates
+PublishAuthoringKitPolicy ..> PublishAuthoringKitResult : creates
+PublishAuthoringKitRecord ..> PublishAuthoringKitResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Govern security readiness
+
+class GovernSecurityReadinessRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GovernSecurityReadinessResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GovernSecurityReadinessRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GovernSecurityReadinessResult): void
+}
+
+class GovernSecurityReadinessPolicy {
+  +Evaluate(request: GovernSecurityReadinessRequest, current: GovernSecurityReadinessRecord): GovernSecurityReadinessResult
+}
+
+interface IGovernSecurityReadinessRepository {
+  +Load(scopeId: string, targetId: string): Task<GovernSecurityReadinessRecord>
+  +Save(record: GovernSecurityReadinessRecord, expectedVersion: long): Task
+}
+
+class GovernSecurityReadinessHandler {
+  +Handle(request: GovernSecurityReadinessRequest): Task<GovernSecurityReadinessResult>
+}
+
+GovernSecurityReadinessHandler ..> GovernSecurityReadinessRequest : handles
+GovernSecurityReadinessHandler ..> GovernSecurityReadinessPolicy : invokes
+GovernSecurityReadinessHandler ..> IGovernSecurityReadinessRepository : uses
+IGovernSecurityReadinessRepository --> GovernSecurityReadinessRecord : loads / saves
+GovernSecurityReadinessPolicy ..> GovernSecurityReadinessRecord : evaluates
+GovernSecurityReadinessPolicy ..> GovernSecurityReadinessResult : creates
+GovernSecurityReadinessRecord ..> GovernSecurityReadinessResult : applies
+@enduml

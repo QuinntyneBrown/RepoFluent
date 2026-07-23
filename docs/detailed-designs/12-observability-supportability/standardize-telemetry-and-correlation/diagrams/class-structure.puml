@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Standardize telemetry and correlation
+
+class StandardizeTelemetryAndCorrelationRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class StandardizeTelemetryAndCorrelationResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class StandardizeTelemetryAndCorrelationRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: StandardizeTelemetryAndCorrelationResult): void
+}
+
+class StandardizeTelemetryAndCorrelationPolicy {
+  +Evaluate(request: StandardizeTelemetryAndCorrelationRequest, current: StandardizeTelemetryAndCorrelationRecord): StandardizeTelemetryAndCorrelationResult
+}
+
+interface IStandardizeTelemetryAndCorrelationRepository {
+  +Load(scopeId: string, targetId: string): Task<StandardizeTelemetryAndCorrelationRecord>
+  +Save(record: StandardizeTelemetryAndCorrelationRecord, expectedVersion: long): Task
+}
+
+class StandardizeTelemetryAndCorrelationHandler {
+  +Handle(request: StandardizeTelemetryAndCorrelationRequest): Task<StandardizeTelemetryAndCorrelationResult>
+}
+
+StandardizeTelemetryAndCorrelationHandler ..> StandardizeTelemetryAndCorrelationRequest : handles
+StandardizeTelemetryAndCorrelationHandler ..> StandardizeTelemetryAndCorrelationPolicy : invokes
+StandardizeTelemetryAndCorrelationHandler ..> IStandardizeTelemetryAndCorrelationRepository : uses
+IStandardizeTelemetryAndCorrelationRepository --> StandardizeTelemetryAndCorrelationRecord : loads / saves
+StandardizeTelemetryAndCorrelationPolicy ..> StandardizeTelemetryAndCorrelationRecord : evaluates
+StandardizeTelemetryAndCorrelationPolicy ..> StandardizeTelemetryAndCorrelationResult : creates
+StandardizeTelemetryAndCorrelationRecord ..> StandardizeTelemetryAndCorrelationResult : applies
+@enduml

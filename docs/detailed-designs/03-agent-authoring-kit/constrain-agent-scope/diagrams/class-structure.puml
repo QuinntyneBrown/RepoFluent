@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Constrain agent scope
+
+class ConstrainAgentScopeRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ConstrainAgentScopeResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ConstrainAgentScopeRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ConstrainAgentScopeResult): void
+}
+
+class ConstrainAgentScopePolicy {
+  +Evaluate(request: ConstrainAgentScopeRequest, current: ConstrainAgentScopeRecord): ConstrainAgentScopeResult
+}
+
+interface IConstrainAgentScopeRepository {
+  +Load(scopeId: string, targetId: string): Task<ConstrainAgentScopeRecord>
+  +Save(record: ConstrainAgentScopeRecord, expectedVersion: long): Task
+}
+
+class ConstrainAgentScopeHandler {
+  +Handle(request: ConstrainAgentScopeRequest): Task<ConstrainAgentScopeResult>
+}
+
+ConstrainAgentScopeHandler ..> ConstrainAgentScopeRequest : handles
+ConstrainAgentScopeHandler ..> ConstrainAgentScopePolicy : invokes
+ConstrainAgentScopeHandler ..> IConstrainAgentScopeRepository : uses
+IConstrainAgentScopeRepository --> ConstrainAgentScopeRecord : loads / saves
+ConstrainAgentScopePolicy ..> ConstrainAgentScopeRecord : evaluates
+ConstrainAgentScopePolicy ..> ConstrainAgentScopeResult : creates
+ConstrainAgentScopeRecord ..> ConstrainAgentScopeResult : applies
+@enduml

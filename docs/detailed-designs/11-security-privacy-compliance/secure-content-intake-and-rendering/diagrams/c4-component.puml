@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Secure content intake and rendering
+
+Container_Boundary(api, "Security Control API") {
+  Component(controller, "SecureContentIntakeAndRenderingController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "SecureContentIntakeAndRenderingHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "SecureContentIntakeAndRenderingPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "ISecureContentIntakeAndRenderingRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Security evidence store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Role and scope policy evaluation
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Tenant administrator" as actor
+box "Frontend — Identity administration" #E0F2FE
+  participant "AuthorizeRolesAndScopesPage" as entry
+  participant "IdentityAccessApiClient" as client
+end box
+box "Backend — RepoFluent Identity API application" #D1FADF
+  participant "AuthorizeRolesAndScopesController" as controller
+end box
+box "Backend — Identity, Tenancy, and Access Application and Domain" #ECFDF3
+  participant "AuthorizeRolesAndScopesHandler" as handler
+  participant "AuthorizeRolesAndScopesPolicy" as policy
+end box
+box "Backend — Identity, Tenancy, and Access Infrastructure" #FFF4E5
+  participant "IAuthorizeRolesAndScopesRepository" as repository
+  database "Identity and access store" as store
+end box
+actor -> entry : Start authorize roles and scopes
+entry -> client : Build typed request
+client -> controller : Send request with scope and correlation
+controller -> controller : Authenticate and apply endpoint policy
+controller -> handler : Dispatch AuthorizeRolesAndScopesRequest
+handler -> repository : Load authorized current state
+repository -> store : Read tenant-scoped record
+store --> repository : Current record
+repository --> handler : Authorized state
+handler -> policy : Apply L2-ITA-04
+alt Policy and validation accept the request
+  policy --> handler : Typed accepted result
+  handler -> repository : Save with expected version and idempotency key
+  repository -> store : Commit one result
+  store --> repository : Durable version
+  repository --> handler : Commit result
+  handler --> controller : Typed feature result
+else Policy or validation rejects the request
+  policy --> handler : Typed rejection without mutation
+  handler --> controller : Safe failure result
+end
+controller --> client : HTTP response or Problem Details
+client --> entry : Typed outcome
+entry --> actor : Present accessible feature state
+@enduml

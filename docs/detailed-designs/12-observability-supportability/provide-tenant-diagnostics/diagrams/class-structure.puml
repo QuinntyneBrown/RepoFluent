@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Provide tenant diagnostics
+
+class ProvideTenantDiagnosticsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ProvideTenantDiagnosticsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ProvideTenantDiagnosticsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ProvideTenantDiagnosticsResult): void
+}
+
+class ProvideTenantDiagnosticsPolicy {
+  +Evaluate(request: ProvideTenantDiagnosticsRequest, current: ProvideTenantDiagnosticsRecord): ProvideTenantDiagnosticsResult
+}
+
+interface IProvideTenantDiagnosticsRepository {
+  +Load(scopeId: string, targetId: string): Task<ProvideTenantDiagnosticsRecord>
+  +Save(record: ProvideTenantDiagnosticsRecord, expectedVersion: long): Task
+}
+
+class ProvideTenantDiagnosticsHandler {
+  +Handle(request: ProvideTenantDiagnosticsRequest): Task<ProvideTenantDiagnosticsResult>
+}
+
+ProvideTenantDiagnosticsHandler ..> ProvideTenantDiagnosticsRequest : handles
+ProvideTenantDiagnosticsHandler ..> ProvideTenantDiagnosticsPolicy : invokes
+ProvideTenantDiagnosticsHandler ..> IProvideTenantDiagnosticsRepository : uses
+IProvideTenantDiagnosticsRepository --> ProvideTenantDiagnosticsRecord : loads / saves
+ProvideTenantDiagnosticsPolicy ..> ProvideTenantDiagnosticsRecord : evaluates
+ProvideTenantDiagnosticsPolicy ..> ProvideTenantDiagnosticsResult : creates
+ProvideTenantDiagnosticsRecord ..> ProvideTenantDiagnosticsResult : applies
+@enduml

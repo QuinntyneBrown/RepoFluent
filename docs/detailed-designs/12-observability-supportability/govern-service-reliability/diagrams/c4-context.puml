@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Govern service reliability
+
+Person(actor, "Platform operator", "Monitors and supports RepoFluent within approved operational access")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(dependency, "Monitoring and alerting platform", "Collects approved telemetry and routes actionable alerts")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, dependency, "Uses through an approved boundary")
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Render and resolve code
+
+class RenderAndResolveCodeRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RenderAndResolveCodeResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RenderAndResolveCodeRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RenderAndResolveCodeResult): void
+}
+
+class RenderAndResolveCodePolicy {
+  +Evaluate(request: RenderAndResolveCodeRequest, current: RenderAndResolveCodeRecord): RenderAndResolveCodeResult
+}
+
+interface IRenderAndResolveCodeRepository {
+  +Load(scopeId: string, targetId: string): Task<RenderAndResolveCodeRecord>
+  +Save(record: RenderAndResolveCodeRecord, expectedVersion: long): Task
+}
+
+class RenderAndResolveCodeHandler {
+  +Handle(request: RenderAndResolveCodeRequest): Task<RenderAndResolveCodeResult>
+}
+
+RenderAndResolveCodeHandler ..> RenderAndResolveCodeRequest : handles
+RenderAndResolveCodeHandler ..> RenderAndResolveCodePolicy : invokes
+RenderAndResolveCodeHandler ..> IRenderAndResolveCodeRepository : uses
+IRenderAndResolveCodeRepository --> RenderAndResolveCodeRecord : loads / saves
+RenderAndResolveCodePolicy ..> RenderAndResolveCodeRecord : evaluates
+RenderAndResolveCodePolicy ..> RenderAndResolveCodeResult : creates
+RenderAndResolveCodeRecord ..> RenderAndResolveCodeResult : applies
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Define safe content and code
+
+Container_Boundary(api, "Contract Registry API") {
+  Component(controller, "DefineSafeContentAndCodeController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "DefineSafeContentAndCodeHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "DefineSafeContentAndCodePolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "IDefineSafeContentAndCodeRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Contract artifact store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

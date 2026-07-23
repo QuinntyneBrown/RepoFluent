@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Invalidate defective items
+
+class InvalidateDefectiveItemsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class InvalidateDefectiveItemsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class InvalidateDefectiveItemsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: InvalidateDefectiveItemsResult): void
+}
+
+class InvalidateDefectiveItemsPolicy {
+  +Evaluate(request: InvalidateDefectiveItemsRequest, current: InvalidateDefectiveItemsRecord): InvalidateDefectiveItemsResult
+}
+
+interface IInvalidateDefectiveItemsRepository {
+  +Load(scopeId: string, targetId: string): Task<InvalidateDefectiveItemsRecord>
+  +Save(record: InvalidateDefectiveItemsRecord, expectedVersion: long): Task
+}
+
+class InvalidateDefectiveItemsHandler {
+  +Handle(request: InvalidateDefectiveItemsRequest): Task<InvalidateDefectiveItemsResult>
+}
+
+InvalidateDefectiveItemsHandler ..> InvalidateDefectiveItemsRequest : handles
+InvalidateDefectiveItemsHandler ..> InvalidateDefectiveItemsPolicy : invokes
+InvalidateDefectiveItemsHandler ..> IInvalidateDefectiveItemsRepository : uses
+IInvalidateDefectiveItemsRepository --> InvalidateDefectiveItemsRecord : loads / saves
+InvalidateDefectiveItemsPolicy ..> InvalidateDefectiveItemsRecord : evaluates
+InvalidateDefectiveItemsPolicy ..> InvalidateDefectiveItemsResult : creates
+InvalidateDefectiveItemsRecord ..> InvalidateDefectiveItemsResult : applies
+@enduml

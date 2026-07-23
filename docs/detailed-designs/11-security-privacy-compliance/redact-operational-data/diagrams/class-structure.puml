@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Redact operational data
+
+class RedactOperationalDataRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RedactOperationalDataResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RedactOperationalDataRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RedactOperationalDataResult): void
+}
+
+class RedactOperationalDataPolicy {
+  +Evaluate(request: RedactOperationalDataRequest, current: RedactOperationalDataRecord): RedactOperationalDataResult
+}
+
+interface IRedactOperationalDataRepository {
+  +Load(scopeId: string, targetId: string): Task<RedactOperationalDataRecord>
+  +Save(record: RedactOperationalDataRecord, expectedVersion: long): Task
+}
+
+class RedactOperationalDataHandler {
+  +Handle(request: RedactOperationalDataRequest): Task<RedactOperationalDataResult>
+}
+
+RedactOperationalDataHandler ..> RedactOperationalDataRequest : handles
+RedactOperationalDataHandler ..> RedactOperationalDataPolicy : invokes
+RedactOperationalDataHandler ..> IRedactOperationalDataRepository : uses
+IRedactOperationalDataRepository --> RedactOperationalDataRecord : loads / saves
+RedactOperationalDataPolicy ..> RedactOperationalDataRecord : evaluates
+RedactOperationalDataPolicy ..> RedactOperationalDataResult : creates
+RedactOperationalDataRecord ..> RedactOperationalDataResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Start governed attempts
+
+class StartGovernedAttemptsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class StartGovernedAttemptsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class StartGovernedAttemptsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: StartGovernedAttemptsResult): void
+}
+
+class StartGovernedAttemptsPolicy {
+  +Evaluate(request: StartGovernedAttemptsRequest, current: StartGovernedAttemptsRecord): StartGovernedAttemptsResult
+}
+
+interface IStartGovernedAttemptsRepository {
+  +Load(scopeId: string, targetId: string): Task<StartGovernedAttemptsRecord>
+  +Save(record: StartGovernedAttemptsRecord, expectedVersion: long): Task
+}
+
+class StartGovernedAttemptsHandler {
+  +Handle(request: StartGovernedAttemptsRequest): Task<StartGovernedAttemptsResult>
+}
+
+StartGovernedAttemptsHandler ..> StartGovernedAttemptsRequest : handles
+StartGovernedAttemptsHandler ..> StartGovernedAttemptsPolicy : invokes
+StartGovernedAttemptsHandler ..> IStartGovernedAttemptsRepository : uses
+IStartGovernedAttemptsRepository --> StartGovernedAttemptsRecord : loads / saves
+StartGovernedAttemptsPolicy ..> StartGovernedAttemptsRecord : evaluates
+StartGovernedAttemptsPolicy ..> StartGovernedAttemptsResult : creates
+StartGovernedAttemptsRecord ..> StartGovernedAttemptsResult : applies
+@enduml

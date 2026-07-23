@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Monitor import and learning
+
+class MonitorImportAndLearningRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class MonitorImportAndLearningResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class MonitorImportAndLearningRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: MonitorImportAndLearningResult): void
+}
+
+class MonitorImportAndLearningPolicy {
+  +Evaluate(request: MonitorImportAndLearningRequest, current: MonitorImportAndLearningRecord): MonitorImportAndLearningResult
+}
+
+interface IMonitorImportAndLearningRepository {
+  +Load(scopeId: string, targetId: string): Task<MonitorImportAndLearningRecord>
+  +Save(record: MonitorImportAndLearningRecord, expectedVersion: long): Task
+}
+
+class MonitorImportAndLearningHandler {
+  +Handle(request: MonitorImportAndLearningRequest): Task<MonitorImportAndLearningResult>
+}
+
+MonitorImportAndLearningHandler ..> MonitorImportAndLearningRequest : handles
+MonitorImportAndLearningHandler ..> MonitorImportAndLearningPolicy : invokes
+MonitorImportAndLearningHandler ..> IMonitorImportAndLearningRepository : uses
+IMonitorImportAndLearningRepository --> MonitorImportAndLearningRecord : loads / saves
+MonitorImportAndLearningPolicy ..> MonitorImportAndLearningRecord : evaluates
+MonitorImportAndLearningPolicy ..> MonitorImportAndLearningResult : creates
+MonitorImportAndLearningRecord ..> MonitorImportAndLearningResult : applies
+@enduml

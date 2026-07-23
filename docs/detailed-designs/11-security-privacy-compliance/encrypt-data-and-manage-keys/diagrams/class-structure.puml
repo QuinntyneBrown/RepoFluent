@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Encrypt data and manage keys
+
+class EncryptDataAndManageKeysRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class EncryptDataAndManageKeysResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class EncryptDataAndManageKeysRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: EncryptDataAndManageKeysResult): void
+}
+
+class EncryptDataAndManageKeysPolicy {
+  +Evaluate(request: EncryptDataAndManageKeysRequest, current: EncryptDataAndManageKeysRecord): EncryptDataAndManageKeysResult
+}
+
+interface IEncryptDataAndManageKeysRepository {
+  +Load(scopeId: string, targetId: string): Task<EncryptDataAndManageKeysRecord>
+  +Save(record: EncryptDataAndManageKeysRecord, expectedVersion: long): Task
+}
+
+class EncryptDataAndManageKeysHandler {
+  +Handle(request: EncryptDataAndManageKeysRequest): Task<EncryptDataAndManageKeysResult>
+}
+
+EncryptDataAndManageKeysHandler ..> EncryptDataAndManageKeysRequest : handles
+EncryptDataAndManageKeysHandler ..> EncryptDataAndManageKeysPolicy : invokes
+EncryptDataAndManageKeysHandler ..> IEncryptDataAndManageKeysRepository : uses
+IEncryptDataAndManageKeysRepository --> EncryptDataAndManageKeysRecord : loads / saves
+EncryptDataAndManageKeysPolicy ..> EncryptDataAndManageKeysRecord : evaluates
+EncryptDataAndManageKeysPolicy ..> EncryptDataAndManageKeysResult : creates
+EncryptDataAndManageKeysRecord ..> EncryptDataAndManageKeysResult : applies
+@enduml
