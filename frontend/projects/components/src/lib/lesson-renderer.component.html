@@ -1,46 +1,96 @@
-<article class="lesson">
-  <header>
-    <p class="lesson__meta">Lesson · {{ lesson().estimatedMinutes }} min</p>
-    <h1>{{ lesson().title }}</h1>
-    <section class="lesson__objectives" aria-labelledby="objectives-title">
-      <h2 id="objectives-title">By the end, you can</h2>
-      <ul>
-        @for (objective of lesson().objectives; track objective) {
-          <li>{{ objective }}</li>
-        }
-      </ul>
-    </section>
-  </header>
+<article class="lesson-workspace">
+  <div class="lesson-toolbar">
+    <div class="rf-toggle-group" aria-label="Lesson view">
+      <span class="rf-button" aria-current="page">Rendered</span>
+      <span class="rf-button">Source</span>
+    </div>
+    <span class="rf-status rf-status--success">source verified</span>
+  </div>
 
-  <div class="lesson__body">
-    @for (block of lesson().blocks; track $index) {
-      @switch (block.type) {
-        @case ('prose') {
-          <p>{{ block.text }}</p>
+  <div class="lesson">
+    <section class="lesson__document" aria-label="Rendered lesson">
+      <header>
+        <p class="lesson__meta"># Lesson document · {{ lesson().estimatedMinutes }} min</p>
+        <h1>{{ lesson().title }}</h1>
+        <section class="rf-objectives lesson__objectives" aria-labelledby="objectives-title">
+          <span class="rf-objectives__label" id="objectives-title">By the end, you can</span>
+          <div>
+            @for (objective of lesson().objectives; track objective) {
+              <p><span>[✓]</span>{{ objective }}</p>
+            }
+          </div>
+        </section>
+      </header>
+
+      <div class="lesson__body">
+        @for (block of lesson().blocks; track $index) {
+          @switch (block.type) {
+            @case ('prose') {
+              <p class="lesson-prose">{{ block.text }}</p>
+            }
+            @case ('callout') {
+              <aside class="rf-callout callout">
+                <span class="callout-mark" aria-hidden="true">↳</span>
+                <div>
+                  <strong>{{ block.title }}</strong>
+                  <p>{{ block.text }}</p>
+                </div>
+              </aside>
+            }
+            @case ('codeReference') {
+              <div class="rf-source-link source-link" aria-label="Source code reference">
+                <span class="source-link__mark" aria-hidden="true">↳</span>
+                <span>
+                  <strong>{{ block.symbol }}</strong>
+                  <small
+                    >Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</small
+                  >
+                </span>
+                <span class="rf-badge">open</span>
+              </div>
+            }
+            @default {
+              <div class="rf-callout rf-callout--danger block-error" role="status">
+                <div>
+                  <strong>Unsupported lesson block</strong>
+                  <p>This content block is unavailable. Support code LEX-BLOCK-UNSUPPORTED.</p>
+                </div>
+              </div>
+            }
+          }
         }
-        @case ('callout') {
-          <aside class="callout">
-            <strong>{{ block.title }}</strong>
-            <p>{{ block.text }}</p>
-          </aside>
-        }
-        @case ('codeReference') {
-          <section class="code-reference" aria-label="Source code reference">
-            <div>
-              <span>Source reference</span>
-              <strong>{{ block.symbol }}</strong>
-            </div>
-            <code>{{ block.path }}</code>
+      </div>
+    </section>
+
+    <aside class="lesson__source" aria-label="Source pane">
+      @for (block of lesson().blocks; track $index) {
+        @if (block.type === 'codeReference') {
+          <div class="source-title">
+            <span>{{ block.language }} · {{ block.symbol }}</span>
+            <span class="rf-status rf-status--success">verified</span>
+          </div>
+          <div class="source-breadcrumbs">{{ block.path }}</div>
+          <div class="source-location">
+            <span>Source location</span>
+            <strong>{{ block.symbol }}</strong>
             <p>Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</p>
-            <p>{{ block.explanation }}</p>
-          </section>
-        }
-        @default {
-          <div class="block-error" role="status">
-            This content block is unavailable. Support code LEX-BLOCK-UNSUPPORTED.
+          </div>
+          <div class="source-excerpt" role="note">
+            <span class="source-excerpt__line">{{ block.startLine }}</span>
+            <div>
+              <strong>Referenced source is linked by provenance.</strong>
+              <p>The curriculum package does not embed repository source text.</p>
+            </div>
+          </div>
+          <div class="rf-callout rf-callout--success provenance">
+            <span aria-hidden="true">✓</span>
+            <div>
+              <strong>Provenance · verified</strong>
+              <p>{{ block.explanation }}</p>
+            </div>
           </div>
         }
       }
-    }
+    </aside>
   </div>
 </article>

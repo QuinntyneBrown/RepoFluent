@@ -1,5 +1,7 @@
 .page-heading {
-  margin-bottom: var(--rf-space-9);
+  border-bottom: 1px solid var(--rf-color-line);
+  margin-bottom: var(--rf-space-7);
+  padding-bottom: var(--rf-space-6);
 }
 
 .eyebrow {
@@ -11,54 +13,170 @@
 
 h1 {
   font: var(--rf-type-page-title);
+  margin: var(--rf-space-2) 0 var(--rf-space-3);
+}
+
+.page-heading__lede {
+  color: var(--rf-color-ink-muted);
+  margin: 0;
+}
+
+.loading-panel .rf-panel__body {
+  display: grid;
+  gap: var(--rf-space-3);
+}
+
+.skeleton-short {
+  width: 55%;
+}
+
+.dashboard {
+  background-image:
+    linear-gradient(rgb(38 50 61 / 18%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(38 50 61 / 18%) 1px, transparent 1px);
+  background-size: 1rem 1rem;
+  margin: calc(var(--rf-space-4) * -1);
+  padding: var(--rf-space-4);
+}
+
+.dashboard-command {
+  margin-bottom: var(--rf-space-6);
+}
+
+.dashboard-command h2 {
+  font: var(--rf-type-page-title);
   margin: var(--rf-space-2) 0;
+}
+
+.dashboard-command h2 span {
+  color: var(--rf-color-primary);
+}
+
+.dashboard-command p:last-child {
+  color: var(--rf-color-ink-muted);
+  margin-bottom: 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  gap: var(--rf-space-4);
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.9fr);
 }
 
 .assignment-list {
   display: grid;
-  gap: var(--rf-space-6);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: var(--rf-space-4);
 }
 
-.assignment-card,
-.empty {
-  background: var(--rf-color-surface-1);
-  border: 1px solid var(--rf-color-line);
-  border-radius: var(--rf-radius-panel);
-  padding: var(--rf-space-7);
+.assignment-card__body {
+  display: grid;
+  gap: var(--rf-space-4);
 }
 
-.assignment-card__status {
-  color: var(--rf-color-primary);
-  display: flex;
-  font: var(--rf-type-label);
-  justify-content: space-between;
+.assignment-card__body h2 {
+  font: var(--rf-type-section);
+  margin: 0;
+}
+
+.assignment-card__body > p {
+  margin: 0;
+}
+
+.assignment-kicker,
+.next-action span,
+.metric-summary span {
+  color: var(--rf-color-ink-muted);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
   text-transform: uppercase;
 }
 
 .next-action {
-  background: var(--rf-color-surface-2);
+  border-left: 2px solid var(--rf-color-line-strong);
   display: grid;
-  gap: var(--rf-space-2);
-  margin: var(--rf-space-6) 0;
+  gap: var(--rf-space-1);
+  padding-left: var(--rf-space-3);
+}
+
+.command-line {
+  color: var(--rf-color-info);
+  font: var(--rf-type-code);
+}
+
+.assignment-card .rf-button {
+  justify-self: start;
+}
+
+.assignment-progress {
+  border-top: 1px solid var(--rf-color-line);
   padding: var(--rf-space-4);
 }
 
-.next-action span {
-  color: var(--rf-color-ink-muted);
-  font: var(--rf-type-label);
+.metrics-body {
+  align-items: center;
+  display: grid;
+  gap: var(--rf-space-5);
+  grid-template-columns: auto 1fr;
 }
 
-.primary-link {
-  background: var(--rf-color-primary);
-  border-radius: var(--rf-radius-control);
-  color: var(--rf-color-ink-inverse);
-  display: inline-flex;
-  font-weight: 700;
-  padding: var(--rf-space-3) var(--rf-space-5);
-  text-decoration: none;
+.metric-summary {
+  display: grid;
+  gap: var(--rf-space-2);
+}
+
+.metric-summary strong {
+  color: var(--rf-color-ink-strong);
+  font: var(--rf-type-section);
+  text-transform: uppercase;
+}
+
+.metric-summary p {
+  margin: 0;
+}
+
+.metric-bars {
+  display: grid;
+  gap: var(--rf-space-4);
+  grid-column: 1 / -1;
+}
+
+.assignment-fill {
+  background: var(--rf-color-info);
+}
+
+.assignment-queue {
+  margin-top: var(--rf-space-4);
 }
 
 .error {
-  color: var(--rf-color-danger);
+  margin-top: var(--rf-space-5);
+}
+
+@media (max-width: 64rem) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 48rem) {
+  .dashboard {
+    margin: 0;
+    padding: 0;
+  }
+
+  .dashboard-command h2 {
+    font-size: 2rem;
+  }
+
+  .assignment-card .rf-button {
+    justify-self: stretch;
+  }
+
+  .learning-metrics {
+    order: 2;
+  }
+
+  .assignment-queue {
+    order: 3;
+  }
 }

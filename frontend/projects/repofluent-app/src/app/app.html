@@ -1,26 +1,113 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
-<div class="development-banner" role="status">
-  Development identities only — not production authentication
-</div>
-<header class="app-header">
-  <a class="brand" routerLink="/" aria-label="RepoFluent" role="heading" aria-level="1">
-    RepoFluent
-  </a>
-  <nav aria-label="Primary navigation">
-    <a routerLink="/">Curricula</a>
-    <a routerLink="/learning">My learning</a>
-  </nav>
-  <div class="persona-selector">
-    <label for="development-persona">Development persona</label>
-    <select id="development-persona" [value]="personas.current()" (change)="setPersona($event)">
-      <option value="author">Author</option>
-      <option value="reviewer">Reviewer</option>
-      <option value="administrator">Administrator</option>
-      <option value="learner">Learner</option>
-    </select>
+<div class="product-shell">
+  <div class="development-banner" role="status">
+    <span class="development-banner__wide">
+      Development identities only — not production authentication
+    </span>
+    <span class="development-banner__compact">Development identities · local only</span>
   </div>
-</header>
 
-<main id="main-content" class="app-shell">
-  <router-outlet />
-</main>
+  <header class="app-header">
+    <a class="rf-brand brand" routerLink="/" aria-label="RepoFluent" role="heading" aria-level="1">
+      <span class="rf-brand__mark" aria-hidden="true">RF</span>
+      <span>RepoFluent</span>
+    </a>
+
+    <div class="rf-command-trigger command-trigger" aria-hidden="true">
+      <span>Search curriculum, code, systems…</span>
+      <kbd>Ctrl K</kbd>
+    </div>
+
+    <div class="titlebar-actions">
+      <span class="rf-status rf-status--success sync-status">synced</span>
+      <div class="persona-selector">
+        <label for="development-persona">Development persona</label>
+        <select
+          class="rf-select"
+          id="development-persona"
+          [value]="personas.current()"
+          (change)="setPersona($event)"
+        >
+          <option value="author">Author</option>
+          <option value="reviewer">Reviewer</option>
+          <option value="administrator">Administrator</option>
+          <option value="learner">Learner</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+    <nav class="activity-bar" aria-label="Primary navigation">
+      <a
+        class="activity-link"
+        routerLink="/"
+        routerLinkActive="activity-link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-label="Curricula"
+      >
+        <span class="activity-glyph" aria-hidden="true">⌂</span>
+        <span class="activity-label">Curricula</span>
+      </a>
+      <a
+        class="activity-link"
+        routerLink="/learning"
+        routerLinkActive="activity-link--active"
+        aria-label="My learning"
+      >
+        <span class="activity-glyph" aria-hidden="true">▤</span>
+        <span class="activity-label">Learning</span>
+      </a>
+    </nav>
+
+    <aside class="workspace-sidebar" aria-label="Workspace explorer">
+      <div class="rf-panel__header sidebar-heading">
+        <span>Workspace explorer</span>
+        <span>RF</span>
+      </div>
+      <ul class="rf-tree" aria-label="Open workspace documents">
+        <li>
+          <span class="rf-tree__item" aria-current="page">
+            <span class="tree-file" aria-hidden="true">◇</span>
+            workspace.rf
+          </span>
+        </li>
+        <li>
+          <details open>
+            <summary>⌄ governed-learning</summary>
+            <ul>
+              <li><span class="rf-tree__item">curriculum.lifecycle</span></li>
+              <li><span class="rf-tree__item">learning.dashboard</span></li>
+              <li><span class="rf-tree__item">lesson.source</span></li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+      <div class="sidebar-context">
+        <span>ENVIRONMENT</span>
+        <strong>LOCAL DEVELOPMENT</strong>
+        <small>Identity simulation is active.</small>
+      </div>
+    </aside>
+
+    <div class="workbench">
+      <div class="rf-tabs workbench-tabs" aria-label="Open views">
+        <span class="rf-tab" aria-selected="true">workspace.rf</span>
+      </div>
+      <div class="rf-breadcrumbs">
+        repofluent <span aria-hidden="true">›</span> governed-learning
+        <span aria-hidden="true">›</span> <strong>workspace.rf</strong>
+      </div>
+      <main id="main-content" class="app-shell">
+        <router-outlet />
+      </main>
+    </div>
+  </div>
+
+  <footer class="statusbar" aria-label="Application status">
+    <span><strong>RF</strong> local</span>
+    <span>0 errors</span>
+    <span>WCAG 2.2 AA</span>
+    <span>UTF-8 · LF</span>
+  </footer>
+</div>

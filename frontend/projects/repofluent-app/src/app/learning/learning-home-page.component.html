@@ -1,44 +1,148 @@
 <header class="page-heading">
-  <p class="eyebrow">Recommended next</p>
+  <p class="eyebrow">&gt; learner.status --today</p>
   <h1>My learning</h1>
-  <p>Continue assigned codebase learning from one trusted place.</p>
+  <p class="page-heading__lede">Continue assigned codebase learning from one trusted place.</p>
 </header>
 
 @if (isLoading()) {
-  <p role="status">Loading assigned learning…</p>
+  <section class="rf-panel loading-panel" role="status" aria-label="Loading assigned learning">
+    <div class="rf-panel__header">Personalized home</div>
+    <div class="rf-panel__body">
+      <div class="rf-skeleton"></div>
+      <div class="rf-skeleton skeleton-short"></div>
+      <span>Loading assigned learning…</span>
+    </div>
+  </section>
 } @else if (error()) {
-  <p class="error" role="alert">{{ error() }}</p>
+  <div class="rf-callout rf-callout--danger error" role="alert">
+    <div>
+      <strong>Learning dashboard unavailable</strong>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
 } @else if (assignments().length === 0) {
-  <section class="empty">
-    <h2>No learning assigned</h2>
-    <p>Your assigned published curricula will appear here.</p>
+  <section class="rf-panel">
+    <div class="rf-panel__header">Personalized home / Maya Quinn</div>
+    <div class="rf-empty">
+      <div>
+        <h2>No learning assigned</h2>
+        <p>Your assigned published curricula will appear here.</p>
+      </div>
+    </div>
   </section>
 } @else {
-  <section class="assignment-list" aria-label="Assigned learning">
-    @for (assignment of assignments(); track assignment.id) {
-      <article class="assignment-card">
-        <div class="assignment-card__status">
-          <span>{{ assignment.isRequired ? 'Required' : 'Optional' }}</span>
-          <span>Not started</span>
+  <section class="dashboard" aria-label="Assigned learning">
+    <div class="dashboard-command">
+      <p class="eyebrow">&gt; learner.status --today</p>
+      <h2>Ready when you are, Maya<span aria-hidden="true">_</span></h2>
+      <p>One focused session will move your assigned learning forward.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="assignment-list">
+        @for (assignment of assignments(); track assignment.id) {
+          <article class="rf-panel assignment-card">
+            <div class="rf-panel__header">
+              <span>Recommended_next</span>
+              <span>{{ assignment.isRequired ? 'Required' : 'Optional' }}</span>
+            </div>
+            <div class="rf-panel__body assignment-card__body">
+              <p class="assignment-kicker">Assigned course / Not started</p>
+              <h2>{{ assignment.title }}</h2>
+              <p>{{ assignment.description }}</p>
+              <div class="next-action">
+                <span>Why this is next</span>
+                <strong>{{ assignment.nextAction }}</strong>
+              </div>
+              <p class="command-line">
+                <span aria-hidden="true">$</span> course start
+                {{ assignment.firstCourseId }}
+              </p>
+              <a
+                class="rf-button rf-button--primary"
+                [routerLink]="[
+                  '/learning/versions',
+                  assignment.publishedVersionId,
+                  'courses',
+                  assignment.firstCourseId,
+                ]"
+              >
+                Start course
+                <span aria-hidden="true">↵</span>
+              </a>
+            </div>
+            <div class="assignment-progress">
+              <div class="rf-progress">
+                <div class="rf-progress__meta">
+                  <span>Session progress</span><strong>0%</strong>
+                </div>
+                <div class="rf-progress__track">
+                  <span class="rf-progress__fill" style="width: 0%"></span>
+                </div>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      <aside class="rf-panel learning-metrics" aria-labelledby="metrics-title">
+        <div class="rf-panel__header">
+          <span id="metrics-title">Learning_status</span>
+          <span class="rf-status rf-status--info">assigned</span>
         </div>
-        <h2>{{ assignment.title }}</h2>
-        <p>{{ assignment.description }}</p>
-        <div class="next-action">
-          <span>Why this is next</span>
-          <strong>{{ assignment.nextAction }}</strong>
+        <div class="rf-panel__body metrics-body">
+          <div class="rf-radial" style="--rf-progress-value: 0%">
+            <span class="rf-radial__value">0<small>complete</small></span>
+          </div>
+          <div class="metric-summary">
+            <span>Status</span>
+            <strong>Ready to begin ↑</strong>
+            <p>
+              {{ assignments().length }} active
+              {{ assignments().length === 1 ? 'assignment' : 'assignments' }}
+            </p>
+          </div>
+          <div class="metric-bars">
+            <div class="rf-progress">
+              <div class="rf-progress__meta"><span>Course progress</span><strong>0</strong></div>
+              <div class="rf-progress__track">
+                <span class="rf-progress__fill" style="width: 0%"></span>
+              </div>
+            </div>
+            <div class="rf-progress">
+              <div class="rf-progress__meta">
+                <span>Assigned queue</span><strong>{{ assignments().length }}</strong>
+              </div>
+              <div class="rf-progress__track">
+                <span class="rf-progress__fill assignment-fill" style="width: 100%"></span>
+              </div>
+            </div>
+          </div>
         </div>
-        <a
-          class="primary-link"
-          [routerLink]="[
-            '/learning/versions',
-            assignment.publishedVersionId,
-            'courses',
-            assignment.firstCourseId,
-          ]"
-        >
-          Start course
-        </a>
-      </article>
-    }
+      </aside>
+    </div>
+
+    <div class="rf-table-wrap assignment-queue">
+      <table class="rf-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Next action</th>
+            <th>Priority</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (assignment of assignments(); track assignment.id) {
+            <tr>
+              <td><span class="rf-badge">Course</span></td>
+              <td class="rf-table__primary">{{ assignment.nextAction }}</td>
+              <td>{{ assignment.isRequired ? 'REQ' : 'OPTIONAL' }}</td>
+              <td><span class="rf-status rf-status--info">queued</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </section>
 }

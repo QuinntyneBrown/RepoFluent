@@ -1,51 +1,75 @@
-<a class="back-link" routerLink="/learning">← My learning</a>
 @if (course(); as view) {
+  <nav class="course-context" aria-label="Course context">
+    <a class="back-link" routerLink="/learning">← My learning</a>
+    <span class="rf-status rf-status--success">assigned</span>
+  </nav>
+
   <header class="course-heading">
     <div>
-      <p class="eyebrow">{{ view.course.difficulty }} · {{ view.course.estimatedMinutes }} min</p>
+      <p class="eyebrow">
+        Course document · {{ view.course.difficulty }} · {{ view.course.estimatedMinutes }} min
+      </p>
       <h1>{{ view.course.title }}</h1>
-      <p>{{ view.course.description }}</p>
+      <p class="course-description">{{ view.course.description }}</p>
     </div>
-    <section aria-labelledby="outcomes-title">
-      <h2 id="outcomes-title">Course outcomes</h2>
-      <ul>
+    <section class="rf-objectives" aria-labelledby="outcomes-title">
+      <span class="rf-objectives__label" id="outcomes-title">Course outcomes</span>
+      <div>
         @for (objective of view.course.objectives; track objective) {
-          <li>{{ objective }}</li>
+          <p><span>[✓]</span>{{ objective }}</p>
         }
-      </ul>
+      </div>
     </section>
   </header>
 
-  <section class="outline" aria-labelledby="outline-title">
-    <h2 id="outline-title">Course outline</h2>
-    @for (module of view.course.modules; track module.id; let moduleIndex = $index) {
-      <div class="module">
-        <p>Module {{ moduleIndex + 1 }}</p>
-        <h3>{{ module.title }}</h3>
-        <ol>
-          @for (lesson of module.lessons; track lesson.id) {
-            <li>
-              <a
-                [routerLink]="[
-                  '/learning/versions',
-                  view.publishedVersionId,
-                  'courses',
-                  view.course.id,
-                  'lessons',
-                  lesson.id,
-                ]"
-              >
-                <strong>{{ lesson.title }}</strong>
-                <span>{{ lesson.estimatedMinutes }} min</span>
-              </a>
-            </li>
-          }
-        </ol>
-      </div>
-    }
+  <section class="rf-panel outline" aria-labelledby="outline-title">
+    <div class="rf-panel__header">
+      <span id="outline-title">Course outline</span>
+      <span>
+        {{ view.course.modules.length }}
+        {{ view.course.modules.length === 1 ? 'module' : 'modules' }}
+      </span>
+    </div>
+    <div class="outline-body">
+      @for (module of view.course.modules; track module.id; let moduleIndex = $index) {
+        <div class="module">
+          <p>Module {{ moduleIndex + 1 }}</p>
+          <h2>{{ module.title }}</h2>
+          <ol>
+            @for (lesson of module.lessons; track lesson.id; let lessonIndex = $index) {
+              <li>
+                <a
+                  [routerLink]="[
+                    '/learning/versions',
+                    view.publishedVersionId,
+                    'courses',
+                    view.course.id,
+                    'lessons',
+                    lesson.id,
+                  ]"
+                >
+                  <span class="lesson-number">{{ lessonIndex + 1 }}</span>
+                  <strong>{{ lesson.title }}</strong>
+                  <span>{{ lesson.estimatedMinutes }} min</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            }
+          </ol>
+        </div>
+      }
+    </div>
   </section>
 } @else if (error()) {
-  <p role="alert">{{ error() }}</p>
+  <div class="rf-callout rf-callout--danger" role="alert">
+    <div>
+      <strong>Course unavailable</strong>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
 } @else {
-  <p role="status">Loading course…</p>
+  <section class="rf-panel loading" role="status">
+    <div class="rf-panel__header">Course document</div>
+    <div class="rf-panel__body">Loading course…</div>
+  </section>
 }

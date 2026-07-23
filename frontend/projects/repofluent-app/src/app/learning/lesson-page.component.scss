@@ -1,18 +1,8 @@
 .lesson-nav {
-  align-items: center;
-  border-bottom: 1px solid var(--rf-color-line);
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--rf-space-8);
-  padding-bottom: var(--rf-space-5);
+  margin-bottom: var(--rf-space-4);
 }
 
 .lesson-nav a {
   color: var(--rf-color-link);
-}
-
-.lesson-nav span {
-  color: var(--rf-color-primary);
-  font: var(--rf-type-overline);
-  text-transform: uppercase;
+  font: var(--rf-type-data);
 }

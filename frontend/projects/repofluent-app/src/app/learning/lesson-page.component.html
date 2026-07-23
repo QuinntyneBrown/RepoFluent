@@ -1,13 +1,22 @@
 @if (lesson(); as view) {
-  <nav class="lesson-nav" aria-label="Lesson context">
+  <nav class="rf-toolbar lesson-nav" aria-label="Lesson context">
     <a [routerLink]="['/learning/versions', view.publishedVersionId, 'courses', courseId]">
       ← {{ view.courseTitle }}
     </a>
-    <span>Published version</span>
+    <span class="rf-toolbar__spacer"></span>
+    <span class="rf-status rf-status--success">Published version</span>
   </nav>
   <rf-lesson-renderer [lesson]="view.lesson" />
 } @else if (error()) {
-  <p role="alert">{{ error() }}</p>
+  <div class="rf-callout rf-callout--danger" role="alert">
+    <div>
+      <strong>Lesson unavailable</strong>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
 } @else {
-  <p role="status">Loading lesson…</p>
+  <section class="rf-panel" role="status">
+    <div class="rf-panel__header">Lesson document</div>
+    <div class="rf-panel__body">Loading lesson…</div>
+  </section>
 }
