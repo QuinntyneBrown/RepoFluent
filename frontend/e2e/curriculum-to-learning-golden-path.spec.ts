@@ -1,59 +1,52 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
+import { AppShellPage } from './pages/app-shell.page';
+import { CurriculumImportsPage } from './pages/curriculum-imports.page';
+import { LearningPage } from './pages/learning.page';
 
 // Traces to: L2-CLI-01, L2-CLI-05, L2-CLI-06, L2-CLI-07, L2-CLI-08,
 // L2-ATO-05, L2-LEX-01, L2-LEX-03, L2-LEX-04.
 test('a governed curriculum becomes an assigned learning experience', async ({ page, request }) => {
+  const appShell = new AppShellPage(page);
+  const curriculumImports = new CurriculumImportsPage(page);
+  const learning = new LearningPage(page);
+  const lessonTitle = 'How an order becomes a workflow';
+  const courseTitle = 'Order Processing Foundations';
+  const curriculumPackage = path.resolve(
+    process.cwd(),
+    '..',
+    'contracts/curriculum/0.1.0/fixtures/order-processing.json',
+  );
+
   const health = await request.get('http://127.0.0.1:5080/api/health');
   expect(health.ok()).toBeTruthy();
 
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'RepoFluent', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Curriculum imports' })).toBeVisible();
+  await appShell.open();
+  await curriculumImports.expectLoaded();
 
-  await page.getByLabel('Development persona').selectOption('author');
-  await page
-    .getByLabel('Curriculum package')
-    .setInputFiles(
-      path.resolve(
-        process.cwd(),
-        '..',
-        'contracts/curriculum/0.1.0/fixtures/order-processing.json',
-      ),
-    );
-  await page.getByRole('button', { name: 'Upload and validate' }).click();
-  await expect(page.getByText('Ready for review')).toBeVisible();
-  const checksum = await page.getByTestId('curriculum-checksum').textContent();
-  expect(checksum).toMatch(/^sha256:[a-f0-9]{64}$/);
+  await test.step('the author imports a valid curriculum package', async () => {
+    await appShell.actAs('author');
+    await curriculumImports.upload(curriculumPackage);
+  });
 
-  await page.getByLabel('Development persona').selectOption('reviewer');
-  await page.getByRole('button', { name: 'Preview draft' }).click();
-  await expect(page.getByText('Draft preview')).toBeVisible();
-  await expect(
-    page.getByRole('heading', { name: 'How an order becomes a workflow' }),
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Approve this checksum' }).click();
-  await expect(page.getByText('Approved')).toBeVisible();
+  await test.step('a different reviewer previews and approves the draft', async () => {
+    await appShell.actAs('reviewer');
+    await curriculumImports.previewDraft(lessonTitle);
+    await curriculumImports.approveDraft();
+  });
 
-  await page.getByLabel('Development persona').selectOption('administrator');
-  await page.getByRole('button', { name: 'Publish version' }).click();
-  await expect(page.getByText('Published', { exact: true })).toBeVisible();
-  await page.getByLabel('Learner').selectOption('learner');
-  await page.getByLabel('Required assignment').check();
-  await page.getByRole('button', { name: 'Assign learner' }).click();
-  await expect(page.getByText('Assignment created')).toBeVisible();
+  await test.step('an administrator publishes and assigns the course', async () => {
+    await appShell.actAs('administrator');
+    await curriculumImports.publish();
+    await curriculumImports.assignRequiredCourse('learner');
+  });
 
-  await page.getByLabel('Development persona').selectOption('learner');
-  await page.getByRole('link', { name: 'My learning' }).click();
-  await expect(page.getByRole('heading', { name: 'My learning' })).toBeVisible();
-  await expect(page.getByText('Order Processing Foundations')).toBeVisible();
-  await expect(page.getByText('Required', { exact: true })).toBeVisible();
-  await page.getByRole('link', { name: 'Start course' }).click();
-
-  await expect(page.getByRole('heading', { name: 'Order Processing Foundations' })).toBeVisible();
-  await page.getByRole('link', { name: 'How an order becomes a workflow' }).click();
-  await expect(
-    page.getByRole('heading', { name: 'How an order becomes a workflow' }),
-  ).toBeVisible();
-  await expect(page.getByText('src/Order.Api/Controllers/OrderController.cs')).toBeVisible();
+  await test.step('the learner opens the assigned lesson', async () => {
+    await appShell.actAs('learner');
+    await appShell.openMyLearning();
+    await learning.expectRequiredAssignment(courseTitle);
+    await learning.startCourse(courseTitle);
+    await learning.openLesson(lessonTitle);
+    await learning.expectCodeReference('src/Order.Api/Controllers/OrderController.cs');
+  });
 });

@@ -9,9 +9,10 @@ approved source material. RepoFluent validates and publishes that package as
 courses, lessons, code tours, quizzes, and tests, while helping learners build
 codebase fluency and giving managers visibility into progress and knowledge gaps.
 
-> **Project status:** product definition and design exploration. The current
-> checked-in baseline contains requirements, detailed designs, UI prototypes,
-> and design-system foundations; it does not yet contain a production application.
+> **Project status:** foundational vertical slice. The repository contains an
+> acceptance-tested curriculum-to-learning journey alongside the requirements,
+> designs, prototypes, and design-system foundations. Development personas and
+> SQLite are local/test choices; the product is not production-ready.
 
 ## Product flow
 
@@ -28,16 +29,69 @@ one experience, and humans approve agent-generated material before publication.
 
 ## Repository guide
 
-| Path | Contents |
-| --- | --- |
-| [`docs/PRD.md`](docs/PRD.md) | Product vision, users, journeys, requirements, release scope, risks, and open decisions |
-| [`docs/specs/`](docs/specs/) | L1 outcome requirements and traceable L2 acceptance requirements organized by subsystem |
+| Path                                               | Contents                                                                                      |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| [`backend/`](backend/)                             | .NET 10 domain, application, SQLite infrastructure, API, migrations, and tests                |
+| [`frontend/`](frontend/)                           | Angular 21 application shell, API/components libraries, unit tests, and Playwright journey    |
+| [`contracts/`](contracts/)                         | Versioned curriculum schema, contract notes, and conformance fixtures                         |
+| [`docs/PRD.md`](docs/PRD.md)                       | Product vision, users, journeys, requirements, release scope, risks, and open decisions       |
+| [`docs/specs/`](docs/specs/)                       | L1 outcome requirements and traceable L2 acceptance requirements organized by subsystem       |
 | [`docs/detailed-designs/`](docs/detailed-designs/) | Requirement-traceable vertical feature designs with rendered C4, class, and sequence diagrams |
-| [`docs/mocks/`](docs/mocks/) | Standalone interface concepts for learner, lesson, code-navigation, and analytics experiences |
-| [`desigh-system/assets/`](desigh-system/assets/) | Shared CSS tokens, components, and documentation styles |
+| [`docs/mocks/`](docs/mocks/)                       | Standalone interface concepts for learner, lesson, code-navigation, and analytics experiences |
+| [`desigh-system/assets/`](desigh-system/assets/)   | Shared CSS tokens, components, and documentation styles                                       |
 
 The [subsystem requirements index](docs/specs/README.md) explains requirement
 ownership, identifier conventions, traceability, and the shared quality baseline.
+
+## Run the vertical slice
+
+Prerequisites are .NET SDK `10.0.101`, Node.js 22, and npm `10.9.4`. Restore the
+local EF tool and start the API from the repository root:
+
+```powershell
+dotnet tool restore
+dotnet run --project backend/src/RepoFluent.Api/RepoFluent.Api.csproj
+```
+
+In a second terminal, start Angular:
+
+```powershell
+Set-Location frontend
+npm ci
+npm start
+```
+
+Open <http://localhost:4200>. The persistent banner and persona selector expose
+the Author, Reviewer, Administrator, and Learner test identities. They are enabled
+only in Development, Testing, and E2E environments. Upload
+`contracts/curriculum/0.1.0/fixtures/order-processing.json`, then move through
+review, publication, assignment, and learning.
+
+SQLite migrations run automatically for Development/E2E startup. Production
+deployment must use an explicit migration step after a production database and
+identity design are approved.
+
+## Build and test
+
+```powershell
+dotnet restore backend/RepoFluent.sln
+dotnet build backend/RepoFluent.sln --no-restore
+dotnet test backend/RepoFluent.sln --no-build
+
+Set-Location frontend
+npm ci
+npm run format:check
+npm run build
+npm test
+npm run e2e
+```
+
+The Playwright command starts an isolated E2E API on port `5080`, an Angular app
+on port `4217`, and a disposable SQLite database. Its role-oriented journey uses
+Page Objects under `frontend/e2e/pages` so the acceptance specification remains
+focused on business behavior. The contract and public endpoint shapes are
+documented in [`contracts/curriculum/0.1.0/`](contracts/curriculum/0.1.0/), and
+development OpenAPI is exposed at `/openapi/v1.json`.
 
 ## Explore the UI concepts
 

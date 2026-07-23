@@ -4,45 +4,96 @@
 }
 
 .skip-link {
-  left: 1rem;
+  background: var(--rf-color-primary);
+  color: var(--rf-color-ink-inverse);
+  left: var(--rf-space-4);
+  padding: var(--rf-space-3);
   position: fixed;
-  top: -4rem;
+  top: -5rem;
   z-index: 10;
 }
 
 .skip-link:focus {
-  top: 1rem;
+  top: var(--rf-space-4);
+}
+
+.development-banner {
+  background: var(--rf-color-warning-dim);
+  border-bottom: 1px solid var(--rf-color-warning);
+  color: var(--rf-color-warning);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
+  padding: var(--rf-space-2) var(--rf-space-7);
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .app-header {
   align-items: center;
-  border-bottom: 1px solid var(--rf-border-subtle, #d8ded9);
-  display: flex;
-  min-height: 4rem;
-  padding: 0 2rem;
+  background: var(--rf-color-surface-1);
+  border-bottom: 1px solid var(--rf-color-line);
+  display: grid;
+  gap: var(--rf-space-7);
+  grid-template-columns: auto 1fr auto;
+  min-height: 4.5rem;
+  padding: 0 var(--rf-space-7);
 }
 
 .brand {
-  color: inherit;
-  font-weight: 750;
+  color: var(--rf-color-ink-strong);
+  font: var(--rf-type-section);
   text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: var(--rf-space-5);
+}
+
+nav a {
+  color: var(--rf-color-ink-muted);
+  text-decoration: none;
+}
+
+.persona-selector {
+  align-items: center;
+  display: flex;
+  gap: var(--rf-space-3);
+}
+
+.persona-selector label {
+  color: var(--rf-color-ink-muted);
+  font: var(--rf-type-label);
+}
+
+select {
+  background: var(--rf-color-surface-2);
+  border: 1px solid var(--rf-color-line-strong);
+  border-radius: var(--rf-radius-control);
+  color: var(--rf-color-ink-strong);
+  min-height: 2.5rem;
+  padding: 0 var(--rf-space-4);
 }
 
 .app-shell {
   margin: 0 auto;
-  max-width: 72rem;
-  padding: 5rem 2rem;
+  max-width: 80rem;
+  padding: var(--rf-space-9) var(--rf-space-7) var(--rf-space-11);
 }
 
-.eyebrow {
-  color: var(--rf-text-muted, #56645b);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
+@media (max-width: 42rem) {
+  .app-header {
+    align-items: start;
+    grid-template-columns: 1fr;
+    padding-block: var(--rf-space-5);
+  }
 
-h1 {
-  font-size: clamp(2.5rem, 8vw, 5.5rem);
-  margin: 0;
+  .persona-selector {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .app-shell {
+    padding-inline: var(--rf-space-4);
+  }
 }

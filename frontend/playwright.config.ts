@@ -20,6 +20,10 @@ export default defineConfig({
       command:
         'dotnet run --no-launch-profile --urls http://127.0.0.1:5080 --project backend/src/RepoFluent.Api/RepoFluent.Api.csproj',
       cwd: '..',
+      env: {
+        ASPNETCORE_ENVIRONMENT: 'E2E',
+        ConnectionStrings__RepoFluent: 'Data Source=repofluent.e2e.db',
+      },
       url: 'http://127.0.0.1:5080/api/health',
       reuseExistingServer: false,
       timeout: 120_000,

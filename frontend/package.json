@@ -27,9 +27,13 @@
     "@angular/compiler-cli": "21.2.18",
     "@playwright/test": "1.61.1",
     "jsdom": "28.0.0",
-    "ng-packagr": "21.2.0",
+    "ng-packagr": "21.2.5",
     "prettier": "3.9.6",
     "typescript": "~5.9.2",
-    "vitest": "4.0.18"
+    "vitest": "4.1.10"
+  },
+  "overrides": {
+    "@hono/node-server": "2.0.11",
+    "esbuild": "0.28.1"
   }
 }

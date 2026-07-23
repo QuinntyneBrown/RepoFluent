@@ -1,12 +1,26 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
+<div class="development-banner" role="status">
+  Development identities only — not production authentication
+</div>
 <header class="app-header">
-  <a class="brand" routerLink="/" aria-label="RepoFluent home">RepoFluent</a>
+  <a class="brand" routerLink="/" aria-label="RepoFluent" role="heading" aria-level="1">
+    RepoFluent
+  </a>
+  <nav aria-label="Primary navigation">
+    <a routerLink="/">Curricula</a>
+    <a routerLink="/learning">My learning</a>
+  </nav>
+  <div class="persona-selector">
+    <label for="development-persona">Development persona</label>
+    <select id="development-persona" [value]="personas.current()" (change)="setPersona($event)">
+      <option value="author">Author</option>
+      <option value="reviewer">Reviewer</option>
+      <option value="administrator">Administrator</option>
+      <option value="learner">Learner</option>
+    </select>
+  </div>
 </header>
 
 <main id="main-content" class="app-shell">
-  <p class="eyebrow">Curriculum intelligence</p>
-  <h1>RepoFluent</h1>
-  <p>Turn approved codebase knowledge into guided, measurable learning.</p>
+  <router-outlet />
 </main>
-
-<router-outlet />
