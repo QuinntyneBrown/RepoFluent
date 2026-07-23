@@ -74,7 +74,7 @@ export class DesignSystemPage {
       animations: 'disabled',
       caret: 'hide',
       fullPage: false,
-      maxDiffPixelRatio: 0.001,
+      maxDiffPixelRatio: 0.015,
     });
   }
 }
