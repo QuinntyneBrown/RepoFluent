@@ -154,7 +154,14 @@ export class CurriculumVersionGovernancePage {
   async expectVisualContract(): Promise<void> {
     await this.page.setViewportSize({ width: 1280, height: 1200 });
     await this.page.addStyleTag({
-      content: '.statusbar { visibility: hidden !important; }',
+      content: `
+        .statusbar { visibility: hidden !important; }
+        [aria-label='Version comparison evidence'] {
+          box-sizing: border-box;
+          height: 1400px;
+          overflow: hidden;
+        }
+      `,
     });
     await expect(
       this.page.getByRole('region', { name: 'Version comparison evidence' }),
