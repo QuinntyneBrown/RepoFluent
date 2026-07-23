@@ -1,0 +1,16 @@
+@RepoFluent_Api_HostAddress = http://localhost:5116
+
+GET {{RepoFluent_Api_HostAddress}}/api/health
+Accept: application/json
+
+###
+
+# Development and test identities are resolved server-side from this user ID.
+GET {{RepoFluent_Api_HostAddress}}/api/learning/assignments
+Accept: application/json
+X-RepoFluent-Dev-User: learner
+
+###
+
+GET {{RepoFluent_Api_HostAddress}}/openapi/v1.json
+Accept: application/json

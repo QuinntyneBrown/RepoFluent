@@ -1,0 +1,66 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Experience Platform
+
+class DesignToken {
+  +string Name
+  +TokenKind Kind
+  +string Value
+  +Validate(): Result
+}
+
+class Theme {
+  +string Id
+  +IReadOnlyMap<string, DesignToken> Tokens
+  +ValidateAccessibility(): Result
+}
+
+class ComponentContract {
+  +string Name
+  +SemanticRole Role
+  +KeyboardContract Keyboard
+  +MotionContract Motion
+}
+
+class CapabilityProfile {
+  +bool WebGpu
+  +bool ReducedMotion
+  +ViewportClass Viewport
+  +InputModes Inputs
+}
+
+class RenderStrategy {
+  +RendererKind Kind
+  +Supports(profile): bool
+  +Render(model): RenderResult
+}
+
+class NavigationContext {
+  +RouteRef Route
+  +SelectionRef Selection
+  +PaneState Panes
+  +Restore(): void
+}
+
+class PerformanceBudget {
+  +string Metric
+  +Percentile Percentile
+  +Duration Threshold
+  +Evaluate(sample): BudgetResult
+}
+
+Theme "1" *-- "*" DesignToken : overrides
+ComponentContract ..> Theme : consumes
+CapabilityProfile --> RenderStrategy : selects
+ComponentContract ..> NavigationContext : preserves
+RenderStrategy ..> PerformanceBudget : is measured against
+@enduml

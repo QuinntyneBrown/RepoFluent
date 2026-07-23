@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — authenticate and authorize
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Tenant administrator" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "RepoFluent application shell" as shell
+  participant "IdentityApiClient" as client
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "Authentication middleware" as auth
+  participant "Protected endpoint" as endpoint
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "ActorContextResolver" as resolver
+  participant "AuthorizationPolicyEvaluator" as policy
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  participant "Enterprise identity provider" as provider
+  database "Identity schema" as store
+  database "Audit ledger" as audit
+end box
+actor -> shell : Start an authorized task
+shell -> provider : Redirect for production sign-in
+provider --> shell : Return authenticated session result
+shell -> client : Request protected operation
+client -> auth : Send HTTPS request and session credential
+auth -> provider : Validate credential when required
+provider --> auth : Validated subject and approved claims
+auth -> resolver : Resolve server-side tenant and grants
+resolver -> store : Read active identity and grants
+store --> resolver : Tenant-scoped identity state
+resolver --> auth : Trusted ActorContext
+auth -> endpoint : Continue authenticated request
+endpoint -> policy : Evaluate action and resource scope
+policy --> endpoint : Permit or deny
+endpoint -> audit : Append decision evidence
+audit --> endpoint : Commit result
+endpoint --> client : Result or non-disclosing problem
+client --> shell : Present authorized result
+shell --> actor : Complete task
+@enduml

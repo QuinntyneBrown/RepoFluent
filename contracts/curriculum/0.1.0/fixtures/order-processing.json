@@ -1,0 +1,75 @@
+{
+  "contractVersion": "0.1.0",
+  "packageId": "order-processing-foundations",
+  "version": "1.0.0",
+  "title": "Order Processing Foundations",
+  "description": "Learn how an Angular checkout becomes a durable .NET workflow.",
+  "owner": "Platform Enablement",
+  "locale": "en-CA",
+  "sourceSnapshot": {
+    "repositories": [
+      {
+        "id": "order-service",
+        "name": "Order Service",
+        "revision": "8f24c1a"
+      },
+      {
+        "id": "storefront",
+        "name": "Angular Storefront",
+        "revision": "91be440"
+      }
+    ]
+  },
+  "courses": [
+    {
+      "id": "order-processing-course",
+      "title": "Order Processing Foundations",
+      "description": "Trace an order across the browser, API, and asynchronous workflow.",
+      "difficulty": "foundational",
+      "estimatedMinutes": 45,
+      "objectives": [
+        "Trace an order from checkout to durable workflow",
+        "Explain the asynchronous processing boundary"
+      ],
+      "modules": [
+        {
+          "id": "order-workflow-module",
+          "title": "The order workflow",
+          "lessons": [
+            {
+              "id": "order-becomes-workflow",
+              "title": "How an order becomes a workflow",
+              "estimatedMinutes": 12,
+              "objectives": [
+                "Locate the HTTP-to-message handoff",
+                "Explain why downstream work can wait"
+              ],
+              "blocks": [
+                {
+                  "type": "prose",
+                  "text": "The API accepts the customer's intent, persists an order, and then publishes a message for downstream processing."
+                },
+                {
+                  "type": "callout",
+                  "tone": "information",
+                  "title": "Architecture note",
+                  "text": "Publishing after persistence gives the workflow a durable order to retrieve."
+                },
+                {
+                  "type": "codeReference",
+                  "repositoryId": "order-service",
+                  "path": "src/Order.Api/Controllers/OrderController.cs",
+                  "language": "csharp",
+                  "startLine": 42,
+                  "endLine": 57,
+                  "symbol": "OrderController.Create",
+                  "explanation": "The controller validates, persists, publishes, and returns."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — follow code tour
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Learner" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Course and Lesson Player" as lesson
+  participant "CodeTourController" as tour
+  participant "Code Navigator" as view
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "CodeNavigationEndpoints" as endpoints
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "CodeReferenceResolver" as resolver
+  participant "CodeAccessPolicy" as policy
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Code metadata schema" as metadata
+  database "Approved excerpt store" as excerpts
+  participant "Repository provider" as provider
+end box
+actor -> lesson : Open code tour from lesson
+lesson -> tour : Preserve lesson and tour context
+tour -> endpoints : Request authorized tour definition
+endpoints -> policy : Authorize tour and repository classification
+policy --> endpoints : Permit
+endpoints -> metadata : Read ordered references and source snapshot
+metadata --> endpoints : Tour projection
+endpoints --> tour : Versioned tour steps
+actor -> tour : Select current step
+tour -> endpoints : Resolve code reference
+endpoints -> resolver : Resolve against pinned source snapshot
+resolver -> policy : Recheck content and repository access
+policy --> resolver : Permit
+resolver -> metadata : Read anchors and drift status
+metadata --> resolver : Reference metadata
+alt approved excerpt is stored
+  resolver -> excerpts : Read inert minimized excerpt
+  excerpts --> resolver : Excerpt bytes
+else provider link is configured
+  resolver -> provider : Build current authorized read-only link
+  provider --> resolver : Link and current revision
+end
+resolver --> endpoints : Authorized reference projection
+endpoints --> view : Syntax, anchors, revision, and drift warning
+view --> actor : Present source without losing lesson context
+@enduml

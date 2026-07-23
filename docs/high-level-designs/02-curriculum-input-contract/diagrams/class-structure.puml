@@ -1,0 +1,65 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Curriculum Input Contract
+
+class ContractRelease {
+  +SemVer Version
+  +Checksum Checksum
+  +CompatibilityRange SupportedBy
+  +Verify(): ReleaseResult
+}
+
+class CurriculumPackage {
+  +string PackageId
+  +SemVer ContractVersion
+  +PackageMetadata Metadata
+  +Validate(release): IssueSet
+}
+
+class SourceSnapshot {
+  +string Repository
+  +string Revision
+  +DateTimeOffset CapturedAt
+}
+
+class CourseDefinition {
+  +string Id
+  +string Title
+  +Duration EstimatedDuration
+}
+
+class CodeReference {
+  +string RepositoryRelativePath
+  +string? Symbol
+  +LineRange? Lines
+}
+
+class AssessmentDefinition {
+  +string Id
+  +AttemptPolicy Policy
+  +IReadOnlyList<Question> Questions
+}
+
+class ValidationIssue {
+  +string Code
+  +IssueSeverity Severity
+  +JsonPointer Path
+  +string SafeMessage
+}
+
+ContractRelease ..> CurriculumPackage : validates
+CurriculumPackage "1" *-- "1" SourceSnapshot : identifies
+CurriculumPackage "1" *-- "*" CourseDefinition : contains
+CourseDefinition "1" o-- "*" CodeReference : cites
+CourseDefinition "1" o-- "*" AssessmentDefinition : includes
+CurriculumPackage ..> ValidationIssue : produces
+@enduml

@@ -1,0 +1,66 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Curriculum Lifecycle
+
+class ImportReceipt {
+  +Guid Id
+  +Guid TenantId
+  +Checksum PackageChecksum
+  +ProcessingStatus Status
+  +BeginValidation(): void
+}
+
+class ValidationRun {
+  +Guid Id
+  +Guid ReceiptId
+  +ValidatorVersion Version
+  +IReadOnlyList<ValidationIssue> Issues
+  +Complete(): void
+}
+
+class CurriculumDraft {
+  +Guid Id
+  +Guid TenantId
+  +DraftStatus Status
+  +Checksum Checksum
+  +SubmitForReview(): void
+}
+
+class ReviewDecision {
+  +Guid Id
+  +Guid ReviewerId
+  +Decision Outcome
+  +Checksum ReviewedChecksum
+}
+
+class CurriculumVersion {
+  +Guid Id
+  +string StableCurriculumId
+  +int Version
+  +Checksum Checksum
+  +Publish(): void
+}
+
+class LifecycleEvent {
+  +Guid Id
+  +Guid TenantId
+  +string Type
+  +DateTimeOffset OccurredAt
+}
+
+ImportReceipt "1" *-- "*" ValidationRun : records
+ImportReceipt "1" --> "0..1" CurriculumDraft : creates
+CurriculumDraft "1" *-- "*" ReviewDecision : receives
+CurriculumDraft "1" --> "0..1" CurriculumVersion : publishes as
+CurriculumDraft ..> LifecycleEvent : emits
+CurriculumVersion ..> LifecycleEvent : emits
+@enduml

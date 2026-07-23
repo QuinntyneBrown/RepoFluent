@@ -1,0 +1,72 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Analytics and Reporting
+
+class MetricDefinition {
+  +string Id
+  +SemVer Version
+  +string Formula
+  +IReadOnlyList<string> SourceFields
+  +FreshnessPolicy Freshness
+}
+
+class AnalyticsEvent {
+  +Guid EventId
+  +Guid TenantId
+  +string Type
+  +Guid CurriculumVersionId
+  +DateTimeOffset OccurredAt
+}
+
+class LearningFact {
+  +Guid LearnerId
+  +string ObjectiveId
+  +FactState State
+  +DateTimeOffset EffectiveAt
+}
+
+class CohortDefinition {
+  +string Id
+  +PopulationFilter Filter
+  +PolicyScope Scope
+}
+
+class MetricResult {
+  +string MetricId
+  +SemVer DefinitionVersion
+  +DimensionSet Dimensions
+  +decimal Value
+  +DateTimeOffset FreshAt
+}
+
+class PrivacyDecision {
+  +bool Permitted
+  +SuppressionReason? Reason
+  +PolicyVersion Version
+}
+
+class ReportExport {
+  +Guid Id
+  +Guid ActorId
+  +QueryDefinition Query
+  +ExportStatus Status
+  +DateTimeOffset ExpiresAt
+}
+
+AnalyticsEvent "*" --> "*" LearningFact : projects into
+MetricDefinition ..> LearningFact : reads
+CohortDefinition --> LearningFact : filters
+MetricDefinition --> MetricResult : calculates
+MetricResult --> PrivacyDecision : is governed by
+ReportExport --> CohortDefinition : scopes
+ReportExport --> MetricDefinition : selects
+@enduml

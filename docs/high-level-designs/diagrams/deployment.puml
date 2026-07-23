@@ -1,0 +1,104 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam linetype ortho
+skinparam node {
+  BorderColor #344054
+  BackgroundColor #F9FAFB
+  FontColor #101828
+}
+skinparam database {
+  BorderColor #344054
+  BackgroundColor #ECFDF3
+  FontColor #101828
+}
+skinparam cloud {
+  BorderColor #344054
+  BackgroundColor #E0F2FE
+  FontColor #101828
+}
+title Production Deployment — RepoFluent
+
+node "User and authoring devices" as devices {
+  artifact "Supported browser\nrepofluent-app" as browser
+  artifact "Customer authoring environment\nAgent kit + ContractCli" as authoring
+}
+
+cloud "Public edge <TO SUPPLY>" as edge {
+  node "DNS + TLS + CDN + WAF\nrate and request controls" as gateway
+  artifact "Hashed Angular assets" as webassets
+}
+
+node "Application runtime <TO SUPPLY>" as runtime {
+  node "API deployment" as apideploy {
+    artifact "RepoFluent.Api replica 1..N" as api
+  }
+  node "Worker deployment" as workerdeploy {
+    artifact "RepoFluent.Worker replica 1..N" as worker
+  }
+  node "Gated deployment jobs" as jobs {
+    artifact "RepoFluent.Migrator" as migrator
+  }
+}
+
+node "Tenant data services <TO SUPPLY>" as data {
+  database "Relational database\nlogical subsystem schemas + outbox" as db
+  database "Encrypted object storage\nquarantine + packages + excerpts + exports" as objects
+  queue "Durable message broker\nwork + versioned events" as broker
+  database "Distributed cache\ndisposable projections" as cache
+  database "Search service\nauthorized indexes" as search
+  database "Contract and kit registry\nimmutable release artifacts" as artifacts
+}
+
+node "Security and operations services <TO SUPPLY>" as management {
+  node "Key and secret management" as keys
+  node "OpenTelemetry collector" as otel
+  database "Telemetry + dashboards + alerts" as observability
+  database "Isolated backup vault" as backup
+  node "Container registry + CI/CD gates" as delivery
+}
+
+cloud "Enterprise and provider systems" as external {
+  node "Enterprise identity provider" as idp
+  node "Repository provider" as repo
+  node "Content + secret scanners" as scanners
+  node "Notification provider" as notify
+  node "Incident + paging platform" as incidents
+}
+
+browser --> gateway : HTTPS
+gateway --> webassets
+gateway --> api : HTTPS
+authoring --> artifacts
+authoring --> gateway : HTTPS
+api --> idp
+api --> db
+api --> objects
+api --> broker
+api --> cache
+api --> search
+worker --> broker
+worker --> db
+worker --> objects
+worker --> cache
+worker --> search
+worker --> repo
+worker --> scanners
+worker --> notify
+migrator --> db
+api --> keys
+worker --> keys
+api --> otel
+worker --> otel
+browser --> otel
+otel --> observability
+observability --> incidents
+db --> backup
+objects --> backup
+delivery --> apideploy
+delivery --> workerdeploy
+delivery --> jobs
+@enduml

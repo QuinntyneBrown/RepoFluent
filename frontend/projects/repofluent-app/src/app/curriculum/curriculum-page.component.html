@@ -1,0 +1,100 @@
+<header class="page-heading">
+  <div>
+    <p class="eyebrow">Governed content pipeline</p>
+    <h1>Curriculum imports</h1>
+    <p>
+      Validate source-linked learning, bind approval to its checksum, and publish intentionally.
+    </p>
+  </div>
+</header>
+
+<div class="workspace">
+  <div class="panel">
+    <p class="step">01 · Intake</p>
+    <h2 id="upload-title">Upload a curriculum package</h2>
+    <label class="file-field">
+      <span>Curriculum package</span>
+      <input type="file" accept="application/json,.json" (change)="chooseFile($event)" />
+    </label>
+    <button class="primary" type="button" [disabled]="isBusy()" (click)="upload()">
+      Upload and validate
+    </button>
+  </div>
+
+  @if (status(); as current) {
+    <section class="panel status-panel" aria-labelledby="status-title">
+      <div class="status-line">
+        <div>
+          <p class="step">02 · Lifecycle</p>
+          <h2 id="status-title">{{ current.title }}</h2>
+        </div>
+        <span class="status" [attr.data-status]="current.status">{{ statusLabel(current) }}</span>
+      </div>
+      <dl>
+        <div>
+          <dt>Content checksum</dt>
+          <dd data-testid="curriculum-checksum">{{ current.checksum }}</dd>
+        </div>
+        <div>
+          <dt>Correlation</dt>
+          <dd>{{ current.correlationId }}</dd>
+        </div>
+      </dl>
+
+      @if (current.issues.length) {
+        <div class="issues" role="alert">
+          <h3>Blocking validation issues</h3>
+          @for (issue of current.issues; track issue.code + issue.path) {
+            <p>
+              <code>{{ issue.code }}</code> {{ issue.path }} — {{ issue.message }}
+            </p>
+          }
+        </div>
+      }
+
+      <div class="actions">
+        @if (current.allowedActions.includes('preview')) {
+          <button class="secondary" type="button" (click)="openPreview()">Preview draft</button>
+        }
+        @if (current.allowedActions.includes('review')) {
+          <button class="primary" type="button" (click)="approve()">Approve this checksum</button>
+        }
+        @if (current.allowedActions.includes('publish')) {
+          <button class="primary" type="button" (click)="publish()">Publish version</button>
+        }
+      </div>
+
+      @if (current.allowedActions.includes('assign')) {
+        <form class="assignment" (ngSubmit)="assign()">
+          <h3>Assign published learning</h3>
+          <div class="field">
+            <label for="assignment-learner">Learner</label>
+            <select id="assignment-learner" name="learner" [(ngModel)]="learnerId">
+              <option value="learner">Maya Quinn · Learner</option>
+            </select>
+          </div>
+          <label class="checkbox">
+            <input type="checkbox" name="required" [(ngModel)]="isRequired" />
+            <span>Required assignment</span>
+          </label>
+          <button class="primary" type="submit">Assign learner</button>
+        </form>
+      }
+    </section>
+  }
+</div>
+
+@if (message()) {
+  <p class="notice" role="status">{{ message() }}</p>
+}
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+
+@if (preview(); as draft) {
+  <div class="preview">
+    <div class="draft-banner">Draft preview</div>
+    <h2 id="preview-title">Learner-equivalent preview</h2>
+    <rf-lesson-renderer [lesson]="draft.package.courses[0].modules[0].lessons[0]" />
+  </div>
+}

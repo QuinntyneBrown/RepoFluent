@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Observability and Supportability
+
+Person(actor, "Platform operator", "Monitors, diagnoses, restores, and supports RepoFluent within approved access")
+Container_Boundary(web, "repofluent-app") {
+  Component(client_telemetry, "Client Telemetry Adapter", "OpenTelemetry web", "Emits redacted navigation, rendering, error, and performance signals")
+  Component(support_ui, "Tenant Support Diagnostics", "Angular 21", "Presents safe health, job status, and correlation identifiers to authorized administrators")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(correlation, "CorrelationMiddleware", "ASP.NET Core", "Accepts or creates safe correlation and propagates trace context")
+  Component(health, "HealthEndpoints", "ASP.NET Core", "Exposes liveness, readiness, and dependency state by approved audience")
+  Component(diagnostics, "SupportDiagnosticsService", ".NET application service", "Composes tenant-safe operation status and support references")
+  Component(idempotency, "IdempotencyCoordinator", ".NET application service", "Deduplicates retried learning, assessment, and administrative writes")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(stale_monitor, "StaleJobMonitor", ".NET worker", "Detects stalled imports, projections, exports, notifications, and deletions")
+  Component(backup_verifier, "BackupRestoreVerifier", ".NET worker and runbook", "Records backup coverage and scheduled restore evidence")
+  Component(release_gate, "OperationalReadinessGate", "Delivery pipeline tool", "Evaluates telemetry, security, migration, restore, and rollback evidence before release")
+}
+ContainerDb(telemetry, "Telemetry backend", "OpenTelemetry-compatible platform <TO SUPPLY>", "Stores bounded traces, metrics, logs, dashboards, and alerts")
+ContainerDb(reliability_store, "Reliability schema", "Production relational database <TO SUPPLY>", "Stores idempotency keys, job leases, support references, and readiness evidence")
+ContainerDb(backup_vault, "Backup vault", "Isolated encrypted backup storage <TO SUPPLY>", "Stores protected database and object recovery points")
+System_Ext(paging, "Incident and paging platform", "Routes actionable alerts to the owning on-call path")
+
+Rel(actor, support_ui, "Inspects approved diagnostics in", "HTTPS")
+Rel(client_telemetry, telemetry, "Emits redacted client signals to", "OpenTelemetry")
+Rel(support_ui, diagnostics, "Requests tenant-safe diagnostics from", "JSON/HTTPS")
+Rel(correlation, telemetry, "Emits correlated server traces to", "OpenTelemetry")
+Rel(health, telemetry, "Publishes health state to", "OpenTelemetry")
+Rel(diagnostics, reliability_store, "Reads operation and support references from", "SQL")
+Rel(idempotency, reliability_store, "Claims and completes retry keys in", "SQL")
+Rel(stale_monitor, reliability_store, "Reads job leases and records incidents in", "SQL")
+Rel(stale_monitor, telemetry, "Emits stale-job signals to", "OpenTelemetry")
+Rel(telemetry, paging, "Routes actionable alerts to", "provider integration <TO SUPPLY>")
+Rel(backup_verifier, backup_vault, "Verifies protected recovery points in", "backup protocol <TO SUPPLY>")
+Rel(release_gate, telemetry, "Reads release indicators and evidence from", "query API")
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — curriculum to publication
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Curriculum authoring agent" as agent
+actor "Author / reviewer / administrator" as operator
+box "Frontend — Customer authoring and RepoFluent web" #E0F2FE
+  participant "Agent Authoring Kit" as kit
+  participant "RepoFluent.ContractCli" as cli
+  participant "Curriculum Workspace" as web
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "CurriculumEndpoints" as api
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "CurriculumWorkflow" as workflow
+  participant "CurriculumLifecycle" as lifecycle
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Quarantine / package object store" as objects
+  database "Curriculum lifecycle schema + outbox" as db
+  queue "Platform message broker" as broker
+  participant "RepoFluent.Worker" as worker
+  participant "Content scanner + contract validator" as validator
+end box
+
+agent -> kit : Analyze declared approved source snapshot
+kit --> agent : Contract-shaped package and generation manifest
+agent -> cli : Validate package against pinned release
+cli --> agent : Deterministic local result
+operator -> web : Upload locally valid package
+web -> api : POST authorized curriculum import
+api -> workflow : Receive bounded inert stream
+workflow -> objects : Store encrypted quarantined bytes
+objects --> workflow : Object reference and checksum
+workflow -> db : Commit receipt, actor evidence, and outbox
+db --> workflow : Receipt identifier
+workflow --> api : Accepted processing status
+api --> web : Receipt and safe correlation identifier
+db -> broker : Publish committed validation work
+broker -> worker : Deliver validation job
+worker -> objects : Read quarantined bytes
+objects --> worker : Package stream
+worker -> validator : Scan and validate contract semantics
+validator --> worker : Normalized issues and release decision
+worker -> db : Commit issues or atomic draft
+operator -> web : Preview and approve exact draft checksum
+web -> api : Review decision and publication command
+api -> workflow : Apply authorized commands
+workflow -> lifecycle : Enforce state, role, checksum, and immutability
+lifecycle --> workflow : Published version result
+workflow -> db : Commit version, audit intent, and projection outbox
+db --> workflow : Immutable version identifier
+workflow --> api : Publication result
+api --> web : Published status
+operator -> web : Assign version to learner or group
+web -> api : Assignment command
+api -> db : Commit version-bound assignment and outbox
+db --> api : Assignment result
+api --> web : Per-target outcome
+@enduml

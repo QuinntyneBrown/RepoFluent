@@ -1,0 +1,48 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Runtime Containers — RepoFluent
+
+Person(user, "RepoFluent user", "Learner, author, reviewer, manager, administrator, security reviewer, or operator")
+Person(agent, "Curriculum authoring agent", "Builds curriculum inside an approved environment")
+System_Ext(idp, "Enterprise identity provider", "Authenticates production identities")
+System_Ext(repo, "Repository provider", "Provides optional current read-only source context")
+System_Ext(notify, "Notification provider", "Delivers approved messages")
+System_Ext(telemetry, "Operations platform", "Stores telemetry and routes alerts")
+
+System_Boundary(repofluent, "RepoFluent") {
+  Container(web, "repofluent-app", "Angular 21", "Single web application for all product workspaces")
+  Container(api, "RepoFluent.Api", "ASP.NET Core / .NET 10", "Authenticated synchronous API and modular application host")
+  Container(worker, "RepoFluent.Worker", ".NET worker", "Asynchronous validation, projection, grading, export, notification, deletion, and monitoring")
+  Container(cli, "RepoFluent.ContractCli", ".NET tool", "Offline package validation in the customer-approved environment")
+  Container(migrator, "RepoFluent.Migrator", ".NET deployment job", "Applies approved production schema migrations")
+  ContainerDb(db, "RepoFluent relational database", "Provider <TO SUPPLY>", "Tenant-scoped subsystem schemas, evidence, and outbox")
+  ContainerDb(objects, "Encrypted object storage", "Provider <TO SUPPLY>", "Packages, approved excerpts, exports, assets, and recovery objects")
+  ContainerQueue(broker, "Platform message broker", "Provider <TO SUPPLY>", "Durable asynchronous work and domain-event delivery")
+  ContainerDb(cache, "Distributed cache", "Provider <TO SUPPLY>", "Disposable tenant/version-keyed read data")
+  ContainerDb(search, "Search service", "Provider <TO SUPPLY>", "Authorized learning and code projections")
+  ContainerDb(artifacts, "Contract and kit registry", "Provider <TO SUPPLY>", "Immutable schema, ICD, fixture, CLI, and authoring-kit releases")
+}
+
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "Calls", "JSON/HTTPS")
+Rel(api, idp, "Authenticates with", "OIDC or SAML <TO SUPPLY>")
+Rel(api, db, "Reads and writes owned schemas", "data protocol <TO SUPPLY>")
+Rel(api, objects, "Writes and reads authorized objects", "object API")
+Rel(api, broker, "Publishes committed work through outbox", "broker protocol")
+Rel(api, cache, "Reads and invalidates derived cache", "cache protocol")
+Rel(api, search, "Queries authorized indexes", "search API")
+Rel(worker, broker, "Consumes and publishes idempotent work", "broker protocol")
+Rel(worker, db, "Reads and writes owned schemas and outbox", "data protocol <TO SUPPLY>")
+Rel(worker, objects, "Processes classified objects", "object API")
+Rel(worker, cache, "Refreshes or invalidates derived cache", "cache protocol")
+Rel(worker, search, "Builds authorized indexes", "index API")
+Rel(worker, repo, "Reads optional revision metadata from", "provider API <TO SUPPLY>")
+Rel(worker, notify, "Delivers configured notifications through", "provider API <TO SUPPLY>")
+Rel(api, telemetry, "Emits redacted telemetry to", "OpenTelemetry")
+Rel(worker, telemetry, "Emits redacted telemetry to", "OpenTelemetry")
+Rel(web, telemetry, "Emits redacted experience telemetry to", "OpenTelemetry")
+Rel(agent, cli, "Validates generated package with", "local process")
+Rel(cli, artifacts, "Obtains pinned contract and kit artifacts from", "HTTPS or offline bundle")
+Rel(migrator, db, "Applies compatible schema migrations to", "data protocol <TO SUPPLY>")
+@enduml

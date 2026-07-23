@@ -1,0 +1,71 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Learning Experience
+
+class LearningAssignment {
+  +Guid Id
+  +Guid LearnerId
+  +Guid CurriculumVersionId
+  +AssignmentKind Kind
+  +DateOnly? DueDate
+}
+
+class CourseProjection {
+  +string CourseId
+  +string Title
+  +IReadOnlyList<LessonProjection> Lessons
+  +Duration EstimatedDuration
+}
+
+class LessonProjection {
+  +string LessonId
+  +IReadOnlyList<ContentBlock> Blocks
+  +IReadOnlyList<string> ObjectiveIds
+}
+
+class ProgressRecord {
+  +Guid AssignmentId
+  +string LessonId
+  +ProgressState State
+  +long Sequence
+  +Apply(event): bool
+}
+
+class ProgressEvent {
+  +Guid IdempotencyKey
+  +long ClientSequence
+  +ProgressState State
+  +DateTimeOffset ObservedAt
+}
+
+class PrivateArtifact {
+  +Guid Id
+  +ArtifactKind Kind
+  +string TargetId
+  +string Content
+  +Delete(): void
+}
+
+class NextAction {
+  +ActionKind Kind
+  +string TargetId
+  +string Explanation
+  +DateTimeOffset CalculatedAt
+}
+
+LearningAssignment "1" --> "1" CourseProjection : exposes
+CourseProjection "1" *-- "*" LessonProjection : contains
+LearningAssignment "1" *-- "*" ProgressRecord : tracks
+ProgressRecord "1" *-- "*" ProgressEvent : accepts
+LearningAssignment "1" o-- "*" PrivateArtifact : owns privately
+LearningAssignment "1" --> "0..1" NextAction : recommends
+@enduml

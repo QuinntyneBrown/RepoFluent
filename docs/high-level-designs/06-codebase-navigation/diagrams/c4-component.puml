@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Codebase Navigation
+
+Person(actor, "Learner", "Explores approved source context while retaining lesson position")
+Container_Boundary(web, "repofluent-app") {
+  Component(code_view, "Code Navigator", "Angular 21", "Presents syntax-highlighted excerpts, file context, symbols, and safe external links")
+  Component(tour_controller, "CodeTourController", "Angular service", "Preserves lesson and tour position across source steps")
+  Component(relationship_view, "Architecture Relationship View", "Angular and optional WebGPU", "Presents supplied relationships with a semantic fallback")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(code_endpoints, "CodeNavigationEndpoints", "ASP.NET Core", "Returns authorized references, excerpts, tours, trees, symbols, and drift")
+  Component(reference_resolver, "CodeReferenceResolver", ".NET application service", "Resolves contract references against source snapshots and provider links")
+  Component(code_policy, "CodeAccessPolicy", ".NET domain service", "Filters every source capability by tenant, content, and repository classification")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(metadata_indexer, "CodeMetadataIndexer", ".NET worker", "Builds file, symbol, and relationship projections from imported metadata")
+  Component(drift_checker, "SourceDriftChecker", ".NET worker", "Compares pinned snapshots with current authorized provider metadata")
+}
+ContainerDb(code_store, "Code metadata schema", "Production relational database <TO SUPPLY>", "Stores references, tours, snapshots, symbols, classifications, and drift")
+ContainerDb(excerpt_store, "Approved excerpt store", "Encrypted object storage <TO SUPPLY>", "Stores minimized inert excerpts where policy permits")
+ContainerDb(code_search, "Code navigation index", "Search service <TO SUPPLY>", "Indexes permitted file, symbol, and relationship metadata")
+System_Ext(repo_provider, "Repository provider", "Provides optional current read-only links and metadata under delegated authorization")
+
+Rel(actor, code_view, "Explores source through", "HTTPS")
+Rel(code_view, code_endpoints, "Requests authorized source context from", "JSON/HTTPS")
+Rel(tour_controller, code_endpoints, "Loads ordered tour steps from", "JSON/HTTPS")
+Rel(relationship_view, code_endpoints, "Loads supplied graph from", "JSON/HTTPS")
+Rel(code_endpoints, reference_resolver, "Resolves references through", "in process")
+Rel(reference_resolver, code_policy, "Checks every reference with", "in process")
+Rel(reference_resolver, code_store, "Reads snapshot and metadata from", "SQL")
+Rel(reference_resolver, excerpt_store, "Reads approved inert excerpt from", "object API")
+Rel(reference_resolver, repo_provider, "Builds authorized current link with", "provider API <TO SUPPLY>")
+Rel(metadata_indexer, code_store, "Writes imported projections to", "SQL")
+Rel(metadata_indexer, code_search, "Indexes permitted metadata in", "index API")
+Rel(drift_checker, repo_provider, "Reads current revision metadata from", "provider API <TO SUPPLY>")
+Rel(drift_checker, code_store, "Records drift state in", "SQL")
+@enduml

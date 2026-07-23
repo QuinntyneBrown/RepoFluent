@@ -1,0 +1,72 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Identity, Tenancy, and Access
+
+class Tenant {
+  +Guid Id
+  +string Name
+  +TenantStatus Status
+  +ChangeStatus(status): void
+}
+
+class User {
+  +Guid Id
+  +Guid TenantId
+  +string ExternalSubject
+  +UserStatus Status
+  +Deactivate(): void
+}
+
+class Group {
+  +Guid Id
+  +Guid TenantId
+  +string Name
+  +AddMember(userId): void
+}
+
+class Membership {
+  +Guid GroupId
+  +Guid UserId
+  +DateTimeOffset EffectiveAt
+}
+
+class RoleGrant {
+  +Guid Id
+  +Guid UserId
+  +Role Role
+  +ResourceScope Scope
+  +Revoke(): void
+}
+
+class ActorContext {
+  +Guid TenantId
+  +Guid UserId
+  +IReadOnlySet<Role> Roles
+  +Authorize(action, resource): Decision
+}
+
+class IdentityAuditEvent {
+  +Guid Id
+  +Guid TenantId
+  +Guid ActorId
+  +string Action
+  +DateTimeOffset OccurredAt
+}
+
+Tenant "1" *-- "*" User : contains
+Tenant "1" *-- "*" Group : contains
+Group "1" *-- "*" Membership : owns
+Membership "*" --> "1" User : references
+User "1" *-- "*" RoleGrant : receives
+RoleGrant --> ActorContext : contributes to
+ActorContext ..> IdentityAuditEvent : attributes
+@enduml

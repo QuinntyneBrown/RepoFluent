@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — trace and diagnose operation
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Platform operator" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "RepoFluent application shell" as shell
+  participant "Tenant Support Diagnostics" as support
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "CorrelationMiddleware" as correlation
+  participant "Domain endpoint" as endpoint
+  participant "SupportDiagnosticsService" as diagnostics
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "IdempotencyCoordinator" as idempotency
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Reliability schema" as reliability
+  participant "OpenTelemetry collector" as otel
+  database "Telemetry backend" as backend
+  participant "Incident and paging platform" as paging
+end box
+actor -> shell : Start a retry-safe operation
+shell -> correlation : Send request with client operation identifier
+correlation -> correlation : Validate or create safe correlation context
+correlation -> otel : Start redacted server span
+correlation -> endpoint : Continue request with trace context
+endpoint -> idempotency : Claim tenant, operation, and idempotency key
+idempotency -> reliability : Insert or read operation record
+reliability --> idempotency : New, in-progress, or completed state
+idempotency --> endpoint : Execute or replay prior result
+endpoint -> reliability : Complete operation and safe support reference
+reliability --> endpoint : Durable result
+endpoint -> otel : Emit bounded result attributes
+otel -> backend : Export traces, metrics, and logs
+backend -> backend : Evaluate service indicators and alerts
+opt actionable user impact crosses alert policy
+  backend -> paging : Route owner, runbook, and correlation context
+end
+endpoint --> shell : Result and safe correlation identifier
+actor -> support : Open tenant support status
+support -> diagnostics : Request authorized operation status
+diagnostics -> reliability : Read safe support reference
+reliability --> diagnostics : Status without protected payload
+diagnostics --> support : Safe status and correlation identifier
+support --> actor : Present support result
+@enduml

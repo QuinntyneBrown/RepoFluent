@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — RepoFluent
+
+Person(learner, "Learner", "Studies code-linked curriculum and demonstrates understanding")
+Person(author, "Author and reviewer", "Uploads, reviews, approves, and publishes curriculum")
+Person(manager, "Manager and tenant administrator", "Assigns learning and inspects authorized outcomes")
+Person(operator, "Platform operator", "Operates and supports the hosted platform")
+Person(agent, "Curriculum authoring agent", "Analyzes approved source in a customer-controlled environment")
+
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(idp, "Enterprise identity provider", "Authenticates users and optionally provisions directory state")
+System_Ext(sources, "Approved source systems", "Repositories and documents used to prepare curriculum")
+System_Ext(repo, "Repository provider", "Optional current read-only links and revision metadata")
+System_Ext(notify, "Notification provider", "Delivers approved tenant notifications")
+System_Ext(ops, "Operations platform", "Telemetry, alerting, incidents, and support evidence")
+
+Rel(learner, repofluent, "Learns and completes assessments using", "HTTPS")
+Rel(author, repofluent, "Governs curriculum using", "HTTPS")
+Rel(manager, repofluent, "Administers and reports using", "HTTPS")
+Rel(operator, repofluent, "Operates with", "restricted HTTPS")
+Rel(agent, sources, "Reads declared snapshot from", "customer-controlled access")
+Rel(agent, repofluent, "Supplies locally validated package to", "JSON upload/HTTPS")
+Rel(repofluent, idp, "Authenticates and provisions through", "standard <TO SUPPLY>")
+Rel(repofluent, repo, "Resolves optional read-only source context through", "provider API <TO SUPPLY>")
+Rel(repofluent, notify, "Sends configured notifications through", "provider API <TO SUPPLY>")
+Rel(repofluent, ops, "Emits redacted telemetry and receives operational signals from", "OpenTelemetry and provider APIs")
+@enduml

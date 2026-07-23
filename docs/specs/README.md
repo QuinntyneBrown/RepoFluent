@@ -2,12 +2,12 @@
 
 ## Document control
 
-| Field | Value |
-| --- | --- |
-| Product | RepoFluent |
-| Requirements baseline | `docs/PRD.md`, version 0.1, 2026-07-22 |
-| Specification status | Draft for engineering and stakeholder review |
-| Requirement language | **Shall** is mandatory, **should** is planned but deferrable, and **may** is optional |
+| Field                 | Value                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| Product               | RepoFluent                                                                            |
+| Requirements baseline | `docs/PRD.md`, version 0.1, 2026-07-22                                                |
+| Specification status  | Draft for engineering and stakeholder review                                          |
+| Requirement language  | **Shall** is mandatory, **should** is planned but deferrable, and **may** is optional |
 
 ## Purpose
 
@@ -20,20 +20,20 @@ The acceptance criteria retain the requested **GIVE / WHEN / THEN** labels. `GIV
 
 ## Subsystem map
 
-| Subsystem | Responsibility | Primary PRD source |
-| --- | --- | --- |
-| `01-identity-tenancy-access` | Tenant isolation, authentication, authorization, teams, and access audit | IAM-01–IAM-07 |
-| `02-curriculum-input-contract` | Portable curriculum package contract, ICD, schema, fixtures, compatibility, and safety limits | PRD 8.3, CUR-01–CUR-04 |
-| `03-agent-authoring-kit` | Versioned agent guidance, generation workflow, local validation, and manifests | AGT-01–AGT-08 |
-| `04-curriculum-lifecycle` | Upload, validation orchestration, draft, preview, review, approval, publication, versioning, and retirement | CUR-01–CUR-12 |
-| `05-learning-experience` | Learner home, course delivery, progress, search, glossary, recommendations, notes, and review | LRN-01–LRN-11 |
-| `06-codebase-navigation` | Source excerpts, code references, code tours, file/symbol navigation, and architecture relationships | CODE-01–CODE-08 |
-| `07-assessment-mastery` | Quizzes, tests, grading, attempt evidence, answer protection, and explainable mastery | ASM-01–ASM-09 |
-| `08-analytics-reporting` | Learner and manager analytics, privacy-safe drill-down, gaps, comparisons, and export | ANL-01–ANL-09 |
-| `09-administration-operations` | Users, groups, assignments, settings, processing status, retention, branding, and notifications | ADM-01–ADM-06 |
-| `10-experience-platform` | Design system, responsive interaction, accessibility, progressive visual enhancement, and performance | PRD 9, pilot AC-8/9 |
-| `11-security-privacy-compliance` | Data protection, content safety, secrets, audit integrity, retention controls, and tenant boundaries | PRD 4/11/17 |
-| `12-observability-supportability` | Telemetry, correlation, monitoring, diagnostics, reliability, backup/restore, and incident readiness | PRD 12, ADM-04 |
+| Subsystem                         | Responsibility                                                                                              | Primary PRD source     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `01-identity-tenancy-access`      | Tenant isolation, authentication, authorization, teams, and access audit                                    | IAM-01–IAM-07          |
+| `02-curriculum-input-contract`    | Portable curriculum package contract, ICD, schema, fixtures, compatibility, and safety limits               | PRD 8.3, CUR-01–CUR-04 |
+| `03-agent-authoring-kit`          | Versioned agent guidance, generation workflow, local validation, and manifests                              | AGT-01–AGT-08          |
+| `04-curriculum-lifecycle`         | Upload, validation orchestration, draft, preview, review, approval, publication, versioning, and retirement | CUR-01–CUR-12          |
+| `05-learning-experience`          | Learner home, course delivery, progress, search, glossary, recommendations, notes, and review               | LRN-01–LRN-11          |
+| `06-codebase-navigation`          | Source excerpts, code references, code tours, file/symbol navigation, and architecture relationships        | CODE-01–CODE-08        |
+| `07-assessment-mastery`           | Quizzes, tests, grading, attempt evidence, answer protection, and explainable mastery                       | ASM-01–ASM-09          |
+| `08-analytics-reporting`          | Learner and manager analytics, privacy-safe drill-down, gaps, comparisons, and export                       | ANL-01–ANL-09          |
+| `09-administration-operations`    | Users, groups, assignments, settings, processing status, retention, branding, and notifications             | ADM-01–ADM-06          |
+| `10-experience-platform`          | Design system, responsive interaction, accessibility, progressive visual enhancement, and performance       | PRD 9, pilot AC-8/9    |
+| `11-security-privacy-compliance`  | Data protection, content safety, secrets, audit integrity, retention controls, and tenant boundaries        | PRD 4/11/17            |
+| `12-observability-supportability` | Telemetry, correlation, monitoring, diagnostics, reliability, backup/restore, and incident readiness        | PRD 12, ADM-04         |
 
 ## Traceability rules
 
@@ -48,24 +48,38 @@ The acceptance criteria retain the requested **GIVE / WHEN / THEN** labels. `GIV
 
 All development and all subsystems shall conform to PRD ENG-01–ENG-03 and the normative [Engineering handbook](https://github.com/QuinntyneBrown/engineering-handbook). They shall also preserve tenant isolation, role-based access, immutable published curriculum evidence, WCAG 2.2 AA behavior for launch-critical flows, safe failure behavior, structured telemetry without sensitive payloads, and the learner-shell performance budgets defined in the PRD. Cross-cutting controls are specified once in their owning subsystem and referenced rather than redefined inconsistently.
 
+## Executable scenario coverage
+
+This table records bounded scenario evidence, not blanket implementation of an
+entire L2 requirement. Requirements remain draft until all of their acceptance and
+production-readiness conditions are satisfied.
+
+| Scenario                                                                              | Requirement coverage                          | Evidence                                               | Status                                 |
+| ------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| Valid JSON upload creates a tenant receipt and asynchronous draft                     | L2-CLI-01, L2-CLI-05; supporting L2-CIC-02–05 | SQLite API integration test and Playwright golden path | Implemented scenario                   |
+| Forbidden source path is blocked with stable code and exact JSON Pointer              | L2-CIC-05, L2-CIC-10; supporting L2-CLI-03    | `CurriculumGoldenPathApiTests`                         | Implemented scenario                   |
+| Separate reviewer previews and approves the exact checksum                            | L2-CLI-06, L2-CLI-07; supporting L2-ITA-05    | Domain/API tests and Playwright golden path            | Implemented scenario                   |
+| Administrator publishes and directly assigns one learner                              | L2-CLI-08; partial L2-ATO-05                  | API integration test and Playwright golden path        | Implemented direct-assignment scenario |
+| Learner sees assigned learning and renders hierarchy, safe blocks, and code reference | L2-LEX-01, L2-LEX-03, L2-LEX-04               | Angular component test and Playwright golden path      | Implemented scenario                   |
+
 ## Open decisions before baseline approval
 
 The specifications deliberately do not invent answers to PRD section 18. The following decisions require product, architecture, security, legal, or pilot-customer approval before the affected L1/L2 set can be promoted from draft to an approved production baseline.
 
-| PRD decision | Primary owner |
-| --- | --- |
-| SaaS, single-tenant hosted, customer-managed, or combined deployment model | Security/Privacy and Observability/Supportability |
-| Initial identity provider, SSO protocol, and provisioning standard | Identity/Tenancy/Access |
-| Storage of source excerpts versus repository-provider metadata/links | Curriculum Contract, Codebase Navigation, and Security/Privacy |
-| First repository and document providers | Codebase Navigation and Agent Authoring Kit |
-| Customer-managed versus managed agent execution | Agent Authoring Kit and Security/Privacy |
-| Allowed v1 diagram, image, and video formats | Curriculum Contract and Experience Platform |
-| Required locales and translated-variant model | Curriculum Contract and Learning Experience |
-| Retention, learner privacy, manager visibility, and acceptable-use defaults | Administration, Analytics, and Security/Privacy |
-| Evidence and tenant opt-in for “top learner” indicators | Analytics and Reporting |
-| Material-code-change detection and curriculum staleness trigger | Curriculum Lifecycle and Codebase Navigation |
-| Informal knowledge check versus internal-certification policy | Assessment and Mastery |
-| Pilot package, excerpt, course, concurrency, and tenant-scale limits | Curriculum Contract, Experience Platform, and Observability/Supportability |
+| PRD decision                                                                | Primary owner                                                              |
+| --------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| SaaS, single-tenant hosted, customer-managed, or combined deployment model  | Security/Privacy and Observability/Supportability                          |
+| Initial identity provider, SSO protocol, and provisioning standard          | Identity/Tenancy/Access                                                    |
+| Storage of source excerpts versus repository-provider metadata/links        | Curriculum Contract, Codebase Navigation, and Security/Privacy             |
+| First repository and document providers                                     | Codebase Navigation and Agent Authoring Kit                                |
+| Customer-managed versus managed agent execution                             | Agent Authoring Kit and Security/Privacy                                   |
+| Allowed v1 diagram, image, and video formats                                | Curriculum Contract and Experience Platform                                |
+| Required locales and translated-variant model                               | Curriculum Contract and Learning Experience                                |
+| Retention, learner privacy, manager visibility, and acceptable-use defaults | Administration, Analytics, and Security/Privacy                            |
+| Evidence and tenant opt-in for “top learner” indicators                     | Analytics and Reporting                                                    |
+| Material-code-change detection and curriculum staleness trigger             | Curriculum Lifecycle and Codebase Navigation                               |
+| Informal knowledge check versus internal-certification policy               | Assessment and Mastery                                                     |
+| Pilot package, excerpt, course, concurrency, and tenant-scale limits        | Curriculum Contract, Experience Platform, and Observability/Supportability |
 
 ## Baseline approval criteria
 

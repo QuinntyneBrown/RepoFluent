@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Analytics and Reporting
+
+Person(actor, "Authorized analytics user", "Inspects personal or scoped population measures")
+Container_Boundary(web, "repofluent-app") {
+  Component(learner_analytics, "Learner Analytics View", "Angular 21", "Presents personal completion, objective coverage, results, recency, and next actions")
+  Component(manager_analytics, "Manager Analytics Workspace", "Angular 21", "Presents scoped cohorts, systems, gaps, distributions, and transparent high-performance indicators")
+  Component(report_builder, "Report Export Builder", "Angular 21", "Previews authorized filters, columns, privacy effects, and export status")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(analytics_endpoints, "AnalyticsEndpoints", "ASP.NET Core", "Serves learner, manager, content, cohort, and export queries")
+  Component(analytics_policy, "AnalyticsPolicyGate", ".NET application service", "Applies role, team, content, and minimum-group policy before result materialization")
+  Component(metric_engine, "MetricQueryEngine", ".NET application service", "Evaluates approved versioned metric definitions against projections")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(analytics_projector, "AnalyticsProjectionBuilder", ".NET worker", "Builds versioned facts and aggregate projections from domain events")
+  Component(export_worker, "ReportExportProcessor", ".NET worker", "Produces encrypted expiring exports after policy re-evaluation")
+}
+ContainerDb(analytics_store, "Analytics projection store", "Analytical relational or column store <TO SUPPLY>", "Stores versioned facts, dimensions, aggregates, and metric metadata")
+ContainerDb(export_store, "Report export store", "Encrypted object storage <TO SUPPLY>", "Stores time-bounded authorized export artifacts")
+ContainerQueue(analytics_queue, "Platform work queue", "Durable message broker <TO SUPPLY>", "Carries projection and export jobs")
+
+Rel(actor, manager_analytics, "Explores scoped analytics in", "HTTPS")
+Rel(learner_analytics, analytics_endpoints, "Requests personal measures from", "JSON/HTTPS")
+Rel(manager_analytics, analytics_endpoints, "Requests scoped aggregates from", "JSON/HTTPS")
+Rel(report_builder, analytics_endpoints, "Requests and polls exports through", "JSON/HTTPS")
+Rel(analytics_endpoints, analytics_policy, "Authorizes dimensions and population with", "in process")
+Rel(analytics_policy, metric_engine, "Passes permitted query to", "in process")
+Rel(metric_engine, analytics_store, "Reads versioned projections from", "query protocol")
+Rel(analytics_projector, analytics_queue, "Consumes domain evidence from", "broker protocol")
+Rel(analytics_projector, analytics_store, "Upserts idempotent facts and aggregates in", "data protocol")
+Rel(export_worker, analytics_queue, "Consumes approved export job from", "broker protocol")
+Rel(export_worker, analytics_policy, "Re-evaluates export policy with", "in process")
+Rel(export_worker, analytics_store, "Reads permitted rows from", "query protocol")
+Rel(export_worker, export_store, "Writes expiring artifact to", "object API")
+@enduml

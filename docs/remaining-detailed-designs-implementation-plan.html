@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Dependency-driven implementation plan for RepoFluent detailed designs outside the Curriculum-to-Learning Golden Path."
+    >
+    <title>RepoFluent — Remaining Detailed Designs Implementation Plan</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --void: #070b12;
+        --surface: #0e1522;
+        --surface-raised: #151f30;
+        --surface-soft: #1c293c;
+        --line: #2b3a50;
+        --line-strong: #45607d;
+        --ink: #f4f7fb;
+        --muted: #a9b8ca;
+        --subtle: #7f91a8;
+        --cyan: #46d7ff;
+        --cyan-soft: #103447;
+        --green: #62e5a5;
+        --green-soft: #103a2d;
+        --amber: #ffc96b;
+        --amber-soft: #3f2e10;
+        --purple: #c8a9ff;
+        --danger: #ff8f9c;
+        --max: 82rem;
+        --radius: 0.8rem;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 82% 0%, rgb(26 81 104 / 35%), transparent 28rem),
+          linear-gradient(180deg, #0a101a, var(--void) 35rem);
+        line-height: 1.55;
+      }
+
+      a {
+        color: var(--cyan);
+      }
+
+      a:hover {
+        color: #9cecff;
+      }
+
+      code {
+        color: #cceeff;
+        font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+        font-size: 0.78rem;
+      }
+
+      .skip-link {
+        position: fixed;
+        z-index: 20;
+        top: 0.75rem;
+        left: 0.75rem;
+        padding: 0.65rem 0.85rem;
+        color: var(--void);
+        background: var(--cyan);
+        border-radius: 0.4rem;
+        transform: translateY(-160%);
+      }
+
+      .skip-link:focus {
+        transform: none;
+      }
+
+      header,
+      main,
+      footer {
+        width: min(calc(100% - 2rem), var(--max));
+        margin-inline: auto;
+      }
+
+      header {
+        padding: 4.5rem 0 2.25rem;
+      }
+
+      .eyebrow,
+      .wave-number,
+      .status {
+        color: var(--cyan);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 18ch;
+        margin-bottom: 1rem;
+        font-size: clamp(2.35rem, 7vw, 5rem);
+        line-height: 0.98;
+        letter-spacing: -0.055em;
+      }
+
+      h2 {
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+        letter-spacing: -0.025em;
+      }
+
+      h3 {
+        margin-bottom: 0.35rem;
+        font-size: 1rem;
+      }
+
+      .lede {
+        max-width: 68ch;
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+      }
+
+      .pill,
+      .reqs {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.32rem 0.55rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        background: rgb(14 21 34 / 82%);
+        font-size: 0.78rem;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .metric,
+      .panel,
+      .wave,
+      .callout {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgb(14 21 34 / 88%);
+        box-shadow: 0 1rem 3rem rgb(0 0 0 / 18%);
+      }
+
+      .metric {
+        padding: 1rem;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 1.75rem;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .panel,
+      .callout {
+        margin-bottom: 1rem;
+        padding: clamp(1rem, 3vw, 1.5rem);
+      }
+
+      .callout {
+        border-color: #796020;
+        background: linear-gradient(135deg, var(--amber-soft), rgb(14 21 34 / 92%));
+      }
+
+      .callout .status {
+        color: var(--amber);
+      }
+
+      .compact-list,
+      .slice-list,
+      .checklist {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .compact-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.55rem;
+      }
+
+      .compact-list li,
+      .checklist li {
+        position: relative;
+        padding-left: 1.2rem;
+        color: var(--muted);
+      }
+
+      .compact-list li::before,
+      .checklist li::before {
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        content: "✓";
+      }
+
+      .excluded-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .excluded-group {
+        padding: 0.9rem;
+        border: 1px solid #6f5720;
+        border-radius: 0.65rem;
+        background: rgb(7 11 18 / 42%);
+      }
+
+      .excluded-group ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--muted);
+      }
+
+      .dependency-map {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(8rem, 1fr));
+        gap: 0.55rem;
+        margin: 1rem 0 0;
+        overflow-x: auto;
+      }
+
+      .dependency-map a {
+        min-width: 8rem;
+        padding: 0.75rem;
+        border: 1px solid var(--line);
+        border-radius: 0.6rem;
+        color: var(--ink);
+        background: var(--surface-raised);
+        text-decoration: none;
+      }
+
+      .dependency-map a:hover,
+      .dependency-map a:focus-visible {
+        border-color: var(--cyan);
+      }
+
+      .dependency-map strong,
+      .dependency-map span {
+        display: block;
+      }
+
+      .dependency-map span {
+        margin-top: 0.25rem;
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .controls {
+        position: sticky;
+        z-index: 10;
+        top: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        align-items: center;
+        margin: 2rem 0 1rem;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        background: rgb(7 11 18 / 94%);
+        backdrop-filter: blur(12px);
+      }
+
+      .controls input {
+        flex: 1 1 16rem;
+        min-height: 2.5rem;
+        padding: 0.55rem 0.7rem;
+        border: 1px solid var(--line-strong);
+        border-radius: 0.45rem;
+        color: var(--ink);
+        background: var(--surface);
+        font: inherit;
+      }
+
+      button {
+        min-height: 2.5rem;
+        padding: 0.5rem 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 0.45rem;
+        color: var(--muted);
+        background: var(--surface-raised);
+        font: inherit;
+        cursor: pointer;
+      }
+
+      button[aria-pressed="true"] {
+        color: var(--void);
+        border-color: var(--cyan);
+        background: var(--cyan);
+      }
+
+      .result-count {
+        margin-left: auto;
+        color: var(--subtle);
+        font-size: 0.82rem;
+      }
+
+      .wave {
+        margin-bottom: 1rem;
+        padding: clamp(1rem, 3vw, 1.5rem);
+        scroll-margin-top: 5.5rem;
+      }
+
+      .wave[hidden],
+      .slice[hidden] {
+        display: none;
+      }
+
+      .wave-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        align-items: start;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .wave-header h2 {
+        margin-bottom: 0.35rem;
+      }
+
+      .wave-header p {
+        max-width: 72ch;
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .wave-count {
+        color: var(--green);
+        font-weight: 750;
+        white-space: nowrap;
+      }
+
+      .wave-facts {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0;
+      }
+
+      .fact {
+        padding: 0.8rem;
+        border-left: 2px solid var(--cyan);
+        background: var(--surface-raised);
+      }
+
+      .fact strong {
+        display: block;
+        margin-bottom: 0.2rem;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+      }
+
+      .fact span {
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .feature-groups {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+
+      .feature-group {
+        padding: 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 0.65rem;
+        background: rgb(21 31 48 / 58%);
+      }
+
+      .feature-group > p {
+        margin-bottom: 0.65rem;
+        color: var(--subtle);
+        font-size: 0.78rem;
+      }
+
+      .slice {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.6rem;
+        align-items: center;
+        padding: 0.65rem 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .slice:first-child {
+        border-top: 0;
+      }
+
+      .slice a {
+        font-weight: 650;
+        text-decoration: none;
+      }
+
+      .slice a::after {
+        color: var(--subtle);
+        content: " ↗";
+      }
+
+      .reqs {
+        max-width: 22rem;
+        border-color: #304b63;
+        border-radius: 0.4rem;
+        background: var(--cyan-soft);
+        text-align: right;
+      }
+
+      .gate {
+        margin-top: 1rem;
+        padding: 0.85rem 1rem;
+        border: 1px solid #2c7252;
+        border-radius: 0.6rem;
+        color: #c9f9df;
+        background: var(--green-soft);
+      }
+
+      .gate strong {
+        color: var(--green);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      th,
+      td {
+        padding: 0.7rem;
+        border-bottom: 1px solid var(--line);
+        overflow-wrap: anywhere;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 0.75rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      footer {
+        padding: 2rem 0 4rem;
+        color: var(--subtle);
+        font-size: 0.82rem;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--cyan);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 800px) {
+        .summary-grid,
+        .compact-list,
+        .excluded-grid,
+        .feature-groups,
+        .wave-facts {
+          grid-template-columns: 1fr;
+        }
+
+        .wave-header {
+          grid-template-columns: 1fr;
+        }
+
+        .slice {
+          grid-template-columns: 1fr;
+        }
+
+        .reqs {
+          justify-self: start;
+          text-align: left;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      @media print {
+        :root {
+          color-scheme: light;
+        }
+
+        body {
+          color: #111827;
+          background: #fff;
+        }
+
+        .controls {
+          display: none;
+        }
+
+        .metric,
+        .panel,
+        .wave,
+        .callout,
+        .feature-group,
+        .fact {
+          color: #111827;
+          border-color: #cbd5e1;
+          background: #fff;
+          box-shadow: none;
+          break-inside: avoid;
+        }
+
+        a,
+        code,
+        .status,
+        .wave-number,
+        .eyebrow {
+          color: #075985;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#plan">Skip to implementation waves</a>
+
+    <header>
+      <p class="eyebrow">RepoFluent · implementation portfolio</p>
+      <h1>Remaining detailed designs</h1>
+      <p class="lede">
+        A dependency-driven plan for implementing every detailed-design feature outside the
+        <strong>Curriculum-to-Learning Golden Path</strong>, which is already in progress and is
+        deliberately not scheduled here.
+      </p>
+      <div class="meta" role="group" aria-label="Plan metadata">
+        <span class="pill">Baseline: 22 July 2026</span>
+        <span class="pill">Source: docs/detailed-designs</span>
+        <span class="pill">Order: dependency waves, not calendar dates</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="summary-grid" aria-label="Portfolio summary">
+        <div class="metric"><strong>84</strong><span>Total detailed-design features</span></div>
+        <div class="metric"><strong>11</strong><span>Golden-path features excluded</span></div>
+        <div class="metric"><strong>73</strong><span>Features planned here</span></div>
+        <div class="metric"><strong>148</strong><span>Remaining L2 requirements</span></div>
+      </section>
+
+      <section class="callout" aria-labelledby="golden-path-title">
+        <p class="status">Excluded · implementation in progress</p>
+        <h2 id="golden-path-title">Curriculum-to-Learning Golden Path</h2>
+        <p>
+          This exclusion is the minimal end-to-end chain from a valid curriculum package to an
+          assigned learner opening content and retaining progress. These 11 designs and their 27 L2
+          requirements remain owned by the active golden-path implementation. Other waves may consume
+          their public contracts, but shall not duplicate or replace their implementations.
+        </p>
+        <div class="excluded-grid">
+          <div class="excluded-group">
+            <h3>Curriculum Input Contract</h3>
+            <ul>
+              <li data-excluded-feature="02-curriculum-input-contract/model-curriculum-package">
+                <a href="detailed-designs/02-curriculum-input-contract/model-curriculum-package/README.md">Model a curriculum package</a>
+                — <code>L2-CIC-02, 03, 06</code>
+              </li>
+              <li data-excluded-feature="02-curriculum-input-contract/validate-packages-and-limits">
+                <a href="detailed-designs/02-curriculum-input-contract/validate-packages-and-limits/README.md">Validate packages and limits</a>
+                — <code>L2-CIC-10, 11</code>
+              </li>
+            </ul>
+          </div>
+          <div class="excluded-group">
+            <h3>Curriculum Lifecycle</h3>
+            <ul>
+              <li data-excluded-feature="04-curriculum-lifecycle/receive-and-validate-package">
+                <a href="detailed-designs/04-curriculum-lifecycle/receive-and-validate-package/README.md">Receive and validate a package</a>
+                — <code>L2-CLI-01–04</code>
+              </li>
+              <li data-excluded-feature="04-curriculum-lifecycle/import-draft-idempotently">
+                <a href="detailed-designs/04-curriculum-lifecycle/import-draft-idempotently/README.md">Import a draft idempotently</a>
+                — <code>L2-CLI-05, 12</code>
+              </li>
+              <li data-excluded-feature="04-curriculum-lifecycle/preview-and-review-draft">
+                <a href="detailed-designs/04-curriculum-lifecycle/preview-and-review-draft/README.md">Preview and review a draft</a>
+                — <code>L2-CLI-06, 07</code>
+              </li>
+              <li data-excluded-feature="04-curriculum-lifecycle/publish-immutable-version">
+                <a href="detailed-designs/04-curriculum-lifecycle/publish-immutable-version/README.md">Publish an immutable version</a>
+                — <code>L2-CLI-08, 09</code>
+              </li>
+            </ul>
+          </div>
+          <div class="excluded-group">
+            <h3>Learning Experience</h3>
+            <ul>
+              <li data-excluded-feature="05-learning-experience/present-learning-home">
+                <a href="detailed-designs/05-learning-experience/present-learning-home/README.md">Present the learning home</a>
+                — <code>L2-LEX-01, 02, 11</code>
+              </li>
+              <li data-excluded-feature="05-learning-experience/render-course-lessons">
+                <a href="detailed-designs/05-learning-experience/render-course-lessons/README.md">Render course lessons</a>
+                — <code>L2-LEX-03, 04, 16</code>
+              </li>
+              <li data-excluded-feature="05-learning-experience/track-and-resume-progress">
+                <a href="detailed-designs/05-learning-experience/track-and-resume-progress/README.md">Track and resume progress</a>
+                — <code>L2-LEX-05, 06</code>
+              </li>
+            </ul>
+          </div>
+          <div class="excluded-group">
+            <h3>Administration</h3>
+            <ul>
+              <li data-excluded-feature="09-administration-operations/administer-curricula-and-status">
+                <a href="detailed-designs/09-administration-operations/administer-curricula-and-status/README.md">Administer curricula and status</a>
+                — <code>L2-ATO-04, 07</code>
+              </li>
+              <li data-excluded-feature="09-administration-operations/manage-assignments">
+                <a href="detailed-designs/09-administration-operations/manage-assignments/README.md">Manage assignments</a>
+                — <code>L2-ATO-05, 06</code>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="gate">
+          <strong>Integration rule:</strong> when the golden path merges, record its API, event,
+          persistence, authorization, and UI-route seams as the baseline. Rebase remaining work onto
+          that baseline and resolve deviations through an ADR instead of parallel implementations.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="execution-title">
+        <p class="status">Execution model</p>
+        <h2 id="execution-title">How to use this plan</h2>
+        <ul class="compact-list">
+          <li>Implement one linked feature design as one reviewable vertical slice whenever practical.</li>
+          <li>Start a slice only when its “Starts when” condition and unresolved decisions are cleared.</li>
+          <li>Put every owned L2 identifier in tests, telemetry, and the pull-request description.</li>
+          <li>Keep frontend, API, application, domain, persistence, security, and operations changes together.</li>
+          <li>Use feature flags for incomplete journeys; never expose a partially authorized route.</li>
+          <li>Complete each wave’s exit gate before downstream waves depend on its contracts.</li>
+        </ul>
+        <nav class="dependency-map" aria-label="Implementation wave sequence">
+          <a href="#wave-1"><strong>Wave 1</strong><span>Trust &amp; platform</span></a>
+          <a href="#wave-2"><strong>Wave 2</strong><span>Authoring contract</span></a>
+          <a href="#wave-3"><strong>Wave 3</strong><span>Learning depth</span></a>
+          <a href="#wave-4"><strong>Wave 4</strong><span>Assessment</span></a>
+          <a href="#wave-5"><strong>Wave 5</strong><span>Tenant operations</span></a>
+          <a href="#wave-6"><strong>Wave 6</strong><span>Analytics</span></a>
+          <a href="#wave-7"><strong>Wave 7</strong><span>Production gate</span></a>
+        </nav>
+      </section>
+
+      <section class="controls panel" aria-label="Plan filters">
+        <label for="feature-search">Find a feature</label>
+        <input id="feature-search" type="search" placeholder="Search by feature, subsystem, or L2 ID">
+        <button type="button" data-filter="all" aria-pressed="true">All waves</button>
+        <button type="button" data-filter="1" aria-pressed="false">1</button>
+        <button type="button" data-filter="2" aria-pressed="false">2</button>
+        <button type="button" data-filter="3" aria-pressed="false">3</button>
+        <button type="button" data-filter="4" aria-pressed="false">4</button>
+        <button type="button" data-filter="5" aria-pressed="false">5</button>
+        <button type="button" data-filter="6" aria-pressed="false">6</button>
+        <button type="button" data-filter="7" aria-pressed="false">7</button>
+        <span class="result-count" aria-live="polite">73 features shown</span>
+      </section>
+
+      <div id="plan">
+        <section class="wave" id="wave-1" data-wave="1" aria-labelledby="wave-1-title">
+          <div class="wave-header">
+            <div>
+              <p class="wave-number">Wave 1</p>
+              <h2 id="wave-1-title">Establish trust and shared platform foundations</h2>
+              <p>
+                Harden the golden-path shell with tenant identity, authorization, shared experience
+                contracts, telemetry, safe errors, and replay-safe learning writes.
+              </p>
+            </div>
+            <span class="wave-count">18 features · 38 L2</span>
+          </div>
+          <div class="wave-facts">
+            <div class="fact"><strong>Starts when</strong><span>Golden-path public seams are named and owned; work may proceed in parallel without editing its feature files.</span></div>
+            <div class="fact"><strong>Primary output</strong><span>Tenant-aware application shell and reusable quality/security/telemetry foundations.</span></div>
+            <div class="fact"><strong>Parallelism</strong><span>Identity, experience-platform, security, and observability tracks can run concurrently behind contract tests.</span></div>
+          </div>
+          <div class="feature-groups">
+            <article class="feature-group" data-subsystem="Identity, Tenancy, and Access">
+              <h3>Identity, Tenancy, and Access</h3>
+              <p>Tenant boundary, authentication, authorization, lifecycle, and evidence.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="01-identity-tenancy-access/enforce-tenant-boundaries"><a href="detailed-designs/01-identity-tenancy-access/enforce-tenant-boundaries/README.md">Enforce tenant boundaries</a><span class="reqs"><code>L2-ITA-01, 11</code></span></li>
+                <li class="slice" data-feature="01-identity-tenancy-access/onboard-and-authenticate-users"><a href="detailed-designs/01-identity-tenancy-access/onboard-and-authenticate-users/README.md">Onboard and authenticate users</a><span class="reqs"><code>L2-ITA-02, 03</code></span></li>
+                <li class="slice" data-feature="01-identity-tenancy-access/authorize-roles-and-scopes"><a href="detailed-designs/01-identity-tenancy-access/authorize-roles-and-scopes/README.md">Authorize roles and scopes</a><span class="reqs"><code>L2-ITA-04, 05</code></span></li>
+                <li class="slice" data-feature="01-identity-tenancy-access/manage-groups-and-provisioning"><a href="detailed-designs/01-identity-tenancy-access/manage-groups-and-provisioning/README.md">Manage groups and provisioning</a><span class="reqs"><code>L2-ITA-06, 08</code></span></li>
+                <li class="slice" data-feature="01-identity-tenancy-access/govern-sessions-and-access-reviews"><a href="detailed-designs/01-identity-tenancy-access/govern-sessions-and-access-reviews/README.md">Govern sessions and access reviews</a><span class="reqs"><code>L2-ITA-09, 10</code></span></li>
+                <li class="slice" data-feature="01-identity-tenancy-access/record-identity-audit-evidence"><a href="detailed-designs/01-identity-tenancy-access/record-identity-audit-evidence/README.md">Record identity audit evidence</a><span class="reqs"><code>L2-ITA-07</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Experience Platform">
+              <h3>Experience Platform</h3>
+              <p>Reusable UI contract, accessibility, responsiveness, capabilities, and budgets.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="10-experience-platform/govern-design-system"><a href="detailed-designs/10-experience-platform/govern-design-system/README.md">Govern the design system</a><span class="reqs"><code>L2-EXP-01–03</code></span></li>
+                <li class="slice" data-feature="10-experience-platform/provide-progressive-visualizations"><a href="detailed-designs/10-experience-platform/provide-progressive-visualizations/README.md">Provide progressive visualizations</a><span class="reqs"><code>L2-EXP-04, 05, 11</code></span></li>
+                <li class="slice" data-feature="10-experience-platform/preserve-responsive-navigation"><a href="detailed-designs/10-experience-platform/preserve-responsive-navigation/README.md">Preserve responsive navigation</a><span class="reqs"><code>L2-EXP-06, 07, 14</code></span></li>
+                <li class="slice" data-feature="10-experience-platform/enforce-accessible-interaction"><a href="detailed-designs/10-experience-platform/enforce-accessible-interaction/README.md">Enforce accessible interaction</a><span class="reqs"><code>L2-EXP-08–10</code></span></li>
+                <li class="slice" data-feature="10-experience-platform/meet-performance-budgets"><a href="detailed-designs/10-experience-platform/meet-performance-budgets/README.md">Meet performance budgets</a><span class="reqs"><code>L2-EXP-12, 13</code></span></li>
+                <li class="slice" data-feature="10-experience-platform/govern-browser-capabilities"><a href="detailed-designs/10-experience-platform/govern-browser-capabilities/README.md">Govern browser capabilities</a><span class="reqs"><code>L2-EXP-15</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Security, Privacy, and Compliance">
+              <h3>Security foundations</h3>
+              <p>Controls required before expanding tenant-visible functionality.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="11-security-privacy-compliance/isolate-tenants-and-identifiers"><a href="detailed-designs/11-security-privacy-compliance/isolate-tenants-and-identifiers/README.md">Isolate tenants and identifiers</a><span class="reqs"><code>L2-SPC-01, 17</code></span></li>
+                <li class="slice" data-feature="11-security-privacy-compliance/control-privileged-access"><a href="detailed-designs/11-security-privacy-compliance/control-privileged-access/README.md">Control privileged access</a><span class="reqs"><code>L2-SPC-02</code></span></li>
+                <li class="slice" data-feature="11-security-privacy-compliance/encrypt-data-and-manage-keys"><a href="detailed-designs/11-security-privacy-compliance/encrypt-data-and-manage-keys/README.md">Encrypt data and manage keys</a><span class="reqs"><code>L2-SPC-03, 04</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Observability and Supportability">
+              <h3>Reliability foundations</h3>
+              <p>Consistent signals, client-safe failures, and replay-safe writes.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="12-observability-supportability/standardize-telemetry-and-correlation"><a href="detailed-designs/12-observability-supportability/standardize-telemetry-and-correlation/README.md">Standardize telemetry and correlation</a><span class="reqs"><code>L2-OBS-01–03</code></span></li>
+                <li class="slice" data-feature="12-observability-supportability/guarantee-idempotent-learning-writes"><a href="detailed-designs/12-observability-supportability/guarantee-idempotent-learning-writes/README.md">Guarantee idempotent learning writes</a><span class="reqs"><code>L2-OBS-07, 08</code></span></li>
+                <li class="slice" data-feature="12-observability-supportability/protect-logs-and-errors"><a href="detailed-designs/12-observability-supportability/protect-logs-and-errors/README.md">Protect logs and errors</a><span class="reqs"><code>L2-OBS-09, 10</code></span></li>
+              </ul>
+            </article>
+          </div>
+          <p class="gate"><strong>Exit gate:</strong> tenant-negative integration tests, role/scope tests, keyboard and narrow-viewport conformance, telemetry correlation, redaction tests, and idempotency replay tests pass against the golden-path application shell.</p>
+        </section>
+
+        <section class="wave" id="wave-2" data-wave="2" aria-labelledby="wave-2-title">
+          <div class="wave-header">
+            <div>
+              <p class="wave-number">Wave 2</p>
+              <h2 id="wave-2-title">Productize the authoring and contract toolchain</h2>
+              <p>Turn the golden path’s accepted package shape into a versioned, distributable, source-safe authoring workflow.</p>
+            </div>
+            <span class="wave-count">11 features · 22 L2</span>
+          </div>
+          <div class="wave-facts">
+            <div class="fact"><strong>Starts when</strong><span>The golden-path package schema and validator boundary are frozen for a compatibility version.</span></div>
+            <div class="fact"><strong>Primary output</strong><span>Versioned contract artifacts and an offline authoring kit with stable, reproducible output.</span></div>
+            <div class="fact"><strong>Parallelism</strong><span>Contract publication and authoring analysis can proceed together behind shared fixture suites.</span></div>
+          </div>
+          <div class="feature-groups">
+            <article class="feature-group" data-subsystem="Curriculum Input Contract">
+              <h3>Curriculum Input Contract</h3>
+              <p>Compatibility, content safety, provenance, and extension rules around the core package model.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="02-curriculum-input-contract/publish-versioned-contract"><a href="detailed-designs/02-curriculum-input-contract/publish-versioned-contract/README.md">Publish a versioned contract</a><span class="reqs"><code>L2-CIC-01, 12, 14</code></span></li>
+                <li class="slice" data-feature="02-curriculum-input-contract/define-safe-content-and-code"><a href="detailed-designs/02-curriculum-input-contract/define-safe-content-and-code/README.md">Define safe content and code</a><span class="reqs"><code>L2-CIC-04, 05</code></span></li>
+                <li class="slice" data-feature="02-curriculum-input-contract/record-provenance-and-identities"><a href="detailed-designs/02-curriculum-input-contract/record-provenance-and-identities/README.md">Record provenance and identities</a><span class="reqs"><code>L2-CIC-07–09</code></span></li>
+                <li class="slice" data-feature="02-curriculum-input-contract/support-contract-extensions"><a href="detailed-designs/02-curriculum-input-contract/support-contract-extensions/README.md">Support contract extensions</a><span class="reqs"><code>L2-CIC-13</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Agent Authoring Kit">
+              <h3>Agent Authoring Kit</h3>
+              <p>Approved source analysis, deterministic generation, citations, local validation, and distribution.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="03-agent-authoring-kit/publish-authoring-kit"><a href="detailed-designs/03-agent-authoring-kit/publish-authoring-kit/README.md">Publish the authoring kit</a><span class="reqs"><code>L2-AAK-01, 12</code></span></li>
+                <li class="slice" data-feature="03-agent-authoring-kit/constrain-agent-scope"><a href="detailed-designs/03-agent-authoring-kit/constrain-agent-scope/README.md">Constrain agent scope</a><span class="reqs"><code>L2-AAK-02–04</code></span></li>
+                <li class="slice" data-feature="03-agent-authoring-kit/cite-sources-and-uncertainty"><a href="detailed-designs/03-agent-authoring-kit/cite-sources-and-uncertainty/README.md">Cite sources and uncertainty</a><span class="reqs"><code>L2-AAK-05, 06</code></span></li>
+                <li class="slice" data-feature="03-agent-authoring-kit/generate-stable-curriculum"><a href="detailed-designs/03-agent-authoring-kit/generate-stable-curriculum/README.md">Generate stable curriculum</a><span class="reqs"><code>L2-AAK-07, 11</code></span></li>
+                <li class="slice" data-feature="03-agent-authoring-kit/validate-packages-locally"><a href="detailed-designs/03-agent-authoring-kit/validate-packages-locally/README.md">Validate packages locally</a><span class="reqs"><code>L2-AAK-08</code></span></li>
+                <li class="slice" data-feature="03-agent-authoring-kit/analyze-dotnet-and-angular"><a href="detailed-designs/03-agent-authoring-kit/analyze-dotnet-and-angular/README.md">Analyze .NET and Angular</a><span class="reqs"><code>L2-AAK-09, 10</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Security, Privacy, and Compliance">
+              <h3>Model data-use boundary</h3>
+              <p>Keep customer content within declared agent and model-processing policy.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="11-security-privacy-compliance/restrict-model-data-use"><a href="detailed-designs/11-security-privacy-compliance/restrict-model-data-use/README.md">Restrict model data use</a><span class="reqs"><code>L2-SPC-05</code></span></li>
+              </ul>
+            </article>
+          </div>
+          <p class="gate"><strong>Exit gate:</strong> released schema/ICD/fixture artifacts are checksummed and compatibility-tested; the kit produces byte-stable representative C#/Angular packages, blocks out-of-scope inputs, contains no absolute paths or secrets, and passes the platform validator.</p>
+        </section>
+
+        <section class="wave" id="wave-3" data-wave="3" aria-labelledby="wave-3-title">
+          <div class="wave-header">
+            <div>
+              <p class="wave-number">Wave 3</p>
+              <h2 id="wave-3-title">Deepen curriculum governance and code-aware learning</h2>
+              <p>Extend the golden path with lifecycle evolution, discovery, remediation, learner-owned artifacts, safe code navigation, and source drift.</p>
+            </div>
+            <span class="wave-count">14 features · 28 L2</span>
+          </div>
+          <div class="wave-facts">
+            <div class="fact"><strong>Starts when</strong><span>The golden path is merged and its publication, lesson, progress, and assignment regression suite is stable.</span></div>
+            <div class="fact"><strong>Primary output</strong><span>A complete code-learning experience and governed curriculum evolution beyond first publication.</span></div>
+            <div class="fact"><strong>Parallelism</strong><span>Lifecycle, learning-discovery, and code-navigation tracks share immutable version and authorization contracts.</span></div>
+          </div>
+          <div class="feature-groups">
+            <article class="feature-group" data-subsystem="Curriculum Lifecycle">
+              <h3>Curriculum Lifecycle</h3>
+              <p>Version evolution, operational evidence, and contract-compatible editing.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="04-curriculum-lifecycle/compare-and-retire-versions"><a href="detailed-designs/04-curriculum-lifecycle/compare-and-retire-versions/README.md">Compare and retire versions</a><span class="reqs"><code>L2-CLI-10, 11</code></span></li>
+                <li class="slice" data-feature="04-curriculum-lifecycle/operate-and-audit-lifecycle"><a href="detailed-designs/04-curriculum-lifecycle/operate-and-audit-lifecycle/README.md">Operate and audit the lifecycle</a><span class="reqs"><code>L2-CLI-13, 14</code></span></li>
+                <li class="slice" data-feature="04-curriculum-lifecycle/edit-contract-content"><a href="detailed-designs/04-curriculum-lifecycle/edit-contract-content/README.md">Edit contract-compatible content</a><span class="reqs"><code>L2-CLI-15</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Learning Experience">
+              <h3>Learning Experience</h3>
+              <p>Discovery, remediation, private artifacts, and moderated collaboration.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="05-learning-experience/search-and-navigate-learning"><a href="detailed-designs/05-learning-experience/search-and-navigate-learning/README.md">Search and navigate learning</a><span class="reqs"><code>L2-LEX-07–09</code></span></li>
+                <li class="slice" data-feature="05-learning-experience/recommend-remediation-and-review"><a href="detailed-designs/05-learning-experience/recommend-remediation-and-review/README.md">Recommend remediation and review</a><span class="reqs"><code>L2-LEX-10, 14</code></span></li>
+                <li class="slice" data-feature="05-learning-experience/manage-private-learning-artifacts"><a href="detailed-designs/05-learning-experience/manage-private-learning-artifacts/README.md">Manage private learning artifacts</a><span class="reqs"><code>L2-LEX-12, 13</code></span></li>
+                <li class="slice" data-feature="05-learning-experience/moderate-learning-discussion"><a href="detailed-designs/05-learning-experience/moderate-learning-discussion/README.md">Moderate learning discussion</a><span class="reqs"><code>L2-LEX-15</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Codebase Navigation">
+              <h3>Codebase Navigation</h3>
+              <p>Inert source rendering, tours, provider links, trees, architecture, and drift.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="06-codebase-navigation/render-and-resolve-code"><a href="detailed-designs/06-codebase-navigation/render-and-resolve-code/README.md">Render and resolve code</a><span class="reqs"><code>L2-CBN-01, 02, 07, 12</code></span></li>
+                <li class="slice" data-feature="06-codebase-navigation/open-external-code-links"><a href="detailed-designs/06-codebase-navigation/open-external-code-links/README.md">Open external code links</a><span class="reqs"><code>L2-CBN-03</code></span></li>
+                <li class="slice" data-feature="06-codebase-navigation/follow-code-tours"><a href="detailed-designs/06-codebase-navigation/follow-code-tours/README.md">Follow code tours</a><span class="reqs"><code>L2-CBN-04</code></span></li>
+                <li class="slice" data-feature="06-codebase-navigation/show-source-snapshot-drift"><a href="detailed-designs/06-codebase-navigation/show-source-snapshot-drift/README.md">Show source snapshot drift</a><span class="reqs"><code>L2-CBN-05, 06, 11</code></span></li>
+                <li class="slice" data-feature="06-codebase-navigation/browse-files-and-symbols"><a href="detailed-designs/06-codebase-navigation/browse-files-and-symbols/README.md">Browse files and symbols</a><span class="reqs"><code>L2-CBN-08, 09</code></span></li>
+                <li class="slice" data-feature="06-codebase-navigation/explore-architecture-relationships"><a href="detailed-designs/06-codebase-navigation/explore-architecture-relationships/README.md">Explore architecture relationships</a><span class="reqs"><code>L2-CBN-10</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Security, Privacy, and Compliance">
+              <h3>Content execution boundary</h3>
+              <p>Keep curriculum and source material inert from intake through browser rendering.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="11-security-privacy-compliance/secure-content-intake-and-rendering"><a href="detailed-designs/11-security-privacy-compliance/secure-content-intake-and-rendering/README.md">Secure content intake and rendering</a><span class="reqs"><code>L2-SPC-06–08</code></span></li>
+              </ul>
+            </article>
+          </div>
+          <p class="gate"><strong>Exit gate:</strong> a version update preserves prior learner evidence; authorized users can search, traverse a code tour, resolve safe source anchors, observe drift, and return to the lesson context; active-content and cross-tenant tests remain negative.</p>
+        </section>
+
+        <section class="wave" id="wave-4" data-wave="4" aria-labelledby="wave-4-title">
+          <div class="wave-header">
+            <div>
+              <p class="wave-number">Wave 4</p>
+              <h2 id="wave-4-title">Deliver governed assessment and explainable mastery</h2>
+              <p>Build the attempt lifecycle, protected grading, objective coverage, correction workflows, and mastery evidence on the stable learning experience.</p>
+            </div>
+            <span class="wave-count">8 features · 20 L2</span>
+          </div>
+          <div class="wave-facts">
+            <div class="fact"><strong>Starts when</strong><span>Lesson rendering, identity, immutable curriculum versions, and replay-safe write contracts pass their gates.</span></div>
+            <div class="fact"><strong>Primary output</strong><span>Auditable formative and controlled assessments with policy-safe feedback and mastery.</span></div>
+            <div class="fact"><strong>Parallelism</strong><span>Item rendering/coverage and attempt/grading tracks converge on immutable submission evidence.</span></div>
+          </div>
+          <div class="feature-groups">
+            <article class="feature-group" data-subsystem="Assessment and Mastery">
+              <h3>Assessment and Mastery</h3>
+              <p>Items, attempts, responses, grading, coverage, correction, and mastery.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="07-assessment-mastery/render-assessment-items"><a href="detailed-designs/07-assessment-mastery/render-assessment-items/README.md">Render assessment items</a><span class="reqs"><code>L2-ASM-01–04</code></span></li>
+                <li class="slice" data-feature="07-assessment-mastery/start-governed-attempts"><a href="detailed-designs/07-assessment-mastery/start-governed-attempts/README.md">Start governed attempts</a><span class="reqs"><code>L2-ASM-05–08</code></span></li>
+                <li class="slice" data-feature="07-assessment-mastery/save-and-submit-responses"><a href="detailed-designs/07-assessment-mastery/save-and-submit-responses/README.md">Save and submit responses</a><span class="reqs"><code>L2-ASM-09, 11</code></span></li>
+                <li class="slice" data-feature="07-assessment-mastery/grade-assessment-outcomes"><a href="detailed-designs/07-assessment-mastery/grade-assessment-outcomes/README.md">Grade assessment outcomes</a><span class="reqs"><code>L2-ASM-10, 12</code></span></li>
+                <li class="slice" data-feature="07-assessment-mastery/manage-objective-coverage"><a href="detailed-designs/07-assessment-mastery/manage-objective-coverage/README.md">Manage objective coverage</a><span class="reqs"><code>L2-ASM-13, 15</code></span></li>
+                <li class="slice" data-feature="07-assessment-mastery/invalidate-defective-items"><a href="detailed-designs/07-assessment-mastery/invalidate-defective-items/README.md">Invalidate defective items</a><span class="reqs"><code>L2-ASM-14</code></span></li>
+                <li class="slice" data-feature="07-assessment-mastery/calculate-explainable-mastery"><a href="detailed-designs/07-assessment-mastery/calculate-explainable-mastery/README.md">Calculate explainable mastery</a><span class="reqs"><code>L2-ASM-16, 17</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Security, Privacy, and Compliance">
+              <h3>Assessment confidentiality</h3>
+              <p>Prevent premature answer disclosure and unauthorized source access.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="11-security-privacy-compliance/protect-answers-and-source"><a href="detailed-designs/11-security-privacy-compliance/protect-answers-and-source/README.md">Protect answers and source</a><span class="reqs"><code>L2-SPC-09–11</code></span></li>
+              </ul>
+            </article>
+          </div>
+          <p class="gate"><strong>Exit gate:</strong> retry and concurrency tests prove one submission/result per attempt; feedback release and answer protection pass adversarial tests; objective evidence remains tied to immutable curriculum and item versions; defective-item recalculation is explainable and audited.</p>
+        </section>
+
+        <section class="wave" id="wave-5" data-wave="5" aria-labelledby="wave-5-title">
+          <div class="wave-header">
+            <div>
+              <p class="wave-number">Wave 5</p>
+              <h2 id="wave-5-title">Complete tenant administration and support operations</h2>
+              <p>Add the tenant-facing control plane around the golden path: people, roles, retention, diagnostics, branding, and notifications.</p>
+            </div>
+            <span class="wave-count">8 features · 13 L2</span>
+          </div>
+          <div class="wave-facts">
+            <div class="fact"><strong>Starts when</strong><span>Wave 1 identity, authorization, audit, and safe diagnostic contracts are stable.</span></div>
+            <div class="fact"><strong>Primary output</strong><span>A tenant-scoped operations console with governed data lifecycle and support evidence.</span></div>
+            <div class="fact"><strong>Parallelism</strong><span>User/role and retention/diagnostics tracks can run together; branding and notifications remain adapters.</span></div>
+          </div>
+          <div class="feature-groups">
+            <article class="feature-group" data-subsystem="Administration and Tenant Operations">
+              <h3>Administration and Tenant Operations</h3>
+              <p>Admin shell, people controls, policy, support, presentation, and communications.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="09-administration-operations/navigate-tenant-administration"><a href="detailed-designs/09-administration-operations/navigate-tenant-administration/README.md">Navigate tenant administration</a><span class="reqs"><code>L2-ATO-01</code></span></li>
+                <li class="slice" data-feature="09-administration-operations/manage-users-groups-and-roles"><a href="detailed-designs/09-administration-operations/manage-users-groups-and-roles/README.md">Manage users, groups, and roles</a><span class="reqs"><code>L2-ATO-02, 03, 14</code></span></li>
+                <li class="slice" data-feature="09-administration-operations/govern-retention-and-deletion"><a href="detailed-designs/09-administration-operations/govern-retention-and-deletion/README.md">Govern retention and deletion</a><span class="reqs"><code>L2-ATO-08, 09</code></span></li>
+                <li class="slice" data-feature="09-administration-operations/access-support-diagnostics"><a href="detailed-designs/09-administration-operations/access-support-diagnostics/README.md">Access support diagnostics</a><span class="reqs"><code>L2-ATO-10</code></span></li>
+                <li class="slice" data-feature="09-administration-operations/configure-tenant-branding"><a href="detailed-designs/09-administration-operations/configure-tenant-branding/README.md">Configure tenant branding</a><span class="reqs"><code>L2-ATO-11</code></span></li>
+                <li class="slice" data-feature="09-administration-operations/deliver-tenant-notifications"><a href="detailed-designs/09-administration-operations/deliver-tenant-notifications/README.md">Deliver tenant notifications</a><span class="reqs"><code>L2-ATO-12, 13</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Security, Privacy, and Compliance">
+              <h3>Data lifecycle controls</h3>
+              <p>Apply retention and deletion policy without breaking required audit evidence.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="11-security-privacy-compliance/retain-delete-and-audit-data"><a href="detailed-designs/11-security-privacy-compliance/retain-delete-and-audit-data/README.md">Retain, delete, and audit data</a><span class="reqs"><code>L2-SPC-12, 13</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Observability and Supportability">
+              <h3>Support evidence</h3>
+              <p>Produce a bounded tenant-safe diagnostic artifact.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="12-observability-supportability/provide-tenant-diagnostics"><a href="detailed-designs/12-observability-supportability/provide-tenant-diagnostics/README.md">Provide tenant diagnostics</a><span class="reqs"><code>L2-OBS-11</code></span></li>
+              </ul>
+            </article>
+          </div>
+          <p class="gate"><strong>Exit gate:</strong> a tenant administrator completes the supported people and policy workflows without cross-tenant visibility; retention/deletion jobs reconcile with holds and audit evidence; diagnostic bundles pass seeded-secret scans; provider failures degrade safely.</p>
+        </section>
+
+        <section class="wave" id="wave-6" data-wave="6" aria-labelledby="wave-6-title">
+          <div class="wave-header">
+            <div>
+              <p class="wave-number">Wave 6</p>
+              <h2 id="wave-6-title">Build versioned analytics and reporting</h2>
+              <p>Turn stable learning, assessment, curriculum, and assignment evidence into authorized measures, gaps, cohorts, exports, and operational monitoring.</p>
+            </div>
+            <span class="wave-count">9 features · 19 L2</span>
+          </div>
+          <div class="wave-facts">
+            <div class="fact"><strong>Starts when</strong><span>Learning, assessment, lifecycle, and administration events have versioned schemas and replay tests.</span></div>
+            <div class="fact"><strong>Primary output</strong><span>Privacy-safe learner and manager analytics with governed definitions and reproducible exports.</span></div>
+            <div class="fact"><strong>Parallelism</strong><span>Metric governance and ingestion precede learner/manager views; exports follow authorization and redaction.</span></div>
+          </div>
+          <div class="feature-groups">
+            <article class="feature-group" data-subsystem="Analytics and Reporting">
+              <h3>Analytics and Reporting</h3>
+              <p>Definitions, views, gaps, exports, cohort analysis, and version preservation.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="08-analytics-reporting/govern-metric-definitions"><a href="detailed-designs/08-analytics-reporting/govern-metric-definitions/README.md">Govern metric definitions</a><span class="reqs"><code>L2-ANR-01, 05, 06</code></span></li>
+                <li class="slice" data-feature="08-analytics-reporting/show-learner-analytics"><a href="detailed-designs/08-analytics-reporting/show-learner-analytics/README.md">Show learner analytics</a><span class="reqs"><code>L2-ANR-02</code></span></li>
+                <li class="slice" data-feature="08-analytics-reporting/explore-manager-analytics"><a href="detailed-designs/08-analytics-reporting/explore-manager-analytics/README.md">Explore manager analytics</a><span class="reqs"><code>L2-ANR-03, 04, 09</code></span></li>
+                <li class="slice" data-feature="08-analytics-reporting/identify-gaps-and-performance"><a href="detailed-designs/08-analytics-reporting/identify-gaps-and-performance/README.md">Identify gaps and performance</a><span class="reqs"><code>L2-ANR-07, 08</code></span></li>
+                <li class="slice" data-feature="08-analytics-reporting/export-reports"><a href="detailed-designs/08-analytics-reporting/export-reports/README.md">Export reports</a><span class="reqs"><code>L2-ANR-10</code></span></li>
+                <li class="slice" data-feature="08-analytics-reporting/analyze-content-and-cohorts"><a href="detailed-designs/08-analytics-reporting/analyze-content-and-cohorts/README.md">Analyze content and cohorts</a><span class="reqs"><code>L2-ANR-11, 12</code></span></li>
+                <li class="slice" data-feature="08-analytics-reporting/preserve-versioned-analytics"><a href="detailed-designs/08-analytics-reporting/preserve-versioned-analytics/README.md">Preserve versioned analytics</a><span class="reqs"><code>L2-ANR-13–15</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Security, Privacy, and Compliance">
+              <h3>Operational-data minimization</h3>
+              <p>Keep analytics and operations useful without capturing protected payloads.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="11-security-privacy-compliance/redact-operational-data"><a href="detailed-designs/11-security-privacy-compliance/redact-operational-data/README.md">Redact operational data</a><span class="reqs"><code>L2-SPC-14</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Observability and Supportability">
+              <h3>Journey monitoring</h3>
+              <p>Measure import, learner, and assessment reliability against versioned releases.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="12-observability-supportability/monitor-import-and-learning"><a href="detailed-designs/12-observability-supportability/monitor-import-and-learning/README.md">Monitor import and learning</a><span class="reqs"><code>L2-OBS-04–06</code></span></li>
+              </ul>
+            </article>
+          </div>
+          <p class="gate"><strong>Exit gate:</strong> metric fixtures reproduce approved results across curriculum versions; learner and manager authorization matrices pass; small-population and cross-tenant privacy tests pass; exports are auditable and expiring; import/learning/assessment dashboards expose agreed SLIs.</p>
+        </section>
+
+        <section class="wave" id="wave-7" data-wave="7" aria-labelledby="wave-7-title">
+          <div class="wave-header">
+            <div>
+              <p class="wave-number">Wave 7</p>
+              <h2 id="wave-7-title">Prove production readiness</h2>
+              <p>Close the portfolio with security evidence, service objectives, dependency degradation, recovery exercises, incident readiness, and a recorded release decision.</p>
+            </div>
+            <span class="wave-count">5 features · 8 L2</span>
+          </div>
+          <div class="wave-facts">
+            <div class="fact"><strong>Starts when</strong><span>All pilot-critical journeys are deployable in the target environment with owners and current evidence.</span></div>
+            <div class="fact"><strong>Primary output</strong><span>An auditable go/no-go packet and exercised operational controls.</span></div>
+            <div class="fact"><strong>Parallelism</strong><span>Security review, SLO/dependency work, recovery exercise, and incident tabletop converge at the release gate.</span></div>
+          </div>
+          <div class="feature-groups">
+            <article class="feature-group" data-subsystem="Security, Privacy, and Compliance">
+              <h3>Security readiness</h3>
+              <p>Evidence-backed release controls and managed exceptions.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="11-security-privacy-compliance/govern-security-readiness"><a href="detailed-designs/11-security-privacy-compliance/govern-security-readiness/README.md">Govern security readiness</a><span class="reqs"><code>L2-SPC-15, 16</code></span></li>
+              </ul>
+            </article>
+            <article class="feature-group" data-subsystem="Observability and Supportability">
+              <h3>Operational readiness</h3>
+              <p>SLOs, degradation, recovery, response, and the final production gate.</p>
+              <ul class="slice-list">
+                <li class="slice" data-feature="12-observability-supportability/govern-service-reliability"><a href="detailed-designs/12-observability-supportability/govern-service-reliability/README.md">Govern service reliability</a><span class="reqs"><code>L2-OBS-12, 16</code></span></li>
+                <li class="slice" data-feature="12-observability-supportability/back-up-and-restore-state"><a href="detailed-designs/12-observability-supportability/back-up-and-restore-state/README.md">Back up and restore state</a><span class="reqs"><code>L2-OBS-13, 14</code></span></li>
+                <li class="slice" data-feature="12-observability-supportability/respond-to-incidents"><a href="detailed-designs/12-observability-supportability/respond-to-incidents/README.md">Respond to incidents</a><span class="reqs"><code>L2-OBS-15</code></span></li>
+                <li class="slice" data-feature="12-observability-supportability/gate-production-releases"><a href="detailed-designs/12-observability-supportability/gate-production-releases/README.md">Gate production releases</a><span class="reqs"><code>L2-OBS-17</code></span></li>
+              </ul>
+            </article>
+          </div>
+          <p class="gate"><strong>Exit gate:</strong> the release packet contains passing security/privacy/accessibility/performance evidence, SLOs and owners, dependency-failure results, a successful isolated restore with achieved RPO/RTO, an incident exercise, current runbooks, and a recorded approval or time-bounded exception for every gap.</p>
+        </section>
+      </div>
+
+      <section class="panel" aria-labelledby="done-title">
+        <p class="status">Every slice</p>
+        <h2 id="done-title">Definition of done</h2>
+        <ul class="checklist">
+          <li>All L2 acceptance scenarios owned by the feature are automated at the lowest reliable layer and mapped by identifier.</li>
+          <li>Tenant, role, scope, lifecycle-state, replay, concurrency, and failure-path tests cover the feature’s trust boundaries.</li>
+          <li>The vertical slice includes required Angular UI, API, application/domain behavior, persistence, migrations, and provider adapters.</li>
+          <li>Structured telemetry, audit evidence, client-safe errors, redaction, and correlation are implemented without protected payloads.</li>
+          <li>Keyboard, screen-reader semantics, 200% zoom, narrow viewport, reduced motion, capability fallback, and performance budgets are checked where applicable.</li>
+          <li>API/event/schema compatibility is versioned; migrations and rollback or forward-fix steps are documented and exercised.</li>
+          <li>Operational ownership, alert/runbook changes, feature-flag behavior, and deployment evidence accompany the pull request.</li>
+          <li>The linked detailed design and affected requirement documents are updated if implementation decisions change their contract.</li>
+        </ul>
+      </section>
+
+      <section class="panel" aria-labelledby="governance-title">
+        <p class="status">Portfolio controls</p>
+        <h2 id="governance-title">Decisions, dependencies, and change control</h2>
+        <table>
+          <thead>
+            <tr><th>Control</th><th>Required action</th><th>Evidence</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>&lt;TO SUPPLY&gt;</code> technology</td><td>Resolve the decision before a dependent slice enters implementation; record the choice and rejected alternatives.</td><td>Approved ADR linked from the feature PR.</td></tr>
+            <tr><td>Golden-path seam</td><td>Consume the merged contract; propose changes through a compatibility review rather than duplicating the component.</td><td>Contract test and migration note.</td></tr>
+            <tr><td>Cross-wave dependency</td><td>Name the owning feature and versioned interface in the consuming PR.</td><td>Dependency entry in the PR description.</td></tr>
+            <tr><td>Requirement change</td><td>Update the L1/L2 source and regenerate or revise affected detailed designs before implementation proceeds.</td><td>Requirement/design diff and passing design verifier.</td></tr>
+            <tr><td>Wave exit</td><td>Review the listed exit gate with product, architecture, security/privacy, accessibility, and operations owners as applicable.</td><td>Dated gate record with exceptions, owners, and expiry.</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Coverage source: <a href="detailed-designs/README.md">RepoFluent detailed-design index</a>.
+        This plan assigns 73 remaining features exactly once and reserves 11 features for the active
+        Curriculum-to-Learning Golden Path.
+      </p>
+    </footer>
+
+    <script>
+      (() => {
+        const search = document.querySelector("#feature-search");
+        const buttons = [...document.querySelectorAll("[data-filter]")];
+        const waves = [...document.querySelectorAll(".wave")];
+        const slices = [...document.querySelectorAll(".slice[data-feature]")];
+        const resultCount = document.querySelector(".result-count");
+        let activeWave = "all";
+
+        const applyFilters = () => {
+          const query = search.value.trim().toLocaleLowerCase();
+          let visibleCount = 0;
+
+          for (const wave of waves) {
+            const waveSelected = activeWave === "all" || wave.dataset.wave === activeWave;
+            let waveMatches = 0;
+
+            for (const slice of wave.querySelectorAll(".slice[data-feature]")) {
+              const group = slice.closest(".feature-group");
+              const haystack = `${slice.textContent} ${slice.dataset.feature} ${group?.dataset.subsystem ?? ""}`.toLocaleLowerCase();
+              const visible = waveSelected && (!query || haystack.includes(query));
+              slice.hidden = !visible;
+              if (visible) {
+                waveMatches += 1;
+                visibleCount += 1;
+              }
+            }
+
+            wave.hidden = !waveSelected || (query && waveMatches === 0);
+            for (const group of wave.querySelectorAll(".feature-group")) {
+              group.hidden = ![...group.querySelectorAll(".slice[data-feature]")].some((slice) => !slice.hidden);
+            }
+          }
+
+          resultCount.textContent = `${visibleCount} ${visibleCount === 1 ? "feature" : "features"} shown`;
+        };
+
+        search.addEventListener("input", applyFilters);
+        for (const button of buttons) {
+          button.addEventListener("click", () => {
+            activeWave = button.dataset.filter;
+            for (const candidate of buttons) {
+              candidate.setAttribute("aria-pressed", String(candidate === button));
+            }
+            applyFilters();
+          });
+        }
+
+        resultCount.textContent = `${slices.length} features shown`;
+      })();
+    </script>
+  </body>
+</html>

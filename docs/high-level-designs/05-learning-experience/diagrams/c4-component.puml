@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Learning Experience
+
+Person(actor, "Learner", "Studies assigned curriculum and records progress")
+Container_Boundary(web, "repofluent-app") {
+  Component(learning_home, "LearningHomePage", "Angular 21", "Presents assignments, status, due dates, activity, and next action")
+  Component(course_player, "Course and Lesson Player", "Angular 21", "Renders hierarchy, lesson blocks, glossary, progress, and context")
+  Component(lesson_renderer, "LessonRendererComponent", "Angular library", "Renders safe contract blocks through typed components")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(learning_endpoints, "LearningEndpoints", "ASP.NET Core", "Returns learner-scoped assignments, courses, lessons, and progress commands")
+  Component(progress_coordinator, "ProgressCoordinator", ".NET application service", "Applies retry-safe monotonic progress semantics")
+  Component(next_action, "NextActionSelector", ".NET domain service", "Explains the selected assignment, remediation, or review action")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(learning_projector, "LearningProjectionBuilder", ".NET worker", "Builds learner-safe read models from publication and assignment events")
+  Component(recommendation_worker, "ReviewRecommendationProcessor", ".NET worker", "Refreshes remediation and spaced-review candidates")
+}
+ContainerDb(learning_store, "Learning schema", "Production relational database <TO SUPPLY>", "Stores progress, notes, bookmarks, next actions, and projections")
+ContainerDb(search_index, "Learning search index", "Search service <TO SUPPLY>", "Indexes authorized published content and glossary terms")
+ContainerDb(learning_cache, "Learning cache", "Distributed cache <TO SUPPLY>", "Caches learner-safe published projections and navigation state")
+
+Rel(actor, learning_home, "Starts and resumes learning in", "HTTPS")
+Rel(learning_home, learning_endpoints, "Loads assignments from", "JSON/HTTPS")
+Rel(course_player, learning_endpoints, "Loads lessons and saves progress through", "JSON/HTTPS")
+Rel(course_player, lesson_renderer, "Renders typed blocks with", "Angular component API")
+Rel(learning_endpoints, progress_coordinator, "Dispatches progress to", "in process")
+Rel(learning_endpoints, next_action, "Requests recommendations from", "in process")
+Rel(progress_coordinator, learning_store, "Writes monotonic progress to", "SQL")
+Rel(learning_endpoints, search_index, "Searches authorized content in", "query API")
+Rel(learning_endpoints, learning_cache, "Reads cached projections from", "cache protocol")
+Rel(learning_projector, learning_store, "Builds versioned projections in", "SQL")
+Rel(recommendation_worker, learning_store, "Refreshes next actions in", "SQL")
+@enduml

@@ -1,0 +1,69 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Assessment and Mastery
+
+class AssessmentDefinition {
+  +string Id
+  +Guid CurriculumVersionId
+  +AttemptPolicy Policy
+  +IReadOnlyList<QuestionRef> Pool
+}
+
+class Question {
+  +string Id
+  +QuestionType Type
+  +IReadOnlyList<string> ObjectiveIds
+  +ItemVersion Version
+}
+
+class AnswerKey {
+  +string QuestionId
+  +ProtectedAnswer Answer
+  +string Rationale
+  +FeedbackReleasePolicy Release
+}
+
+class AssessmentAttempt {
+  +Guid Id
+  +Guid LearnerId
+  +AttemptStatus Status
+  +DateTimeOffset StartedAt
+  +Submit(key): GradeRequest
+}
+
+class Response {
+  +string QuestionId
+  +ResponseValue Value
+  +DateTimeOffset SavedAt
+}
+
+class GradeResult {
+  +decimal Score
+  +bool Passed
+  +IReadOnlyList<ObjectiveResult> Objectives
+  +GraderVersion Version
+}
+
+class MasteryRecord {
+  +string ObjectiveId
+  +MasteryState State
+  +EvidenceSummary Evidence
+  +CalculationVersion Version
+}
+
+AssessmentDefinition "1" o-- "*" Question : selects from
+Question "1" --> "1" AnswerKey : protected by
+AssessmentDefinition "1" --> "*" AssessmentAttempt : governs
+AssessmentAttempt "1" *-- "*" Response : records
+AssessmentAttempt "1" --> "0..1" GradeResult : produces
+GradeResult "*" --> "*" MasteryRecord : contributes to
+@enduml

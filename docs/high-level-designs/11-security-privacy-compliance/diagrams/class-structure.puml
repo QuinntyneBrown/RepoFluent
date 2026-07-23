@@ -1,0 +1,71 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Security, Privacy, and Compliance
+
+class DataClassification {
+  +string Id
+  +ClassificationLevel Level
+  +HandlingPolicy Policy
+  +Evaluate(context): Decision
+}
+
+class SecurityPolicy {
+  +string Id
+  +SemVer Version
+  +DateTimeOffset EffectiveAt
+  +IReadOnlyList<ControlRef> Controls
+}
+
+class SecurityControl {
+  +string Id
+  +ControlKind Kind
+  +string Owner
+  +EvidenceRequirement Evidence
+}
+
+class AuditEvent {
+  +Guid Id
+  +Guid TenantId
+  +Guid ActorId
+  +string Action
+  +Checksum ChainHash
+}
+
+class EncryptionEnvelope {
+  +string Algorithm
+  +KeyReference Key
+  +byte[] Ciphertext
+  +Decrypt(context): byte[]
+}
+
+class RetentionPolicy {
+  +string Id
+  +SemVer Version
+  +RetentionRule Rules
+  +Evaluate(record): RetentionDecision
+}
+
+class SecurityException {
+  +Guid Id
+  +string Scope
+  +RiskRating Risk
+  +DateTimeOffset ExpiresAt
+  +Approve(actor): void
+}
+
+SecurityPolicy "1" *-- "*" SecurityControl : defines
+DataClassification --> SecurityPolicy : selects handling from
+SecurityControl ..> AuditEvent : produces evidence as
+DataClassification ..> EncryptionEnvelope : governs
+RetentionPolicy --> DataClassification : varies by
+SecurityException --> SecurityControl : compensates for
+@enduml

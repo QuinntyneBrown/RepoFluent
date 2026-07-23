@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Experience Platform
+
+Person(actor, "RepoFluent user", "Operates RepoFluent through a supported browser and input method")
+Container_Boundary(web, "repofluent-app") {
+  Component(shell, "RepoFluent Application Shell", "Angular 21", "Hosts routing, workspaces, navigation context, session state, and responsive layout")
+  Component(design_system, "RepoFluent Design System", "Angular library and CSS tokens", "Supplies accessible components, typography, color, spacing, elevation, and motion")
+  Component(capability_broker, "BrowserCapabilityBroker", "Angular service", "Selects semantic, Canvas, or WebGPU renderer from measured capabilities and preferences")
+  Component(gpu_renderer, "WebGPU Visualization Adapter", "WebGPU", "Adds spatial system and relationship rendering when available")
+  Component(accessible_fallback, "Semantic Visualization Adapter", "Angular and SVG/HTML", "Presents equivalent navigable relationships without GPU dependence")
+  Component(client_telemetry, "ClientExperienceTelemetry", "OpenTelemetry web", "Measures navigation, errors, responsiveness, and performance budgets")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(experience_endpoint, "ExperienceConfigurationEndpoint", "ASP.NET Core", "Returns tenant-safe theme, feature, browser, and asset configuration")
+}
+ContainerDb(static_assets, "Static web asset store", "Versioned object storage and CDN <TO SUPPLY>", "Publishes hashed Angular, design-system, font, and visualization assets")
+System_Ext(browser, "Supported browser platform", "Provides semantic DOM, accessibility APIs, navigation, storage, rendering, and optional WebGPU")
+System_Ext(rum, "Experience telemetry backend", "Receives redacted client metrics, errors, traces, and capability dimensions")
+
+Rel(actor, shell, "Uses", "browser input and HTTPS")
+Rel(shell, design_system, "Composes interface from", "Angular APIs")
+Rel(shell, capability_broker, "Requests renderer selection from", "in process")
+Rel(capability_broker, browser, "Detects supported capabilities from", "browser APIs")
+Rel(capability_broker, gpu_renderer, "Selects when supported", "adapter contract")
+Rel(capability_broker, accessible_fallback, "Selects as baseline or fallback", "adapter contract")
+Rel(shell, experience_endpoint, "Loads approved tenant configuration from", "JSON/HTTPS")
+Rel(shell, static_assets, "Loads hashed release assets from", "HTTPS/CDN")
+Rel(client_telemetry, rum, "Emits redacted experience telemetry to", "OpenTelemetry")
+@enduml

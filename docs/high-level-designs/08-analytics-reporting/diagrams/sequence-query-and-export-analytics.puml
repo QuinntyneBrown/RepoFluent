@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — query and export analytics
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Authorized analytics user" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Manager Analytics Workspace" as dashboard
+  participant "Report Export Builder" as builder
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "AnalyticsEndpoints" as endpoints
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "AnalyticsPolicyGate" as policy
+  participant "MetricQueryEngine" as metrics
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Analytics projection store" as store
+  queue "Platform work queue" as queue
+  participant "ReportExportProcessor" as worker
+  database "Report export store" as exports
+end box
+actor -> dashboard : Select team, curriculum version, and measure
+dashboard -> endpoints : GET scoped analytics query
+endpoints -> policy : Evaluate actor, dimensions, and population
+policy -> store : Resolve authorized population and group size
+store --> policy : Population metadata
+policy --> endpoints : Permitted query or suppression decision
+endpoints -> metrics : Evaluate approved metric definition
+metrics -> store : Query versioned facts and aggregates
+store --> metrics : Metric inputs and freshness
+metrics --> endpoints : Transparent metric result
+endpoints --> dashboard : Measures, lineage, and suppression state
+dashboard --> actor : Present scoped analytics
+actor -> builder : Request machine-readable export
+builder -> endpoints : POST export query
+endpoints -> policy : Authorize requested fields and population
+policy --> endpoints : Approved export scope
+endpoints -> queue : Enqueue export with actor and policy version
+queue --> endpoints : Export identifier
+endpoints --> builder : Accepted export status
+queue -> worker : Deliver export job
+worker -> policy : Re-evaluate current export policy
+policy --> worker : Permitted scope
+worker -> store : Read authorized rows
+store --> worker : Versioned result set
+worker -> exports : Write encrypted expiring artifact
+exports --> worker : Artifact reference and expiry
+@enduml

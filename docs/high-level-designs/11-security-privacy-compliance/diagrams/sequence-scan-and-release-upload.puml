@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — scan and release upload
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Security administrator" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Curriculum Workspace" as curriculum
+  participant "Security and Privacy Workspace" as security
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "SecurityPolicyMiddleware" as middleware
+  participant "ContentSafetyGate" as gate
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "DataClassificationService" as classification
+  participant "AuditWriter" as audit
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Security policy schema" as policy
+  database "Quarantine object store" as quarantine
+  participant "Threat and secret scanning providers" as scanner
+  database "Tamper-evident audit ledger" as ledger
+end box
+actor -> curriculum : Upload curriculum package
+curriculum -> middleware : Send authenticated bounded request
+middleware -> classification : Resolve tenant and content handling policy
+classification -> policy : Read effective classification and control versions
+policy --> classification : Handling decision
+classification --> middleware : Permit bounded intake
+middleware -> gate : Pass inert stream and trusted context
+gate -> quarantine : Store encrypted untrusted bytes
+quarantine --> gate : Object reference and checksum
+gate -> scanner : Request malware, active-content, and secret scans
+scanner -> quarantine : Read isolated object
+quarantine --> scanner : Untrusted bytes
+scanner --> gate : Normalized scan decisions
+alt all required controls pass
+  gate -> audit : Record release decision and policy versions
+  audit -> ledger : Append chained event
+  ledger --> audit : Evidence reference
+  gate --> middleware : Released package reference
+else any blocking control fails or is unknown
+  gate -> audit : Record non-disclosing rejection evidence
+  audit -> ledger : Append chained event
+  gate --> middleware : Safe rejection code
+end
+middleware --> curriculum : Accepted receipt or safe problem
+@enduml

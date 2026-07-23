@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — submit grade and update mastery
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Learner" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Assessment Runner" as runner
+  participant "Assessment Result View" as results
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "AssessmentEndpoints" as endpoints
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "AttemptCoordinator" as attempts
+  participant "GradingEngine" as grader
+  participant "MasteryCalculator" as mastery
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Assessment evidence schema" as db
+  database "Protected answer vault" as vault
+  queue "Platform work queue" as queue
+  participant "MasteryProjector" as projector
+end box
+actor -> runner : Submit governed assessment attempt
+runner -> endpoints : POST submission with idempotency key
+endpoints -> attempts : Validate actor, version, timing, and policy
+attempts -> db : Load active attempt and saved responses
+db --> attempts : Version-bound attempt state
+attempts -> grader : Grade deterministic responses
+grader -> vault : Read protected answer keys
+vault --> grader : Authorized keys and release policy
+grader -> db : Commit submission and grade atomically
+db --> grader : Immutable grade result
+grader -> queue : Publish mastery recalculation event
+grader --> attempts : Grade and learner-visible release state
+attempts --> endpoints : Submission result
+endpoints --> runner : Score or held-result status
+queue -> projector : Deliver mastery event
+projector -> db : Read versioned objective evidence
+db --> projector : Grade and prior mastery inputs
+projector -> mastery : Calculate documented objective state
+mastery --> projector : Explainable mastery result
+projector -> db : Commit calculation version and inputs
+actor -> results : Open released result
+results -> endpoints : GET authorized outcome
+endpoints -> db : Read learner-visible result projection
+db --> endpoints : Score, gaps, and remediation
+endpoints --> results : Released outcome
+results --> actor : Present result and next learning action
+@enduml

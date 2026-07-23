@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Assessment and Mastery
+
+Person(actor, "Learner", "Completes formative quizzes and governed tests")
+Container_Boundary(web, "repofluent-app") {
+  Component(assessment_runner, "Assessment Runner", "Angular 21", "Presents instructions, items, timing, save state, and submission")
+  Component(result_view, "Assessment Result View", "Angular 21", "Presents permitted score, rationale, strengths, gaps, and remediation")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(assessment_endpoints, "AssessmentEndpoints", "ASP.NET Core", "Starts attempts, saves responses, submits, and returns authorized outcomes")
+  Component(attempt_coordinator, "AttemptCoordinator", ".NET application service", "Enforces version, policy, time, attempt count, and idempotency")
+  Component(grading_engine, "GradingEngine", ".NET domain service", "Grades supported deterministic question types against protected keys")
+  Component(mastery_calculator, "MasteryCalculator", ".NET domain service", "Produces transparent objective-level mastery inputs and result")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(mastery_projector, "MasteryProjector", ".NET worker", "Recalculates mastery after grading or approved item invalidation")
+  Component(item_analyzer, "AssessmentQualityAnalyzer", ".NET worker", "Builds duplicate, leakage, coverage, and item-quality signals")
+}
+ContainerDb(assessment_store, "Assessment evidence schema", "Production relational database <TO SUPPLY>", "Stores definitions, policies, attempts, responses, grades, and mastery")
+ContainerDb(answer_vault, "Protected answer vault", "Encrypted logically separated storage <TO SUPPLY>", "Stores answer keys and unreleased rationales")
+ContainerQueue(assessment_queue, "Platform work queue", "Durable message broker <TO SUPPLY>", "Carries grading, mastery, and item-analysis work")
+
+Rel(actor, assessment_runner, "Completes assessments in", "HTTPS")
+Rel(assessment_runner, assessment_endpoints, "Starts, saves, and submits through", "JSON/HTTPS")
+Rel(result_view, assessment_endpoints, "Reads released outcome from", "JSON/HTTPS")
+Rel(assessment_endpoints, attempt_coordinator, "Dispatches attempt commands to", "in process")
+Rel(attempt_coordinator, assessment_store, "Reads policy and writes attempt evidence in", "SQL")
+Rel(attempt_coordinator, grading_engine, "Requests deterministic grading from", "in process")
+Rel(grading_engine, answer_vault, "Reads protected keys from", "restricted data access")
+Rel(grading_engine, assessment_store, "Commits grade outcome to", "SQL")
+Rel(grading_engine, assessment_queue, "Emits mastery work through", "transactional outbox")
+Rel(mastery_projector, assessment_queue, "Consumes mastery work from", "broker protocol")
+Rel(mastery_projector, mastery_calculator, "Calculates objective state with", "in process")
+Rel(mastery_projector, assessment_store, "Writes versioned mastery to", "SQL")
+Rel(item_analyzer, assessment_store, "Reads de-identified item evidence from", "SQL")
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Administration and Tenant Operations
+
+Person(actor, "Tenant administrator", "Operates authorized tenant configuration and workflows")
+Container_Boundary(web, "repofluent-app") {
+  Component(admin_workspace, "Administration Workspace", "Angular 21", "Presents users, groups, roles, curricula, assignments, settings, status, branding, and diagnostics")
+  Component(operation_status, "Operation Status Center", "Angular 21", "Presents per-item outcomes and safe correlation identifiers for long-running work")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(admin_endpoints, "AdministrationEndpoints", "ASP.NET Core", "Exposes tenant configuration and orchestration commands")
+  Component(assignment_service, "AssignmentService", ".NET application service", "Creates version-bound user or group assignments idempotently")
+  Component(retention_coordinator, "RetentionCoordinator", ".NET application service", "Plans policy-governed retention and deletion across owners")
+  Component(status_composer, "TenantStatusComposer", ".NET application service", "Combines safe status from owner modules without exposing payloads")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(deletion_orchestrator, "DeletionOrchestrator", ".NET worker", "Executes approved primary and derived deletion steps with evidence")
+  Component(notification_dispatcher, "NotificationDispatcher", ".NET worker", "Delivers configured assignment, due-date, publication, and failure notifications")
+}
+ContainerDb(admin_store, "Tenant operations schema", "Production relational database <TO SUPPLY>", "Stores assignments, settings, branding, preferences, and orchestration state")
+ContainerQueue(admin_queue, "Platform work queue", "Durable message broker <TO SUPPLY>", "Carries deletion, notification, and bulk-operation jobs")
+System_Ext(notification_provider, "Notification provider", "Delivers approved tenant notification channels")
+
+Rel(actor, admin_workspace, "Administers tenant in", "HTTPS")
+Rel(admin_workspace, admin_endpoints, "Calls", "JSON/HTTPS")
+Rel(operation_status, admin_endpoints, "Reads safe status from", "JSON/HTTPS")
+Rel(admin_endpoints, assignment_service, "Dispatches assignments to", "in process")
+Rel(admin_endpoints, retention_coordinator, "Dispatches retention requests to", "in process")
+Rel(admin_endpoints, status_composer, "Requests owner status from", "in process")
+Rel(assignment_service, admin_store, "Writes assignments and provenance to", "SQL")
+Rel(retention_coordinator, admin_store, "Commits plan and outbox to", "SQL")
+Rel(retention_coordinator, admin_queue, "Enqueues approved deletion work through", "transactional outbox")
+Rel(deletion_orchestrator, admin_queue, "Consumes deletion work from", "broker protocol")
+Rel(notification_dispatcher, admin_queue, "Consumes notification work from", "broker protocol")
+Rel(notification_dispatcher, notification_provider, "Delivers through", "provider API <TO SUPPLY>")
+@enduml

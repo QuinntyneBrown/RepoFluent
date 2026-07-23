@@ -1,0 +1,99 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.skip-link {
+  background: var(--rf-color-primary);
+  color: var(--rf-color-ink-inverse);
+  left: var(--rf-space-4);
+  padding: var(--rf-space-3);
+  position: fixed;
+  top: -5rem;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: var(--rf-space-4);
+}
+
+.development-banner {
+  background: var(--rf-color-warning-dim);
+  border-bottom: 1px solid var(--rf-color-warning);
+  color: var(--rf-color-warning);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
+  padding: var(--rf-space-2) var(--rf-space-7);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.app-header {
+  align-items: center;
+  background: var(--rf-color-surface-1);
+  border-bottom: 1px solid var(--rf-color-line);
+  display: grid;
+  gap: var(--rf-space-7);
+  grid-template-columns: auto 1fr auto;
+  min-height: 4.5rem;
+  padding: 0 var(--rf-space-7);
+}
+
+.brand {
+  color: var(--rf-color-ink-strong);
+  font: var(--rf-type-section);
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: var(--rf-space-5);
+}
+
+nav a {
+  color: var(--rf-color-ink-muted);
+  text-decoration: none;
+}
+
+.persona-selector {
+  align-items: center;
+  display: flex;
+  gap: var(--rf-space-3);
+}
+
+.persona-selector label {
+  color: var(--rf-color-ink-muted);
+  font: var(--rf-type-label);
+}
+
+select {
+  background: var(--rf-color-surface-2);
+  border: 1px solid var(--rf-color-line-strong);
+  border-radius: var(--rf-radius-control);
+  color: var(--rf-color-ink-strong);
+  min-height: 2.5rem;
+  padding: 0 var(--rf-space-4);
+}
+
+.app-shell {
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: var(--rf-space-9) var(--rf-space-7) var(--rf-space-11);
+}
+
+@media (max-width: 42rem) {
+  .app-header {
+    align-items: start;
+    grid-template-columns: 1fr;
+    padding-block: var(--rf-space-5);
+  }
+
+  .persona-selector {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .app-shell {
+    padding-inline: var(--rf-space-4);
+  }
+}

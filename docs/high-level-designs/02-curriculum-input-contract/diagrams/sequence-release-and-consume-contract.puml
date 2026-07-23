@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — release and consume contract
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Contract maintainer" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Contract release workbench" as workbench
+  participant "RepoFluent.ContractCli" as cli
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "ContractRegistryEndpoint" as registry
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "ContractReleaseVerifier" as verifier
+  participant "CurriculumPackageValidator" as validator
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Contract source tree" as repo
+  database "Contract artifact registry" as artifacts
+end box
+actor -> workbench : Prepare schema, ICD, fixtures, and metadata
+workbench -> verifier : Build candidate contract release
+verifier -> repo : Read versioned source artifacts
+repo --> verifier : Candidate release
+verifier -> validator : Run valid and invalid fixtures
+validator --> verifier : Deterministic conformance results
+alt release conforms
+  verifier -> artifacts : Publish immutable bundle and checksum
+  artifacts --> verifier : Release identifier
+else release fails
+  verifier --> workbench : Return blocking release issues
+end
+cli -> registry : Request selected contract version
+registry -> artifacts : Read verified bundle
+artifacts --> registry : Schema, ICD, fixtures, and checksum
+registry --> cli : Checksummed contract release
+cli -> validator : Validate local curriculum package
+validator --> cli : Stable issues and exit status
+@enduml

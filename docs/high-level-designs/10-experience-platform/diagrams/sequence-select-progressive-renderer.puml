@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — select progressive renderer
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "RepoFluent user" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "RepoFluent Application Shell" as shell
+  participant "BrowserCapabilityBroker" as broker
+  participant "WebGPU Visualization Adapter" as gpu
+  participant "Semantic Visualization Adapter" as fallback
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "ExperienceConfigurationEndpoint" as config
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "Visualization contract" as contract
+  participant "PerformanceBudgetEvaluator" as budget
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Static web asset store" as assets
+  participant "Supported browser platform" as browser
+  participant "Experience telemetry backend" as rum
+end box
+actor -> shell : Open system relationship view
+shell -> config : Request tenant-safe experience configuration
+config --> shell : Theme, feature, and browser policy
+shell -> assets : Load hashed visualization assets
+assets --> shell : Versioned frontend bundle
+shell -> broker : Select renderer for visualization model
+broker -> browser : Read capability and reduced-motion profile
+browser --> broker : Runtime CapabilityProfile
+broker -> contract : Verify both adapters support semantic model
+contract --> broker : Equivalent renderer contract
+alt WebGPU is permitted and initializes
+  broker -> gpu : Render progressive relationship view
+  gpu -> browser : Initialize GPU resources
+  browser --> gpu : Ready
+  gpu --> shell : Interactive rendered result
+else WebGPU is unavailable, reduced, or fails
+  broker -> fallback : Render semantic HTML and SVG view
+  fallback --> shell : Accessible rendered result
+end
+shell -> budget : Record interaction and frame measurements
+budget -> rum : Emit redacted budget result
+shell --> actor : Present operable relationship view
+@enduml
