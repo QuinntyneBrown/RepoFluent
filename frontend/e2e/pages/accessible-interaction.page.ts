@@ -112,12 +112,12 @@ export class AccessibleInteractionPage {
     await this.page.getByLabel('Curriculum package').scrollIntoViewIfNeeded();
   }
 
-  async expectScreenshot(name: string): Promise<void> {
+  async expectScreenshot(name: string, maxDiffPixelRatio = 0.015): Promise<void> {
     await expect(this.page).toHaveScreenshot(name, {
       animations: 'disabled',
       caret: 'hide',
       fullPage: false,
-      maxDiffPixelRatio: 0.015,
+      maxDiffPixelRatio,
     });
   }
 }

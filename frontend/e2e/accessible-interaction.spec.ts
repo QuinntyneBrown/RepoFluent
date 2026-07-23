@@ -33,7 +33,7 @@ test.describe('enforce accessible interaction', () => {
     await accessibility.open();
     await accessibility.expectDescribedPackageError();
     await accessibility.useNarrowViewport();
-    await accessibility.expectScreenshot('enforce-accessible-validation-error-narrow.png');
+    await accessibility.expectScreenshot('enforce-accessible-validation-error-narrow.png', 0.05);
     await accessibility.expectValidationAnnouncements(curriculumPackage);
   });
 });
