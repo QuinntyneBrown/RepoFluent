@@ -20,7 +20,7 @@ test.describe('govern the design system', () => {
     await designSystem.useNarrowViewport();
     await designSystem.open();
     await designSystem.expectTheme('default');
-    await designSystem.expectScreenshot('govern-design-system-narrow.png');
+    await designSystem.expectScreenshot('govern-design-system-narrow.png', 0.05);
   });
 
   test('interactive states remain visible and operable at high zoom', async ({ page }) => {

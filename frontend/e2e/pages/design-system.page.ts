@@ -69,12 +69,12 @@ export class DesignSystemPage {
     await this.page.setViewportSize({ width: 390, height: 844 });
   }
 
-  async expectScreenshot(name: string): Promise<void> {
+  async expectScreenshot(name: string, maxDiffPixelRatio = 0.015): Promise<void> {
     await expect(this.page).toHaveScreenshot(name, {
       animations: 'disabled',
       caret: 'hide',
       fullPage: false,
-      maxDiffPixelRatio: 0.015,
+      maxDiffPixelRatio,
     });
   }
 }
