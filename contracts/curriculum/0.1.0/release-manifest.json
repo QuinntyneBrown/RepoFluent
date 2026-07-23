@@ -4,14 +4,14 @@
   "status": "prerelease",
   "publishedAt": "2026-07-23T12:00:00Z",
   "checksumAlgorithm": "sha256",
-  "releaseChecksum": "sha256:ab605846f181cc04e18f3121d040f0153a13283169ec7b5fa244471579b12f9c",
+  "releaseChecksum": "sha256:b228eb96b4dff1c639615a01b713b56abe5d50743cc991408030e6f2a951c223",
   "checksumInput": "Artifact path and SHA-256 pairs sorted by ordinal path and terminated by LF.",
   "artifacts": [
     {
       "name": "JSON Schema",
       "path": "curriculum.schema.json",
       "mediaType": "application/schema+json",
-      "sha256": "84f65157a989b6de2a69064cbe41783dfb167b85b96104783430cfd0b373fe2f"
+      "sha256": "012d9b7ea0c32bf4ba17af4a67277c8b47441356406db5b6f4090a4401bb6616"
     },
     {
       "name": "Interface control document",
@@ -41,7 +41,7 @@
       "name": "Representative C# and Angular fixture",
       "path": "fixtures/order-processing.json",
       "mediaType": "application/json",
-      "sha256": "a2b3038892108a3c4d9347d2113ceef0b0b66c329285d48c040e1c1d45664042"
+      "sha256": "b3c4d916d40579a6eeaf0b432a0ac54fda5374323cbfff5990c16d3f982e21c6"
     },
     {
       "name": "Conformance fixtures",
