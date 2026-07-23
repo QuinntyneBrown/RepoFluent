@@ -25,6 +25,17 @@ node scripts/validate.mjs examples/valid/order-processing.json
 The command prints `{"valid":true,"issues":[]}` and exits with status `0`.
 Invalid input prints path-addressed schema issues and exits with status `1`.
 
+Run scope preflight before reading an approved repository:
+
+```sh
+node scripts/preflight.mjs examples/scope/approved-scope.json
+```
+
+Preflight resolves root-to-directory `AGENTS.md` policies, applies explicit
+exclusions, requires the repository revision and document scope, and scans the
+effective files for suspected credentials. A blocking report contains paths and
+safe codes but not the suspected value.
+
 ## Offline boundary
 
 Schema resolution, examples, instructions, validation, checksums, and

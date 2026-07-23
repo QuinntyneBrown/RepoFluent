@@ -2,42 +2,58 @@
 
 ## Overview
 
-RepoFluent's Agent Authoring Kit subsystem guides approved agents from declared source scope to a locally validated curriculum package. This feature
-brings *repository instruction precedence*, *scope and access declaration*, *secret and sensitive-data handling* into one vertical slice. The slice preserves tenant,
-actor, version, authorization, and correlation context wherever the cited
-requirements apply.
+RepoFluent's acquired authoring kit performs a local scope preflight before an
+agent reads customer source. A *source-scope declaration* names the approved
+repositories, documents, revisions, inclusions, exclusions, output location,
+and data-handling rules for one generation run. The command resolves applicable
+repository guidance from root to directory, calculates the effective file set,
+and stops on unsafe input.
 
-The curriculum authoring agent starts the outcome through Authoring Kit CLI.
-Local Validator applies server-side policy before state is read or changed.
-The external dependency and persistent technology remain `<TO SUPPLY>` where
-the requirements baseline does not select them.
+Release `0.1.0` ships the dependency-free command, representative safe and
+secret-exposure scopes, and fixture repositories. Preflight reads only the
+declared local snapshots, follows no symbolic links, makes no network request,
+and emits one redacted JSON report to standard output. It does not upload source
+or persist customer content in RepoFluent.
+
+The Angular authoring-kit view explains this deny-by-default posture. The local
+command remains the enforcement boundary.
 
 ## Description
 
-The greenfield slice introduces the following building blocks. The endpoint
-route, deployment topology, and unresolved provider choices remain `<TO SUPPLY>`.
+The implemented vertical slice contains the following building blocks.
 
-- **`ConstrainAgentScopeCli`** — .NET tool entry component that presents
-  the feature state and submits a typed intent.
-- **`AuthoringKitClient`** — typed client that carries tenant, actor, version,
-  idempotency, and correlation context required by the operation.
-- **`ConstrainAgentScopeController`** — .NET boundary that authenticates
-  the caller, applies endpoint policy, and dispatches `ConstrainAgentScopeRequest`.
-- **`ConstrainAgentScopeRequest`** — application request containing scope, actor, target,
-  expected version, correlation identifier, and feature payload.
-- **`ConstrainAgentScopeHandler`** — application handler that loads authorized state,
-  invokes `ConstrainAgentScopePolicy`, and commits one result.
-- **`ConstrainAgentScopePolicy`** — domain policy that evaluates the cited L2 rules without
-  relying on client presentation state.
-- **`IConstrainAgentScopeRepository`** — application abstraction for tenant-scoped reads,
-  writes, optimistic concurrency, and idempotency lookup.
-- **`ConstrainAgentScopeRecord`** — persisted feature record containing identity, tenant,
-  version, status, timestamps, and safe evidence references.
+- **`AGENTS.md`, generation prompt, and authoring skill** — require
+  root-to-directory instruction discovery, explicit source scope, minimum
+  excerpts, no access elevation, and a stop on suspected secret exposure.
+- **`approved-scope.json` and `secret-exposure-scope.json`** — executable scope
+  declarations covering an accepted repository boundary and a blocking
+  sensitive-data path.
+- **Fixture repository guidance** — embeds a fenced `repofluent-policy` JSON
+  block. Root guidance applies first; deeper guidance may narrow but cannot
+  loosen a parent prohibition.
+- **`preflight.mjs`** — validates the declaration, canonicalizes each local
+  repository root, walks regular files without following symbolic links,
+  and orders applicable guidance. It applies declared and directory exclusions,
+  verifies declared documents, scans safe text, and prints a redacted report.
+- **`build_authoring_kit.mjs` and `verify_authoring_kits.mjs`** — include every
+  scope artifact in the release checksums and execute accepted and blocked
+  preflight cases with the offline flag enabled.
+- **`AuthoringScopePolicyComponent`** — presents instruction precedence,
+  declared scope, sensitive-data stop, and the local command using the
+  RepoFluent design tokens.
+- **`AuthoringScopePage`** — Playwright Page Object for the visible policy,
+  effective-file result, directory exclusion, redacted failure, and Windows and
+  Linux visual contracts.
+
+The report contains `scopeId`, declared output location, repository revision,
+guidance order, effective files, exclusions, and blocking findings. It contains
+paths and stable codes, never the matching credential value. Exit status `0`
+means preflight accepted the boundary; status `1` prevents source analysis.
 
 ## Requirements
 
 The feature realizes the following level-2 (L2) requirements. Each row cites
-the first L1 identifier named by the source requirement as its primary parent.
+the L1 parent named by the source requirement.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
@@ -45,51 +61,70 @@ the first L1 identifier named by the source requirement as its primary parent.
 | `L2-AAK-03` | `L1-AAK-02` | The workflow shall require an explicit source scope, approved repositories/documents, revision or snapshot, exclusions, output location, and data-handling constraints before analysis. The kit shall not instruct an agent to elevate access, bypass controls, or retrieve undeclared sources. |
 | `L2-AAK-04` | `L1-AAK-02` | Instructions shall require agents to avoid collecting secrets, minimize source excerpts, honor content classification/redaction metadata, and stop/report suspected secret exposure. The validation workflow shall support secret-pattern scanning before package release. |
 
+### Implementation evidence
+
+- `constrain-agent-scope.spec.ts` starts the slice with Page Object acceptance
+  for the policy panel, root-to-directory guidance order, exact effective files,
+  preserved exclusions, redacted secret finding, and process exit status.
+- `verify_authoring_kits.mjs` reruns both scope cases, verifies every new
+  artifact checksum, and rejects network imports in the preflight runtime.
+- `preflight.mjs` returns `AAK_SECRET_SUSPECTED` with only the affected path and
+  safe message; the seeded fixture value is absent from command output.
+- Windows and Linux Chromium baselines capture the same 500-pixel policy panel
+  using versioned design-system tokens.
+
 ## Diagrams
 
 ### System context
 
-The curriculum authoring agent uses RepoFluent to complete the feature outcome.
-RepoFluent interacts with Approved source repositories only through the boundary
-described by the requirements and approved configuration.
+The curriculum-authoring agent invokes an acquired RepoFluent authoring kit
+against an approved local repository snapshot. Only files admitted by the
+declaration and applicable repository guidance become effective.
 
-![C4 system context for constrain agent scope](diagrams/c4-context.png)
+![C4 system context for constraining agent scope](diagrams/c4-context.png)
 
 ### Containers
 
-Authoring Kit CLI sends typed requests to Local Validator. The API applies
-server-owned rules and records the accepted outcome in Authoring workspace.
+The Angular application communicates the policy. The acquired Node.js command
+reads the local declaration and approved repository snapshot, then returns a
+redacted report without a server or network dependency.
 
-![C4 container view for constrain agent scope](diagrams/c4-container.png)
+![C4 container view for constraining agent scope](diagrams/c4-container.png)
 
 ### Components
 
-`ConstrainAgentScopeController` dispatches `ConstrainAgentScopeRequest` to `ConstrainAgentScopeHandler`. The handler
-uses `ConstrainAgentScopePolicy` and `IConstrainAgentScopeRepository` before it commits a state change.
+`preflight.mjs` coordinates declaration validation, canonical file walking,
+guidance resolution, effective-scope filtering, secret scanning, and report
+output. Repository build tooling verifies the same packaged behavior.
 
-![C4 component view for constrain agent scope](diagrams/c4-component.png)
+![C4 component view for constraining agent scope](diagrams/c4-component.png)
 
 ### Class structure
 
-`ConstrainAgentScopeHandler` depends on the request, policy, and repository abstractions.
-`IConstrainAgentScopeRepository` stores `ConstrainAgentScopeRecord` under tenant and version context.
+The declaration owns repository and data-handling values. The preflight report
+records repository outcomes and stable findings without source contents.
 
-![Class diagram for constrain agent scope](diagrams/class-structure.png)
+![Class diagram for constraining agent scope](diagrams/class-structure.png)
 
 ### Behaviour — repository instruction precedence
 
-The sequence applies `L2-AAK-02` before the handler persists an accepted result. A rejected policy or validation result returns without a state change.
+For `L2-AAK-02`, preflight discovers guidance in root-to-directory order and
+applies the first parent or directory prohibition that excludes a file.
 
 ![Sequence diagram for repository instruction precedence](diagrams/sequence-l2-aak-02.png)
 
 ### Behaviour — scope and access declaration
 
-The sequence applies `L2-AAK-03` before the handler persists an accepted result. A rejected policy or validation result returns without a state change.
+For `L2-AAK-03`, declaration validation completes before repository inspection.
+Missing scope fields, unavailable roots, symbolic links, or unavailable
+documents produce blocking findings.
 
 ![Sequence diagram for scope and access declaration](diagrams/sequence-l2-aak-03.png)
 
 ### Behaviour — secret and sensitive-data handling
 
-The sequence applies `L2-AAK-04` before the handler persists an accepted result. A rejected policy or validation result returns without a state change.
+For `L2-AAK-04`, preflight scans only effective safe-text files. A suspected
+credential yields a path-addressed blocking finding without reproducing the
+matched value, and the command exits with status `1`.
 
 ![Sequence diagram for secret and sensitive-data handling](diagrams/sequence-l2-aak-04.png)

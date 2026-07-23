@@ -43,3 +43,6 @@
 - Checksummed authoring-kit `0.1.0` distribution with bundled instructions,
   prompt, skill, contract artifacts, examples, dependency-free offline
   validation, public artifact retrieval, and a token-conformant release view.
+- Deny-by-default authoring scope preflight with root-to-directory repository
+  guidance, declared-source enforcement, explicit exclusions, and redacted
+  secret-pattern stops before analysis.

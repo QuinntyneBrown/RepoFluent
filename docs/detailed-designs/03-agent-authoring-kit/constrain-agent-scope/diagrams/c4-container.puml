@@ -3,16 +3,19 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Constrain agent scope
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Authoring Kit CLI", ".NET tool", "Offline authoring and validation interface")
-  Container(api, "Local Validator", ".NET", "Applies application and domain policy")
-  ContainerDb(store, "Authoring workspace", "File system", "Stores tenant-scoped state and evidence")
+Person(agent, "Curriculum authoring agent", "Runs preflight before source analysis")
+System_Boundary(repofluent, "RepoFluent authoring workflow") {
+  Container(policyView, "Authoring-kit policy view", "Angular", "Explains the deny-by-default source boundary")
+  Container(preflight, "Source-scope preflight", "Dependency-free Node.js 22 command", "Calculates effective files and emits a redacted report")
+  ContainerDb(release, "Acquired authoring-kit release", "Versioned files", "Instructions, scope examples, command, and checksums")
 }
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+System_Ext(scope, "Source-scope declaration", "Approved repositories, documents, revisions, exclusions, output, and data rules")
+System_Ext(repository, "Approved repository snapshot", "Local regular files and directory-scoped AGENTS.md guidance")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(agent, policyView, "Reviews policy")
+Rel(agent, preflight, "Invokes before analysis", "Local process")
+Rel(preflight, release, "Runs from verified")
+Rel(preflight, scope, "Validates and reads", "Local JSON")
+Rel(preflight, repository, "Canonicalizes and reads admitted files", "Local file access")
+Rel(preflight, agent, "Returns redacted JSON and exit status", "Standard output")
 @enduml

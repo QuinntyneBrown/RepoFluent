@@ -1,0 +1,21 @@
+{
+  "scopeVersion": "0.1.0",
+  "scopeId": "approved-order-platform",
+  "repositories": [
+    {
+      "id": "order-platform",
+      "root": "../fixtures/repositories/order-platform",
+      "revision": "7d9d2e9fd6df4d1bb8653fd8a27f67f4455d92b8",
+      "documents": ["docs/architecture.md"],
+      "include": ["docs/**", "src/**"],
+      "exclude": ["src/generated/**"]
+    }
+  ],
+  "outputLocation": "workspace/order-platform-curriculum.json",
+  "dataHandling": {
+    "classification": "internal",
+    "excerptPolicy": "minimum-necessary",
+    "redact": ["secrets", "personal-data"],
+    "secretScanning": true
+  }
+}

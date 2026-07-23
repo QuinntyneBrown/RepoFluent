@@ -10,7 +10,7 @@
     "version": ">=22.0.0"
   },
   "checksumAlgorithm": "sha256",
-  "releaseChecksum": "sha256:b2f1f85a1c10a3ebf5257169283621b2357394c05b71ff738c6207310b636f68",
+  "releaseChecksum": "sha256:15b3e4c393e2ba6db90ca715ddfb431baae49d686fae4d9e2252e0aee8849788",
   "checksumInput": "Artifact path and SHA-256 pairs sorted by ordinal path and terminated by LF.",
   "offline": {
     "supported": true,
@@ -25,25 +25,25 @@
       "name": "Quick start",
       "path": "README.md",
       "mediaType": "text/markdown",
-      "sha256": "f69a3460caab53f698bcffb94162dc453c4f696c7e5d7c48a0436bdf48dfa15c"
+      "sha256": "57b4ffc8999622cd5a57203e1caf72cabfed1b4c0b31738ad899d47c3b1cf4f3"
     },
     {
       "name": "Agent instructions",
       "path": "AGENTS.md",
       "mediaType": "text/markdown",
-      "sha256": "18f1e3cb58aa7653073a43b44db3de47fea56be6ff78649a834523de130e49c9"
+      "sha256": "372892d662be596a0851d70048e78242fcdf1e679b16ac06e349a6aa6af0dbd0"
     },
     {
       "name": "Generation prompt",
       "path": "prompts/generate-curriculum.md",
       "mediaType": "text/markdown",
-      "sha256": "8fd0bd5a017258a014618eb5b7337c95ebe51decc85ded6eec36abc7ecc0c3ff"
+      "sha256": "85ddadcec3e230003040e97293013b9375146e81b912a84c2707688befc94ee5"
     },
     {
       "name": "Authoring skill",
       "path": "skills/repofluent-authoring/SKILL.md",
       "mediaType": "text/markdown",
-      "sha256": "a2d9158d27c54ac0299572e9dfe7d0cf61b0d00121e1f9470a0e3adc85b71fd7"
+      "sha256": "2e7bdf101eacf7ae7ac63d3d5660af73ecd14a0bdeab4526f44b62f111333dfc"
     },
     {
       "name": "Curriculum JSON Schema",
@@ -70,6 +70,78 @@
       "sha256": "4665a7cc7f2293430a29240f33a3eccad81572bc45510cc40101c294f0cccad2"
     },
     {
+      "name": "Approved source-scope declaration",
+      "path": "examples/scope/approved-scope.json",
+      "mediaType": "application/json",
+      "sha256": "e13ec0ba2ca9a8e8c63145909523ba4e4a995057226012fcf6ae282606307013"
+    },
+    {
+      "name": "Secret-exposure source-scope declaration",
+      "path": "examples/scope/secret-exposure-scope.json",
+      "mediaType": "application/json",
+      "sha256": "e7138b502cdbc65f41d50d976e7cd7200ff46afccad002fc5a26f7735f77644f"
+    },
+    {
+      "name": "Approved repository instructions",
+      "path": "examples/fixtures/repositories/order-platform/AGENTS.md",
+      "mediaType": "text/markdown",
+      "sha256": "5754a4523b78678759429ee2f007a8bf1460faf073a5ed8f0ed5c627ffd198c9"
+    },
+    {
+      "name": "Approved architecture document",
+      "path": "examples/fixtures/repositories/order-platform/docs/architecture.md",
+      "mediaType": "text/markdown",
+      "sha256": "fecac7ca2a16abf92278c715a5e0840395e46bc6bf824d01f71bc276c2c0e62d"
+    },
+    {
+      "name": "Approved application source",
+      "path": "examples/fixtures/repositories/order-platform/src/app.ts",
+      "mediaType": "text/typescript",
+      "sha256": "3eb96298549f65723842102ff071cb7adf4ba4426f0ff319f1cc8069b3872ca5"
+    },
+    {
+      "name": "Directory-scoped repository instructions",
+      "path": "examples/fixtures/repositories/order-platform/src/payments/AGENTS.md",
+      "mediaType": "text/markdown",
+      "sha256": "417689e5a1c893afa91ee32f68ca35ce2ac61822915a31525385833d3ccce0c4"
+    },
+    {
+      "name": "Approved payment source",
+      "path": "examples/fixtures/repositories/order-platform/src/payments/handler.ts",
+      "mediaType": "text/typescript",
+      "sha256": "97b0f2692d8d18b01790eabee2e0d3b00dd399961f47f4c063e0a0b6bcb68f11"
+    },
+    {
+      "name": "Explicitly excluded payment source",
+      "path": "examples/fixtures/repositories/order-platform/src/payments/private/ledger.txt",
+      "mediaType": "text/plain",
+      "sha256": "8c990787122e08707f4ca0dc32e6e7949354bf2c1952be178744fe2f554daf8f"
+    },
+    {
+      "name": "Secret-exposure repository instructions",
+      "path": "examples/fixtures/repositories/secret-exposure/AGENTS.md",
+      "mediaType": "text/markdown",
+      "sha256": "51bb8ac6f99e3482eb64becbcc9daab9518183697c74b7df3b58c906d1f1498d"
+    },
+    {
+      "name": "Secret-exposure architecture document",
+      "path": "examples/fixtures/repositories/secret-exposure/docs/architecture.md",
+      "mediaType": "text/markdown",
+      "sha256": "6191a033e8d3b21f7adee345c8a4a975a2df82be06a455dc5458ee54c91f81a5"
+    },
+    {
+      "name": "Suspected-secret fixture",
+      "path": "examples/fixtures/repositories/secret-exposure/src/config/application.env",
+      "mediaType": "text/plain",
+      "sha256": "99c7ea303e000e95c61495975770c5e60438574f65f34875bfc7771b23be87d6"
+    },
+    {
+      "name": "Source-scope preflight",
+      "path": "scripts/preflight.mjs",
+      "mediaType": "text/javascript",
+      "sha256": "089dbc003144b0c38faf98f87e2362b2c32fe76b0f16bee4e8707a94948ca11c"
+    },
+    {
       "name": "Local validation command",
       "path": "scripts/validate.mjs",
       "mediaType": "text/javascript",
@@ -91,13 +163,13 @@
       "name": "Release notes",
       "path": "release-notes.md",
       "mediaType": "text/markdown",
-      "sha256": "1225ec8a29ea34903417fa432bd8f021510866e24a20ede966f5185ea821a68c"
+      "sha256": "fb79aed8936cc7d2aa19f04998c40db3caaddb58788412239d1d4fab748501ff"
     },
     {
       "name": "Artifact checksums",
       "path": "checksums.sha256",
       "mediaType": "text/plain",
-      "sha256": "0f17fa68257eedfab4a4262fb5499a6b5e8f95a8ddd48a3de10cd6e0e7e8b17d"
+      "sha256": "b13763e8a88c60cad0761e680acc900cdb95de9feb3128bfbf27e7e90e5f8cfe"
     }
   ]
 }

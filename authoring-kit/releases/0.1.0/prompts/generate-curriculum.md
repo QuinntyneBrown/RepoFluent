@@ -10,6 +10,9 @@ Before analysis:
 - discover applicable repository guidance from root to each in-scope source;
 - stop and report unresolved instruction conflicts.
 
+Run `node scripts/preflight.mjs <scope.json>`. Do not begin source analysis when
+preflight reports a blocking finding.
+
 During generation:
 
 - derive stable identifiers from semantic source scope, not display wording;
@@ -17,6 +20,8 @@ During generation:
 - represent assumptions, omissions, conflicts, and unresolved questions
   explicitly;
 - keep protected assessment answers out of learner-visible content;
+- minimize excerpts, honor classification and redaction metadata, and stop on
+  suspected secret exposure without reproducing the value;
 - use only inert lesson blocks and repository-relative code references;
 - keep producer-specific metadata inside a declared extension namespace.
 

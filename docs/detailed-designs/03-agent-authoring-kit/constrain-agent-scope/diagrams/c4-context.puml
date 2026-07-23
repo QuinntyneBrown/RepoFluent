@@ -3,10 +3,10 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Constrain agent scope
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+Person(agent, "Curriculum authoring agent", "Produces a package only from an approved source boundary")
+System(kit, "Acquired RepoFluent authoring kit", "Applies local instructions, scope preflight, and package validation")
+System_Ext(repository, "Approved repository snapshot", "Local code and documents governed by repository instructions")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(agent, kit, "Invokes with a source-scope declaration", "Local command")
+Rel(kit, repository, "Reads admitted regular files only", "Local file access")
 @enduml

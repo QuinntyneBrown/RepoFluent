@@ -18,6 +18,18 @@ const requiredArtifacts = new Set([
   "contracts/ICD.md",
   "examples/valid/order-processing.json",
   "examples/invalid/missing-title.json",
+  "examples/scope/approved-scope.json",
+  "examples/scope/secret-exposure-scope.json",
+  "examples/fixtures/repositories/order-platform/AGENTS.md",
+  "examples/fixtures/repositories/order-platform/docs/architecture.md",
+  "examples/fixtures/repositories/order-platform/src/app.ts",
+  "examples/fixtures/repositories/order-platform/src/payments/AGENTS.md",
+  "examples/fixtures/repositories/order-platform/src/payments/handler.ts",
+  "examples/fixtures/repositories/order-platform/src/payments/private/ledger.txt",
+  "examples/fixtures/repositories/secret-exposure/AGENTS.md",
+  "examples/fixtures/repositories/secret-exposure/docs/architecture.md",
+  "examples/fixtures/repositories/secret-exposure/src/config/application.env",
+  "scripts/preflight.mjs",
   "scripts/validate.mjs",
   "scripts/curriculum.validator.mjs",
   "scripts/verify-release.mjs",
@@ -107,8 +119,12 @@ async function verifyRelease(version) {
   );
 
   const runtimeSource = await Promise.all(
-    ["scripts/validate.mjs", "scripts/curriculum.validator.mjs"].map(
-      (relativePath) => readFile(path.join(releaseRoot, relativePath), "utf8"),
+    [
+      "scripts/preflight.mjs",
+      "scripts/validate.mjs",
+      "scripts/curriculum.validator.mjs",
+    ].map((relativePath) =>
+      readFile(path.join(releaseRoot, relativePath), "utf8"),
     ),
   );
   if (
@@ -160,6 +176,75 @@ async function verifyRelease(version) {
     !JSON.parse(invalid.stdout).issues?.some((issue) => issue.path === "/title")
   ) {
     errors.push(`${version}: invalid package did not fail at /title`);
+  }
+
+  const approvedPreflight = runPreflight(
+    releaseRoot,
+    path.join(releaseRoot, "examples", "scope", "approved-scope.json"),
+  );
+  const approvedReport = parseReport(
+    version,
+    "approved scope preflight",
+    approvedPreflight.stdout,
+  );
+  if (
+    approvedPreflight.status !== 0 ||
+    approvedReport?.valid !== true ||
+    !approvedReport.repositories?.[0]?.exclusions?.some(
+      (exclusion) =>
+        exclusion.path === "src/payments/private/ledger.txt" &&
+        exclusion.guidance === "src/payments/AGENTS.md",
+    )
+  ) {
+    errors.push(
+      `${version}: approved scope did not preserve directory exclusions`,
+    );
+  }
+
+  const secretPreflight = runPreflight(
+    releaseRoot,
+    path.join(releaseRoot, "examples", "scope", "secret-exposure-scope.json"),
+  );
+  const secretReport = parseReport(
+    version,
+    "secret-exposure preflight",
+    secretPreflight.stdout,
+  );
+  const rawSecret = "AKIAREPOFLUENTDEMO12";
+  if (
+    secretPreflight.status !== 1 ||
+    secretPreflight.stdout.includes(rawSecret) ||
+    !secretReport?.findings?.some(
+      (finding) =>
+        finding.code === "AAK_SECRET_SUSPECTED" &&
+        finding.path === "src/config/application.env" &&
+        finding.isBlocking === true,
+    )
+  ) {
+    errors.push(
+      `${version}: suspected secret did not stop with a redacted report`,
+    );
+  }
+}
+
+function runPreflight(releaseRoot, scopePath) {
+  return spawnSync(
+    process.execPath,
+    [path.join(releaseRoot, "scripts", "preflight.mjs"), scopePath],
+    {
+      cwd: releaseRoot,
+      encoding: "utf8",
+      env: { ...process.env, REPOFLUENT_OFFLINE: "true" },
+    },
+  );
+}
+
+function parseReport(version, label, stdout) {
+  try {
+    return JSON.parse(stdout);
+  } catch {
+    errors.push(`${version}: ${label} did not emit JSON`);
+    return null;
   }
 }
 

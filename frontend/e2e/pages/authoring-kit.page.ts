@@ -38,17 +38,17 @@ export class AuthoringKitPage {
 
     for (const artifact of [
       'AGENTS.md',
-      'generate-curriculum.md',
-      'SKILL.md',
-      'curriculum.schema.json',
-      'ICD.md',
-      'order-processing.json',
-      'missing-title.json',
-      'validate.mjs',
+      'prompts/generate-curriculum.md',
+      'skills/repofluent-authoring/SKILL.md',
+      'contracts/curriculum.schema.json',
+      'contracts/ICD.md',
+      'examples/valid/order-processing.json',
+      'examples/invalid/missing-title.json',
+      'scripts/validate.mjs',
       'release-notes.md',
       'checksums.sha256',
     ]) {
-      await expect(release.getByRole('row').filter({ hasText: artifact })).toHaveCount(1);
+      await expect(release.getByRole('cell', { name: artifact, exact: true })).toHaveCount(1);
     }
   }
 

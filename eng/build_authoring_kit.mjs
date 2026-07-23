@@ -113,6 +113,62 @@ const artifactDefinitions = [
     "examples/invalid/missing-title.json",
     "application/json",
   ],
+  [
+    "Approved source-scope declaration",
+    "examples/scope/approved-scope.json",
+    "application/json",
+  ],
+  [
+    "Secret-exposure source-scope declaration",
+    "examples/scope/secret-exposure-scope.json",
+    "application/json",
+  ],
+  [
+    "Approved repository instructions",
+    "examples/fixtures/repositories/order-platform/AGENTS.md",
+    "text/markdown",
+  ],
+  [
+    "Approved architecture document",
+    "examples/fixtures/repositories/order-platform/docs/architecture.md",
+    "text/markdown",
+  ],
+  [
+    "Approved application source",
+    "examples/fixtures/repositories/order-platform/src/app.ts",
+    "text/typescript",
+  ],
+  [
+    "Directory-scoped repository instructions",
+    "examples/fixtures/repositories/order-platform/src/payments/AGENTS.md",
+    "text/markdown",
+  ],
+  [
+    "Approved payment source",
+    "examples/fixtures/repositories/order-platform/src/payments/handler.ts",
+    "text/typescript",
+  ],
+  [
+    "Explicitly excluded payment source",
+    "examples/fixtures/repositories/order-platform/src/payments/private/ledger.txt",
+    "text/plain",
+  ],
+  [
+    "Secret-exposure repository instructions",
+    "examples/fixtures/repositories/secret-exposure/AGENTS.md",
+    "text/markdown",
+  ],
+  [
+    "Secret-exposure architecture document",
+    "examples/fixtures/repositories/secret-exposure/docs/architecture.md",
+    "text/markdown",
+  ],
+  [
+    "Suspected-secret fixture",
+    "examples/fixtures/repositories/secret-exposure/src/config/application.env",
+    "text/plain",
+  ],
+  ["Source-scope preflight", "scripts/preflight.mjs", "text/javascript"],
   ["Local validation command", "scripts/validate.mjs", "text/javascript"],
   [
     "Compiled offline validator",

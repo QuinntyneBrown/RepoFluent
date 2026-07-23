@@ -1,0 +1,55 @@
+<section class="rf-panel authoring-scope-policy" aria-label="Authoring scope policy">
+  <div class="rf-panel__header">
+    <span>02 · Scope preflight</span>
+    <span class="rf-badge">deny by default</span>
+  </div>
+
+  <div class="rf-panel__body scope-policy__body">
+    <div class="scope-policy__heading">
+      <div>
+        <span class="micro-label">Before source analysis</span>
+        <h2>Scope preflight</h2>
+        <p>
+          Resolve the approved boundary locally, then stop safely if guidance, access, or data
+          handling cannot be proven.
+        </p>
+      </div>
+      <span class="rf-status rf-status--success">Boundary enforced</span>
+    </div>
+
+    <div class="scope-policy__steps">
+      <article>
+        <span class="scope-policy__index">01</span>
+        <div>
+          <span class="micro-label">Repository instructions</span>
+          <h3>Root → directory precedence</h3>
+          <p>Discover applicable guidance and preserve every explicit exclusion.</p>
+        </div>
+      </article>
+      <article>
+        <span class="scope-policy__index">02</span>
+        <div>
+          <span class="micro-label">Declared source scope</span>
+          <h3>Repositories · documents · revisions</h3>
+          <p>Read only named sources and write only to the declared workspace.</p>
+        </div>
+      </article>
+      <article>
+        <span class="scope-policy__index scope-policy__index--warning">!</span>
+        <div>
+          <span class="micro-label">Sensitive-data stop</span>
+          <h3>Secret scan before generation</h3>
+          <p>Report safe paths and codes without reproducing suspected values.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="scope-policy__command">
+      <div>
+        <span class="micro-label">Enforcement posture</span>
+        <strong>No elevation · no undeclared access</strong>
+      </div>
+      <code><span aria-hidden="true">$</span> node scripts/preflight.mjs scope.json</code>
+    </div>
+  </div>
+</section>

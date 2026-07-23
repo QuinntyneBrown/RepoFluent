@@ -9,6 +9,8 @@ This prerelease includes:
 - representative valid and missing-title invalid examples;
 - a dependency-free, compiled local schema validator for Node.js 22;
 - local artifact and aggregate checksum verification;
+- declared-scope preflight with directory guidance precedence, exclusion
+  reporting, access boundaries, and redacted secret-pattern findings;
 - an explicit offline policy with optional network features disabled by default.
 
 There is no preceding authoring-kit release to migrate.

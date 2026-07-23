@@ -3,16 +3,33 @@
 LAYOUT_WITH_LEGEND()
 title Components — Constrain agent scope
 
-Container_Boundary(api, "Local Validator") {
-  Component(controller, "ConstrainAgentScopeController", ".NET boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "ConstrainAgentScopeHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "ConstrainAgentScopePolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IConstrainAgentScopeRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Authoring workspace", "File system", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(policyView, "AuthoringScopePolicyComponent", "Angular component", "Presents precedence, scope, secret stop, and local command")
 }
+Container_Boundary(command, "Source-scope preflight") {
+  Component(orchestrator, "preflight.mjs", "Node.js command", "Coordinates one local preflight and exit status")
+  Component(declaration, "Declaration validator", "Local function", "Requires source and data-handling fields")
+  Component(walker, "Canonical file walker", "Local function", "Walks regular files and refuses symbolic-link traversal")
+  Component(guidance, "Guidance resolver", "Local function", "Orders AGENTS.md and applies fenced policy exclusions")
+  Component(scanner, "Secret-pattern scanner", "Local function", "Scans effective safe text without returning matches")
+  Component(report, "Report writer", "Local function", "Serializes safe paths, codes, and outcomes")
+}
+Container_Boundary(tooling, "Repository release tooling") {
+  Component(builder, "build_authoring_kit.mjs", "Node.js build command", "Declares and hashes scope artifacts")
+  Component(gate, "verify_authoring_kits.mjs", "Node.js CI gate", "Executes accepted and blocked preflight cases")
+}
+ContainerDb(files, "Local release and approved snapshots", "Files", "Scope JSON, AGENTS.md, documents, and source")
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(policyView, orchestrator, "Documents invocation of")
+Rel(orchestrator, declaration, "Validates through")
+Rel(orchestrator, walker, "Discovers files through")
+Rel(orchestrator, guidance, "Resolves policies through")
+Rel(orchestrator, scanner, "Scans effective files through")
+Rel(orchestrator, report, "Emits through")
+Rel(declaration, files, "Reads scope from")
+Rel(walker, files, "Reads metadata from")
+Rel(guidance, files, "Reads instructions from")
+Rel(scanner, files, "Reads safe text from")
+Rel(builder, files, "Hashes")
+Rel(gate, orchestrator, "Executes offline")
 @enduml

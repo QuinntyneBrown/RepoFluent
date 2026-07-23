@@ -9,50 +9,69 @@ skinparam class {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-title Class structure — Constrain agent scope
+title Information structure — Constrain agent scope
 
-class ConstrainAgentScopeRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class SourceScopeDeclaration {
+  +scopeVersion: string
+  +scopeId: string
+  +outputLocation: string
 }
 
-class ConstrainAgentScopeResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class RepositoryScope {
+  +id: string
+  +root: string
+  +revision: string
+  +documents: string[]
+  +include: string[]
+  +exclude: string[]
 }
 
-class ConstrainAgentScopeRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: ConstrainAgentScopeResult): void
+class DataHandling {
+  +classification: string
+  +excerptPolicy: "minimum-necessary"
+  +redact: string[]
+  +secretScanning: true
 }
 
-class ConstrainAgentScopePolicy {
-  +Evaluate(request: ConstrainAgentScopeRequest, current: ConstrainAgentScopeRecord): ConstrainAgentScopeResult
+class GuidancePolicy {
+  +path: string
+  +directory: string
+  +analysis: "allow" | "deny"
+  +exclude: string[]
 }
 
-interface IConstrainAgentScopeRepository {
-  +Load(scopeId: string, targetId: string): Task<ConstrainAgentScopeRecord>
-  +Save(record: ConstrainAgentScopeRecord, expectedVersion: long): Task
+class PreflightReport {
+  +valid: boolean
+  +scopeId: string
+  +outputLocation: string
 }
 
-class ConstrainAgentScopeHandler {
-  +Handle(request: ConstrainAgentScopeRequest): Task<ConstrainAgentScopeResult>
+class RepositoryReport {
+  +id: string
+  +revision: string
+  +guidanceOrder: string[]
+  +effectiveFiles: string[]
+  +exclusions: Exclusion[]
 }
 
-ConstrainAgentScopeHandler ..> ConstrainAgentScopeRequest : handles
-ConstrainAgentScopeHandler ..> ConstrainAgentScopePolicy : invokes
-ConstrainAgentScopeHandler ..> IConstrainAgentScopeRepository : uses
-IConstrainAgentScopeRepository --> ConstrainAgentScopeRecord : loads / saves
-ConstrainAgentScopePolicy ..> ConstrainAgentScopeRecord : evaluates
-ConstrainAgentScopePolicy ..> ConstrainAgentScopeResult : creates
-ConstrainAgentScopeRecord ..> ConstrainAgentScopeResult : applies
+class Exclusion {
+  +path: string
+  +guidance: string
+  +reason: string
+}
+
+class Finding {
+  +code: string
+  +severity: "error"
+  +isBlocking: true
+  +path: string
+  +message: string
+}
+
+SourceScopeDeclaration "1" *-- "1..*" RepositoryScope
+SourceScopeDeclaration "1" *-- "1" DataHandling
+PreflightReport "1" *-- "0..*" RepositoryReport
+PreflightReport "1" *-- "0..*" Finding
+RepositoryReport "1" *-- "0..*" Exclusion
+RepositoryScope ..> GuidancePolicy : resolves for files
 @enduml

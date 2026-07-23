@@ -9,49 +9,46 @@ skinparam rectangle {
   BorderColor #344054
   FontColor #101828
 }
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "ConstrainAgentScopeCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum authoring agent" as agent
+box "Frontend — Acquired authoring-kit command" #E0F2FE
+  participant "preflight.mjs" as command
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "ConstrainAgentScopeController" as controller
+box "Backend — Agent Authoring Kit Application and Domain" #D1FADF
+  participant "Safe-text reader" as reader
+  participant "Secret-pattern scanner" as scanner
+  participant "Report writer" as report
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "ConstrainAgentScopeHandler" as handler
-  participant "ConstrainAgentScopePolicy" as policy
+box "Backend — Approved repository Infrastructure" #FFF4E5
+  database "Approved repository snapshot" as repository
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IConstrainAgentScopeRepository" as repository
-  database "Authoring workspace" as store
-end box
-actor -> entry : Start constrain agent scope
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch ConstrainAgentScopeRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-04
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+agent -> command : Run preflight before source analysis
+command -> command : Calculate effective file paths
+loop Effective file
+  command -> reader : Read at most 1 MiB
+  reader -> repository : Read local bytes
+  repository --> reader : Bytes
+  alt Binary or oversized file
+    reader --> command : Not scannable; no content returned
+  else Safe text
+    reader --> scanner : Text in memory
+    scanner -> scanner : Apply L2-AAK-04 credential patterns
+    alt Suspected credential
+      scanner -> report : AAK_SECRET_SUSPECTED,\nfile path, blocking=true
+      note right of report
+        Matched value is never
+        added to the report.
+      end note
+    else No suspected credential
+      scanner --> command : Clear
+    end
+  end
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+alt Any blocking finding exists
+  report --> command : valid=false
+  command --> agent : Redacted JSON + exit 1
+else Scan is clear
+  report --> command : valid=true
+  command --> agent : Safe JSON + exit 0
+end
 @enduml
