@@ -16,14 +16,19 @@ From this release directory, verify every declared artifact:
 node scripts/verify-release.mjs
 ```
 
-Validate the representative package:
+Validate the representative package with the documented interface:
 
 ```sh
-node scripts/validate.mjs examples/valid/order-processing.json
+node scripts/validate.mjs examples/valid/order-processing.json \
+  --contract auto \
+  --format json \
+  --threshold warning
 ```
 
-The command prints `{"valid":true,"issues":[]}` and exits with status `0`.
-Invalid input prints path-addressed schema issues and exits with status `1`.
+The command exits with status `0` for success, `3` for warnings-only, `1` for
+package failure, `2` for invalid invocation, and `4` for internal validator
+failure. See `guides/local-validation.md` for options, output fields, text
+format, threshold behavior, and the validation issue contract.
 
 Run scope preflight before reading an approved repository:
 

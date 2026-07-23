@@ -9,50 +9,69 @@ skinparam class {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-title Class structure — Validate packages locally
+title Information structure — Validate packages locally
 
-class ValidatePackagesLocallyRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class ValidatorOptions {
+  +packagePath: string
+  +contract: auto | 0.1.0
+  +format: json | text
+  +threshold: info | warning | error
 }
 
-class ValidatePackagesLocallyResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class ValidationReport {
+  +valid: boolean
+  +outcome: ValidationOutcome
+  +contractVersion: string?
+  +threshold: Severity
 }
 
-class ValidatePackagesLocallyRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: ValidatePackagesLocallyResult): void
+class ValidationIssue {
+  +code: string
+  +severity: Severity
+  +isBlocking: boolean
+  +path: json-pointer
+  +message: string
 }
 
-class ValidatePackagesLocallyPolicy {
-  +Evaluate(request: ValidatePackagesLocallyRequest, current: ValidatePackagesLocallyRecord): ValidatePackagesLocallyResult
+enum Severity {
+  info
+  warning
+  error
 }
 
-interface IValidatePackagesLocallyRepository {
-  +Load(scopeId: string, targetId: string): Task<ValidatePackagesLocallyRecord>
-  +Save(record: ValidatePackagesLocallyRecord, expectedVersion: long): Task
+enum ValidationOutcome {
+  success
+  warnings-only
+  validation-failure
+  invalid-invocation
+  internal-failure
 }
 
-class ValidatePackagesLocallyHandler {
-  +Handle(request: ValidatePackagesLocallyRequest): Task<ValidatePackagesLocallyResult>
+enum ExitStatus {
+  SUCCESS = 0
+  VALIDATION_FAILURE = 1
+  INVALID_INVOCATION = 2
+  WARNINGS_ONLY = 3
+  INTERNAL_FAILURE = 4
 }
 
-ValidatePackagesLocallyHandler ..> ValidatePackagesLocallyRequest : handles
-ValidatePackagesLocallyHandler ..> ValidatePackagesLocallyPolicy : invokes
-ValidatePackagesLocallyHandler ..> IValidatePackagesLocallyRepository : uses
-IValidatePackagesLocallyRepository --> ValidatePackagesLocallyRecord : loads / saves
-ValidatePackagesLocallyPolicy ..> ValidatePackagesLocallyRecord : evaluates
-ValidatePackagesLocallyPolicy ..> ValidatePackagesLocallyResult : creates
-ValidatePackagesLocallyRecord ..> ValidatePackagesLocallyResult : applies
+class PackageDocument {
+  +contractVersion: string
+  +extensions: Extension[]
+}
+
+class Extension {
+  +namespace: string
+  +version: string
+  +critical: boolean
+  +data: object
+}
+
+ValidationReport "1" *-- "0..*" ValidationIssue
+ValidationReport --> ValidationOutcome
+ValidationReport --> Severity
+ValidationIssue --> Severity
+ValidationOutcome --> ExitStatus : maps to
+ValidatorOptions --> Severity
+PackageDocument "1" *-- "0..*" Extension
 @enduml

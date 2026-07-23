@@ -38,10 +38,13 @@ After generation, run:
 ```sh
 node scripts/validate-evidence.mjs <evidence-report.json> <scope.json>
 node scripts/generate-identities.mjs <identities.json>
-node scripts/validate.mjs <package.json>
+node scripts/validate.mjs <package.json> \
+  --contract auto \
+  --format json \
+  --threshold warning
 node scripts/finalize-generation.mjs <completed-run.json> <package.json>
 ```
 
 Return the package and safe generation manifest only when validation reports
-`valid: true`. Otherwise return path-addressed issues without copying source or
-protected values into the issue text.
+`valid: true`. Preserve warnings for review. Otherwise return path-addressed
+issues without copying source or protected values into the issue text.

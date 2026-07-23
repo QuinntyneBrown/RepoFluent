@@ -16,10 +16,12 @@ const requiredArtifacts = new Set([
   "skills/repofluent-authoring/SKILL.md",
   "guides/citations-and-uncertainty.md",
   "guides/stable-generation.md",
+  "guides/local-validation.md",
   "contracts/curriculum.schema.json",
   "contracts/ICD.md",
   "examples/valid/order-processing.json",
   "examples/invalid/missing-title.json",
+  "examples/warnings/unsupported-extension.json",
   "examples/scope/approved-scope.json",
   "examples/scope/secret-exposure-scope.json",
   "examples/evidence/valid-evidence-report.json",
@@ -163,6 +165,12 @@ async function verifyRelease(version) {
     [
       path.join(releaseRoot, "scripts", "validate.mjs"),
       path.join(releaseRoot, "examples", "valid", "order-processing.json"),
+      "--contract",
+      "auto",
+      "--format",
+      "json",
+      "--threshold",
+      "warning",
     ],
     {
       cwd: releaseRoot,
@@ -170,8 +178,54 @@ async function verifyRelease(version) {
       env: { ...process.env, REPOFLUENT_OFFLINE: "true" },
     },
   );
-  if (valid.status !== 0 || JSON.parse(valid.stdout).valid !== true) {
+  if (
+    valid.status !== 0 ||
+    JSON.parse(valid.stdout).valid !== true ||
+    JSON.parse(valid.stdout).outcome !== "success"
+  ) {
     errors.push(`${version}: representative package did not validate offline`);
+  }
+
+  const warning = spawnSync(
+    process.execPath,
+    [
+      path.join(releaseRoot, "scripts", "validate.mjs"),
+      path.join(
+        releaseRoot,
+        "examples",
+        "warnings",
+        "unsupported-extension.json",
+      ),
+      "--contract",
+      "auto",
+      "--format",
+      "json",
+      "--threshold",
+      "warning",
+    ],
+    {
+      cwd: releaseRoot,
+      encoding: "utf8",
+      env: { ...process.env, REPOFLUENT_OFFLINE: "true" },
+    },
+  );
+  const warningReport = parseReport(
+    version,
+    "warnings-only package",
+    warning.stdout,
+  );
+  if (
+    warning.status !== 3 ||
+    warningReport?.valid !== true ||
+    warningReport?.outcome !== "warnings-only" ||
+    !warningReport?.issues?.some(
+      (issue) =>
+        issue.code === "CIC_EXTENSION_IGNORED" &&
+        issue.path === "/extensions/0/namespace" &&
+        issue.isBlocking === false,
+    )
+  ) {
+    errors.push(`${version}: warnings-only package did not return status 3`);
   }
 
   const invalid = spawnSync(
@@ -179,6 +233,12 @@ async function verifyRelease(version) {
     [
       path.join(releaseRoot, "scripts", "validate.mjs"),
       path.join(releaseRoot, "examples", "invalid", "missing-title.json"),
+      "--contract",
+      "auto",
+      "--format",
+      "json",
+      "--threshold",
+      "warning",
     ],
     {
       cwd: releaseRoot,
@@ -191,6 +251,27 @@ async function verifyRelease(version) {
     !JSON.parse(invalid.stdout).issues?.some((issue) => issue.path === "/title")
   ) {
     errors.push(`${version}: invalid package did not fail at /title`);
+  }
+
+  const invocation = spawnSync(
+    process.execPath,
+    [
+      path.join(releaseRoot, "scripts", "validate.mjs"),
+      path.join(releaseRoot, "examples", "valid", "order-processing.json"),
+      "--contract",
+      "9.0.0",
+    ],
+    { cwd: releaseRoot, encoding: "utf8" },
+  );
+  if (
+    invocation.status !== 2 ||
+    !JSON.parse(invocation.stdout).issues?.some(
+      (issue) =>
+        issue.code === "AAK_VALIDATOR_INVOCATION" &&
+        issue.path === "/contract",
+    )
+  ) {
+    errors.push(`${version}: invalid invocation did not return status 2`);
   }
 
   const approvedPreflight = runPreflight(

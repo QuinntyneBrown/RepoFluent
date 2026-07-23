@@ -3,16 +3,26 @@
 LAYOUT_WITH_LEGEND()
 title Components — Validate packages locally
 
-Container_Boundary(api, "Local Validator") {
-  Component(controller, "ValidatePackagesLocallyController", ".NET boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "ValidatePackagesLocallyHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "ValidatePackagesLocallyPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IValidatePackagesLocallyRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Authoring workspace", "File system", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(policyView, "AuthoringValidatorPolicyComponent", "Angular component", "Presents option and outcome contracts")
 }
+Container_Boundary(command, "Local validator") {
+  Component(entry, "validate.mjs", "Node.js command", "Coordinates one validation")
+  Component(parser, "Option parser", "Local function", "Validates package, contract, format, and threshold arguments")
+  Component(selector, "Contract selector", "Local function", "Selects explicit or detected contract 0.1.0")
+  Component(schema, "Schema validator", "Bundled module", "Returns ordered JSON Schema findings")
+  Component(extension, "Extension evaluator", "Local function", "Classifies unsupported extension criticality")
+  Component(projector, "Report projector", "Local function", "Filters issues and formats safe JSON or text")
+  Component(status, "Exit-status mapper", "Local constant", "Maps five outcomes to process status")
+}
+ContainerDb(files, "Local release and workspace", "Files", "Package, guide, fixtures, contract, and validator")
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(policyView, entry, "Documents invocation of")
+Rel(entry, parser, "Parses through")
+Rel(entry, selector, "Selects through")
+Rel(entry, schema, "Validates through")
+Rel(entry, extension, "Evaluates through")
+Rel(entry, projector, "Formats through")
+Rel(entry, status, "Exits through")
+Rel(entry, files, "Reads only local files from")
 @enduml

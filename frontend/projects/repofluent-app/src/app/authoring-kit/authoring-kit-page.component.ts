@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthoringEvidencePolicyComponent } from './authoring-evidence-policy.component';
 import { AuthoringGenerationPolicyComponent } from './authoring-generation-policy.component';
 import { AuthoringScopePolicyComponent } from './authoring-scope-policy.component';
+import { AuthoringValidatorPolicyComponent } from './authoring-validator-policy.component';
 
 @Component({
   selector: 'app-authoring-kit-page',
@@ -13,6 +14,7 @@ import { AuthoringScopePolicyComponent } from './authoring-scope-policy.componen
     AuthoringScopePolicyComponent,
     AuthoringEvidencePolicyComponent,
     AuthoringGenerationPolicyComponent,
+    AuthoringValidatorPolicyComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

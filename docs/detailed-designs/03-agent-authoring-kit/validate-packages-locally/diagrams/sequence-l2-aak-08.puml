@@ -9,49 +9,39 @@ skinparam rectangle {
   BorderColor #344054
   FontColor #101828
 }
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "ValidatePackagesLocallyCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum authoring agent" as agent
+box "Frontend — Acquired authoring-kit command" #E0F2FE
+  participant "validate.mjs" as command
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "ValidatePackagesLocallyController" as controller
+box "Backend — Agent Authoring Kit Application and Domain" #D1FADF
+  participant "Option and contract selector" as selector
+  participant "Schema and extension validator" as validator
+  participant "Threshold and outcome projector" as projector
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "ValidatePackagesLocallyHandler" as handler
-  participant "ValidatePackagesLocallyPolicy" as policy
+box "Backend — Authoring-kit release Infrastructure" #FFF4E5
+  collections "Package JSON" as package
+  collections "curriculum.validator.mjs" as schema
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IValidatePackagesLocallyRepository" as repository
-  database "Authoring workspace" as store
-end box
-actor -> entry : Start validate packages locally
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch ValidatePackagesLocallyRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-08
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+agent -> command : Validate package with options
+command -> selector : Parse package, contract, format,\nand severity threshold
+selector -> package : Read declared local package
+package --> selector : Package bytes and contract version
+selector -> schema : Load selected bundled contract
+schema --> selector : Compiled validator
+selector -> validator : Apply L2-AAK-08 contract validation
+validator --> selector : Ordered schema and extension issues
+selector -> projector : Filter issues and classify outcome
+alt Valid without visible issues
+  projector --> command : success and status 0
+else Warnings without blocking issue
+  projector --> command : warnings-only and status 3
+else Blocking package issue
+  projector --> command : validation-failure and status 1
+else Invalid arguments or package path
+  projector --> command : invalid-invocation and status 2
+else Validator cannot initialize or complete
+  projector --> command : internal-failure and status 4
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+command --> agent : Safe JSON or text report
 @enduml

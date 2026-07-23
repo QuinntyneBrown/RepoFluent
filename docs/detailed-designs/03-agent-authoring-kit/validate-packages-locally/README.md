@@ -2,80 +2,102 @@
 
 ## Overview
 
-RepoFluent's Agent Authoring Kit subsystem guides approved agents from declared source scope to a locally validated curriculum package. This feature
-brings *local validator interface* into one vertical slice. The slice preserves tenant,
-actor, version, authorization, and correlation context wherever the cited
-requirements apply.
+The acquired RepoFluent authoring kit validates curriculum packages entirely
+inside the approved workstation. One dependency-free Node.js command reads the
+named package and its bundled contract validator.
 
-The curriculum authoring agent starts the outcome through Authoring Kit CLI.
-Local Validator applies server-side policy before state is read or changed.
-The external dependency and persistent technology remain `<TO SUPPLY>` where
-the requirements baseline does not select them.
+The command accepts an explicit contract or auto-detection, JSON or text output,
+and an information, warning, or error threshold. Deterministic exit statuses
+separate success, warnings, package failure, invocation failure, and internal
+validator failure.
+
+Each machine-readable issue contains a stable code, severity, blocking
+classification, JSON Pointer, and safe explanation. Issue messages omit package
+values, protected answers, source excerpts, credentials, and personal data.
 
 ## Description
 
-The greenfield slice introduces the following building blocks. The endpoint
-route, deployment topology, and unresolved provider choices remain `<TO SUPPLY>`.
+The implemented vertical slice contains the following building blocks.
 
-- **`ValidatePackagesLocallyCli`** — .NET tool entry component that presents
-  the feature state and submits a typed intent.
-- **`AuthoringKitClient`** — typed client that carries tenant, actor, version,
-  idempotency, and correlation context required by the operation.
-- **`ValidatePackagesLocallyController`** — .NET boundary that authenticates
-  the caller, applies endpoint policy, and dispatches `ValidatePackagesLocallyRequest`.
-- **`ValidatePackagesLocallyRequest`** — application request containing scope, actor, target,
-  expected version, correlation identifier, and feature payload.
-- **`ValidatePackagesLocallyHandler`** — application handler that loads authorized state,
-  invokes `ValidatePackagesLocallyPolicy`, and commits one result.
-- **`ValidatePackagesLocallyPolicy`** — domain policy that evaluates the cited L2 rules without
-  relying on client presentation state.
-- **`IValidatePackagesLocallyRepository`** — application abstraction for tenant-scoped reads,
-  writes, optimistic concurrency, and idempotency lookup.
-- **`ValidatePackagesLocallyRecord`** — persisted feature record containing identity, tenant,
-  version, status, timestamps, and safe evidence references.
+- **Local validation guide** — documents noninteractive options, JSON fields,
+  severity filtering, five exit statuses, legacy compatibility, and the offline
+  boundary.
+- **Success, warning, and failure fixtures** — exercise clean validation,
+  ignored noncritical extensions, and a missing required title.
+- **`validate.mjs`** — parses options, auto-detects contract `0.1.0`, loads the
+  bundled validator, maps schema findings, evaluates extension support, filters
+  issues, and formats one result.
+- **`curriculum.validator.mjs`** — contains a bundled standalone JSON Schema
+  validator with no package or network dependency.
+- **`build_authoring_kit.mjs` and `verify_authoring_kits.mjs`** — reproduce the
+  fixtures, hash every artifact, reject network imports, and exercise status
+  `0`, `1`, `2`, and `3`.
+- **`AuthoringValidatorPolicyComponent`** — presents the option matrix, issue
+  envelope, offline boundary, and status meanings with design-system tokens.
+- **`AuthoringValidatorPage`** — provides the Playwright Page Object for local
+  process outcomes, internal status `4`, accessible content, and visual
+  evidence.
+
+The one-argument command retains the original `0.1.0` JSON shape and error-only
+threshold. Flagged invocation returns the expanded outcome envelope.
 
 ## Requirements
 
-The feature realizes the following level-2 (L2) requirements. Each row cites
-the first L1 identifier named by the source requirement as its primary parent.
+The feature realizes the following level-2 requirement. The row cites the L1
+parent named by the source requirement.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
 | `L2-AAK-08` | `L1-AAK-06` | The kit shall document a noninteractive local command that accepts package path, contract version or auto-detection, output format, and severity threshold. Exit status shall distinguish success, warnings-only, validation failure, invalid invocation, and internal validator failure. JSON output shall implement the validation issue contract. |
 
+### Implementation evidence
+
+- `validate-packages-locally.spec.ts` begins the slice with Page Object
+  acceptance for the visible command and three package outcomes.
+- The warning fixture emits `CIC_EXTENSION_IGNORED` at
+  `/extensions/0/namespace` and exits with status `3`.
+- The missing-title fixture emits `CIC_REQUIRED` at `/title` and exits with
+  status `1`.
+- Unsupported contract selection emits `AAK_VALIDATOR_INVOCATION` and exits
+  with status `2`.
+- A missing or unusable bundled validator emits `AAK_VALIDATOR_INTERNAL`
+  without exception details and exits with status `4`.
+- Windows and Linux Chromium baselines capture the complete 520-pixel policy
+  panel.
+
 ## Diagrams
 
 ### System context
 
-The curriculum authoring agent uses RepoFluent to complete the feature outcome.
-RepoFluent interacts with Approved source repositories only through the boundary
-described by the requirements and approved configuration.
+The curriculum-authoring agent invokes the acquired kit against a package in
+the approved workspace. Package data remains local.
 
-![C4 system context for validate packages locally](diagrams/c4-context.png)
+![C4 system context for local package validation](diagrams/c4-context.png)
 
 ### Containers
 
-Authoring Kit CLI sends typed requests to Local Validator. The API applies
-server-owned rules and records the accepted outcome in Authoring workspace.
+The Angular view communicates the interface contract. The Node.js command reads
+the package and compiled validator from the acquired release.
 
-![C4 container view for validate packages locally](diagrams/c4-container.png)
+![C4 container view for local package validation](diagrams/c4-container.png)
 
 ### Components
 
-`ValidatePackagesLocallyController` dispatches `ValidatePackagesLocallyRequest` to `ValidatePackagesLocallyHandler`. The handler
-uses `ValidatePackagesLocallyPolicy` and `IValidatePackagesLocallyRepository` before it commits a state change.
+The command coordinates option parsing, contract selection, schema validation,
+extension evaluation, threshold filtering, output formatting, and exit status.
 
-![C4 component view for validate packages locally](diagrams/c4-component.png)
+![C4 component view for local package validation](diagrams/c4-component.png)
 
 ### Class structure
 
-`ValidatePackagesLocallyHandler` depends on the request, policy, and repository abstractions.
-`IValidatePackagesLocallyRepository` stores `ValidatePackagesLocallyRecord` under tenant and version context.
+Validator options select one contract, output format, and threshold. A report
+contains ordered validation issues and one deterministic outcome.
 
-![Class diagram for validate packages locally](diagrams/class-structure.png)
+![Class diagram for local package validation](diagrams/class-structure.png)
 
 ### Behaviour — local validator interface
 
-The sequence applies `L2-AAK-08` before the handler persists an accepted result. A rejected policy or validation result returns without a state change.
+For `L2-AAK-08`, the command reads package bytes, selects the bundled contract,
+validates locally, filters issues, and returns one safe report and status.
 
 ![Sequence diagram for local validator interface](diagrams/sequence-l2-aak-08.png)

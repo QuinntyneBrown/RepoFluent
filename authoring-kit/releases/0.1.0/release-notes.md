@@ -15,6 +15,8 @@ This prerelease includes:
   offline validation with material-conflict enforcement;
 - deterministic package/entity identity generation with collision stops and a
   safe, checksummed generation manifest finalizer;
+- a noninteractive local validator with contract selection, JSON or text output,
+  severity thresholds, validation issue envelopes, and five distinct statuses;
 - an explicit offline policy with optional network features disabled by default.
 
 There is no preceding authoring-kit release to migrate.

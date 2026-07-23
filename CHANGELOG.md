@@ -51,3 +51,6 @@
 - Prose-independent authoring identities for seven curriculum entity kinds,
   collision stops, and a private-data-safe generation manifest with exact
   package checksum and validation receipt.
+- Noninteractive offline package validation with contract auto-detection, JSON
+  or text reports, severity thresholds, safe issue envelopes, and distinct
+  success, warning, package, invocation, and internal statuses.

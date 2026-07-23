@@ -10,7 +10,7 @@
     "version": ">=22.0.0"
   },
   "checksumAlgorithm": "sha256",
-  "releaseChecksum": "sha256:851edf711f3d94e27c8f58960f7e736701b53b1bc11b6484c72582d606ead533",
+  "releaseChecksum": "sha256:1dfd4a65991b1690c7d2621a05987774de34666c158e5e2daab8529327a57081",
   "checksumInput": "Artifact path and SHA-256 pairs sorted by ordinal path and terminated by LF.",
   "offline": {
     "supported": true,
@@ -25,25 +25,25 @@
       "name": "Quick start",
       "path": "README.md",
       "mediaType": "text/markdown",
-      "sha256": "ef883ebde9552671346cffd4845a400acd8d0ed5aac2f973aa8fbc7381571bc8"
+      "sha256": "a720a6d0a132426cd8aaa9f173ce1604d03d3d557e24fa84feaee49799842a25"
     },
     {
       "name": "Agent instructions",
       "path": "AGENTS.md",
       "mediaType": "text/markdown",
-      "sha256": "6745c79c51ee4b18521d5cbdf62a684c9c8be63fedf7a12aa8a61cf50bc8158e"
+      "sha256": "b09499fdd4dda6ab5f9f261bc606262a51e6b67214c0a3c41351633e815ff8ec"
     },
     {
       "name": "Generation prompt",
       "path": "prompts/generate-curriculum.md",
       "mediaType": "text/markdown",
-      "sha256": "36855d94b984ab8c7036a0d3832e19e6100c242dc5171a8a9d4fcf292475cfbb"
+      "sha256": "6571eeaa2989ebe361038aa2070a27c10045c15728851270bddc995cceb63026"
     },
     {
       "name": "Authoring skill",
       "path": "skills/repofluent-authoring/SKILL.md",
       "mediaType": "text/markdown",
-      "sha256": "fbdef711e214dffe330072e83e4fbffa4244f53ce2d323f5fc18cc4b172c1742"
+      "sha256": "844eb6648006f3e7de0f16ea178ef1f1b014d8023c6bacfea5936ae68c5daa84"
     },
     {
       "name": "Citation and uncertainty guide",
@@ -56,6 +56,12 @@
       "path": "guides/stable-generation.md",
       "mediaType": "text/markdown",
       "sha256": "e16cd503ddb1209b2c845f97996396a4da30c070a4fd4306eaa1ac51d1d7dda8"
+    },
+    {
+      "name": "Local validation guide",
+      "path": "guides/local-validation.md",
+      "mediaType": "text/markdown",
+      "sha256": "535acbfc70ab0010611bf3e36e1741eb94b1e55202afa65fc68300cf2263d5bc"
     },
     {
       "name": "Curriculum JSON Schema",
@@ -73,13 +79,19 @@
       "name": "Representative valid package",
       "path": "examples/valid/order-processing.json",
       "mediaType": "application/json",
-      "sha256": "21019be2182933fec14457eccf2f121d6faccae20a30886e69745cc880d33c36"
+      "sha256": "1ce988cc024bc5e8d5e797c7480946755b098d1691f5f32c7baad4e0a0cae3ae"
     },
     {
       "name": "Missing-title invalid package",
       "path": "examples/invalid/missing-title.json",
       "mediaType": "application/json",
-      "sha256": "4665a7cc7f2293430a29240f33a3eccad81572bc45510cc40101c294f0cccad2"
+      "sha256": "7e3cfee5c44e04979180b8a017995a513da9be8999e70def28f403b2f82d8aee"
+    },
+    {
+      "name": "Unsupported-extension warning package",
+      "path": "examples/warnings/unsupported-extension.json",
+      "mediaType": "application/json",
+      "sha256": "b9c15e630e7cc3a1b323305f1e8702c12282ab65ffe3f166d70e917e02d324e9"
     },
     {
       "name": "Approved source-scope declaration",
@@ -217,7 +229,7 @@
       "name": "Local validation command",
       "path": "scripts/validate.mjs",
       "mediaType": "text/javascript",
-      "sha256": "308c1ce1248d624d5dd5ab1a25cdc0a3e54cbd3c7f3a831b8373452b2fa2bef3"
+      "sha256": "26a93fbd5c1759124f8cd8dbe82dfb43c18cfed6601c6b251e47ad97bd12027a"
     },
     {
       "name": "Compiled offline validator",
@@ -235,13 +247,13 @@
       "name": "Release notes",
       "path": "release-notes.md",
       "mediaType": "text/markdown",
-      "sha256": "59ab7e1ba410c341e2f5439176e223b535e8e07458e84006022ef6d155960433"
+      "sha256": "0a09b3ba86e668af342226eb014d621ae911e97059a1627b2a7da5f331bacf4d"
     },
     {
       "name": "Artifact checksums",
       "path": "checksums.sha256",
       "mediaType": "text/plain",
-      "sha256": "86ef31d523de0ca25056ac8ebd40c72b1bb81a4e6218e7e170d0d0f8252c230e"
+      "sha256": "31ed69490b1c217c6bb956a40098e5fc067fec5da223844b5748a3830d03f8f3"
     }
   ]
 }

@@ -33,7 +33,9 @@ the parent repository's engineering instructions.
 14. Follow `guides/stable-generation.md`. Derive identifiers from the stable
     namespace, entity kind, and semantic key; never from display wording alone.
 15. Stop and report identity collisions instead of overwriting an entity.
-16. Run `node scripts/validate.mjs <package.json>` before returning a package.
+16. Read `guides/local-validation.md`, then run
+    `node scripts/validate.mjs <package.json> --contract auto --format json --threshold warning`.
+    Return warnings for review and stop on a blocking issue.
 17. Run
     `node scripts/finalize-generation.mjs <completed-run.json> <package.json>`
     and return the safe generation manifest with the package.

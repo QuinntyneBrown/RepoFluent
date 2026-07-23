@@ -3,16 +3,19 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Validate packages locally
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Authoring Kit CLI", ".NET tool", "Offline authoring and validation interface")
-  Container(api, "Local Validator", ".NET", "Applies application and domain policy")
-  ContainerDb(store, "Authoring workspace", "File system", "Stores tenant-scoped state and evidence")
+Person(agent, "Curriculum authoring agent", "Selects package, contract, format, and threshold")
+System_Boundary(repofluent, "RepoFluent authoring workflow") {
+  Container(policyView, "Local validation policy view", "Angular", "Explains options, issues, status, and offline behavior")
+  Container(command, "Local validator", "Dependency-free Node.js 22 command", "Validates one package and emits JSON or text")
+  Container(validator, "Compiled contract validator", "Bundled ECMAScript module", "Applies Curriculum Input Contract schema 0.1.0")
+  ContainerDb(release, "Acquired authoring-kit release", "Versioned files", "Stores guide, fixtures, command, validator, and checksums")
 }
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+System_Ext(workspace, "Approved authoring workspace", "Generated package JSON")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(agent, policyView, "Reviews interface")
+Rel(agent, command, "Invokes", "Local process")
+Rel(command, workspace, "Reads package from")
+Rel(command, validator, "Loads")
+Rel(validator, release, "Runs from verified")
+Rel(command, agent, "Returns report and status", "Standard output")
 @enduml

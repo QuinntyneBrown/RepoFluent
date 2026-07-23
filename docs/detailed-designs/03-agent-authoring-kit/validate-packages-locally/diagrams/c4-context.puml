@@ -3,10 +3,11 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Validate packages locally
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+Person(agent, "Curriculum authoring agent", "Validates generated curriculum before release")
+System(kit, "Acquired RepoFluent authoring kit", "Validates one local package with bundled contract artifacts")
+System_Ext(workspace, "Approved authoring workspace", "Holds generated package bytes inside the authorized environment")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(agent, kit, "Invokes noninteractive validation")
+Rel(kit, workspace, "Reads one declared package from")
+Rel(kit, agent, "Returns safe issues and deterministic status", "Standard output")
 @enduml

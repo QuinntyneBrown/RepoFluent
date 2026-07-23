@@ -29,6 +29,9 @@ const esbuild = frontendRequire("esbuild");
 await mkdir(path.join(releaseRoot, "contracts"), { recursive: true });
 await mkdir(path.join(releaseRoot, "examples", "valid"), { recursive: true });
 await mkdir(path.join(releaseRoot, "examples", "invalid"), { recursive: true });
+await mkdir(path.join(releaseRoot, "examples", "warnings"), {
+  recursive: true,
+});
 await mkdir(path.join(releaseRoot, "examples", "evidence"), {
   recursive: true,
 });
@@ -42,17 +45,30 @@ await copyFile(
   path.join(contractRoot, "ICD.md"),
   path.join(releaseRoot, "contracts", "ICD.md"),
 );
-await copyFile(
-  path.join(contractRoot, "fixtures", "order-processing.json"),
-  path.join(releaseRoot, "examples", "valid", "order-processing.json"),
-);
-
-const invalidPackage = JSON.parse(
+const warningPackage = JSON.parse(
   await readFile(
     path.join(contractRoot, "fixtures", "order-processing.json"),
     "utf8",
   ),
 );
+await writeFile(
+  path.join(
+    releaseRoot,
+    "examples",
+    "warnings",
+    "unsupported-extension.json",
+  ),
+  `${JSON.stringify(warningPackage, null, 2)}\n`,
+);
+
+const validPackage = structuredClone(warningPackage);
+delete validPackage.extensions;
+await writeFile(
+  path.join(releaseRoot, "examples", "valid", "order-processing.json"),
+  `${JSON.stringify(validPackage, null, 2)}\n`,
+);
+
+const invalidPackage = structuredClone(validPackage);
 delete invalidPackage.title;
 await writeFile(
   path.join(releaseRoot, "examples", "invalid", "missing-title.json"),
@@ -124,6 +140,7 @@ const artifactDefinitions = [
     "text/markdown",
   ],
   ["Stable generation guide", "guides/stable-generation.md", "text/markdown"],
+  ["Local validation guide", "guides/local-validation.md", "text/markdown"],
   [
     "Curriculum JSON Schema",
     "contracts/curriculum.schema.json",
@@ -142,6 +159,11 @@ const artifactDefinitions = [
   [
     "Missing-title invalid package",
     "examples/invalid/missing-title.json",
+    "application/json",
+  ],
+  [
+    "Unsupported-extension warning package",
+    "examples/warnings/unsupported-extension.json",
     "application/json",
   ],
   [

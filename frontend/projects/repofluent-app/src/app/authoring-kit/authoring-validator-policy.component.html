@@ -1,0 +1,67 @@
+<section class="rf-panel authoring-validator-policy" aria-label="Local validator interface">
+  <div class="rf-panel__header">
+    <span>05 · Local validator interface</span>
+    <span class="rf-badge">offline deterministic</span>
+  </div>
+
+  <div class="rf-panel__body validator-policy__body">
+    <div class="validator-policy__heading">
+      <div>
+        <span class="micro-label">One command · five outcomes</span>
+        <h2>Local validation matrix</h2>
+        <p>
+          Select the bundled contract, machine or human output, and the lowest visible severity
+          without sending package data away.
+        </p>
+      </div>
+      <span class="rf-status rf-status--success">Network disabled</span>
+    </div>
+
+    <div class="validator-policy__options" aria-label="Validator options">
+      <article>
+        <span class="option-index">01</span>
+        <div>
+          <span class="micro-label">Package + contract</span>
+          <strong>0.1.0 · auto-detect</strong>
+        </div>
+      </article>
+      <article>
+        <span class="option-index">02</span>
+        <div>
+          <span class="micro-label">Output format</span>
+          <strong>JSON · text</strong>
+        </div>
+      </article>
+      <article>
+        <span class="option-index">03</span>
+        <div>
+          <span class="micro-label">Severity threshold</span>
+          <strong>info · warning · error</strong>
+        </div>
+      </article>
+    </div>
+
+    <div class="validator-policy__result">
+      <div>
+        <span class="micro-label">Validation issue contract</span>
+        <h3>code · severity · blocking · path · safe message</h3>
+      </div>
+      <div class="outcome-row" aria-label="Validator exit statuses">
+        <span class="outcome outcome--success"><strong>0</strong> success</span>
+        <span class="outcome outcome--warning"><strong>3</strong> warnings</span>
+        <span class="outcome outcome--failure"><strong>1</strong> failure</span>
+        <span class="outcome"><strong>2</strong> invocation</span>
+        <span class="outcome"><strong>4</strong> internal</span>
+      </div>
+      <p>0 success · 3 warnings · 1 failure · 2 invocation · 4 internal</p>
+    </div>
+
+    <div class="validator-policy__command" aria-label="Local validator command">
+      <span aria-hidden="true">$</span>
+      <code
+        >node scripts/validate.mjs package.json --contract auto --format json --threshold
+        warning</code
+      >
+    </div>
+  </div>
+</section>
