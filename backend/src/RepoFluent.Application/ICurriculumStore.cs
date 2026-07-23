@@ -41,4 +41,12 @@ public interface ICurriculumStore
         string tenantId,
         Guid publishedVersionId,
         CancellationToken cancellationToken);
+
+    Task RecordAuditAsync(
+        string tenantId,
+        string actorId,
+        string action,
+        string targetId,
+        string correlationId,
+        CancellationToken cancellationToken);
 }

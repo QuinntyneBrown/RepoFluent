@@ -160,6 +160,12 @@ namespace RepoFluent.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ValidationReportJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WarningAcknowledgementJson")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TenantId", "Id")

@@ -5,53 +5,65 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "ReceiveAndValidatePackagePage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum reviewer" as reviewer
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "ReceiveAndValidatePackageController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "ReceiveAndValidatePackageHandler" as handler
-  participant "ReceiveAndValidatePackagePolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "CurriculumLifecycle" as lifecycle
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IReceiveAndValidatePackageRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start receive and validate a package
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch ReceiveAndValidatePackageRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-04
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+reviewer -> page : Open valid draft evidence
+page -> client : Read current import status
+client -> endpoints : GET /api/curriculum-imports/{id}
+endpoints -> workflow : Read authorized tenant import
+workflow -> port : Load report and acknowledgement
+port -> store : Read tenant record
+store --> port : Draft, report, and warning state
+port --> workflow : Current import
+workflow --> endpoints : ImportStatus
+endpoints --> client : Report and allowed actions
+client --> page : Show acknowledgement requirement
+
+reviewer -> page : Acknowledge exact warning set
+page -> client : Submit package and issue checksums
+client -> endpoints : POST /warning-acknowledgements
+endpoints -> workflow : Apply L2-CLI-04 reviewer gate
+workflow -> workflow : Compare package checksum and issue checksum
+alt Exact current report
+  workflow -> port : Save actor, time, checksums, and rationale
+  port -> store : Commit acknowledgement and audit event
+  store --> port : Durable acknowledgement
+  port --> workflow : Saved state
+  workflow --> endpoints : ImportStatus with review action
+  endpoints --> client : 200 acknowledged state
+  client --> page : Enable checksum approval
+else Changed package or issue set
+  workflow --> endpoints : CLI_STALE_WARNING_REPORT
+  endpoints --> client : 409 Problem Details
+  client --> page : Keep approval unavailable
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+reviewer -> page : Approve this checksum
+page -> client : Submit approved decision and checksum
+client -> endpoints : POST /review-decisions
+endpoints -> workflow : Verify acknowledgement and checksum
+workflow -> lifecycle : Apply approved transition
+lifecycle --> workflow : Approved status
+workflow -> port : Save decision and audit event
+port -> store : Commit approval
+store --> port : Durable status
+port --> workflow : Saved approval
+workflow --> endpoints : Approved ImportStatus
+endpoints --> client : 200 approved
+client --> page : Present approved state
 @enduml

@@ -5,53 +5,44 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "ReceiveAndValidatePackagePage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum author" as author
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "ReceiveAndValidatePackageController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "ReceiveAndValidatePackageHandler" as handler
-  participant "ReceiveAndValidatePackagePolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "PackageIntakeScanner" as scanner
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IReceiveAndValidatePackageRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start receive and validate a package
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch ReceiveAndValidatePackageRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-02
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+author -> page : Select unsupported or unsafe content
+page -> client : Upload multipart file
+client -> endpoints : POST /api/curriculum-imports
+endpoints -> workflow : Receive bytes and content metadata
+workflow -> workflow : Apply L2-CLI-02 intake rejection gates
+alt Unsupported media or configured size
+  workflow -> port : Record safe intake-rejected audit
+else Executable signature, binary byte, or malformed JSON
+  workflow -> scanner : Screen inert bytes
+  scanner --> workflow : Stable rejection code
+  workflow -> port : Record safe intake-rejected audit
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+port -> store : Append event without rejected content
+store --> port : Durable audit result
+port --> workflow : Audit recorded
+workflow --> endpoints : WorkflowException without import identifier
+endpoints --> client : 400 Problem Details and stable code
+client --> page : Safe actionable error
+page --> author : Present rejection guidance
+note over workflow,store
+  No CurriculumImport record,
+  draft, or learner entity is created.
+end note
 @enduml

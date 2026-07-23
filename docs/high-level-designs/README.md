@@ -168,10 +168,12 @@ restore evidence before production promotion.
 ### Current foundation
 
 The repository contains the Angular 21 application, .NET 10 layered backend,
-SQLite migration, development persona authentication, asynchronous validation
-hosted inside the API, curriculum contract `0.1.0`, and an acceptance-tested
-curriculum-to-learning path. This foundation proves one workflow; it does not
-constitute the production infrastructure shown in the deployment view.
+SQLite migrations, development persona authentication, guarded package intake,
+and asynchronous validation hosted inside the API. Versioned reports bind
+contract, validator, package, and issue checksums before warning acknowledgement
+and approval. Curriculum contract `0.1.0` and an acceptance-tested
+curriculum-to-learning path complete the current foundation. This foundation
+does not constitute the production infrastructure shown in the deployment view.
 
 ## Diagrams
 

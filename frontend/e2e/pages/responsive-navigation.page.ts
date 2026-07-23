@@ -50,12 +50,20 @@ export class ResponsiveNavigationPage {
     expect(upload.ok()).toBeTruthy();
     const receipt = (await upload.json()) as { id: string };
 
-    let draft: { checksum: string; status: string } | null = null;
+    let draft: {
+      checksum: string;
+      status: string;
+      validationReport: { issueChecksum: string; warningCount: number };
+    } | null = null;
     for (let attempt = 0; attempt < 50; attempt++) {
       const response = await request.get(`${this.apiBaseUrl}/curriculum-imports/${receipt.id}`, {
         headers: this.personaHeaders('author'),
       });
-      const status = (await response.json()) as { checksum: string; status: string };
+      const status = (await response.json()) as {
+        checksum: string;
+        status: string;
+        validationReport: { issueChecksum: string; warningCount: number };
+      };
       if (status.status === 'Draft') {
         draft = status;
         break;
@@ -63,6 +71,21 @@ export class ResponsiveNavigationPage {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
     expect(draft?.status).toBe('Draft');
+
+    if (draft!.validationReport.warningCount > 0) {
+      const acknowledgement = await request.post(
+        `${this.apiBaseUrl}/curriculum-drafts/${receipt.id}/warning-acknowledgements`,
+        {
+          headers: this.personaHeaders('reviewer'),
+          data: {
+            packageChecksum: draft!.checksum,
+            issueChecksum: draft!.validationReport.issueChecksum,
+            rationale: 'Reviewed the exact warning set for this acceptance fixture.',
+          },
+        },
+      );
+      expect(acknowledgement.ok()).toBeTruthy();
+    }
 
     const review = await request.post(
       `${this.apiBaseUrl}/curriculum-drafts/${receipt.id}/review-decisions`,

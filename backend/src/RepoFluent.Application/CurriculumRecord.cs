@@ -35,4 +35,8 @@ public sealed class CurriculumRecord
     public DateTimeOffset? PublishedAt { get; set; }
 
     public IReadOnlyList<ValidationIssue> Issues { get; set; } = [];
+
+    public ValidationReport? ValidationReport { get; set; }
+
+    public WarningAcknowledgement? WarningAcknowledgement { get; set; }
 }

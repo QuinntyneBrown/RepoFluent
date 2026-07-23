@@ -57,3 +57,6 @@
 - Source-resolved C# and Angular authoring profiles with eleven evidence
   categories each, explicit dynamic-registration uncertainty, five-step
   user-to-API tracing, and offline fixture verification.
+- Guarded curriculum intake with executable-signature and malformed-JSON
+  rejection, eleven-category versioned validation receipts, exact issue-set
+  warning acknowledgement, and cross-platform visual evidence.

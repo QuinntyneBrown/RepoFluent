@@ -3,16 +3,21 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Receive and validate a package
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
-System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Curriculum administration", "Angular 21", "Curriculum lifecycle interface")
-  Container(api, "Curriculum Lifecycle API", "ASP.NET Core", "Applies application and domain policy")
-  ContainerDb(store, "Curriculum store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
-}
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+Person(author, "Curriculum author", "Uploads approved JSON curriculum")
+Person(reviewer, "Curriculum reviewer", "Reviews validation evidence")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(web, "Curriculum workspace", "Angular 21", "Presents intake, versioned validation evidence, issues, and warning actions")
+  Container(api, "RepoFluent API", "ASP.NET Core on .NET 10", "Authorizes intake and coordinates lifecycle policy")
+  Container(worker, "Curriculum validation hosted service", ".NET background service", "Claims accepted receipts and runs contract validation")
+  ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Stores tenant receipts, reports, acknowledgements, and audit events")
+  ContainerDb(contract, "Curriculum contract release", "Versioned JSON and .NET model", "Defines contract 0.1.0 and stable validation semantics")
+}
+
+Rel(author, web, "Uploads approved package", "HTTPS")
+Rel(reviewer, web, "Reviews and acknowledges", "HTTPS")
+Rel(web, api, "Calls typed curriculum endpoints", "JSON and multipart HTTPS")
+Rel(api, store, "Creates receipts and writes audit evidence", "EF Core")
+Rel(worker, store, "Claims and updates imports", "EF Core")
+Rel(worker, contract, "Validates against")
 @enduml

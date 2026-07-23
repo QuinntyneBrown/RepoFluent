@@ -3,16 +3,30 @@
 LAYOUT_WITH_LEGEND()
 title Components — Receive and validate a package
 
-Container_Boundary(api, "Curriculum Lifecycle API") {
-  Component(controller, "ReceiveAndValidatePackageController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "ReceiveAndValidatePackageHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "ReceiveAndValidatePackagePolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IReceiveAndValidatePackageRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Curriculum store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(page, "CurriculumPageComponent", "Angular component", "Presents intake, evidence, issues, and reviewer actions")
+  Component(client, "RepoFluentApiService", "Angular API client", "Sends multipart intake and typed acknowledgement requests")
 }
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Container_Boundary(api, "RepoFluent API") {
+  Component(endpoints, "CurriculumEndpoints", "ASP.NET Core endpoints", "Applies authenticated actor context and maps lifecycle routes")
+  Component(workflow, "CurriculumWorkflow", "Application service", "Coordinates intake gates, validation reports, acknowledgements, and transitions")
+  Component(scanner, "PackageIntakeScanner", "Application scanner", "Rejects binary signatures and malformed JSON")
+  Component(validator, "PackageValidator", "Contract validator", "Emits stable versioned validation issues")
+  Component(lifecycle, "CurriculumLifecycle", "Domain aggregate", "Enforces legal draft, review, and publication transitions")
+  Component(hosted, "CurriculumValidationWorker", "Hosted service", "Invokes asynchronous validation")
+  Component(port, "ICurriculumStore", "Application port", "Defines tenant-scoped lifecycle persistence")
+}
+
+ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Persists imports, reports, acknowledgements, and audit events")
+
+Rel(page, client, "Invokes")
+Rel(client, endpoints, "Calls", "JSON and multipart HTTPS")
+Rel(endpoints, workflow, "Dispatches to")
+Rel(workflow, scanner, "Screens intake through")
+Rel(workflow, validator, "Validates through")
+Rel(workflow, lifecycle, "Applies transitions through")
+Rel(hosted, workflow, "Runs validation through")
+Rel(workflow, port, "Reads and writes through")
+Rel(port, store, "Persists through CurriculumStore")
 @enduml

@@ -33,4 +33,8 @@ internal sealed class CurriculumImportEntity
     public Guid? PublishedVersionId { get; set; }
 
     public DateTimeOffset? PublishedAt { get; set; }
+
+    public string? ValidationReportJson { get; set; }
+
+    public string? WarningAcknowledgementJson { get; set; }
 }

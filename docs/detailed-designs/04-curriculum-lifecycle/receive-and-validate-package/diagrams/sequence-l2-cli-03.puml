@@ -5,53 +5,53 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "ReceiveAndValidatePackagePage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum author" as author
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "ReceiveAndValidatePackageController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
+  participant "CurriculumValidationWorker" as worker
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "ReceiveAndValidatePackageHandler" as handler
-  participant "ReceiveAndValidatePackagePolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "PackageValidator" as validator
+  participant "CurriculumLifecycle" as lifecycle
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IReceiveAndValidatePackageRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start receive and validate a package
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch ReceiveAndValidatePackageRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-03
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+worker -> workflow : Validate next accepted receipt
+workflow -> port : Claim oldest Received import
+port -> store : Atomically mark Validating
+store --> port : Tenant import and raw JSON
+port --> workflow : Claimed record
+workflow -> validator : Apply L2-CLI-03 eleven check categories
+validator --> workflow : Package model and stable issues
+workflow -> workflow : Compute deterministic issue checksum
+workflow -> workflow : Create report with contract and validator versions
+workflow -> lifecycle : Complete validation with blocking state
+lifecycle --> workflow : Draft or ValidationFailed
+workflow -> port : Save status, issues, report, and audit event
+port -> store : Commit validation result
+store --> port : Durable state
+port --> workflow : Saved result
+
+loop Until terminal validation state
+  author -> page : View import status
+  page -> client : Poll opaque status location
+  client -> endpoints : GET /api/curriculum-imports/{id}
+  endpoints -> workflow : Read authorized tenant import
+  workflow -> port : Load import
+  port -> store : Read record
+  store --> port : Current evidence
+  port --> workflow : Tenant-scoped record
+  workflow --> endpoints : ImportStatus and ValidationReport
+  endpoints --> client : 200 typed status
+  client --> page : Report and issues
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+page --> author : Present versioned validation evidence
 @enduml

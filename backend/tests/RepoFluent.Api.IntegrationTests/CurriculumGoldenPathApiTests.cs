@@ -28,6 +28,14 @@ public sealed class CurriculumGoldenPathApiTests
             new ReviewRequest("approved", "sha256:stale"));
         Assert.Equal(HttpStatusCode.Conflict, staleReview.StatusCode);
 
+        var acknowledgementResponse = await client.PostAsJsonAsync(
+            $"/api/curriculum-drafts/{receipt.Id}/warning-acknowledgements",
+            new WarningAcknowledgementRequest(
+                draft.Checksum,
+                draft.ValidationReport!.IssueChecksum,
+                "Reviewed the exact warning set."));
+        acknowledgementResponse.EnsureSuccessStatusCode();
+
         var approvedResponse = await client.PostAsJsonAsync(
             $"/api/curriculum-drafts/{receipt.Id}/review-decisions",
             new ReviewRequest("approved", draft.Checksum));

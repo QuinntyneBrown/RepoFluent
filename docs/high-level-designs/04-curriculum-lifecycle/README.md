@@ -27,12 +27,12 @@ and deployment views](../) define the shared runtime around this module.
 
 | Deployment unit | Component | Responsibility | Delivery state |
 | --- | --- | --- | --- |
-| `repofluent-app` | `Curriculum Workspace` | Presents upload, validation, preview, review, publication, comparison, and retirement | Foundation implemented |
+| `repofluent-app` | `Curriculum Workspace` | Presents upload, validation, preview, review, publication, comparison, and retirement | Intake evidence and warning gate implemented |
 | `repofluent-app` | `Learner-equivalent Preview` | Renders a draft through production lesson components and access policy | Foundation implemented |
-| `RepoFluent.Api` | `CurriculumEndpoints` | Exposes role-gated lifecycle commands and status queries | Foundation implemented |
-| `RepoFluent.Api` | `CurriculumWorkflow` | Coordinates authorization, state transitions, persistence, and audit evidence | Foundation implemented |
+| `RepoFluent.Api` | `CurriculumEndpoints` | Exposes role-gated lifecycle commands and status queries | Intake, status, acknowledgement, and golden path implemented |
+| `RepoFluent.Api` | `CurriculumWorkflow` | Coordinates authorization, state transitions, persistence, and audit evidence | Intake, validation reports, warning gates, and golden path implemented |
 | `RepoFluent.Api` | `CurriculumLifecycle` | Enforces legal status transitions and immutable publication | Foundation implemented |
-| `RepoFluent.Worker` | `CurriculumValidationProcessor` | Scans, validates, normalizes, and imports packages idempotently | Hosted foundation implemented |
+| `RepoFluent.Worker` | `CurriculumValidationProcessor` | Scans, validates, normalizes, and imports packages idempotently | API-hosted intake scanner and versioned validation implemented |
 | `RepoFluent.Worker` | `PublicationProjector` | Builds learner and search projections after publication | Target platform |
 
 ### Information ownership
@@ -60,7 +60,7 @@ and deployment views](../) define the shared runtime around this module.
 - The current API-hosted validation loop moves to `RepoFluent.Worker` for production isolation and independent scaling.
 - Semantic comparison and visual editing remain post-foundation capabilities within the same lifecycle boundary.
 
-`CurriculumEndpoints`, `CurriculumWorkflow`, `CurriculumLifecycle`, `PackageValidator`, `CurriculumStore`, EF Core migrations, and `CurriculumValidationWorker` implement the golden-path foundation with SQLite. Production infrastructure and the separate worker executable remain target architecture.
+`CurriculumEndpoints`, `CurriculumWorkflow`, `PackageIntakeScanner`, `PackageValidator`, `CurriculumStore`, EF Core migrations, and `CurriculumValidationWorker` implement the intake and golden-path foundation with SQLite. Reports bind contract, validator, package, and issue checksums. Reviewer acknowledgements bind the exact warning set before approval. Production infrastructure and the separate worker executable remain target architecture.
 
 ## Diagrams
 

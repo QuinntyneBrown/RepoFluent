@@ -40,3 +40,5 @@ export * from './lib/source-snapshot';
 export * from './lib/source-citation';
 export * from './lib/terminology-definition';
 export * from './lib/validation-issue';
+export * from './lib/validation-report';
+export * from './lib/warning-acknowledgement';

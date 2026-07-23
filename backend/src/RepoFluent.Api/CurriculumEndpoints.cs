@@ -11,6 +11,9 @@ public static class CurriculumEndpoints
         api.MapPost("/curriculum-imports", ReceiveAsync).DisableAntiforgery();
         api.MapGet("/curriculum-imports/{id:guid}", GetStatusAsync);
         api.MapGet("/curriculum-drafts/{id:guid}/preview", GetPreviewAsync);
+        api.MapPost(
+            "/curriculum-drafts/{id:guid}/warning-acknowledgements",
+            AcknowledgeWarningsAsync);
         api.MapPost("/curriculum-drafts/{id:guid}/review-decisions", ReviewAsync);
         api.MapPost("/curriculum-drafts/{id:guid}/publish", PublishAsync);
         api.MapPost("/assignments", AssignAsync);
@@ -35,11 +38,6 @@ public static class CurriculumEndpoints
         var form = await context.Request.ReadFormAsync(cancellationToken);
         var file = form.Files.GetFile("package")
             ?? throw new WorkflowException(400, "CLI_FILE_REQUIRED", "A curriculum package file is required.");
-        if (file.Length > CurriculumWorkflow.MaximumPackageBytes)
-        {
-            throw new WorkflowException(400, "CLI_PACKAGE_LIMIT", "The curriculum package exceeds the supported limit.");
-        }
-
         await using var stream = new MemoryStream((int)file.Length);
         await file.CopyToAsync(stream, cancellationToken);
         var receipt = await workflow.ReceiveAsync(
@@ -65,6 +63,19 @@ public static class CurriculumEndpoints
         CurriculumWorkflow workflow,
         CancellationToken cancellationToken) =>
         Results.Ok(await workflow.GetPreviewAsync(context.GetActor(), id, cancellationToken));
+
+    private static async Task<IResult> AcknowledgeWarningsAsync(
+        Guid id,
+        WarningAcknowledgementRequest request,
+        HttpContext context,
+        CurriculumWorkflow workflow,
+        CancellationToken cancellationToken) =>
+        Results.Ok(
+            await workflow.AcknowledgeWarningsAsync(
+                context.GetActor(),
+                id,
+                request,
+                cancellationToken));
 
     private static async Task<IResult> ReviewAsync(
         Guid id,

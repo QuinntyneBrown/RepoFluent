@@ -3,10 +3,12 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Receive and validate a package
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+Person(author, "Curriculum author", "Uploads an approved curriculum package and reviews safe validation results")
+Person(reviewer, "Curriculum reviewer", "Acknowledges an exact warning set and approves the bound checksum")
+System(repofluent, "RepoFluent", "Accepts inert package bytes, validates the curriculum contract, and governs draft creation")
+System_Ext(source, "Approved package source", "Provides a local JSON curriculum package")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(author, source, "Obtains approved package from")
+Rel(author, repofluent, "Uploads package and reads validation evidence")
+Rel(reviewer, repofluent, "Acknowledges warnings and reviews checksum")
 @enduml

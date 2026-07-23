@@ -82,6 +82,12 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         entity.PublishedVersionId = record.PublishedVersionId;
         entity.PublishedAt = record.PublishedAt;
         entity.ValidationIssuesJson = JsonSerializer.Serialize(record.Issues, SerializerOptions);
+        entity.ValidationReportJson = record.ValidationReport is null
+            ? null
+            : JsonSerializer.Serialize(record.ValidationReport, SerializerOptions);
+        entity.WarningAcknowledgementJson = record.WarningAcknowledgement is null
+            ? null
+            : JsonSerializer.Serialize(record.WarningAcknowledgement, SerializerOptions);
         AddAudit(record.TenantId, actorId, auditAction, record.Id.ToString(), record.CorrelationId);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
@@ -150,6 +156,18 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         return entity is null ? null : ToRecord(entity);
     }
 
+    public async Task RecordAuditAsync(
+        string tenantId,
+        string actorId,
+        string action,
+        string targetId,
+        string correlationId,
+        CancellationToken cancellationToken)
+    {
+        AddAudit(tenantId, actorId, action, targetId, correlationId);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
     private void AddAudit(string tenantId, string actorId, string action, string targetId, string correlationId) =>
         dbContext.AuditEvents.Add(new AuditEventEntity
         {
@@ -175,7 +193,9 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             PackageId = record.PackageId,
             PackageVersion = record.PackageVersion,
             ValidationIssuesJson = "[]",
-            CreatedAt = record.CreatedAt
+            CreatedAt = record.CreatedAt,
+            ValidationReportJson = null,
+            WarningAcknowledgementJson = null
         };
 
     private static CurriculumRecord ToRecord(CurriculumImportEntity entity) =>
@@ -198,6 +218,16 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             PublishedAt = entity.PublishedAt,
             Issues = JsonSerializer.Deserialize<IReadOnlyList<ValidationIssue>>(
                 entity.ValidationIssuesJson,
-                SerializerOptions) ?? []
+                SerializerOptions) ?? [],
+            ValidationReport = entity.ValidationReportJson is null
+                ? null
+                : JsonSerializer.Deserialize<ValidationReport>(
+                    entity.ValidationReportJson,
+                    SerializerOptions),
+            WarningAcknowledgement = entity.WarningAcknowledgementJson is null
+                ? null
+                : JsonSerializer.Deserialize<WarningAcknowledgement>(
+                    entity.WarningAcknowledgementJson,
+                    SerializerOptions)
         };
 }

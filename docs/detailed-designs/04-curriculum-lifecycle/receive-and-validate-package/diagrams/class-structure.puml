@@ -11,48 +11,83 @@ skinparam class {
 }
 title Class structure — Receive and validate a package
 
-class ReceiveAndValidatePackageRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class CurriculumWorkflow {
+  +ReceiveAsync(actor, fileName, contentType, bytes, correlationId): Task<ImportReceipt>
+  +GetStatusAsync(actor, id): Task<ImportStatus>
+  +ValidateNextAsync(): Task
+  +AcknowledgeWarningsAsync(actor, id, request): Task<ImportStatus>
+  +ReviewAsync(actor, id, request): Task<ImportStatus>
 }
 
-class ReceiveAndValidatePackageResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class PackageIntakeScanner {
+  {static} +ReadJson(bytes: byte[]): string
 }
 
-class ReceiveAndValidatePackageRecord {
-  +string Id
+class PackageValidator {
+  {static} +Validate(rawPackage: string): (Package, Issues)
+}
+
+class CurriculumRecord {
+  +Guid Id
   +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: ReceiveAndValidatePackageResult): void
+  +string AuthorId
+  +string RawPackage
+  +string Checksum
+  +string CorrelationId
+  +CurriculumStatus Status
+  +IReadOnlyList<ValidationIssue> Issues
 }
 
-class ReceiveAndValidatePackagePolicy {
-  +Evaluate(request: ReceiveAndValidatePackageRequest, current: ReceiveAndValidatePackageRecord): ReceiveAndValidatePackageResult
+class ValidationReport {
+  +string ValidatorVersion
+  +string ContractVersion
+  +string PackageChecksum
+  +string IssueChecksum
+  +IReadOnlyList<string> CheckCategories
+  +int ErrorCount
+  +int WarningCount
+  +DateTimeOffset CompletedAt
 }
 
-interface IReceiveAndValidatePackageRepository {
-  +Load(scopeId: string, targetId: string): Task<ReceiveAndValidatePackageRecord>
-  +Save(record: ReceiveAndValidatePackageRecord, expectedVersion: long): Task
+class WarningAcknowledgement {
+  +string ActorId
+  +DateTimeOffset AcknowledgedAt
+  +string PackageChecksum
+  +string IssueChecksum
+  +string? Rationale
 }
 
-class ReceiveAndValidatePackageHandler {
-  +Handle(request: ReceiveAndValidatePackageRequest): Task<ReceiveAndValidatePackageResult>
+class WarningAcknowledgementRequest {
+  +string PackageChecksum
+  +string IssueChecksum
+  +string? Rationale
 }
 
-ReceiveAndValidatePackageHandler ..> ReceiveAndValidatePackageRequest : handles
-ReceiveAndValidatePackageHandler ..> ReceiveAndValidatePackagePolicy : invokes
-ReceiveAndValidatePackageHandler ..> IReceiveAndValidatePackageRepository : uses
-IReceiveAndValidatePackageRepository --> ReceiveAndValidatePackageRecord : loads / saves
-ReceiveAndValidatePackagePolicy ..> ReceiveAndValidatePackageRecord : evaluates
-ReceiveAndValidatePackagePolicy ..> ReceiveAndValidatePackageResult : creates
-ReceiveAndValidatePackageRecord ..> ReceiveAndValidatePackageResult : applies
+class ImportReceipt {
+  +Guid Id
+  +string Checksum
+  +CurriculumStatus Status
+  +string CorrelationId
+  +string StatusUrl
+}
+
+interface ICurriculumStore {
+  +AddImportAsync(record): Task
+  +ClaimReceivedAsync(): Task<CurriculumRecord?>
+  +SaveImportAsync(record, eventType, actorId): Task
+  +RecordAuditAsync(tenantId, actorId, eventType, entityId, correlationId): Task
+}
+
+class CurriculumStore
+class CurriculumValidationWorker
+
+CurriculumValidationWorker --> CurriculumWorkflow : invokes validation
+CurriculumWorkflow ..> PackageIntakeScanner : screens through
+CurriculumWorkflow ..> PackageValidator : validates through
+CurriculumWorkflow --> ICurriculumStore : persists through
+ICurriculumStore <|.. CurriculumStore
+CurriculumWorkflow ..> ImportReceipt : creates
+CurriculumWorkflow ..> WarningAcknowledgementRequest : accepts
+CurriculumRecord *-- "0..1" ValidationReport
+CurriculumRecord *-- "0..1" WarningAcknowledgement
 @enduml

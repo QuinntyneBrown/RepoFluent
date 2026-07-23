@@ -43,6 +43,18 @@ export class RepoFluentApiService {
     });
   }
 
+  acknowledgeWarnings(
+    id: string,
+    packageChecksum: string,
+    issueChecksum: string,
+  ): Observable<ImportStatus> {
+    return this.http.post<ImportStatus>(`/api/curriculum-drafts/${id}/warning-acknowledgements`, {
+      packageChecksum,
+      issueChecksum,
+      rationale: 'Reviewed against the exact local validation report.',
+    });
+  }
+
   publish(id: string): Observable<ImportStatus> {
     return this.http.post<ImportStatus>(`/api/curriculum-drafts/${id}/publish`, {});
   }

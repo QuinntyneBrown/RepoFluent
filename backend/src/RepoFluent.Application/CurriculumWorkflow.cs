@@ -10,6 +10,23 @@ public sealed class CurriculumWorkflow(
     TimeProvider timeProvider)
 {
     public const int MaximumPackageBytes = 512 * 1024;
+    public const string ContractVersion = "0.1.0";
+    public const string ValidatorVersion = "0.1.0";
+
+    private static readonly IReadOnlyList<string> ValidationCheckCategories =
+    [
+        "version",
+        "schema",
+        "identifiers",
+        "references",
+        "ordering",
+        "content-types",
+        "source-references",
+        "provenance",
+        "assessment-integrity",
+        "security-restrictions",
+        "configured-limits"
+    ];
 
     public async Task<ImportReceipt> ReceiveAsync(
         ActorContext actor,
@@ -20,15 +37,38 @@ public sealed class CurriculumWorkflow(
         CancellationToken cancellationToken)
     {
         RequireRole(actor, "Author");
-        if (!fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
-            || !contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+        string rawPackage;
+        try
         {
-            throw new WorkflowException(400, "CLI_UNSUPPORTED_MEDIA", "A JSON curriculum package is required.");
-        }
+            if (!fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
+                || !contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new WorkflowException(
+                    400,
+                    "CLI_UNSUPPORTED_MEDIA",
+                    "A JSON curriculum package is required.");
+            }
 
-        if (bytes.Length == 0 || bytes.Length > MaximumPackageBytes)
+            if (bytes.Length == 0 || bytes.Length > MaximumPackageBytes)
+            {
+                throw new WorkflowException(
+                    400,
+                    "CLI_PACKAGE_LIMIT",
+                    "The curriculum package size is outside the supported limit.");
+            }
+
+            rawPackage = PackageIntakeScanner.ReadJson(bytes);
+        }
+        catch (WorkflowException)
         {
-            throw new WorkflowException(400, "CLI_PACKAGE_LIMIT", "The curriculum package size is outside the supported limit.");
+            await store.RecordAuditAsync(
+                actor.TenantId,
+                actor.UserId,
+                "curriculum.intake-rejected",
+                "upload",
+                correlationId,
+                cancellationToken);
+            throw;
         }
 
         var id = Guid.NewGuid();
@@ -38,7 +78,7 @@ public sealed class CurriculumWorkflow(
             Id = id,
             TenantId = actor.TenantId,
             AuthorId = actor.UserId,
-            RawPackage = Encoding.UTF8.GetString(bytes),
+            RawPackage = rawPackage,
             Checksum = checksum,
             CorrelationId = correlationId,
             CreatedAt = timeProvider.GetUtcNow(),
@@ -55,6 +95,54 @@ public sealed class CurriculumWorkflow(
     {
         RequireAnyRole(actor, "Author", "Reviewer", "Administrator");
         var record = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        return ToStatus(actor, record);
+    }
+
+    public async Task<ImportStatus> AcknowledgeWarningsAsync(
+        ActorContext actor,
+        Guid id,
+        WarningAcknowledgementRequest request,
+        CancellationToken cancellationToken)
+    {
+        RequireRole(actor, "Reviewer");
+        var record = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        if (record.Status != CurriculumStatus.Draft)
+        {
+            throw Conflict(
+                "CLI_WARNING_ACKNOWLEDGEMENT_GATE",
+                "Warnings can be acknowledged only for a valid draft.");
+        }
+
+        var report = record.ValidationReport
+            ?? throw Conflict(
+                "CLI_VALIDATION_REPORT_REQUIRED",
+                "The validation report is not available.");
+        if (report.ErrorCount > 0 || report.WarningCount == 0)
+        {
+            throw Conflict(
+                "CLI_WARNING_ACKNOWLEDGEMENT_GATE",
+                "The draft does not have an acknowledgeable warning set.");
+        }
+
+        if (!string.Equals(record.Checksum, request.PackageChecksum, StringComparison.Ordinal)
+            || !string.Equals(report.IssueChecksum, request.IssueChecksum, StringComparison.Ordinal))
+        {
+            throw Conflict(
+                "CLI_STALE_WARNING_REPORT",
+                "The warning acknowledgement no longer matches the package and issue set.");
+        }
+
+        record.WarningAcknowledgement = new(
+            actor.UserId,
+            timeProvider.GetUtcNow(),
+            record.Checksum,
+            report.IssueChecksum,
+            string.IsNullOrWhiteSpace(request.Rationale) ? null : request.Rationale.Trim());
+        await store.SaveImportAsync(
+            record,
+            "curriculum.warnings-acknowledged",
+            actor.UserId,
+            cancellationToken);
         return ToStatus(actor, record);
     }
 
@@ -94,6 +182,13 @@ public sealed class CurriculumWorkflow(
         if (!isApproved && !isRejected)
         {
             throw new WorkflowException(400, "CLI_INVALID_DECISION", "Decision must be approved or rejected.");
+        }
+
+        if (isApproved && HasUnacknowledgedWarnings(record))
+        {
+            throw Conflict(
+                "CLI_WARNING_ACKNOWLEDGEMENT_REQUIRED",
+                "The exact warning report requires acknowledgement before approval.");
         }
 
         var lifecycle = Rehydrate(record);
@@ -223,6 +318,22 @@ public sealed class CurriculumWorkflow(
         TryTransition(() => lifecycle.CompleteValidation(issues.Any(issue => issue.IsBlocking)));
         record.Status = lifecycle.Status;
         record.Issues = issues;
+        var issueChecksum = ComputeIssueChecksum(issues);
+        record.ValidationReport = new(
+            ValidatorVersion,
+            package?.ContractVersion ?? ContractVersion,
+            record.Checksum,
+            issueChecksum,
+            ValidationCheckCategories,
+            issues.Count(issue => issue.IsBlocking),
+            issues.Count(issue => !issue.IsBlocking),
+            timeProvider.GetUtcNow());
+        if (record.WarningAcknowledgement is { } acknowledgement
+            && (!string.Equals(acknowledgement.PackageChecksum, record.Checksum, StringComparison.Ordinal)
+                || !string.Equals(acknowledgement.IssueChecksum, issueChecksum, StringComparison.Ordinal)))
+        {
+            record.WarningAcknowledgement = null;
+        }
         if (package is not null)
         {
             record.Title = package.Title;
@@ -275,7 +386,14 @@ public sealed class CurriculumWorkflow(
 
         if (record.Status == CurriculumStatus.Draft && actor.IsInRole("Reviewer"))
         {
-            actions.Add("review");
+            if (HasUnacknowledgedWarnings(record))
+            {
+                actions.Add("acknowledge-warnings");
+            }
+            else
+            {
+                actions.Add("review");
+            }
         }
 
         if (record.Status == CurriculumStatus.Approved && actor.IsInRole("Administrator"))
@@ -296,7 +414,35 @@ public sealed class CurriculumWorkflow(
             record.Issues,
             record.PublishedVersionId,
             actions,
-            record.CorrelationId);
+            record.CorrelationId,
+            record.ValidationReport,
+            record.WarningAcknowledgement);
+    }
+
+    private static bool HasUnacknowledgedWarnings(CurriculumRecord record)
+    {
+        var report = record.ValidationReport;
+        if (report is null || report.WarningCount == 0)
+        {
+            return false;
+        }
+
+        return record.WarningAcknowledgement is not { } acknowledgement
+            || !string.Equals(acknowledgement.PackageChecksum, record.Checksum, StringComparison.Ordinal)
+            || !string.Equals(acknowledgement.IssueChecksum, report.IssueChecksum, StringComparison.Ordinal);
+    }
+
+    private static string ComputeIssueChecksum(IReadOnlyList<ValidationIssue> issues)
+    {
+        var normalized = string.Join(
+            '\n',
+            issues
+                .OrderBy(issue => issue.Code, StringComparer.Ordinal)
+                .ThenBy(issue => issue.Path, StringComparer.Ordinal)
+                .ThenBy(issue => issue.Severity, StringComparer.Ordinal)
+                .Select(issue =>
+                    $"{issue.Code}|{issue.Severity}|{issue.IsBlocking}|{issue.Path}|{issue.Message}"));
+        return $"sha256:{Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(normalized)))}";
     }
 
     private async Task<CurriculumRecord> GetImportAsync(

@@ -115,6 +115,65 @@
           </div>
         </dl>
 
+        @if (current.validationReport; as report) {
+          <section class="validation-evidence" aria-label="Validation evidence">
+            <div class="validation-evidence__heading">
+              <div>
+                <p class="step">Versioned validation receipt</p>
+                <h3>Package gate evidence</h3>
+              </div>
+              <span class="rf-badge">{{ report.checkCategories.length }} check categories</span>
+            </div>
+
+            <div class="validation-evidence__versions">
+              <article [attr.aria-label]="'Contract ' + report.contractVersion">
+                <span>Contract</span>
+                <strong>{{ report.contractVersion }}</strong>
+              </article>
+              <article [attr.aria-label]="'Validator ' + report.validatorVersion">
+                <span>Validator</span>
+                <strong>{{ report.validatorVersion }}</strong>
+              </article>
+              <article>
+                <span>Result</span>
+                <strong>{{ report.errorCount }} errors · {{ report.warningCount }} warning</strong>
+              </article>
+            </div>
+
+            <div class="validation-evidence__checksum">
+              <span class="step">Issue-set receipt</span>
+              <code>{{ report.issueChecksum }}</code>
+            </div>
+
+            @if (report.warningCount > 0) {
+              <div
+                class="warning-gate"
+                [class.warning-gate--acknowledged]="current.warningAcknowledgement"
+              >
+                <div>
+                  <span class="step">Warning gate</span>
+                  <strong
+                    role="status"
+                    aria-label="Warning acknowledgement status"
+                    aria-live="polite"
+                  >
+                    {{
+                      current.warningAcknowledgement
+                        ? 'Warnings acknowledged'
+                        : 'Acknowledgement required'
+                    }}
+                  </strong>
+                </div>
+                @if (current.allowedActions.includes('acknowledge-warnings')) {
+                  <button class="rf-button" type="button" (click)="acknowledgeWarnings()">
+                    Acknowledge exact warnings
+                  </button>
+                }
+              </div>
+            }
+          </section>
+        }
+
         @if (current.issues.length) {
           <div
             class="issues"

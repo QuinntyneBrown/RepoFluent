@@ -95,6 +95,23 @@ export class CurriculumPageComponent {
     );
   }
 
+  protected async acknowledgeWarnings(): Promise<void> {
+    const current = this.status();
+    const report = current?.validationReport;
+    if (!current || !report) return;
+    await this.run(
+      async () => {
+        this.status.set(
+          await firstValueFrom(
+            this.api.acknowledgeWarnings(current.id, current.checksum, report.issueChecksum),
+          ),
+        );
+      },
+      'Acknowledging exact warning report',
+      'Warnings acknowledged',
+    );
+  }
+
   protected async publish(): Promise<void> {
     const current = this.status();
     if (!current) return;

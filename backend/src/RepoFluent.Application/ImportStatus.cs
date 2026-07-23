@@ -10,4 +10,6 @@ public sealed record ImportStatus(
     IReadOnlyList<ValidationIssue> Issues,
     Guid? PublishedVersionId,
     IReadOnlyList<string> AllowedActions,
-    string CorrelationId);
+    string CorrelationId,
+    ValidationReport? ValidationReport,
+    WarningAcknowledgement? WarningAcknowledgement);

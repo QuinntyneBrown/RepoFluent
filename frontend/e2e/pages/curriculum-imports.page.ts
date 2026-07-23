@@ -24,6 +24,16 @@ export class CurriculumImportsPage {
   }
 
   async approveDraft(): Promise<void> {
+    const acknowledgeWarnings = this.page.getByRole('button', {
+      name: 'Acknowledge exact warnings',
+    });
+    if (await acknowledgeWarnings.isVisible()) {
+      await acknowledgeWarnings.click();
+      await expect(
+        this.page.getByRole('status', { name: 'Warning acknowledgement status' }),
+      ).toHaveText('Warnings acknowledged');
+    }
+
     await this.page.getByRole('button', { name: 'Approve this checksum' }).click();
     await expect(this.page.getByText('Approved', { exact: true })).toBeVisible();
   }
