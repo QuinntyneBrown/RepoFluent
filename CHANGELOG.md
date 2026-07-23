@@ -66,3 +66,6 @@
 - Learner-equivalent draft preview through the production renderer with
   protected answers and no learner-state writes, plus immutable review decisions
   bound to tenant, version, checksums, warning evidence, time, and rationale.
+- Concurrency-safe immutable publication with active assignment policy, exact
+  approved checksum binding, one audit and outbox event, and retained content
+  and assignments across corrected semantic versions.

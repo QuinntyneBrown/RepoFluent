@@ -267,6 +267,56 @@
           </section>
         }
 
+        @if (current.publication; as publication) {
+          <section class="review-decision publication-evidence" aria-label="Publication evidence">
+            <div class="review-decision__heading">
+              <div>
+                <p class="step">Published release</p>
+                <h3>Immutable publication</h3>
+              </div>
+              <span class="rf-status rf-status--success">Active for assignment</span>
+            </div>
+            <div class="review-decision__grid">
+              <article>
+                <span>Version identity</span>
+                <strong>{{ publication.versionId }}</strong>
+              </article>
+              <article>
+                <span>Package</span>
+                <strong>{{ publication.packageId }}</strong>
+              </article>
+              <article>
+                <span>Package version</span>
+                <strong>{{ publication.packageVersion }}</strong>
+              </article>
+              <article>
+                <span>Published by</span>
+                <strong>{{ publication.publishedBy }}</strong>
+              </article>
+            </div>
+            <div class="validation-evidence__checksum">
+              <span class="step">Approved package checksum</span>
+              <code>{{ publication.packageChecksum }}</code>
+            </div>
+            <div class="publication-evidence__safeguards" aria-label="Immutability safeguards">
+              <span>Read-only content</span>
+              <span>Read-only source snapshot</span>
+              <span>Read-only assessments</span>
+              <span>Protected answer policy retained</span>
+            </div>
+            <dl class="review-decision__checksums">
+              <div>
+                <dt>Availability policy</dt>
+                <dd>{{ publication.availabilityPolicy }}</dd>
+              </div>
+              <div>
+                <dt>Publication event</dt>
+                <dd>{{ publication.eventId }}</dd>
+              </div>
+            </dl>
+          </section>
+        }
+
         @if (current.issues.length) {
           <div
             class="issues"

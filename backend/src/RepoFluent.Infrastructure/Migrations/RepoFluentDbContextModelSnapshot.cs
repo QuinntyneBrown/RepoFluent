@@ -131,6 +131,10 @@ namespace RepoFluent.Infrastructure.Migrations
                     b.Property<Guid?>("PublishedVersionId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PublicationJson")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("RawPackage")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -186,6 +190,39 @@ namespace RepoFluent.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("CurriculumImports", (string)null);
+                });
+
+            modelBuilder.Entity("RepoFluent.Infrastructure.DomainEventEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AggregateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("OccurredAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "EventType", "OccurredAt");
+
+                    b.ToTable("DomainEvents", (string)null);
                 });
 #pragma warning restore 612, 618
         }

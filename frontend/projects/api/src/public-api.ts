@@ -33,6 +33,7 @@ export * from './lib/lesson-block';
 export * from './lib/lesson-view';
 export * from './lib/persona';
 export * from './lib/preview';
+export * from './lib/publication';
 export * from './lib/question-pool';
 export * from './lib/repository';
 export * from './lib/repofluent-api.service';

@@ -3,16 +3,29 @@
 LAYOUT_WITH_LEGEND()
 title Components — Publish an immutable version
 
-Container_Boundary(api, "Curriculum Lifecycle API") {
-  Component(controller, "PublishImmutableVersionController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "PublishImmutableVersionHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "PublishImmutableVersionPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IPublishImmutableVersionRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Curriculum store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(page, "CurriculumPageComponent", "Angular component", "Presents active policy, IDs, checksum, safeguards, publisher, and event")
+  Component(client, "RepoFluentApiService", "Angular API client", "Submits publication and receives typed ImportStatus")
 }
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Container_Boundary(api, "RepoFluent API") {
+  Component(endpoints, "CurriculumEndpoints", "ASP.NET Core endpoints", "Maps the Administrator publication route")
+  Component(workflow, "CurriculumWorkflow", "Application service", "Verifies unchanged approval and converges concurrent commands")
+  Component(lifecycle, "CurriculumLifecycle", "Domain model", "Transitions Approved to Published once")
+  Component(publication, "Publication", "Application record", "Binds immutable version, package, availability, actor, time, and event")
+  Component(port, "ICurriculumStore", "Application port", "Loads approved state and saves atomic publication evidence")
+  Component(concurrency, "ConcurrentPublicationException", "Application signal", "Triggers reload of the winning publication")
+}
+
+ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Stores publication JSON, audit, assignments, and DomainEventEntity outbox rows")
+
+Rel(page, client, "Invokes")
+Rel(client, endpoints, "Calls", "JSON over HTTPS")
+Rel(endpoints, workflow, "Dispatches to")
+Rel(workflow, lifecycle, "Transitions through")
+Rel(workflow, publication, "Creates")
+Rel(workflow, port, "Loads and saves through")
+Rel(port, store, "Persists through CurriculumStore")
+Rel(store, concurrency, "Signals losing token update through")
+Rel(concurrency, workflow, "Triggers winner reload in")
 @enduml

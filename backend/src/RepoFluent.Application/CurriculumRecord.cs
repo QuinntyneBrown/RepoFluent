@@ -43,4 +43,6 @@ public sealed class CurriculumRecord
     public WarningAcknowledgement? WarningAcknowledgement { get; set; }
 
     public ReviewDecision? ReviewDecision { get; set; }
+
+    public Publication? Publication { get; set; }
 }

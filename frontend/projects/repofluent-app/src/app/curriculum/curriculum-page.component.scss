@@ -290,6 +290,20 @@ h3 {
   padding-top: var(--rf-space-3);
 }
 
+.publication-evidence__safeguards {
+  display: grid;
+  gap: var(--rf-space-2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.publication-evidence__safeguards span {
+  background: var(--rf-color-success-dim);
+  border: 1px solid var(--rf-color-success);
+  color: var(--rf-color-ink);
+  font: var(--rf-type-label);
+  padding: var(--rf-space-2) var(--rf-space-3);
+}
+
 .assignment {
   border-top: 1px solid var(--rf-color-line);
   display: grid;
@@ -405,6 +419,7 @@ h3 {
   }
 
   .review-decision__grid,
+  .publication-evidence__safeguards,
   .preview-safeguards {
     grid-template-columns: 1fr;
   }

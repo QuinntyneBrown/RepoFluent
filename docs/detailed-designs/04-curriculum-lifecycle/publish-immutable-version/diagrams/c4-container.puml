@@ -3,16 +3,16 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Publish an immutable version
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
+Person(admin, "Curriculum administrator", "Publishes an approved checksum")
+Person(learner, "Learner", "Reads version-bound assignments")
 System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Curriculum administration", "Angular 21", "Curriculum lifecycle interface")
-  Container(api, "Curriculum Lifecycle API", "ASP.NET Core", "Applies application and domain policy")
-  ContainerDb(store, "Curriculum store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+  Container(web, "Curriculum workspace", "Angular 21", "Presents immutable publication and outbox evidence")
+  Container(api, "RepoFluent API", "ASP.NET Core on .NET 10", "Validates approval and converges publication commands")
+  ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Stores versions, publication concurrency token, audit, assignments, and outbox events")
 }
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(admin, web, "Publishes approved draft", "HTTPS")
+Rel(web, api, "Submits publication and reads evidence", "JSON over HTTPS")
+Rel(api, store, "Commits publication and reads version-bound content", "EF Core")
+Rel(learner, api, "Reads assigned immutable version", "HTTPS")
 @enduml

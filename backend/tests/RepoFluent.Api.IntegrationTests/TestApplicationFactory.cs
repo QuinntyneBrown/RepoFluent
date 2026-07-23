@@ -20,6 +20,8 @@ internal sealed class TestApplicationFactory : WebApplicationFactory<Program>
         _enableValidationWorker = enableValidationWorker;
     }
 
+    public string DatabasePath => _databasePath;
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");

@@ -3,10 +3,10 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Publish an immutable version
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+Person(admin, "Curriculum administrator", "Publishes approved unchanged curriculum")
+Person(learner, "Learner", "Uses assignments bound to immutable published versions")
+System(repofluent, "RepoFluent", "Activates one version, stores publication evidence, and retains historical versions")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(admin, repofluent, "Publishes approved draft", "HTTPS")
+Rel(learner, repofluent, "Reads assigned version content", "HTTPS")
 @enduml

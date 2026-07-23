@@ -177,7 +177,9 @@ and approval. Draft preview uses the production renderer without learner-state
 writes. Immutable decisions bind reviewer, tenant, version, checksums, warning
 acknowledgement, time, and rationale. Curriculum contract `0.1.0` and an
 acceptance-tested curriculum-to-learning path complete the current foundation.
-This foundation does not constitute the production infrastructure shown in the
+Concurrency-safe publication binds an active version to one audit and durable
+outbox event. Corrected versions preserve earlier content and assignments. This
+foundation does not constitute the production infrastructure shown in the
 deployment view.
 
 ## Diagrams

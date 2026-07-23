@@ -41,4 +41,6 @@ internal sealed class CurriculumImportEntity
     public string? WarningAcknowledgementJson { get; set; }
 
     public string? ReviewDecisionJson { get; set; }
+
+    public string? PublicationJson { get; set; }
 }

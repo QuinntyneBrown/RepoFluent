@@ -5,53 +5,62 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "PublishImmutableVersionPage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum author" as author
+actor "Curriculum administrator" as admin
+actor "Learner" as learner
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "PublishImmutableVersionController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "PublishImmutableVersionHandler" as handler
-  participant "PublishImmutableVersionPolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "CurriculumLifecycle" as lifecycle
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IPublishImmutableVersionRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start publish an immutable version
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch PublishImmutableVersionRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-09
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
-end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+author -> page : Upload corrected package version 2.0.0
+page -> client : Send new semantic version and bytes
+client -> endpoints : POST /api/curriculum-imports
+endpoints -> workflow : Receive separate version candidate
+workflow -> port : Create new tenant lifecycle record
+port -> store : Insert version-two draft path
+store --> port : New opaque import identity
+port --> workflow : Independent lifecycle row
+workflow --> endpoints : Version-two receipt
+endpoints --> client : 202 Accepted
+client --> page : Review and approval path
+
+admin -> page : Publish approved version two
+page -> client : Publish exact approved checksum
+client -> endpoints : POST /api/curriculum-drafts/{id}/publish
+endpoints -> workflow : Apply L2-CLI-09 separate-version policy
+workflow -> lifecycle : Publish new version identity
+lifecycle --> workflow : Published version two
+workflow -> port : Save independent immutable publication
+port -> store : Insert version-two event and retain version one
+store --> port : Both publications durable
+port --> workflow : Version-two result
+workflow --> endpoints : Active version two
+endpoints --> client : 200 publication evidence
+client --> page : New assignable version
+
+learner -> endpoints : GET lesson for version-one assignment
+endpoints -> workflow : Read version-one lesson
+workflow -> port : Resolve original version identity
+port -> store : Read retained version-one package
+store --> port : Original content and checksum
+port --> workflow : Immutable version one
+workflow --> endpoints : Version-bound LessonView
+endpoints --> learner : Original lesson remains queryable
+
+note over workflow,store
+  Version-two publication never updates
+  version-one content or assignment IDs.
+end note
 @enduml

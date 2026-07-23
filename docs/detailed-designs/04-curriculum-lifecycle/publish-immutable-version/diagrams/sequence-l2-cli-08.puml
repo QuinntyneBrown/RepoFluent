@@ -5,53 +5,58 @@ skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "PublishImmutableVersionPage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum administrator" as admin
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "PublishImmutableVersionController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "PublishImmutableVersionHandler" as handler
-  participant "PublishImmutableVersionPolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "CurriculumLifecycle" as lifecycle
+  entity "Publication" as publication
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IPublishImmutableVersionRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start publish an immutable version
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch PublishImmutableVersionRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-08
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+admin -> page : Select Publish version twice
+page -> client : Submit duplicate publication commands
+client -> endpoints : POST /api/curriculum-drafts/{id}/publish
+endpoints -> workflow : PublishAsync Administrator actor
+workflow -> port : Load tenant approved record
+port -> store : Read decision, report, and publication token
+store --> port : Approved lifecycle row
+port --> workflow : Exact approval evidence
+workflow -> workflow : Apply L2-CLI-08 role and unchanged checksum gates
+
+par First publication command
+  workflow -> lifecycle : Publish new version identity
+  lifecycle --> workflow : Published status
+  workflow -> publication : Bind ActiveForAssignment and event identity
+  publication --> workflow : Immutable publication
+  workflow -> port : Save lifecycle, publication, audit, and event
+  port -> store : Commit one SaveChanges transaction
+  store --> port : Durable publication
+  port --> workflow : Winning result
+and Concurrent publication command
+  workflow -> lifecycle : Publish competing version identity
+  lifecycle --> workflow : Competing Published state
+  workflow -> port : Save with original null token
+  port -> store : Conditional concurrency-token update
+  store --> port : Zero rows updated
+  port --> workflow : ConcurrentPublicationException
+  workflow -> port : Reload winning publication
+  port -> store : Read committed row
+  store --> port : Winning version and event
+  port --> workflow : Converged result
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+workflow --> endpoints : Same ImportStatus outcome
+endpoints --> client : 200 active publication
+client --> page : Version, checksum, policy, and event
+page --> admin : Publication evidence card
 @enduml

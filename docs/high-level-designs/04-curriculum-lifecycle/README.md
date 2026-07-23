@@ -27,13 +27,13 @@ and deployment views](../) define the shared runtime around this module.
 
 | Deployment unit | Component | Responsibility | Delivery state |
 | --- | --- | --- | --- |
-| `repofluent-app` | `Curriculum Workspace` | Presents upload, validation, preview, review, publication, comparison, and retirement | Intake, draft identity, replay, preview, warning gate, and review evidence implemented |
+| `repofluent-app` | `Curriculum Workspace` | Presents upload, validation, preview, review, publication, comparison, and retirement | Intake through immutable publication evidence implemented |
 | `repofluent-app` | `Learner-equivalent Preview` | Renders a draft through production lesson components and access policy | Production renderer, protected answers, draft context, and write suppression implemented |
-| `RepoFluent.Api` | `CurriculumEndpoints` | Exposes role-gated lifecycle commands and status queries | Intake, status, preview, acknowledgement, review decision, and golden path implemented |
-| `RepoFluent.Api` | `CurriculumWorkflow` | Coordinates authorization, state transitions, persistence, and audit evidence | Intake, idempotent import, validation, preview, warning gates, and immutable review implemented |
-| `RepoFluent.Api` | `CurriculumLifecycle` | Enforces legal status transitions and immutable publication | Review grant and publication foundation implemented |
+| `RepoFluent.Api` | `CurriculumEndpoints` | Exposes role-gated lifecycle commands and status queries | Intake, preview, review, concurrent publication, assignment, and learning reads implemented |
+| `RepoFluent.Api` | `CurriculumWorkflow` | Coordinates authorization, state transitions, persistence, and audit evidence | Intake through concurrency-safe immutable publication implemented |
+| `RepoFluent.Api` | `CurriculumLifecycle` | Enforces legal status transitions and immutable publication | Review grants and idempotent publication implemented |
 | `RepoFluent.Worker` | `CurriculumValidationProcessor` | Scans, validates, normalizes, and imports packages idempotently | API-hosted retryable import and versioned validation implemented |
-| `RepoFluent.Worker` | `PublicationProjector` | Builds learner and search projections after publication | Target platform |
+| `RepoFluent.Worker` | `PublicationProjector` | Builds learner and search projections after publication | Durable publication outbox implemented; projector remains target platform |
 
 ### Information ownership
 
@@ -60,7 +60,7 @@ and deployment views](../) define the shared runtime around this module.
 - The current API-hosted validation loop moves to `RepoFluent.Worker` for production isolation and independent scaling.
 - Semantic comparison and visual editing remain post-foundation capabilities within the same lifecycle boundary.
 
-`CurriculumEndpoints`, `CurriculumWorkflow`, `PackageIntakeScanner`, `PackageValidator`, `PackagePresenter`, `CurriculumStore`, EF Core migrations, and `CurriculumValidationWorker` implement the lifecycle foundation with SQLite. Tenant package-version uniqueness converges identical uploads and rejects changed bytes. Retry attempts remain attached to one lifecycle record. Reports bind contract, validator, package, and issue checksums. Preview removes protected answers and performs no learner-state write. `ReviewDecision` binds reviewer, tenant, version, decision, checksums, warning acknowledgement, time, and rationale once. Production infrastructure and the separate worker executable remain target architecture.
+`CurriculumEndpoints`, `CurriculumWorkflow`, `PackageIntakeScanner`, `PackageValidator`, `PackagePresenter`, `CurriculumStore`, EF Core migrations, and `CurriculumValidationWorker` implement the lifecycle foundation with SQLite. Tenant package-version uniqueness converges identical uploads and rejects changed bytes. Retry attempts remain attached to one lifecycle record. Reports bind contract, validator, package, and issue checksums. Preview removes protected answers and performs no learner-state write. `ReviewDecision` binds the exact review once. `Publication` atomically binds the immutable version and active availability with one audit and `DomainEventEntity` outbox row. A concurrency token converges duplicate publication commands. Corrected semantic versions preserve earlier content and assignments. Production infrastructure and the separate worker executable remain target architecture.
 
 ## Diagrams
 

@@ -321,13 +321,64 @@ public sealed class CurriculumWorkflow(
             return ToStatus(actor, record);
         }
 
+        var reviewDecision = record.ReviewDecision
+            ?? throw Conflict(
+                "CLI_PUBLICATION_REVIEW_REQUIRED",
+                "An immutable approval decision is required before publication.");
+        var validationReport = record.ValidationReport
+            ?? throw Conflict(
+                "CLI_VALIDATION_REPORT_REQUIRED",
+                "The validation report is not available.");
+        if (!string.Equals(reviewDecision.Decision, nameof(CurriculumStatus.Approved), StringComparison.Ordinal)
+            || !string.Equals(reviewDecision.PackageChecksum, record.Checksum, StringComparison.Ordinal)
+            || !string.Equals(
+                reviewDecision.ValidationIssueChecksum,
+                validationReport.IssueChecksum,
+                StringComparison.Ordinal))
+        {
+            throw Conflict(
+                "CLI_PUBLICATION_CHANGED",
+                "The approved package or validation report changed before publication.");
+        }
+
         var lifecycle = Rehydrate(record);
         var versionId = Guid.NewGuid();
         TryTransition(() => lifecycle.Publish(versionId));
         record.Status = lifecycle.Status;
         record.PublishedVersionId = lifecycle.PublishedVersionId;
         record.PublishedAt ??= timeProvider.GetUtcNow();
-        await store.SaveImportAsync(record, "curriculum.published", actor.UserId, cancellationToken);
+        record.Publication = new(
+            versionId,
+            actor.TenantId,
+            record.Id,
+            record.PackageId,
+            record.PackageVersion,
+            record.Checksum,
+            "ActiveForAssignment",
+            actor.UserId,
+            record.PublishedAt.Value,
+            Guid.NewGuid());
+        try
+        {
+            await store.SaveImportAsync(
+                record,
+                "curriculum.published",
+                actor.UserId,
+                cancellationToken);
+        }
+        catch (ConcurrentPublicationException)
+        {
+            var converged = await GetImportAsync(actor.TenantId, id, cancellationToken);
+            if (converged.Status != CurriculumStatus.Published || converged.Publication is null)
+            {
+                throw Conflict(
+                    "CLI_PUBLICATION_CONFLICT",
+                    "The publication command did not converge on an active version.");
+            }
+
+            return ToStatus(actor, converged);
+        }
+
         return ToStatus(actor, record);
     }
 
@@ -529,7 +580,8 @@ public sealed class CurriculumWorkflow(
             record.PackageId,
             record.PackageVersion,
             record.ValidationAttemptCount,
-            record.ReviewDecision);
+            record.ReviewDecision,
+            record.Publication);
     }
 
     private static bool HasUnacknowledgedWarnings(CurriculumRecord record)
