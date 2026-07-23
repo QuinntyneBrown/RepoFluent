@@ -28,6 +28,7 @@ public sealed class RepoFluentDbContext(DbContextOptions<RepoFluentDbContext> op
             entity.Property(item => item.PackageVersion).HasMaxLength(40);
             entity.Property(item => item.ReviewDecisionJson).IsConcurrencyToken();
             entity.Property(item => item.PublicationJson).IsConcurrencyToken();
+            entity.Property(item => item.RetirementJson).IsConcurrencyToken();
             entity.HasIndex(item => new { item.TenantId, item.Id }).IsUnique();
             entity.HasIndex(item => new { item.TenantId, item.PackageId, item.PackageVersion })
                 .IsUnique()

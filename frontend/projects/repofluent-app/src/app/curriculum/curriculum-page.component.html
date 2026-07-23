@@ -89,7 +89,7 @@
           class="rf-status"
           [class.rf-status--info]="current.status === 'Received' || current.status === 'Validating'"
           [class.rf-status--danger]="current.status === 'ValidationFailed'"
-          [class.rf-status--warning]="current.status === 'Rejected'"
+          [class.rf-status--warning]="current.status === 'Rejected' || current.status === 'Retired'"
           [class.rf-status--success]="
             current.status === 'Draft' ||
             current.status === 'Approved' ||
@@ -274,7 +274,13 @@
                 <p class="step">Published release</p>
                 <h3>Immutable publication</h3>
               </div>
-              <span class="rf-status rf-status--success">Active for assignment</span>
+              <span
+                class="rf-status"
+                [class.rf-status--success]="current.status === 'Published'"
+                [class.rf-status--warning]="current.status === 'Retired'"
+              >
+                {{ current.status === 'Retired' ? 'Retained history' : 'Active for assignment' }}
+              </span>
             </div>
             <div class="review-decision__grid">
               <article>
@@ -312,6 +318,50 @@
               <div>
                 <dt>Publication event</dt>
                 <dd>{{ publication.eventId }}</dd>
+              </div>
+            </dl>
+          </section>
+        }
+
+        @if (current.retirement; as retirement) {
+          <section class="review-decision" aria-label="Retirement evidence">
+            <div class="review-decision__heading">
+              <div>
+                <p class="step">Governed availability change</p>
+                <h3>Retired version</h3>
+              </div>
+              <span class="rf-status rf-status--warning">Retired</span>
+            </div>
+            <div class="review-decision__grid">
+              <article>
+                <span>New assignment policy</span>
+                <strong>No new assignment</strong>
+              </article>
+              <article>
+                <span>Existing assignment policy</span>
+                <strong>Existing assignments continue</strong>
+              </article>
+              <article>
+                <span>Content policy</span>
+                <strong>Historical content retained</strong>
+              </article>
+              <article>
+                <span>Retired by</span>
+                <strong>{{ retirement.retiredBy }}</strong>
+              </article>
+            </div>
+            <p class="review-decision__rationale">
+              <span>Retirement reason</span>
+              {{ retirement.reason }}
+            </p>
+            <dl class="review-decision__checksums">
+              <div>
+                <dt>Version identity</dt>
+                <dd>{{ retirement.versionId }}</dd>
+              </div>
+              <div>
+                <dt>Retirement event</dt>
+                <dd>{{ retirement.eventId }}</dd>
               </div>
             </dl>
           </section>
@@ -414,6 +464,121 @@
             </button>
           }
         </div>
+
+        @if (current.allowedActions.includes('compare')) {
+          <form class="assignment" (ngSubmit)="compareVersions()">
+            <div>
+              <p class="step">Change impact</p>
+              <h3>Compare published versions</h3>
+            </div>
+            <label class="rf-field">
+              <span class="rf-field__label">Base published version</span>
+              <input
+                class="rf-input"
+                name="baseVersionId"
+                [(ngModel)]="baseVersionId"
+                placeholder="Published version identity"
+              />
+              <span class="rf-field__hint">
+                Uses stable curriculum entities, source snapshots, and assessment mappings.
+              </span>
+            </label>
+            <button
+              class="rf-button rf-button--primary"
+              type="submit"
+              [disabled]="!baseVersionId.trim()"
+            >
+              Compare versions
+            </button>
+          </form>
+        }
+
+        @if (comparison(); as result) {
+          <section class="validation-evidence" aria-label="Version comparison evidence">
+            <div class="validation-evidence__heading">
+              <div>
+                <p class="step">Semantic version comparison</p>
+                <h3>{{ result.baseVersion }} → {{ result.targetVersion }}</h3>
+              </div>
+              <span
+                class="rf-status"
+                [class.rf-status--warning]="result.learnerRefreshRequired"
+                [class.rf-status--success]="!result.learnerRefreshRequired"
+              >
+                {{
+                  result.learnerRefreshRequired ? 'Learner refresh required' : 'No learner refresh'
+                }}
+              </span>
+            </div>
+            <div class="publication-evidence__safeguards" aria-label="Affected objectives">
+              @for (objectiveId of result.affectedObjectiveIds; track objectiveId) {
+                <span>{{ objectiveId }}</span>
+              }
+            </div>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th>Classification</th>
+                    <th>Stable entity</th>
+                    <th>Impact</th>
+                    <th>Evidence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (change of result.changes; track change.classification + change.entityId) {
+                    <tr>
+                      <td>{{ change.classification }}</td>
+                      <td>
+                        {{ change.entityType }}<br />
+                        <code>{{ change.entityId }}</code>
+                      </td>
+                      <td>
+                        {{
+                          change.learnerRefreshRequired
+                            ? 'Learner refresh required'
+                            : 'No learner refresh'
+                        }}
+                      </td>
+                      <td>
+                        {{ change.description }}
+                        @if (change.affectedObjectiveIds.length) {
+                          <br />
+                          <small>{{ change.affectedObjectiveIds.join(' · ') }}</small>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
+        }
+
+        @if (current.allowedActions.includes('retire')) {
+          <form class="assignment" (ngSubmit)="retire()">
+            <div>
+              <p class="step">Availability policy</p>
+              <h3>Retire published version</h3>
+            </div>
+            <label class="rf-field">
+              <span class="rf-field__label">Retirement reason</span>
+              <textarea
+                class="rf-input"
+                name="retirementReason"
+                rows="3"
+                [(ngModel)]="retirementReason"
+                placeholder="Explain why new discovery and assignment must stop."
+              ></textarea>
+              <span class="rf-field__hint">
+                Existing assignments continue and historical content remains resolvable.
+              </span>
+            </label>
+            <button class="rf-button" type="submit" [disabled]="!retirementReason.trim()">
+              Retire version
+            </button>
+          </form>
+        }
 
         @if (current.allowedActions.includes('assign')) {
           <form class="assignment" (ngSubmit)="assign()">

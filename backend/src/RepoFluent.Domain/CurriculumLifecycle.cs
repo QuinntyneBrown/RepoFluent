@@ -73,6 +73,17 @@ public sealed class CurriculumLifecycle
         return publishedVersionId;
     }
 
+    public void Retire()
+    {
+        if (Status == CurriculumStatus.Retired)
+        {
+            return;
+        }
+
+        Require(CurriculumStatus.Published, "Only a published version can be retired.");
+        Status = CurriculumStatus.Retired;
+    }
+
     private void Require(CurriculumStatus expected, string message)
     {
         if (Status != expected)

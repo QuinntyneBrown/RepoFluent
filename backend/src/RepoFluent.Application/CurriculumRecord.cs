@@ -45,4 +45,6 @@ public sealed class CurriculumRecord
     public ReviewDecision? ReviewDecision { get; set; }
 
     public Publication? Publication { get; set; }
+
+    public Retirement? Retirement { get; set; }
 }

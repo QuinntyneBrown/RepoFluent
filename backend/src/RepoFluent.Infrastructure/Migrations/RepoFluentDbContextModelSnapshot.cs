@@ -143,6 +143,10 @@ namespace RepoFluent.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RetirementJson")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTimeOffset?>("ReviewedAt")
                         .HasColumnType("TEXT");
 

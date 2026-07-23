@@ -48,6 +48,11 @@ public interface ICurriculumStore
         Guid publishedVersionId,
         CancellationToken cancellationToken);
 
+    Task<CurriculumRecord?> GetRetainedVersionAsync(
+        string tenantId,
+        Guid publishedVersionId,
+        CancellationToken cancellationToken);
+
     Task RecordAuditAsync(
         string tenantId,
         string actorId,

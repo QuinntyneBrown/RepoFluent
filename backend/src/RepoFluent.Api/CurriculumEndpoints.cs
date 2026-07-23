@@ -16,6 +16,10 @@ public static class CurriculumEndpoints
             AcknowledgeWarningsAsync);
         api.MapPost("/curriculum-drafts/{id:guid}/review-decisions", ReviewAsync);
         api.MapPost("/curriculum-drafts/{id:guid}/publish", PublishAsync);
+        api.MapGet(
+            "/curriculum-drafts/{id:guid}/comparisons/{baseVersionId:guid}",
+            CompareAsync);
+        api.MapPost("/curriculum-drafts/{id:guid}/retire", RetireAsync);
         api.MapPost("/assignments", AssignAsync);
         api.MapGet("/learning/assignments", GetAssignmentsAsync);
         api.MapGet("/learning/versions/{versionId:guid}/courses/{courseId}", GetCourseAsync);
@@ -91,6 +95,32 @@ public static class CurriculumEndpoints
         CurriculumWorkflow workflow,
         CancellationToken cancellationToken) =>
         Results.Ok(await workflow.PublishAsync(context.GetActor(), id, cancellationToken));
+
+    private static async Task<IResult> CompareAsync(
+        Guid id,
+        Guid baseVersionId,
+        HttpContext context,
+        CurriculumWorkflow workflow,
+        CancellationToken cancellationToken) =>
+        Results.Ok(
+            await workflow.CompareAsync(
+                context.GetActor(),
+                id,
+                baseVersionId,
+                cancellationToken));
+
+    private static async Task<IResult> RetireAsync(
+        Guid id,
+        RetirementRequest request,
+        HttpContext context,
+        CurriculumWorkflow workflow,
+        CancellationToken cancellationToken) =>
+        Results.Ok(
+            await workflow.RetireAsync(
+                context.GetActor(),
+                id,
+                request,
+                cancellationToken));
 
     private static async Task<IResult> AssignAsync(
         AssignmentRequest request,

@@ -3,16 +3,18 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Compare and retire versions
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
+Person(reviewer, "Curriculum reviewer", "Reviews classified semantic impact")
+Person(admin, "Curriculum administrator", "Retires active assignment availability")
+Person(learner, "Assigned learner", "Reads retained content")
 System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Curriculum administration", "Angular 21", "Curriculum lifecycle interface")
-  Container(api, "Curriculum Lifecycle API", "ASP.NET Core", "Applies application and domain policy")
-  ContainerDb(store, "Curriculum store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+  Container(web, "Curriculum workspace", "Angular 21", "Presents comparison, objective impact, and retirement evidence")
+  Container(api, "RepoFluent API", "ASP.NET Core on .NET 10", "Applies tenant, role, comparison, lifecycle, and assignment policy")
+  ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Stores immutable versions, retirement token, assignments, audit, and outbox events")
 }
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(reviewer, web, "Chooses a base version", "HTTPS")
+Rel(admin, web, "Submits retirement reason", "HTTPS")
+Rel(web, api, "Compares and retires", "JSON over HTTPS")
+Rel(api, store, "Reads retained versions and commits retirement", "EF Core")
+Rel(learner, api, "Reads assigned retained content", "HTTPS")
 @enduml

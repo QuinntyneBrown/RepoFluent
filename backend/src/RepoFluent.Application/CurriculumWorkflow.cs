@@ -382,6 +382,119 @@ public sealed class CurriculumWorkflow(
         return ToStatus(actor, record);
     }
 
+    public async Task<VersionComparison> CompareAsync(
+        ActorContext actor,
+        Guid id,
+        Guid baseVersionId,
+        CancellationToken cancellationToken)
+    {
+        RequireAnyRole(actor, "Reviewer", "Administrator");
+        var targetRecord = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        if (targetRecord.Status is not (CurriculumStatus.Published or CurriculumStatus.Retired)
+            || targetRecord.PublishedVersionId is not { } targetVersionId)
+        {
+            throw Conflict(
+                "CLI_COMPARISON_TARGET_REQUIRED",
+                "The comparison target must be a retained published version.");
+        }
+
+        var baseRecord = await store.GetRetainedVersionAsync(
+            actor.TenantId,
+            baseVersionId,
+            cancellationToken)
+            ?? throw new WorkflowException(
+                404,
+                "CLI_COMPARISON_BASE_NOT_FOUND",
+                "The base published version is not available.");
+        if (baseVersionId == targetVersionId)
+        {
+            throw Conflict(
+                "CLI_COMPARISON_DISTINCT_VERSIONS_REQUIRED",
+                "Choose two distinct published versions.");
+        }
+
+        if (!string.Equals(baseRecord.PackageId, targetRecord.PackageId, StringComparison.Ordinal))
+        {
+            throw Conflict(
+                "CLI_COMPARISON_PACKAGE_MISMATCH",
+                "Published versions must share the same package identity.");
+        }
+
+        var comparison = PackageVersionComparer.Compare(
+            baseVersionId,
+            PackageValidator.ReadTrusted(baseRecord.RawPackage),
+            targetVersionId,
+            PackageValidator.ReadTrusted(targetRecord.RawPackage));
+        await store.RecordAuditAsync(
+            actor.TenantId,
+            actor.UserId,
+            "curriculum.version-comparison-viewed",
+            targetRecord.Id.ToString(),
+            targetRecord.CorrelationId,
+            cancellationToken);
+        return comparison;
+    }
+
+    public async Task<ImportStatus> RetireAsync(
+        ActorContext actor,
+        Guid id,
+        RetirementRequest request,
+        CancellationToken cancellationToken)
+    {
+        RequireRole(actor, "Administrator");
+        if (string.IsNullOrWhiteSpace(request.Reason))
+        {
+            throw new WorkflowException(
+                400,
+                "CLI_RETIREMENT_REASON_REQUIRED",
+                "A retirement reason is required.");
+        }
+
+        var record = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        if (record.Status == CurriculumStatus.Retired && record.Retirement is not null)
+        {
+            return ToStatus(actor, record);
+        }
+
+        var publication = record.Publication
+            ?? throw Conflict(
+                "CLI_RETIREMENT_PUBLICATION_REQUIRED",
+                "Only an immutable publication can be retired.");
+        var lifecycle = Rehydrate(record);
+        TryTransition(lifecycle.Retire);
+        record.Status = lifecycle.Status;
+        record.Retirement = new(
+            publication.VersionId,
+            actor.TenantId,
+            actor.UserId,
+            timeProvider.GetUtcNow(),
+            "ContinueAccess",
+            request.Reason.Trim(),
+            Guid.NewGuid());
+        try
+        {
+            await store.SaveImportAsync(
+                record,
+                "curriculum.retired",
+                actor.UserId,
+                cancellationToken);
+        }
+        catch (ConcurrentRetirementException)
+        {
+            var converged = await GetImportAsync(actor.TenantId, id, cancellationToken);
+            if (converged.Status != CurriculumStatus.Retired || converged.Retirement is null)
+            {
+                throw Conflict(
+                    "CLI_RETIREMENT_CONFLICT",
+                    "The retirement command did not converge on a retained version.");
+            }
+
+            return ToStatus(actor, converged);
+        }
+
+        return ToStatus(actor, record);
+    }
+
     public async Task<Assignment> AssignAsync(
         ActorContext actor,
         AssignmentRequest request,
@@ -428,7 +541,10 @@ public sealed class CurriculumWorkflow(
         var results = new List<Assignment>();
         foreach (var assignment in assignments)
         {
-            var curriculum = await store.GetPublishedAsync(actor.TenantId, assignment.PublishedVersionId, cancellationToken);
+            var curriculum = await store.GetRetainedVersionAsync(
+                actor.TenantId,
+                assignment.PublishedVersionId,
+                cancellationToken);
             if (curriculum is not null)
             {
                 results.Add(ToAssignment(assignment, PackageValidator.ReadTrusted(curriculum.RawPackage)));
@@ -515,7 +631,7 @@ public sealed class CurriculumWorkflow(
             throw new WorkflowException(404, "LEX_ASSIGNMENT_NOT_FOUND", "The learning content is not assigned to this learner.");
         }
 
-        var record = await store.GetPublishedAsync(actor.TenantId, versionId, cancellationToken)
+        var record = await store.GetRetainedVersionAsync(actor.TenantId, versionId, cancellationToken)
             ?? throw new WorkflowException(404, "LEX_VERSION_NOT_FOUND", "The learning content is not available.");
         return PackageValidator.ReadTrusted(record.RawPackage);
     }
@@ -564,6 +680,13 @@ public sealed class CurriculumWorkflow(
         if (record.Status == CurriculumStatus.Published && actor.IsInRole("Administrator"))
         {
             actions.Add("assign");
+            actions.Add("retire");
+        }
+
+        if (record.Status is CurriculumStatus.Published or CurriculumStatus.Retired
+            && (actor.IsInRole("Reviewer") || actor.IsInRole("Administrator")))
+        {
+            actions.Add("compare");
         }
 
         return new(
@@ -581,7 +704,8 @@ public sealed class CurriculumWorkflow(
             record.PackageVersion,
             record.ValidationAttemptCount,
             record.ReviewDecision,
-            record.Publication);
+            record.Publication,
+            record.Retirement);
     }
 
     private static bool HasUnacknowledgedWarnings(CurriculumRecord record)

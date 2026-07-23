@@ -3,10 +3,12 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Compare and retire versions
 
-Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+Person(reviewer, "Curriculum reviewer", "Compares retained versions and reviews learner impact")
+Person(admin, "Curriculum administrator", "Retires a published version with a reason")
+Person(learner, "Assigned learner", "Continues reading version-bound historical content")
+System(repofluent, "RepoFluent", "Classifies stable changes, governs availability, and retains evidence")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(reviewer, repofluent, "Compares published versions", "HTTPS")
+Rel(admin, repofluent, "Retires assignment availability", "HTTPS")
+Rel(learner, repofluent, "Reads assigned retained version", "HTTPS")
 @enduml

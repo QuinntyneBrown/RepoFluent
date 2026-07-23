@@ -104,6 +104,9 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         var publicationJson = record.Publication is null
             ? null
             : JsonSerializer.Serialize(record.Publication, SerializerOptions);
+        var retirementJson = record.Retirement is null
+            ? null
+            : JsonSerializer.Serialize(record.Retirement, SerializerOptions);
         if (reviewDecisionJson is not null
             && entity.ReviewDecisionJson is not null
             && !string.Equals(
@@ -124,7 +127,18 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             throw new ConcurrentPublicationException();
         }
 
+        if (retirementJson is not null
+            && entity.RetirementJson is not null
+            && !string.Equals(
+                retirementJson,
+                entity.RetirementJson,
+                StringComparison.Ordinal))
+        {
+            throw new ConcurrentRetirementException();
+        }
+
         var isNewPublication = record.Publication is not null && entity.PublicationJson is null;
+        var isNewRetirement = record.Retirement is not null && entity.RetirementJson is null;
         entity.Status = record.Status.ToString();
         entity.Title = record.Title;
         entity.PackageId = record.PackageId;
@@ -142,6 +156,7 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             : JsonSerializer.Serialize(record.WarningAcknowledgement, SerializerOptions);
         entity.ReviewDecisionJson = reviewDecisionJson;
         entity.PublicationJson = publicationJson;
+        entity.RetirementJson = retirementJson;
         if (isNewPublication)
         {
             dbContext.DomainEvents.Add(new DomainEventEntity
@@ -152,6 +167,19 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
                 AggregateId = record.Id,
                 PayloadJson = publicationJson!,
                 OccurredAt = record.Publication.PublishedAt
+            });
+        }
+
+        if (isNewRetirement)
+        {
+            dbContext.DomainEvents.Add(new DomainEventEntity
+            {
+                Id = record.Retirement!.EventId,
+                TenantId = record.TenantId,
+                EventType = "curriculum.version-retired",
+                AggregateId = record.Id,
+                PayloadJson = retirementJson!,
+                OccurredAt = record.Retirement.RetiredAt
             });
         }
 
@@ -168,6 +196,16 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
                 .SingleAsync(
                     item => item.TenantId == record.TenantId && item.Id == record.Id,
                     cancellationToken);
+            if (retirementJson is not null
+                && current.RetirementJson is not null
+                && !string.Equals(
+                    retirementJson,
+                    current.RetirementJson,
+                    StringComparison.Ordinal))
+            {
+                throw new ConcurrentRetirementException();
+            }
+
             if (publicationJson is not null
                 && current.PublicationJson is not null
                 && !string.Equals(
@@ -264,6 +302,22 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         return entity is null ? null : ToRecord(entity);
     }
 
+    public async Task<CurriculumRecord?> GetRetainedVersionAsync(
+        string tenantId,
+        Guid publishedVersionId,
+        CancellationToken cancellationToken)
+    {
+        var entity = await dbContext.CurriculumImports
+            .AsNoTracking()
+            .SingleOrDefaultAsync(
+                item => item.TenantId == tenantId
+                    && item.PublishedVersionId == publishedVersionId
+                    && (item.Status == nameof(CurriculumStatus.Published)
+                        || item.Status == nameof(CurriculumStatus.Retired)),
+                cancellationToken);
+        return entity is null ? null : ToRecord(entity);
+    }
+
     public async Task RecordAuditAsync(
         string tenantId,
         string actorId,
@@ -306,7 +360,8 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             ValidationReportJson = null,
             WarningAcknowledgementJson = null,
             ReviewDecisionJson = null,
-            PublicationJson = null
+            PublicationJson = null,
+            RetirementJson = null
         };
 
     private static CurriculumRecord ToRecord(CurriculumImportEntity entity) =>
@@ -350,6 +405,11 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
                 ? null
                 : JsonSerializer.Deserialize<Publication>(
                     entity.PublicationJson,
+                    SerializerOptions),
+            Retirement = entity.RetirementJson is null
+                ? null
+                : JsonSerializer.Deserialize<Retirement>(
+                    entity.RetirementJson,
                     SerializerOptions)
         };
 }

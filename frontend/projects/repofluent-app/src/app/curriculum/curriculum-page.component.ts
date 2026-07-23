@@ -1,6 +1,12 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DevPersonaService, ImportStatus, Preview, RepoFluentApiService } from 'api';
+import {
+  DevPersonaService,
+  ImportStatus,
+  Preview,
+  RepoFluentApiService,
+  VersionComparison,
+} from 'api';
 import { LessonRendererComponent } from 'components';
 import { firstValueFrom } from 'rxjs';
 import { ContractModelWorkbenchComponent } from './contract-model-workbench.component';
@@ -21,6 +27,7 @@ export class CurriculumPageComponent {
 
   protected readonly status = signal<ImportStatus | null>(null);
   protected readonly preview = signal<Preview | null>(null);
+  protected readonly comparison = signal<VersionComparison | null>(null);
   protected readonly isBusy = signal(false);
   protected readonly message = signal('');
   protected readonly error = signal('');
@@ -30,6 +37,8 @@ export class CurriculumPageComponent {
   protected learnerId = 'learner';
   protected isRequired = false;
   protected reviewRationale = '';
+  protected baseVersionId = '';
+  protected retirementReason = '';
 
   constructor() {
     effect(() => {
@@ -160,6 +169,32 @@ export class CurriculumPageComponent {
     );
   }
 
+  protected async compareVersions(): Promise<void> {
+    const current = this.status();
+    if (!current || !this.baseVersionId.trim()) return;
+    await this.run(
+      async () =>
+        this.comparison.set(
+          await firstValueFrom(this.api.compare(current.id, this.baseVersionId.trim())),
+        ),
+      'Comparing retained curriculum versions',
+      'Semantic version comparison ready',
+    );
+  }
+
+  protected async retire(): Promise<void> {
+    const current = this.status();
+    if (!current || !this.retirementReason.trim()) return;
+    await this.run(
+      async () =>
+        this.status.set(
+          await firstValueFrom(this.api.retire(current.id, this.retirementReason.trim())),
+        ),
+      'Retiring published curriculum version',
+      'Curriculum version retired with historical access retained',
+    );
+  }
+
   protected async assign(): Promise<void> {
     const versionId = this.status()?.publishedVersionId;
     if (!versionId) return;
@@ -182,6 +217,7 @@ export class CurriculumPageComponent {
       Approved: 'Approved',
       Rejected: 'Rejected',
       Published: 'Published',
+      Retired: 'Retired',
     };
     return labels[value.status];
   }

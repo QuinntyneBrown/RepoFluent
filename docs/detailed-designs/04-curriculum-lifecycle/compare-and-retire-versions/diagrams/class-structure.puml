@@ -11,48 +11,72 @@ skinparam class {
 }
 title Class structure — Compare and retire versions
 
-class CompareAndRetireVersionsRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class CurriculumWorkflow {
+  +CompareAsync(actor, id, baseVersionId): Task<VersionComparison>
+  +RetireAsync(actor, id, request): Task<ImportStatus>
+  +AssignAsync(actor, request, correlationId): Task<Assignment>
+  +GetLessonAsync(actor, versionId, courseId, lessonId): Task<LessonView>
 }
 
-class CompareAndRetireVersionsResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class PackageVersionComparer {
+  +Compare(baseVersionId, baseline, targetVersionId, target): VersionComparison
 }
 
-class CompareAndRetireVersionsRecord {
-  +string Id
+class VersionComparison {
+  +Guid BaseVersionId
+  +Guid TargetVersionId
+  +string BaseVersion
+  +string TargetVersion
+  +IReadOnlyList~VersionChange~ Changes
+  +IReadOnlyList~string~ AffectedObjectiveIds
+  +bool LearnerRefreshRequired
+}
+
+class VersionChange {
+  +string Classification
+  +string EntityType
+  +string EntityId
+  +IReadOnlyList~string~ AffectedObjectiveIds
+  +bool LearnerRefreshRequired
+}
+
+class Retirement {
+  +Guid VersionId
   +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: CompareAndRetireVersionsResult): void
+  +string RetiredBy
+  +DateTimeOffset RetiredAt
+  +string ExistingAssignmentPolicy
+  +string Reason
+  +Guid EventId
 }
 
-class CompareAndRetireVersionsPolicy {
-  +Evaluate(request: CompareAndRetireVersionsRequest, current: CompareAndRetireVersionsRecord): CompareAndRetireVersionsResult
+class CurriculumRecord {
+  +CurriculumStatus Status
+  +Publication? Publication
+  +Retirement? Retirement
 }
 
-interface ICompareAndRetireVersionsRepository {
-  +Load(scopeId: string, targetId: string): Task<CompareAndRetireVersionsRecord>
-  +Save(record: CompareAndRetireVersionsRecord, expectedVersion: long): Task
+class CurriculumLifecycle {
+  +Retire(): void
 }
 
-class CompareAndRetireVersionsHandler {
-  +Handle(request: CompareAndRetireVersionsRequest): Task<CompareAndRetireVersionsResult>
+interface ICurriculumStore {
+  +GetPublishedAsync(tenantId, versionId): Task<CurriculumRecord?>
+  +GetRetainedVersionAsync(tenantId, versionId): Task<CurriculumRecord?>
+  +SaveImportAsync(record, action, actorId): Task
 }
 
-CompareAndRetireVersionsHandler ..> CompareAndRetireVersionsRequest : handles
-CompareAndRetireVersionsHandler ..> CompareAndRetireVersionsPolicy : invokes
-CompareAndRetireVersionsHandler ..> ICompareAndRetireVersionsRepository : uses
-ICompareAndRetireVersionsRepository --> CompareAndRetireVersionsRecord : loads / saves
-CompareAndRetireVersionsPolicy ..> CompareAndRetireVersionsRecord : evaluates
-CompareAndRetireVersionsPolicy ..> CompareAndRetireVersionsResult : creates
-CompareAndRetireVersionsRecord ..> CompareAndRetireVersionsResult : applies
+class CurriculumStore
+class DomainEventEntity
+
+CurriculumWorkflow --> PackageVersionComparer : classifies through
+PackageVersionComparer --> VersionComparison : creates
+VersionComparison *-- "0..*" VersionChange
+CurriculumWorkflow --> CurriculumLifecycle : transitions through
+CurriculumWorkflow ..> Retirement : creates
+CurriculumWorkflow --> ICurriculumStore : loads and saves through
+ICurriculumStore <|.. CurriculumStore
+CurriculumRecord *-- "0..1" Retirement
+Retirement ..> DomainEventEntity : serialized into
+ICurriculumStore --> CurriculumRecord : stores
 @enduml

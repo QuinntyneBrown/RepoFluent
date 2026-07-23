@@ -80,4 +80,19 @@ public sealed class CurriculumLifecycleTests
         Assert.Throws<CurriculumLifecycleException>(() => lifecycle.Publish(Guid.NewGuid()));
         Assert.Equal(CurriculumStatus.Draft, lifecycle.Status);
     }
+
+    [Fact]
+    public void PublishedVersionCanBeRetiredIdempotently()
+    {
+        var lifecycle = CurriculumLifecycle.Receive(Guid.NewGuid(), "author");
+        lifecycle.BeginValidation();
+        lifecycle.CompleteValidation(hasBlockingIssues: false);
+        lifecycle.Review("reviewer", isApproved: true);
+        lifecycle.Publish(Guid.NewGuid());
+
+        lifecycle.Retire();
+        lifecycle.Retire();
+
+        Assert.Equal(CurriculumStatus.Retired, lifecycle.Status);
+    }
 }

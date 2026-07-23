@@ -9,6 +9,7 @@ import type { ImportStatus } from './import-status';
 import type { LearningAssignment } from './learning-assignment';
 import type { LessonView } from './lesson-view';
 import type { Preview } from './preview';
+import type { VersionComparison } from './version-comparison';
 
 @Injectable({ providedIn: 'root' })
 export class RepoFluentApiService {
@@ -78,6 +79,16 @@ export class RepoFluentApiService {
 
   publish(id: string): Observable<ImportStatus> {
     return this.http.post<ImportStatus>(`/api/curriculum-drafts/${id}/publish`, {});
+  }
+
+  compare(id: string, baseVersionId: string): Observable<VersionComparison> {
+    return this.http.get<VersionComparison>(
+      `/api/curriculum-drafts/${id}/comparisons/${baseVersionId}`,
+    );
+  }
+
+  retire(id: string, reason: string): Observable<ImportStatus> {
+    return this.http.post<ImportStatus>(`/api/curriculum-drafts/${id}/retire`, { reason });
   }
 
   assign(

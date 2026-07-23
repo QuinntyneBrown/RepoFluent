@@ -17,4 +17,5 @@ public sealed record ImportStatus(
     string PackageVersion,
     int ValidationAttemptCount,
     ReviewDecision? ReviewDecision,
-    Publication? Publication);
+    Publication? Publication,
+    Retirement? Retirement);

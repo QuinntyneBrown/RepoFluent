@@ -1,5 +1,6 @@
 import type { CurriculumStatus } from './curriculum-status';
 import type { Publication } from './publication';
+import type { Retirement } from './retirement';
 import type { ReviewDecision } from './review-decision';
 import type { ValidationIssue } from './validation-issue';
 import type { ValidationReport } from './validation-report';
@@ -21,4 +22,5 @@ export interface ImportStatus {
   validationAttemptCount: number;
   reviewDecision: ReviewDecision | null;
   publication: Publication | null;
+  retirement: Retirement | null;
 }

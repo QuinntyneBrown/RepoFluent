@@ -3,16 +3,28 @@
 LAYOUT_WITH_LEGEND()
 title Components — Compare and retire versions
 
-Container_Boundary(api, "Curriculum Lifecycle API") {
-  Component(controller, "CompareAndRetireVersionsController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "CompareAndRetireVersionsHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "CompareAndRetireVersionsPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "ICompareAndRetireVersionsRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Curriculum store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(page, "CurriculumPageComponent", "Angular component", "Presents classified changes, objectives, policies, reason, actor, and event")
+  Component(client, "RepoFluentApiService", "Angular API client", "Submits typed comparison and retirement requests")
 }
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Container_Boundary(api, "RepoFluent API") {
+  Component(endpoints, "CurriculumEndpoints", "ASP.NET Core endpoints", "Maps comparison and Administrator retirement routes")
+  Component(workflow, "CurriculumWorkflow", "Application service", "Applies authorization, tenant, package, lifecycle, and assignment policy")
+  Component(comparer, "PackageVersionComparer", "Application policy", "Classifies stable semantic and presentational changes")
+  Component(lifecycle, "CurriculumLifecycle", "Domain model", "Transitions Published to Retired")
+  Component(port, "ICurriculumStore", "Application port", "Separates active publication reads from retained content reads")
+  Component(retirement, "Retirement", "Application record", "Binds version, policy, reason, actor, time, and event")
+}
+
+ContainerDb(store, "Curriculum store", "SQLite through EF Core", "Stores packages, assignments, retirement token, audit, and outbox rows")
+
+Rel(page, client, "Invokes")
+Rel(client, endpoints, "Calls", "JSON over HTTPS")
+Rel(endpoints, workflow, "Dispatches to")
+Rel(workflow, comparer, "Compares through")
+Rel(workflow, lifecycle, "Transitions through")
+Rel(workflow, retirement, "Creates")
+Rel(workflow, port, "Loads and saves through")
+Rel(port, store, "Persists through CurriculumStore")
 @enduml

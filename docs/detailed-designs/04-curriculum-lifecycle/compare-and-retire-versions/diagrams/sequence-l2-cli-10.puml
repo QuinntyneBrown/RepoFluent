@@ -1,57 +1,57 @@
 @startuml
-title UML sequence behaviour — Retirement and unpublication
+title UML sequence behaviour — Retirement and retained access
 skinparam backgroundColor #FFFFFF
 skinparam shadowing false
 skinparam roundcorner 12
 skinparam defaultFontName Arial
 skinparam ArrowColor #344054
-skinparam rectangle {
-  BorderColor #344054
-  FontColor #101828
-}
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "CompareAndRetireVersionsPage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Curriculum administrator" as admin
+actor "Assigned learner" as learner
+box "Frontend — Curriculum workspace" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "CompareAndRetireVersionsController" as controller
+box "Backend — Curriculum API" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
 box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "CompareAndRetireVersionsHandler" as handler
-  participant "CompareAndRetireVersionsPolicy" as policy
+  participant "CurriculumWorkflow" as workflow
+  participant "CurriculumLifecycle" as lifecycle
+  entity "Retirement" as retirement
 end box
 box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "ICompareAndRetireVersionsRepository" as repository
-  database "Curriculum store" as store
+  participant "ICurriculumStore" as port
+  database "SQLite curriculum store" as store
 end box
-actor -> entry : Start compare and retire versions
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch CompareAndRetireVersionsRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-10
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
-end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+admin -> page : Enter retirement reason
+page -> client : Retire current published version
+client -> endpoints : POST /api/curriculum-drafts/{id}/retire
+endpoints -> workflow : RetireAsync Administrator actor
+workflow -> port : Load tenant-scoped publication
+port -> store : Read publication and retirement token
+store --> port : Published lifecycle record
+port --> workflow : Immutable publication
+workflow -> workflow : Apply L2-CLI-10 role and reason gates
+workflow -> lifecycle : Retire()
+lifecycle --> workflow : Retired status
+workflow -> retirement : Bind ContinueAccess, reason, actor, time, event
+retirement --> workflow : Immutable retirement
+workflow -> port : Save status, retirement, audit, and event
+port -> store : Commit one SaveChanges transaction
+store --> port : Retained version
+port --> workflow : Durable retirement evidence
+workflow --> endpoints : Retired ImportStatus
+endpoints --> client : 200 retirement evidence
+client --> page : Policy, reason, actor, and event
+page --> admin : No new assignment; history retained
+
+learner -> endpoints : GET assigned historical lesson
+endpoints -> workflow : GetLessonAsync version identity
+workflow -> port : GetRetainedVersionAsync
+port -> store : Read Published or Retired row
+store --> port : Retired content
+port --> workflow : Original package
+workflow --> endpoints : Version-bound lesson
+endpoints --> learner : 200 retained content
 @enduml

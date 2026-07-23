@@ -11,5 +11,6 @@ public enum CurriculumStatus
     Draft,
     Approved,
     Rejected,
-    Published
+    Published,
+    Retired
 }
