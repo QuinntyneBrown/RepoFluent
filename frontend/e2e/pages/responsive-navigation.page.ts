@@ -164,6 +164,34 @@ export class ResponsiveNavigationPage {
     ).toBeFocused();
   }
 
+  async expectDesktopSplitLayout(): Promise<void> {
+    const layout = await this.page.locator('.lesson').evaluate((lesson) => {
+      const source = lesson.querySelector<HTMLElement>('.lesson__source')!;
+      return {
+        columns: getComputedStyle(lesson).gridTemplateColumns.split(' ').length,
+        display: getComputedStyle(lesson).display,
+        sourcePosition: getComputedStyle(source).position,
+      };
+    });
+    expect(layout).toEqual({
+      columns: 2,
+      display: 'grid',
+      sourcePosition: 'static',
+    });
+  }
+
+  async expectNarrowDrawerLayout(): Promise<void> {
+    const layout = await this.page
+      .getByRole('complementary', { name: 'Source context' })
+      .evaluate((source) => ({
+        position: getComputedStyle(source).position,
+        width: source.getBoundingClientRect().width,
+      }));
+    expect(layout.position).toBe('fixed');
+    expect(layout.width).toBeLessThanOrEqual(390);
+    expect(layout.width).toBeGreaterThanOrEqual(389);
+  }
+
   async useNarrowViewport(): Promise<void> {
     await this.page.setViewportSize({ width: 390, height: 844 });
   }

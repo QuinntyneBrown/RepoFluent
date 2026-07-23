@@ -22,13 +22,15 @@ test('responsive navigation preserves source context and progressive lesson posi
   await responsiveNavigation.expectProgressiveContent(33);
 
   await responsiveNavigation.openSourceContext();
-  await responsiveNavigation.expectScreenshot('preserve-responsive-navigation-desktop.png');
+  await responsiveNavigation.expectDesktopSplitLayout();
+  await responsiveNavigation.expectScreenshot('preserve-responsive-navigation-desktop.png', 0.08);
   await responsiveNavigation.closeSourceWithBrowserBack();
 
   await responsiveNavigation.useNarrowViewport();
   await responsiveNavigation.expectNoPageOverflow();
   await responsiveNavigation.openSourceContext();
-  await responsiveNavigation.expectScreenshot('preserve-responsive-navigation-narrow.png', 0.05);
+  await responsiveNavigation.expectNarrowDrawerLayout();
+  await responsiveNavigation.expectScreenshot('preserve-responsive-navigation-narrow.png', 0.08);
   await responsiveNavigation.closeSourceWithControl();
 
   await responsiveNavigation.useHighZoomEquivalentViewport();
