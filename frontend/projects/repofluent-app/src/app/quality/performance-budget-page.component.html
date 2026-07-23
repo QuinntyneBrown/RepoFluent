@@ -1,0 +1,134 @@
+<header class="page-heading">
+  <p class="eyebrow">&gt; experience.measure --profile production-v1</p>
+  <h1>Experience performance budgets</h1>
+  <p class="page-heading__lede">
+    One approved profile connects repeatable release gates to privacy-safe real-user measurements.
+  </p>
+</header>
+
+<section class="budget-grid" aria-label="Performance budget status">
+  <article class="rf-panel budget-card">
+    <div class="rf-panel__header">
+      Learner shell
+      <span class="rf-status rf-status--success">p75</span>
+    </div>
+    <div class="rf-panel__body">
+      <strong class="budget-value">≤ 2.5 s</strong>
+      <p>Primary heading visible and primary navigation operable.</p>
+      <span class="budget-result">
+        @if (performanceBudget.measurements().length > 0) {
+          Within budget
+        } @else {
+          Awaiting sample
+        }
+      </span>
+    </div>
+  </article>
+
+  <article class="rf-panel budget-card">
+    <div class="rf-panel__header">
+      Typical interaction
+      <span class="rf-status rf-status--info">p75</span>
+    </div>
+    <div class="rf-panel__body">
+      <strong class="budget-value">≤ 200 ms</strong>
+      <p>Input to the next visible, semantic response.</p>
+      <span class="budget-result">Lab + RUM gate</span>
+    </div>
+  </article>
+
+  <article class="rf-panel budget-card">
+    <div class="rf-panel__header">
+      Animation
+      <span class="rf-status rf-status--info">target</span>
+    </div>
+    <div class="rf-panel__body">
+      <strong class="budget-value">60 fps</strong>
+      <p>Effects yield before input or semantic updates are delayed.</p>
+      <span class="budget-result">Effect degradation guard active</span>
+      <span
+        class="rf-visually-hidden"
+        role="status"
+        aria-label="Animation performance policy"
+        aria-live="polite"
+      >
+        @if (performanceBudget.animationPolicy() === 'reduced') {
+          Reduced effects · semantic updates preserved
+        } @else if (performanceBudget.animationPolicy() === 'degraded') {
+          Effects degraded · semantic updates preserved
+        } @else {
+          Full effects · long-task guard active
+        }
+      </span>
+    </div>
+  </article>
+</section>
+
+<section
+  class="rf-panel profile"
+  aria-labelledby="profile-title"
+  aria-label="Approved measurement profile"
+>
+  <div class="rf-panel__header">
+    <span id="profile-title">Approved measurement profile</span>
+    <span>{{ performanceBudget.profile.id }}</span>
+  </div>
+  <div class="profile-body">
+    <dl class="rf-property-list">
+      <div>
+        <dt>Device</dt>
+        <dd>{{ performanceBudget.profile.device }}</dd>
+      </div>
+      <div>
+        <dt>Browser</dt>
+        <dd>{{ performanceBudget.profile.browser }}</dd>
+      </div>
+      <div>
+        <dt>Connection</dt>
+        <dd>{{ performanceBudget.profile.connection }}</dd>
+      </div>
+      <div>
+        <dt>Cache</dt>
+        <dd>{{ performanceBudget.profile.cache }}</dd>
+      </div>
+      <div>
+        <dt>Tenant content envelope</dt>
+        <dd>{{ performanceBudget.profile.contentEnvelope }}</dd>
+      </div>
+      <div>
+        <dt>Usability milestone</dt>
+        <dd>{{ performanceBudget.profile.usabilityMilestone }}</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="measurement-layout" aria-label="Measurement strategy">
+  <article class="rf-panel">
+    <div class="rf-panel__header">
+      Release lab gate
+      <span class="rf-status rf-status--success">repeatable</span>
+    </div>
+    <div class="rf-panel__body strategy-copy">
+      <p class="command-line">$ playwright test performance-budget</p>
+      <p>
+        Cold-load usability and warm interaction samples run against the checked-in 33-block,
+        seven-node content envelope.
+      </p>
+    </div>
+  </article>
+
+  <article class="rf-panel">
+    <div class="rf-panel__header">
+      Real-user monitoring
+      <span class="rf-status rf-status--success">active</span>
+    </div>
+    <div class="rf-panel__body strategy-copy">
+      <p class="command-line">event: repofluent:performance</p>
+      <p>
+        Bounded metric name, duration, budget, outcome, and profile identifier only. No user,
+        tenant, route, or content values.
+      </p>
+    </div>
+  </article>
+</section>

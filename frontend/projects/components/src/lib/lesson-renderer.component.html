@@ -49,6 +49,7 @@
                   type="button"
                   aria-label="Open source context for {{ block.symbol }}"
                   aria-controls="lesson-source-context"
+                  data-rf-performance-interaction="drawer"
                   [attr.aria-expanded]="activeSourceIndex() === index"
                   [attr.aria-pressed]="activeSourceIndex() === index"
                   (click)="openSource(index, $event)"
@@ -82,7 +83,12 @@
             Showing {{ visibleBlocks().length }} of {{ lesson().blocks.length }} lesson blocks
           </p>
           @if (remainingBlockCount() > 0) {
-            <button class="rf-button" type="button" (click)="showMoreContent()">
+            <button
+              class="rf-button"
+              type="button"
+              data-rf-performance-interaction="progress"
+              (click)="showMoreContent()"
+            >
               Show {{ remainingBlockCount() > 10 ? 10 : remainingBlockCount() }} more lesson blocks
             </button>
           }

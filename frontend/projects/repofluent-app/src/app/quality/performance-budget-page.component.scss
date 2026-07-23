@@ -1,0 +1,121 @@
+.page-heading {
+  border-bottom: 1px solid var(--rf-color-line);
+  margin-bottom: var(--rf-space-6);
+  padding-bottom: var(--rf-space-6);
+}
+
+.eyebrow {
+  color: var(--rf-color-primary);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
+  text-transform: uppercase;
+}
+
+h1 {
+  font: var(--rf-type-page-title);
+  margin: var(--rf-space-2) 0 var(--rf-space-3);
+}
+
+.page-heading__lede {
+  color: var(--rf-color-ink-muted);
+  margin: 0;
+  max-width: var(--rf-layout-reading);
+}
+
+.budget-grid,
+.measurement-layout {
+  display: grid;
+  gap: var(--rf-space-4);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.budget-card .rf-panel__body {
+  display: grid;
+  gap: var(--rf-space-3);
+}
+
+.budget-card p,
+.strategy-copy p {
+  color: var(--rf-color-ink-muted);
+  margin: 0;
+}
+
+.budget-value {
+  color: var(--rf-color-primary);
+  font: var(--rf-type-page-title);
+}
+
+.budget-result {
+  border-left: 2px solid var(--rf-color-primary);
+  color: var(--rf-color-ink);
+  font: var(--rf-type-data);
+  padding-left: var(--rf-space-3);
+}
+
+.profile {
+  margin: var(--rf-space-5) 0;
+}
+
+.profile-body {
+  padding: var(--rf-space-5);
+}
+
+.profile .rf-property-list {
+  display: grid;
+  gap: var(--rf-space-4);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.profile .rf-property-list div {
+  border-bottom: 1px solid var(--rf-color-line);
+  display: grid;
+  gap: var(--rf-space-2);
+  padding-bottom: var(--rf-space-3);
+}
+
+.profile .rf-property-list dt {
+  color: var(--rf-color-ink-subtle);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
+  text-transform: uppercase;
+}
+
+.profile .rf-property-list dd {
+  color: var(--rf-color-ink);
+  font: var(--rf-type-data);
+  margin: 0;
+}
+
+.measurement-layout {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.strategy-copy {
+  display: grid;
+  gap: var(--rf-space-4);
+}
+
+.command-line {
+  background: var(--rf-color-void);
+  border: 1px solid var(--rf-color-line);
+  color: var(--rf-color-primary) !important;
+  font: var(--rf-type-code);
+  padding: var(--rf-space-3);
+}
+
+@media (max-width: 64rem) {
+  .budget-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile .rf-property-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 48rem) {
+  .measurement-layout,
+  .profile .rf-property-list {
+    grid-template-columns: 1fr;
+  }
+}

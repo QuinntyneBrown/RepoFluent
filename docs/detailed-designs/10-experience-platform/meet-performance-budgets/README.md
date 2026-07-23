@@ -8,8 +8,10 @@ feature measures learner-shell and interaction budgets under an approved product
 
 The checked-in reference implementation is the static `desigh-system/` site.
 Its HTML, CSS, and JavaScript work from `file://` without a runtime dependency.
-The production Angular consumer, telemetry integration, supported-browser
-matrix, and production measurement profile remain `<TO SUPPLY>`.
+The production Angular consumer now applies a versioned measurement profile,
+repeatable shell and interaction gates, bounded real-user measurement events,
+and automatic effect degradation. Supported-browser policy is implemented by
+its dedicated detailed-design feature.
 
 ## Description
 
@@ -18,14 +20,22 @@ The feature uses the following checked-in assets and planned integration seam.
 - **`desigh-system/tests/smoke.spec.js`** — current reference-page load and narrow-viewport smoke coverage.
 - **`desigh-system/package.json`** — pinned Playwright, validation, formatting, and test commands.
 - **`desigh-system/assets/tokens.css`** — bounded motion durations and reduced-motion replacements.
-- **`frontend/package.json`** — Angular 21 and TypeScript dependency baseline for the future application.
-- **`frontend/angular.json`** — empty Angular workspace awaiting the production application project.
-- **`ExperiencePlatformAdapter`** — planned Angular library boundary that maps
-  the accepted `.rf-*` contracts into product components; implementation remains
-  `<TO SUPPLY>` because `frontend/angular.json` contains no application project.
+- **`approved-performance-profile.ts`** — versioned production profile defining
+  device, browser, connection, cache, tenant content envelope, milestone, and
+  the 2.5 second / 200 ms / 60 fps budgets.
+- **`PerformanceBudgetAdapter`** — Angular library boundary that measures shell
+  usability and named input-to-visible-response interactions, emits bounded
+  non-sensitive RUM events, and degrades effects on reduced-motion preference
+  or long main-thread work.
+- **`PerformanceBudgetPageComponent`** — design-system-native operator evidence
+  view exposing budgets, the approved profile, lab gate, and RUM contract.
+- **`performance-budget.spec.ts`** — Page Object Model live-stack acceptance gate
+  covering shell usability, navigation, search, drawer, progress, map selection,
+  p75 evaluation, privacy-safe event shape, reduced motion, and visual evidence.
 - **`ExperienceConformanceSuite`** — quality boundary composed from Playwright,
-  `html-validate`, Prettier, accessibility checks, and production performance
-  gates. Production performance and browser-matrix checks remain `<TO SUPPLY>`.
+  `html-validate`, Prettier, accessibility checks, repeatable production-profile
+  performance gates, and visual regression. Browser-matrix checks remain owned
+  by their dedicated feature.
 
 The structural diagram models source artifacts as typed contracts. It does not
 claim that the current static JavaScript defines application classes.
@@ -83,3 +93,24 @@ The reference assets apply `L2-EXP-12` through a semantic contract and an access
 The reference assets apply `L2-EXP-13` through a semantic contract and an accessible fallback. The conformance suite checks the available reference behavior before the contract is consumed by the production application.
 
 ![Sequence diagram for interaction and animation budgets](diagrams/sequence-l2-exp-13.png)
+
+### Implementation evidence
+
+Status: **Implemented**
+
+- `experience-production-v1` checks in device, browser, connection, cache,
+  33-block/seven-node content envelope, usability milestone, and budget values
+  as one immutable profile consumed by the UI and test gate.
+- `PerformanceBudgetAdapter` records the shell only after the routed primary
+  heading and navigation exist, and measures named interactions after the next
+  visible browser frame.
+- The adapter retains a bounded local window and emits
+  `repofluent:performance` with only metric name, kind, duration, budget,
+  outcome, and profile identifier for deterministic telemetry forwarding.
+- Reduced-motion preference takes precedence over automatic long-task
+  degradation; both paths reduce effects through the shared motion-token
+  contract without delaying semantic updates.
+- `performance-budget.spec.ts` starts from a Page Object, evaluates the shell
+  and p75 of representative navigation, search, drawer, progress, and
+  map-selection samples, and verifies the privacy-safe event shape. It records
+  desktop and narrow baselines on Windows and Linux.

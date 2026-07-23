@@ -65,6 +65,7 @@ production-readiness conditions are satisfied.
 | Shell, modal, route, error, and validation status preserve accessible interaction      | L2-EXP-08–10                                  | Axe, component tests, Playwright POM and visuals       | Implemented scenarios                  |
 | Lesson source context and large content preserve route, focus, position, and reflow     | L2-EXP-06–07, L2-EXP-14                       | Component tests and responsive Playwright POM visuals  | Implemented scenarios                  |
 | System map preserves content, selection, relationships, and descriptions without GPU   | L2-EXP-04–05, L2-EXP-11                       | Capability unit test and Playwright POM visuals        | Implemented scenarios                  |
+| Approved profile gates shell, interaction, animation, and privacy-safe measurements    | L2-EXP-12–13                                  | Adapter unit tests and Playwright POM performance gate | Implemented scenarios                  |
 
 ## Open decisions before baseline approval
 

@@ -20,6 +20,7 @@
       aria-label="Search curriculum, code, and systems"
       aria-haspopup="dialog"
       aria-controls="command-search-dialog"
+      data-rf-performance-interaction="search"
       (click)="openCommandSearch($event)"
     >
       <span>Search curriculum, code, systems…</span>
@@ -53,6 +54,7 @@
         routerLinkActive="activity-link--active"
         [routerLinkActiveOptions]="{ exact: true }"
         aria-label="Curricula"
+        data-rf-performance-interaction="navigation"
       >
         <span class="activity-glyph" aria-hidden="true">⌂</span>
         <span class="activity-label">Curricula</span>
@@ -62,6 +64,7 @@
         routerLink="/learning"
         routerLinkActive="activity-link--active"
         aria-label="My learning"
+        data-rf-performance-interaction="navigation"
       >
         <span class="activity-glyph" aria-hidden="true">▤</span>
         <span class="activity-label">Learning</span>
@@ -71,9 +74,20 @@
         routerLink="/systems"
         routerLinkActive="activity-link--active"
         aria-label="System map"
+        data-rf-performance-interaction="navigation"
       >
         <span class="activity-glyph" aria-hidden="true">⌘</span>
         <span class="activity-label">Systems</span>
+      </a>
+      <a
+        class="activity-link"
+        routerLink="/quality"
+        routerLinkActive="activity-link--active"
+        aria-label="Experience quality"
+        data-rf-performance-interaction="navigation"
+      >
+        <span class="activity-glyph" aria-hidden="true">◫</span>
+        <span class="activity-label">Quality</span>
       </a>
     </nav>
 
@@ -97,6 +111,7 @@
               <li><span class="rf-tree__item">learning.dashboard</span></li>
               <li><span class="rf-tree__item">lesson.source</span></li>
               <li><span class="rf-tree__item">system.map</span></li>
+              <li><span class="rf-tree__item">experience.quality</span></li>
             </ul>
           </details>
         </li>

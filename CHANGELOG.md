@@ -19,3 +19,6 @@
   narrow drawer profiles, and progressive large-lesson rendering.
 - Progressive system visualization with bounded WebGPU fallback, synchronized
   semantic relationships, and equivalent extended descriptions.
+- Versioned production performance profile with p75 shell and interaction
+  gates, privacy-safe RUM events, long-task protection, and reduced-motion
+  precedence.

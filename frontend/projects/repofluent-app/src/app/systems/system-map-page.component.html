@@ -10,7 +10,13 @@
 <div class="map-toolbar">
   <label class="rf-field layer-filter">
     <span class="rf-field__label">System layer</span>
-    <select class="rf-select" [value]="selectedLayer()" (change)="filterLayer($event)">
+    <select
+      class="rf-select"
+      data-rf-performance-interaction="search-filter"
+      data-rf-performance-event="change"
+      [value]="selectedLayer()"
+      (change)="filterLayer($event)"
+    >
       <option value="all">All layers</option>
       <option value="experience">Experience layer</option>
       <option value="core">Core services</option>
@@ -52,6 +58,7 @@
           class="map-node"
           type="button"
           data-testid="system-map-visual-node"
+          data-rf-performance-interaction="map-selection"
           [attr.aria-pressed]="selectedNodeId() === node.id"
           (click)="selectNode(node.id)"
         >
@@ -119,12 +126,22 @@
         @for (edge of visibleEdges(); track edge.from + edge.to) {
           <tr>
             <td>
-              <button class="table-node" type="button" (click)="selectNode(edge.from)">
+              <button
+                class="table-node"
+                type="button"
+                data-rf-performance-interaction="map-selection"
+                (click)="selectNode(edge.from)"
+              >
                 Select {{ nodeName(edge.from) }}
               </button>
             </td>
             <td>
-              <button class="table-node" type="button" (click)="selectNode(edge.to)">
+              <button
+                class="table-node"
+                type="button"
+                data-rf-performance-interaction="map-selection"
+                (click)="selectNode(edge.to)"
+              >
                 Select {{ nodeName(edge.to) }}
               </button>
             </td>

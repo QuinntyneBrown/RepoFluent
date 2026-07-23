@@ -3,6 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
+  workers: 1,
   retries: 0,
   reporter: 'line',
   use: {
@@ -29,7 +30,8 @@ export default defineConfig({
       timeout: 120_000,
     },
     {
-      command: 'npm run start -- --host 127.0.0.1 --port 4217 --proxy-config proxy.conf.json',
+      command:
+        'npm run start -- --configuration production --host 127.0.0.1 --port 4217 --proxy-config proxy.conf.json',
       url: 'http://127.0.0.1:4217',
       reuseExistingServer: false,
       timeout: 120_000,

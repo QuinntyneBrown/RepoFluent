@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -9,7 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { DevPersonaService, Persona } from 'api';
-import { ExperiencePlatformAdapter } from 'components';
+import { ExperiencePlatformAdapter, PerformanceBudgetAdapter } from 'components';
 import { filter } from 'rxjs';
 
 @Component({
@@ -22,6 +23,7 @@ import { filter } from 'rxjs';
 export class App {
   protected readonly personas = inject(DevPersonaService);
   protected readonly experiencePlatform = inject(ExperiencePlatformAdapter);
+  private readonly performanceBudget = inject(PerformanceBudgetAdapter);
   private readonly router = inject(Router);
   private readonly commandDialog =
     viewChild.required<ElementRef<HTMLDialogElement>>('commandDialog');
@@ -32,13 +34,18 @@ export class App {
 
   constructor() {
     this.experiencePlatform.initialize();
+    this.performanceBudget.initialize();
+    afterNextRender(() => this.performanceBudget.markShellUsable());
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntilDestroyed(),
       )
       .subscribe(() => {
-        queueMicrotask(() => this.experiencePlatform.focusPrimaryHeading());
+        queueMicrotask(() => {
+          this.experiencePlatform.focusPrimaryHeading();
+          this.performanceBudget.markShellUsable();
+        });
       });
   }
 
