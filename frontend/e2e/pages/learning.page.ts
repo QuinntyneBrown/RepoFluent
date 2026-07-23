@@ -5,12 +5,18 @@ export class LearningPage {
 
   async expectRequiredAssignment(courseTitle: string): Promise<void> {
     await expect(this.page.getByRole('heading', { name: 'My learning' })).toBeVisible();
-    await expect(this.page.getByText(courseTitle)).toBeVisible();
-    await expect(this.page.getByText('Required', { exact: true })).toBeVisible();
+    const assignment = this.page.locator('article.assignment-card').filter({
+      has: this.page.getByRole('heading', { name: courseTitle, exact: true }),
+    });
+    await expect(assignment).toBeVisible();
+    await expect(assignment.getByText('Required', { exact: true })).toBeVisible();
   }
 
   async startCourse(courseTitle: string): Promise<void> {
-    await this.page.getByRole('link', { name: 'Start course' }).click();
+    const assignment = this.page.locator('article.assignment-card').filter({
+      has: this.page.getByRole('heading', { name: courseTitle, exact: true }),
+    });
+    await assignment.getByRole('link', { name: 'Start course' }).click();
     await expect(this.page.getByRole('heading', { name: courseTitle })).toBeVisible();
   }
 
@@ -20,6 +26,11 @@ export class LearningPage {
   }
 
   async expectCodeReference(path: string): Promise<void> {
-    await expect(this.page.getByText(path)).toBeVisible();
+    await this.page
+      .getByRole('button', { name: 'Open source context for OrderController.Create' })
+      .click();
+    await expect(
+      this.page.getByRole('complementary', { name: 'Source context' }).getByText(path),
+    ).toBeVisible();
   }
 }

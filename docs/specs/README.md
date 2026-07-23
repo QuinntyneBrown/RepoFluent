@@ -63,6 +63,7 @@ production-readiness conditions are satisfied.
 | Learner sees assigned learning and renders hierarchy, safe blocks, and code reference  | L2-LEX-01, L2-LEX-03, L2-LEX-04               | Angular component test and Playwright golden path      | Implemented scenario                   |
 | Angular consumes versioned default/tenant tokens and preserves state under zoom/motion | L2-EXP-01–03                                  | Consumer guard, static conformance, Playwright visuals | Implemented scenarios                  |
 | Shell, modal, route, error, and validation status preserve accessible interaction      | L2-EXP-08–10                                  | Axe, component tests, Playwright POM and visuals       | Implemented scenarios                  |
+| Lesson source context and large content preserve route, focus, position, and reflow     | L2-EXP-06–07, L2-EXP-14                       | Component tests and responsive Playwright POM visuals  | Implemented scenarios                  |
 
 ## Open decisions before baseline approval
 

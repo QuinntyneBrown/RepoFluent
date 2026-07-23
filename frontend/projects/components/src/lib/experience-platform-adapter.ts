@@ -35,4 +35,41 @@ export class ExperiencePlatformAdapter {
     heading.focus({ preventScroll: true });
     this.pageAnnouncement.set(`${heading.textContent?.trim() ?? 'Page'} page loaded`);
   }
+
+  openContext(parameter: string, value: string): void {
+    const view = this.document.defaultView;
+    if (!view) return;
+
+    const url = new URL(view.location.href);
+    url.searchParams.set(parameter, value);
+    view.history.pushState({ ...view.history.state, repoFluentContext: parameter }, '', url);
+  }
+
+  closeContext(parameter: string): boolean {
+    const view = this.document.defaultView;
+    if (!view) return false;
+
+    if (view.history.state?.repoFluentContext === parameter) {
+      view.history.back();
+      return true;
+    }
+
+    const url = new URL(view.location.href);
+    url.searchParams.delete(parameter);
+    view.history.replaceState(view.history.state, '', url);
+    return false;
+  }
+
+  readContext(parameter: string): string | null {
+    const view = this.document.defaultView;
+    return view ? new URL(view.location.href).searchParams.get(parameter) : null;
+  }
+
+  listenForContextChange(listener: () => void): () => void {
+    const view = this.document.defaultView;
+    if (!view) return () => undefined;
+
+    view.addEventListener('popstate', listener);
+    return () => view.removeEventListener('popstate', listener);
+  }
 }

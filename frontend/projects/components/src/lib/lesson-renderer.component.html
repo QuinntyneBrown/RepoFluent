@@ -7,7 +7,7 @@
     <span class="rf-status rf-status--success">source verified</span>
   </div>
 
-  <div class="lesson">
+  <div class="lesson" [class.lesson--source-open]="activeSourceIndex() !== null">
     <section class="lesson__document" aria-label="Rendered lesson">
       <header>
         <p class="lesson__meta"># Lesson document · {{ lesson().estimatedMinutes }} min</p>
@@ -23,74 +23,113 @@
       </header>
 
       <div class="lesson__body">
-        @for (block of lesson().blocks; track $index) {
-          @switch (block.type) {
-            @case ('prose') {
-              <p class="lesson-prose">{{ block.text }}</p>
-            }
-            @case ('callout') {
-              <aside class="rf-callout callout">
-                <span class="callout-mark" aria-hidden="true">↳</span>
-                <div>
-                  <strong>{{ block.title }}</strong>
-                  <p>{{ block.text }}</p>
+        @for (block of visibleBlocks(); track $index; let index = $index) {
+          <div
+            class="lesson-block"
+            id="lesson-block-{{ index }}"
+            tabindex="-1"
+            [attr.data-block-index]="index"
+          >
+            @switch (block.type) {
+              @case ('prose') {
+                <p class="lesson-prose">{{ block.text }}</p>
+              }
+              @case ('callout') {
+                <aside class="rf-callout callout">
+                  <span class="callout-mark" aria-hidden="true">↳</span>
+                  <div>
+                    <strong>{{ block.title }}</strong>
+                    <p>{{ block.text }}</p>
+                  </div>
+                </aside>
+              }
+              @case ('codeReference') {
+                <button
+                  class="rf-source-link source-link"
+                  type="button"
+                  aria-label="Open source context for {{ block.symbol }}"
+                  aria-controls="lesson-source-context"
+                  [attr.aria-expanded]="activeSourceIndex() === index"
+                  [attr.aria-pressed]="activeSourceIndex() === index"
+                  (click)="openSource(index, $event)"
+                >
+                  <span class="source-link__mark" aria-hidden="true">↳</span>
+                  <span>
+                    <strong>{{ block.symbol }}</strong>
+                    <small
+                      >Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</small
+                    >
+                  </span>
+                  <span class="rf-badge">open</span>
+                </button>
+              }
+              @default {
+                <div class="rf-callout rf-callout--danger block-error" role="status">
+                  <div>
+                    <strong>Unsupported lesson block</strong>
+                    <p>This content block is unavailable. Support code LEX-BLOCK-UNSUPPORTED.</p>
+                  </div>
                 </div>
-              </aside>
+              }
             }
-            @case ('codeReference') {
-              <div class="rf-source-link source-link" aria-label="Source code reference">
-                <span class="source-link__mark" aria-hidden="true">↳</span>
-                <span>
-                  <strong>{{ block.symbol }}</strong>
-                  <small
-                    >Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</small
-                  >
-                </span>
-                <span class="rf-badge">open</span>
-              </div>
-            }
-            @default {
-              <div class="rf-callout rf-callout--danger block-error" role="status">
-                <div>
-                  <strong>Unsupported lesson block</strong>
-                  <p>This content block is unavailable. Support code LEX-BLOCK-UNSUPPORTED.</p>
-                </div>
-              </div>
-            }
-          }
+          </div>
         }
       </div>
+
+      @if (lesson().blocks.length > 10) {
+        <footer class="lesson-progress">
+          <p role="status" aria-label="Lesson content progress" aria-live="polite">
+            Showing {{ visibleBlocks().length }} of {{ lesson().blocks.length }} lesson blocks
+          </p>
+          @if (remainingBlockCount() > 0) {
+            <button class="rf-button" type="button" (click)="showMoreContent()">
+              Show {{ remainingBlockCount() > 10 ? 10 : remainingBlockCount() }} more lesson blocks
+            </button>
+          }
+        </footer>
+      }
     </section>
 
-    <aside class="lesson__source" aria-label="Source pane">
-      @for (block of lesson().blocks; track $index) {
-        @if (block.type === 'codeReference') {
-          <div class="source-title">
-            <span>{{ block.language }} · {{ block.symbol }}</span>
-            <span class="rf-status rf-status--success">verified</span>
+    @if (activeSource(); as block) {
+      <aside
+        class="lesson__source"
+        id="lesson-source-context"
+        aria-label="Source context"
+        tabindex="-1"
+      >
+        <div class="source-title">
+          <span>{{ block.language }} · {{ block.symbol }}</span>
+          <button
+            #sourceClose
+            class="rf-icon-button rf-button--ghost"
+            type="button"
+            aria-label="Close source context"
+            (click)="closeSource()"
+          >
+            ×
+          </button>
+        </div>
+        <div class="source-breadcrumbs">{{ block.path }}</div>
+        <div class="source-location">
+          <span>Source location</span>
+          <strong>{{ block.symbol }}</strong>
+          <p>Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</p>
+        </div>
+        <div class="source-excerpt" role="note">
+          <span class="source-excerpt__line">{{ block.startLine }}</span>
+          <div>
+            <strong>Referenced source is linked by provenance.</strong>
+            <p>The curriculum package does not embed repository source text.</p>
           </div>
-          <div class="source-breadcrumbs">{{ block.path }}</div>
-          <div class="source-location">
-            <span>Source location</span>
-            <strong>{{ block.symbol }}</strong>
-            <p>Lines {{ block.startLine }}–{{ block.endLine }} · {{ block.language }}</p>
+        </div>
+        <div class="rf-callout rf-callout--success provenance">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>Provenance · verified</strong>
+            <p>{{ block.explanation }}</p>
           </div>
-          <div class="source-excerpt" role="note">
-            <span class="source-excerpt__line">{{ block.startLine }}</span>
-            <div>
-              <strong>Referenced source is linked by provenance.</strong>
-              <p>The curriculum package does not embed repository source text.</p>
-            </div>
-          </div>
-          <div class="rf-callout rf-callout--success provenance">
-            <span aria-hidden="true">✓</span>
-            <div>
-              <strong>Provenance · verified</strong>
-              <p>{{ block.explanation }}</p>
-            </div>
-          </div>
-        }
-      }
-    </aside>
+        </div>
+      </aside>
+    }
   </div>
 </article>

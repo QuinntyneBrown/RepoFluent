@@ -4,12 +4,14 @@
 
 RepoFluent's Experience Platform subsystem provides design-system,
 accessibility, responsive, capability, and performance foundations. This
-feature preserves route, focus, and domain context across responsive layouts and large content. It covers *context-preserving navigation primitives*, *responsive layout profiles*, *large-content rendering*.
+feature preserves route, focus, and domain context across responsive layouts and large content. It covers _context-preserving navigation primitives_, _responsive layout profiles_, _large-content rendering_.
 
 The checked-in reference implementation is the static `desigh-system/` site.
 Its HTML, CSS, and JavaScript work from `file://` without a runtime dependency.
-The production Angular consumer, telemetry integration, supported-browser
-matrix, and production measurement profile remain `<TO SUPPLY>`.
+The production Angular consumer now applies the same split-pane, drawer,
+history, focus-return, reflow, and progressive-content contracts. Telemetry,
+supported-browser policy, and production measurement are implemented by their
+dedicated detailed-design features.
 
 ## Description
 
@@ -20,12 +22,13 @@ The feature uses the following checked-in assets and planned integration seam.
 - **`desigh-system/components/tree.html`** — keyboard-operable hierarchical navigation reference.
 - **`desigh-system/assets/components.css`** — responsive `.rf-*` layout and scrolling contracts.
 - **`desigh-system/tests/smoke.spec.js`** — 390 px viewport overflow and page-load checks.
-- **`ExperiencePlatformAdapter`** — planned Angular library boundary that maps
-  the accepted `.rf-*` contracts into product components; implementation remains
-  `<TO SUPPLY>` because `frontend/angular.json` contains no application project.
+- **`ExperiencePlatformAdapter`** — Angular library boundary that records
+  contextual UI in browser history and exposes deterministic Back/close
+  behavior while product components consume the accepted `.rf-*` contracts.
 - **`ExperienceConformanceSuite`** — quality boundary composed from Playwright,
-  `html-validate`, Prettier, accessibility checks, and production performance
-  gates. Production performance and browser-matrix checks remain `<TO SUPPLY>`.
+  `html-validate`, Prettier, accessibility checks, responsive visual regression,
+  and production performance gates. Production performance and browser-matrix
+  checks remain owned by their dedicated experience-platform features.
 
 The structural diagram models source artifacts as typed contracts. It does not
 claim that the current static JavaScript defines application classes.
@@ -90,3 +93,23 @@ The reference assets apply `L2-EXP-07` through a semantic contract and an access
 The reference assets apply `L2-EXP-14` through a semantic contract and an accessible fallback. The conformance suite checks the available reference behavior before the contract is consumed by the production application.
 
 ![Sequence diagram for large-content rendering](diagrams/sequence-l2-exp-14.png)
+
+### Implementation evidence
+
+Status: **Implemented**
+
+- Source context is represented by the `source` URL parameter and a browser
+  history entry. Browser Back or the close control removes the context and
+  restores focus to the invoking source reference.
+- The lesson workspace uses a desktop split pane and a token-based narrow
+  drawer. Acceptance coverage verifies 390 px narrow and 640 px high-zoom
+  equivalent profiles without page-level horizontal overflow.
+- Supported layout profiles are desktop at 64 rem and above, compact from
+  48–64 rem, and narrow from 20–48 rem in portrait or landscape; keyboard and
+  pointer controls remain available in each profile.
+- Lessons render ten semantic blocks at a time. Each expansion announces the
+  new count and focuses the first revealed block so reading position remains
+  predictable without rendering the full pilot-limit fixture.
+- `responsive-navigation.spec.ts` starts from a Page Object, exercises a
+  deterministic 33-block assigned lesson, and records desktop and narrow visual
+  baselines on Windows and Linux.

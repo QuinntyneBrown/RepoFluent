@@ -39,4 +39,16 @@ describe('ExperiencePlatformAdapter', () => {
     expect(adapter.pageAnnouncement()).toBe('My learning page loaded');
     main.remove();
   });
+
+  it('stores contextual navigation in the URL and browser history state', () => {
+    const document = TestBed.inject(DOCUMENT);
+    const adapter = TestBed.inject(ExperiencePlatformAdapter);
+    const originalUrl = document.location.href;
+
+    adapter.openContext('source', '2');
+
+    expect(adapter.readContext('source')).toBe('2');
+    expect(document.defaultView?.history.state.repoFluentContext).toBe('source');
+    document.defaultView?.history.replaceState({}, '', originalUrl);
+  });
 });
