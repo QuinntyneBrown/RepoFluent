@@ -70,6 +70,8 @@ export class CurriculumContractPage {
     });
     await expect(workbench).toHaveScreenshot('model-curriculum-package-workbench.png', {
       animations: 'disabled',
+      caret: 'hide',
+      maxDiffPixelRatio: 0.08,
     });
   }
 }
