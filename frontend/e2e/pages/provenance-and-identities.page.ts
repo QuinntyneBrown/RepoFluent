@@ -74,7 +74,22 @@ export class ProvenanceAndIdentitiesPage {
     });
     await provenance.scrollIntoViewIfNeeded();
     await this.page.addStyleTag({
-      content: '.statusbar { visibility: hidden !important; }',
+      content: `
+        .statusbar { visibility: hidden !important; }
+        .provenance-section {
+          box-sizing: border-box !important;
+          height: 778px !important;
+          overflow: hidden !important;
+        }
+      `,
+    });
+    await provenance.evaluate((element) => {
+      const panel = element as HTMLElement;
+      const bounds = panel.getBoundingClientRect();
+      panel.style.transform = `translate(
+        ${Math.round(bounds.left) - bounds.left}px,
+        ${Math.round(bounds.top) - bounds.top}px
+      )`;
     });
     await expect(provenance).toHaveScreenshot('record-provenance-and-identities.png', {
       animations: 'disabled',
