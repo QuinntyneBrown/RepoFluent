@@ -5,6 +5,16 @@ namespace RepoFluent.Application;
 
 public sealed class PackageValidator
 {
+    private static readonly Regex IdentifierPattern = new(
+        "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        RegexOptions.CultureInvariant,
+        TimeSpan.FromMilliseconds(100));
+
+    private static readonly Regex CanonicalDateTimePattern = new(
+        @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,7})?Z$",
+        RegexOptions.CultureInvariant,
+        TimeSpan.FromMilliseconds(100));
+
     private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true
@@ -32,12 +42,20 @@ public sealed class PackageValidator
 
         var issues = new List<ValidationIssue>();
         Require(package.ContractVersion == "0.1.0", "CIC_UNSUPPORTED_VERSION", "/contractVersion", issues);
-        Require(!string.IsNullOrWhiteSpace(package.PackageId), "CIC_REQUIRED", "/packageId", issues);
+        ValidateIdentifier(package.PackageId, "/packageId", issues);
         Require(!string.IsNullOrWhiteSpace(package.Version), "CIC_REQUIRED", "/version", issues);
         Require(!string.IsNullOrWhiteSpace(package.Title), "CIC_REQUIRED", "/title", issues);
         Require(!string.IsNullOrWhiteSpace(package.Description), "CIC_REQUIRED", "/description", issues);
         Require(!string.IsNullOrWhiteSpace(package.Owner), "CIC_REQUIRED", "/owner", issues);
         Require(!string.IsNullOrWhiteSpace(package.Locale), "CIC_REQUIRED", "/locale", issues);
+        if (!string.IsNullOrWhiteSpace(package.Locale))
+        {
+            Require(
+                package.Locale is "en-CA" or "en-US",
+                "CIC_UNSUPPORTED_LOCALE",
+                "/locale",
+                issues);
+        }
         Require(package.CreatedAt != default, "CIC_REQUIRED", "/createdAt", issues);
         Require(!string.IsNullOrWhiteSpace(package.CreatedBy), "CIC_REQUIRED", "/createdBy", issues);
         Require(package.SourceSnapshot?.Repositories?.Count > 0, "CIC_REQUIRED", "/sourceSnapshot/repositories", issues);
@@ -46,8 +64,9 @@ public sealed class PackageValidator
         Require(package.Terminology?.Count > 0, "CIC_REQUIRED", "/terminology", issues);
         Require(package.Courses?.Count > 0, "CIC_REQUIRED", "/courses", issues);
         Require(package.Assessments?.Count > 0, "CIC_REQUIRED", "/assessments", issues);
+        ValidateCanonicalDateTimes(json, issues);
 
-        var identifiers = new HashSet<string>(StringComparer.Ordinal);
+        var identifiers = new Dictionary<string, List<string>>(StringComparer.Ordinal);
         var repositories = package.SourceSnapshot?.Repositories ?? [];
         for (var repositoryIndex = 0; repositoryIndex < repositories.Count; repositoryIndex++)
         {
@@ -76,7 +95,6 @@ public sealed class PackageValidator
             Require(repository.CapturedAt.HasValue, "CIC_REQUIRED", $"{repositoryPath}/capturedAt", issues);
         }
 
-        var repositoryIds = repositories.Select(repository => repository.Id).ToHashSet(StringComparer.Ordinal);
         var repositoryById = new Dictionary<string, Repository>(StringComparer.Ordinal);
         foreach (var repository in repositories)
         {
@@ -85,6 +103,7 @@ public sealed class PackageValidator
                 repositoryById.TryAdd(repository.Id, repository);
             }
         }
+        ValidateEvidence(package.Evidence, "/evidence", repositoryById, issues);
         var systems = package.Systems ?? [];
         var systemIds = new HashSet<string>(StringComparer.Ordinal);
         var subsystemIds = new HashSet<string>(StringComparer.Ordinal);
@@ -169,6 +188,7 @@ public sealed class PackageValidator
                 $"{coursePath}/objectives",
                 identifiers,
                 learningObjectiveIds,
+                repositoryById,
                 issues);
             Require(course.Modules?.Count > 0, "CIC_REQUIRED", $"{coursePath}/modules", issues);
             var modules = course.Modules ?? [];
@@ -200,6 +220,7 @@ public sealed class PackageValidator
                         $"{lessonPath}/objectives",
                         identifiers,
                         learningObjectiveIds,
+                        repositoryById,
                         issues);
                     Require(lesson.Blocks?.Count > 0, "CIC_REQUIRED", $"{lessonPath}/blocks", issues);
                     ValidateBlocks(
@@ -219,7 +240,9 @@ public sealed class PackageValidator
             learningObjectiveIds,
             systemIds,
             subsystemIds,
+            repositoryById,
             issues);
+        ValidateDuplicateIdentifiers(identifiers, issues);
 
         return (package, issues.OrderBy(issue => issue.Path, StringComparer.Ordinal).ThenBy(issue => issue.Code, StringComparer.Ordinal).ToArray());
     }
@@ -264,6 +287,8 @@ public sealed class PackageValidator
                     "Remote resources must be declared by an approved contract extension.",
                     $"{path}/resourceUrl"));
             }
+
+            ValidateEvidence(block.Evidence, $"{path}/evidence", repositoryById, issues);
 
             switch (block.Type)
             {
@@ -470,10 +495,11 @@ public sealed class PackageValidator
 
     private static void ValidateAssessments(
         IReadOnlyList<Assessment> assessments,
-        HashSet<string> identifiers,
+        Dictionary<string, List<string>> identifiers,
         HashSet<string> learningObjectiveIds,
         HashSet<string> systemIds,
         HashSet<string> subsystemIds,
+        IReadOnlyDictionary<string, Repository> repositoryById,
         List<ValidationIssue> issues)
     {
         for (var assessmentIndex = 0; assessmentIndex < assessments.Count; assessmentIndex++)
@@ -552,6 +578,11 @@ public sealed class PackageValidator
                         Require(item.Answer.Visibility == "protected", "CIC_ANSWER_NOT_PROTECTED", $"{itemPath}/answer/visibility", issues);
                         Require(!string.IsNullOrWhiteSpace(item.Answer.Value), "CIC_REQUIRED", $"{itemPath}/answer/value", issues);
                     }
+                    ValidateEvidence(
+                        item.Evidence,
+                        $"{itemPath}/evidence",
+                        repositoryById,
+                        issues);
                 }
             }
 
@@ -569,8 +600,9 @@ public sealed class PackageValidator
     private static void ValidateLearningObjectives(
         IReadOnlyList<LearningObjective> objectives,
         string path,
-        HashSet<string> identifiers,
+        Dictionary<string, List<string>> identifiers,
         HashSet<string> learningObjectiveIds,
+        IReadOnlyDictionary<string, Repository> repositoryById,
         List<ValidationIssue> issues)
     {
         for (var index = 0; index < objectives.Count; index++)
@@ -582,6 +614,11 @@ public sealed class PackageValidator
                 !string.IsNullOrWhiteSpace(objective.Statement),
                 "CIC_REQUIRED",
                 $"{path}/{index}/statement",
+                issues);
+            ValidateEvidence(
+                objective.Evidence,
+                $"{path}/{index}/evidence",
+                repositoryById,
                 issues);
         }
     }
@@ -599,6 +636,148 @@ public sealed class PackageValidator
                 "CIC_DANGLING_REFERENCE",
                 $"{path}/{index}",
                 issues);
+        }
+    }
+
+    private static void ValidateEvidence(
+        EvidenceMetadata? evidence,
+        string path,
+        IReadOnlyDictionary<string, Repository> repositoryById,
+        List<ValidationIssue> issues)
+    {
+        if (evidence is null)
+        {
+            return;
+        }
+
+        Require(
+            !string.IsNullOrWhiteSpace(evidence.Confidence),
+            "CIC_REQUIRED",
+            $"{path}/confidence",
+            issues);
+        if (!string.IsNullOrWhiteSpace(evidence.Confidence))
+        {
+            Require(
+                evidence.Confidence is "high" or "medium" or "low" or "unknown",
+                "CIC_UNSUPPORTED_CONFIDENCE",
+                $"{path}/confidence",
+                issues);
+        }
+        Require(
+            evidence.Citations?.Count > 0,
+            "CIC_REQUIRED",
+            $"{path}/citations",
+            issues);
+
+        var citations = evidence.Citations ?? [];
+        for (var citationIndex = 0; citationIndex < citations.Count; citationIndex++)
+        {
+            var citation = citations[citationIndex];
+            var citationPath = $"{path}/citations/{citationIndex}";
+            var sourcePath = $"{citationPath}/sourceId";
+            ValidateIdentifier(citation.SourceId, sourcePath, issues);
+            Repository? repository = null;
+            var sourceFound =
+                !string.IsNullOrWhiteSpace(citation.SourceId)
+                && repositoryById.TryGetValue(citation.SourceId, out repository);
+            if (!string.IsNullOrWhiteSpace(citation.SourceId))
+            {
+                Require(
+                    sourceFound,
+                    "CIC_DANGLING_CITATION",
+                    sourcePath,
+                    issues);
+            }
+            ValidateRelativePath(citation.Document, $"{citationPath}/document", issues);
+            if (sourceFound)
+            {
+                Require(
+                    repository!.Documents?.Contains(citation.Document, StringComparer.Ordinal) == true,
+                    "CIC_DANGLING_CITATION",
+                    $"{citationPath}/document",
+                    issues);
+            }
+            RequireSafeText(citation.Locator, $"{citationPath}/locator", issues);
+            Require(
+                !string.IsNullOrWhiteSpace(citation.EvidenceType),
+                "CIC_REQUIRED",
+                $"{citationPath}/evidenceType",
+                issues);
+            if (!string.IsNullOrWhiteSpace(citation.EvidenceType))
+            {
+                Require(
+                    citation.EvidenceType is "direct" or "synthesis" or "interpretation",
+                    "CIC_UNSUPPORTED_EVIDENCE_TYPE",
+                    $"{citationPath}/evidenceType",
+                    issues);
+            }
+        }
+
+        ValidateEvidenceNotes(evidence.Assumptions, $"{path}/assumptions", issues);
+        ValidateEvidenceNotes(evidence.Omissions, $"{path}/omissions", issues);
+        ValidateEvidenceNotes(
+            evidence.ConflictingSources,
+            $"{path}/conflictingSources",
+            issues);
+        ValidateEvidenceNotes(
+            evidence.UnresolvedQuestions,
+            $"{path}/unresolvedQuestions",
+            issues);
+    }
+
+    private static void ValidateEvidenceNotes(
+        IReadOnlyList<string>? notes,
+        string path,
+        List<ValidationIssue> issues)
+    {
+        Require(notes is not null, "CIC_REQUIRED", path, issues);
+        for (var index = 0; index < (notes?.Count ?? 0); index++)
+        {
+            RequireSafeText(notes![index], $"{path}/{index}", issues);
+        }
+    }
+
+    private static void ValidateCanonicalDateTimes(
+        string json,
+        List<ValidationIssue> issues)
+    {
+        using var document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+        ValidateCanonicalDateTime(root, "createdAt", "/createdAt", issues);
+
+        if (
+            root.TryGetProperty("sourceSnapshot", out var sourceSnapshot)
+            && sourceSnapshot.TryGetProperty("repositories", out var repositories)
+            && repositories.ValueKind == JsonValueKind.Array)
+        {
+            var repositoryIndex = 0;
+            foreach (var repository in repositories.EnumerateArray())
+            {
+                ValidateCanonicalDateTime(
+                    repository,
+                    "capturedAt",
+                    $"/sourceSnapshot/repositories/{repositoryIndex}/capturedAt",
+                    issues);
+                repositoryIndex++;
+            }
+        }
+    }
+
+    private static void ValidateCanonicalDateTime(
+        JsonElement parent,
+        string propertyName,
+        string path,
+        List<ValidationIssue> issues)
+    {
+        if (
+            parent.TryGetProperty(propertyName, out var property)
+            && property.ValueKind == JsonValueKind.String
+            && !CanonicalDateTimePattern.IsMatch(property.GetString() ?? string.Empty))
+        {
+            issues.Add(Issue(
+                "CIC_NON_CANONICAL_DATE_TIME",
+                "Date and time values use RFC 3339 UTC with a Z suffix.",
+                path));
         }
     }
 
@@ -626,16 +805,56 @@ public sealed class PackageValidator
     private static void AddIdentifier(
         string identifier,
         string path,
-        HashSet<string> identifiers,
+        Dictionary<string, List<string>> identifiers,
+        List<ValidationIssue> issues)
+    {
+        ValidateIdentifier(identifier, path, issues);
+        if (string.IsNullOrWhiteSpace(identifier))
+        {
+            return;
+        }
+
+        if (identifiers.TryGetValue(identifier, out var paths))
+        {
+            paths.Add(path);
+        }
+        else
+        {
+            identifiers.Add(identifier, [path]);
+        }
+    }
+
+    private static void ValidateIdentifier(
+        string? identifier,
+        string path,
         List<ValidationIssue> issues)
     {
         if (string.IsNullOrWhiteSpace(identifier))
         {
             issues.Add(Issue("CIC_REQUIRED", "A stable identifier is required.", path));
         }
-        else if (!identifiers.Add(identifier))
+        else if (!IdentifierPattern.IsMatch(identifier))
         {
-            issues.Add(Issue("CIC_DUPLICATE_ID", "Stable identifiers must be unique.", path));
+            issues.Add(Issue(
+                "CIC_INVALID_ID",
+                "Stable identifiers use lowercase kebab case.",
+                path));
+        }
+    }
+
+    private static void ValidateDuplicateIdentifiers(
+        IReadOnlyDictionary<string, List<string>> identifiers,
+        List<ValidationIssue> issues)
+    {
+        foreach (var paths in identifiers.Values.Where(paths => paths.Count > 1))
+        {
+            foreach (var path in paths)
+            {
+                issues.Add(Issue(
+                    "CIC_DUPLICATE_ID",
+                    "Stable identifiers must be unique.",
+                    path));
+            }
         }
     }
 

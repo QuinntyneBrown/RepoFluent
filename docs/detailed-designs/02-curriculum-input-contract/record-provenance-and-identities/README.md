@@ -2,37 +2,37 @@
 
 ## Overview
 
-RepoFluent's Curriculum Input Contract subsystem defines the portable curriculum package, its compatibility rules, and its conformance artifacts. This feature
-brings *provenance and uncertainty*, *stable identifiers and references*, *canonical primitive formats* into one vertical slice. The slice preserves tenant,
-actor, version, authorization, and correlation context wherever the cited
-requirements apply.
+RepoFluent's Curriculum Input Contract now carries provenance and uncertainty
+without flattening either into unqualified facts. Package, objective, lesson
+block, and assessment-item evidence resolves to declared source-snapshot
+documents, identifies direct evidence versus synthesis or interpretation, and
+keeps assumptions, omissions, conflicts, and unresolved questions explicit.
 
-The contract maintainer starts the outcome through Contract workbench.
-Contract Registry API applies server-side policy before state is read or changed.
-The external dependency and persistent technology remain `<TO SUPPLY>` where
-the requirements baseline does not select them.
+The same vertical slice enforces globally unique lowercase-kebab identifiers,
+reports every colliding JSON Pointer, and defines canonical portable primitives
+for encoding, media type, locale, UTC date/time, duration, checksums, nulls, and
+defaults. Authors inspect the result in the Angular contract workbench before
+the governed curriculum workflow advances.
 
 ## Description
 
-The greenfield slice introduces the following building blocks. The endpoint
-route, deployment topology, and unresolved provider choices remain `<TO SUPPLY>`.
+The implemented slice uses the existing curriculum upload and review boundary:
 
-- **`RecordProvenanceAndIdentitiesWorkbench`** — .NET tool entry component that presents
-  the feature state and submits a typed intent.
-- **`ContractRegistryClient`** — typed client that carries tenant, actor, version,
-  idempotency, and correlation context required by the operation.
-- **`RecordProvenanceAndIdentitiesController`** — ASP.NET Core boundary that authenticates
-  the caller, applies endpoint policy, and dispatches `RecordProvenanceAndIdentitiesRequest`.
-- **`RecordProvenanceAndIdentitiesRequest`** — application request containing scope, actor, target,
-  expected version, correlation identifier, and feature payload.
-- **`RecordProvenanceAndIdentitiesHandler`** — application handler that loads authorized state,
-  invokes `RecordProvenanceAndIdentitiesPolicy`, and commits one result.
-- **`RecordProvenanceAndIdentitiesPolicy`** — domain policy that evaluates the cited L2 rules without
-  relying on client presentation state.
-- **`IRecordProvenanceAndIdentitiesRepository`** — application abstraction for tenant-scoped reads,
-  writes, optimistic concurrency, and idempotency lookup.
-- **`RecordProvenanceAndIdentitiesRecord`** — persisted feature record containing identity, tenant,
-  version, status, timestamps, and safe evidence references.
+- **`EvidenceMetadata` and `SourceCitation`** — typed contract records for
+  confidence, snapshot-resolved citations, assumptions, omissions, conflicts,
+  and unresolved questions.
+- **`PackageValidator`** — validates citation repository/document targets,
+  evidence enumerations, canonical UTC values and locales, normalized
+  identifiers, typed references, and every duplicate-identity path.
+- **`curriculum.schema.json`** — exposes the same evidence shapes and canonical
+  primitive constraints to offline authoring and validation tools.
+- **`ICD.md`** — owns deterministic identifier-generation guidance and the
+  normative primitive, null, default, enumeration, and checksum rules.
+- **`ContractModelWorkbenchComponent`** — renders citation lineage, uncertainty,
+  confidence, identity inventory, and canonical rules using the versioned
+  design-system tokens.
+- **`CurriculumWorkflow` and `ICurriculumStore`** — preserve accepted evidence in
+  the tenant-scoped package JSON already governed by the upload workflow.
 
 ## Requirements
 
@@ -44,6 +44,18 @@ the first L1 identifier named by the source requirement as its primary parent.
 | `L2-CIC-07` | `L1-CIC-02` | Generated claims, explanations, objectives, and assessment rationales shall support source citations where direct sources exist. Package-level and element-level metadata shall represent confidence, assumptions, omissions, conflicting sources, and unresolved questions without presenting them as verified facts. |
 | `L2-CIC-08` | `L1-CIC-04` | All reusable entities shall have stable package-local identifiers following the documented character, length, uniqueness, and normalization rules. References shall target declared identifiers of compatible types. Identifier generation guidance shall allow regeneration from equivalent source scope to retain identities where semantic entities are unchanged. |
 | `L2-CIC-09` | `L1-CIC-04` | The ICD shall define UTF-8 encoding, JSON media type, canonical date/time and timezone representation, duration format, checksum representation, identifier normalization, supported locales, enumerations, null semantics, and default behavior. Defaults shall be applied only where the ICD explicitly permits them. |
+
+### Implementation evidence
+
+- Playwright starts with `provenance-and-identities.spec.ts` and the
+  `ProvenanceAndIdentitiesPage` Page Object, covering the valid workbench,
+  invalid citations, all duplicate paths, and non-canonical primitives.
+- `ProvenanceAndIdentityTests` exercises the application validator directly,
+  including package- and element-level evidence round-tripping.
+- The representative contract fixture carries package, objective, content, and
+  rationale evidence and validates against JSON Schema 2020-12.
+- The visual acceptance baseline captures the provenance workbench at the
+  design-system desktop profile.
 
 ## Diagrams
 

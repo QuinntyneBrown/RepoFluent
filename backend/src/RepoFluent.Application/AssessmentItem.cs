@@ -7,4 +7,7 @@ public sealed record AssessmentItem(
     IReadOnlyList<string>? Options,
     string? Rationale,
     GradingDefinition Grading,
-    AnswerDefinition Answer);
+    AnswerDefinition Answer)
+{
+    public EvidenceMetadata? Evidence { get; init; }
+}

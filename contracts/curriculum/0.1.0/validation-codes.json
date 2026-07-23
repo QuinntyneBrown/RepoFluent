@@ -32,6 +32,11 @@
       "meaning": "The requested contract release is not published."
     },
     {
+      "code": "CIC_DANGLING_CITATION",
+      "category": "references",
+      "meaning": "A citation does not resolve to a declared repository document."
+    },
+    {
       "code": "CIC_DANGLING_REFERENCE",
       "category": "references",
       "meaning": "A typed identifier does not resolve to a declared target."
@@ -72,6 +77,11 @@
       "meaning": "A duration or time limit is outside the supported range."
     },
     {
+      "code": "CIC_INVALID_ID",
+      "category": "identifiers",
+      "meaning": "A stable identifier is not normalized lowercase kebab case."
+    },
+    {
       "code": "CIC_INVALID_JSON",
       "category": "types",
       "meaning": "Content cannot be deserialized as the versioned package contract."
@@ -100,6 +110,11 @@
       "code": "CIC_INVALID_THRESHOLD",
       "category": "limits",
       "meaning": "An assessment threshold is outside zero through 100 percent."
+    },
+    {
+      "code": "CIC_NON_CANONICAL_DATE_TIME",
+      "category": "types",
+      "meaning": "A date and time value is not represented as RFC 3339 UTC with a Z suffix."
     },
     {
       "code": "CIC_REQUIRED",
@@ -142,9 +157,19 @@
       "meaning": "A supplied source excerpt has no supported content classification."
     },
     {
+      "code": "CIC_UNSUPPORTED_CONFIDENCE",
+      "category": "types",
+      "meaning": "Evidence confidence is not one of the supported explicit states."
+    },
+    {
       "code": "CIC_UNSUPPORTED_DIFFICULTY",
       "category": "types",
       "meaning": "The learning difficulty is not supported."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_EVIDENCE_TYPE",
+      "category": "types",
+      "meaning": "A citation does not declare direct evidence, synthesis, or interpretation."
     },
     {
       "code": "CIC_UNSUPPORTED_FEEDBACK_RELEASE",
@@ -160,6 +185,11 @@
       "code": "CIC_UNSUPPORTED_LANGUAGE",
       "category": "types",
       "meaning": "A code reference language is not allow-listed."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_LOCALE",
+      "category": "types",
+      "meaning": "The package locale is outside the supported locale catalog."
     },
     {
       "code": "CIC_UNSUPPORTED_RELATIONSHIP",

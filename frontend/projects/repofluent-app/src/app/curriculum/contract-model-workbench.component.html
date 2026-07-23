@@ -251,4 +251,115 @@
       }
     </div>
   </section>
+
+  @if (package().evidence; as evidence) {
+    <section
+      class="rf-panel contract-section contract-section--wide provenance-section"
+      aria-label="Provenance, uncertainty, and identity rules"
+    >
+      <div class="rf-panel__header">
+        <span>05 · Provenance and identity</span>
+        <span class="rf-badge">{{ stableEntityCount() }} stable entities</span>
+      </div>
+      <div class="rf-panel__body">
+        <div class="provenance-heading">
+          <div>
+            <span class="micro-label">Publication evidence</span>
+            <h2>Provenance and identity</h2>
+            <p>
+              Direct evidence stays bound to the declared source snapshot. Uncertainty remains
+              explicit rather than becoming a verified claim.
+            </p>
+          </div>
+          <span class="rf-status rf-status--success">
+            {{ titleCase(evidence.confidence) }} confidence
+          </span>
+        </div>
+
+        <div class="provenance-layout">
+          <div class="evidence-stack">
+            <article class="evidence-card">
+              <div class="evidence-card__heading">
+                <div>
+                  <span class="micro-label">Resolvable citations</span>
+                  <strong>{{ evidence.citations.length }} declared source</strong>
+                </div>
+                <span class="rf-badge">snapshot bound</span>
+              </div>
+              <ul class="citation-list">
+                @for (citation of evidence.citations; track citation.sourceId + citation.locator) {
+                  <li>
+                    <span class="citation-mark" aria-hidden="true">↗</span>
+                    <div>
+                      <strong>{{ citation.sourceId }} · {{ citation.document }}</strong>
+                      <span>{{ titleCase(citation.evidenceType) }} evidence</span>
+                      <code>{{ citation.locator }}</code>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </article>
+
+            <div class="uncertainty-grid">
+              <article>
+                <span class="micro-label">Assumptions</span>
+                @for (assumption of evidence.assumptions; track assumption) {
+                  <p>{{ assumption }}</p>
+                }
+              </article>
+              <article>
+                <span class="micro-label">Omissions</span>
+                @for (omission of evidence.omissions; track omission) {
+                  <p>{{ omission }}</p>
+                }
+              </article>
+              <article>
+                <span class="micro-label">Conflicting sources</span>
+                @for (conflict of evidence.conflictingSources; track conflict) {
+                  <p>{{ conflict }}</p>
+                }
+              </article>
+              <article>
+                <span class="micro-label">Unresolved questions</span>
+                @for (question of evidence.unresolvedQuestions; track question) {
+                  <p>{{ question }}</p>
+                }
+              </article>
+            </div>
+          </div>
+
+          <aside class="identity-card" aria-label="Canonical contract rules">
+            <span class="micro-label">Canonical contract</span>
+            <h3>Same meaning, same primitive</h3>
+            <dl>
+              <div>
+                <dt>Identifiers</dt>
+                <dd>Lowercase kebab case</dd>
+              </div>
+              <div>
+                <dt>Encoding / media</dt>
+                <dd>UTF-8 · application/json</dd>
+              </div>
+              <div>
+                <dt>Date and time</dt>
+                <dd>RFC 3339 · UTC Z</dd>
+              </div>
+              <div>
+                <dt>Durations</dt>
+                <dd>Positive integer minutes</dd>
+              </div>
+              <div>
+                <dt>Null / defaults</dt>
+                <dd>No implicit defaults</dd>
+              </div>
+            </dl>
+            <div class="identity-proof">
+              <span>{{ stableEntityCount() }}</span>
+              <p>globally unique identities validate without title-based guessing.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  }
 </section>

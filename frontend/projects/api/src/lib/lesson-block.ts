@@ -1,4 +1,5 @@
 import type { CodeTourStep } from './code-tour-step';
+import type { EvidenceMetadata } from './evidence-metadata';
 
 export interface LessonBlock {
   type: string;
@@ -26,4 +27,5 @@ export interface LessonBlock {
   assessmentId?: string;
   resourceUrl?: string;
   steps?: CodeTourStep[];
+  evidence?: EvidenceMetadata;
 }

@@ -25,4 +25,7 @@ public sealed record Block(
     string? Prompt,
     string? AssessmentId,
     string? ResourceUrl,
-    IReadOnlyList<CodeTourStep>? Steps);
+    IReadOnlyList<CodeTourStep>? Steps)
+{
+    public EvidenceMetadata? Evidence { get; init; }
+}

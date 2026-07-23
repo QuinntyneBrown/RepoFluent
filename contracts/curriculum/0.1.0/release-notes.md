@@ -11,6 +11,10 @@ It includes:
 - eight inert, accessible lesson-block discriminators with revision-bound C#
   and Angular code references and ordered tours;
 - exact-path rejection for active content and undeclared remote resources;
+- package- and element-level evidence with snapshot-resolved citations,
+  confidence, assumptions, omissions, conflicts, and unresolved questions;
+- globally unique normalized identifiers and canonical locale/date/time,
+  duration, encoding, checksum, null, and default semantics;
 - stable learning-objective and architecture mappings;
 - protected-answer classification and review-response redaction;
 - JSON Schema 2020-12 plus server-owned semantic validation;

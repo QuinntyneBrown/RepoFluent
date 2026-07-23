@@ -37,4 +37,28 @@ export class ContractModelWorkbenchComponent {
       .flatMap((pool) => pool.items)
       .filter((item) => item.answer.visibility === 'protected').length;
   }
+
+  protected stableEntityCount(): number {
+    const packageBody = this.package();
+    let count =
+      packageBody.sourceSnapshot.repositories.length +
+      packageBody.relationships.length +
+      packageBody.systems.length +
+      packageBody.systems.reduce((total, system) => total + system.subsystems.length, 0);
+
+    for (const course of packageBody.courses) {
+      count += 1 + course.objectives.length + course.modules.length;
+      for (const module of course.modules) {
+        count += module.lessons.length;
+        count += module.lessons.reduce((total, lesson) => total + lesson.objectives.length, 0);
+      }
+    }
+
+    for (const assessment of packageBody.assessments) {
+      count += 1 + assessment.pools.length;
+      count += assessment.pools.reduce((total, pool) => total + pool.items.length, 0);
+    }
+
+    return count;
+  }
 }

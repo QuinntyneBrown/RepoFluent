@@ -2,6 +2,7 @@ import type { ArchitectureRelationship } from './architecture-relationship';
 import type { Assessment } from './assessment';
 import type { Course } from './course';
 import type { CurriculumSystem } from './curriculum-system';
+import type { EvidenceMetadata } from './evidence-metadata';
 import type { SourceSnapshot } from './source-snapshot';
 import type { TerminologyDefinition } from './terminology-definition';
 
@@ -15,6 +16,7 @@ export interface CurriculumPackage {
   locale: string;
   createdAt: string;
   createdBy: string;
+  evidence?: EvidenceMetadata;
   sourceSnapshot: SourceSnapshot;
   systems: CurriculumSystem[];
   relationships: ArchitectureRelationship[];

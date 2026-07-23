@@ -15,4 +15,7 @@ public sealed record Package(
     IReadOnlyList<ArchitectureRelationship> Relationships,
     IReadOnlyList<TerminologyDefinition> Terminology,
     IReadOnlyList<Course> Courses,
-    IReadOnlyList<Assessment> Assessments);
+    IReadOnlyList<Assessment> Assessments)
+{
+    public EvidenceMetadata? Evidence { get; init; }
+}

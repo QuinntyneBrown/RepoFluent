@@ -25,13 +25,21 @@ references and ordered tour steps can carry a snapshot branch and commit,
 symbol and line range, supplied excerpt, content classification, learner
 guidance, and explanatory provenance.
 
+Package, objective, block, and assessment-item evidence can bind direct
+citations to declared repository documents while preserving confidence,
+assumptions, omissions, conflicting sources, and unresolved questions as
+explicit uncertainty. Stable identifiers are globally unique lowercase kebab
+case. Canonical package primitives use supported locales, RFC 3339 UTC
+timestamps, positive integer-minute durations, UTF-8 JSON, and no implicit
+defaults.
+
 `curriculum.schema.json` is the author-facing structural contract. The server adds
-semantic validation for stable identifier uniqueness, repository and
-architecture references, repository-relative paths, ordered learning metadata,
-assessment constraints, protected answers, supported version, and valid line
-ranges. Validation issues have stable codes and JSON Pointer paths. Review
-responses preserve the assessment contract but replace protected answer values
-with `null`.
+semantic validation for stable identifier normalization and uniqueness,
+repository, citation, and architecture references, repository-relative paths,
+ordered learning metadata, canonical values, assessment constraints, protected
+answers, supported version, and valid line ranges. Validation issues have
+stable codes and JSON Pointer paths. Review responses preserve the assessment
+contract but replace protected answer values with `null`.
 
 The `fixtures/` directory contains minimal and representative successful
 packages plus an executable conformance catalog with eight invalid categories

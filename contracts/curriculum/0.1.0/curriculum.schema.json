@@ -28,9 +28,14 @@
     "title": { "type": "string", "minLength": 1, "maxLength": 240 },
     "description": { "type": "string", "minLength": 1, "maxLength": 2000 },
     "owner": { "type": "string", "minLength": 1, "maxLength": 160 },
-    "locale": { "type": "string", "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$" },
-    "createdAt": { "type": "string", "format": "date-time" },
+    "locale": { "enum": ["en-CA", "en-US"] },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,7})?Z$"
+    },
     "createdBy": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "evidence": { "$ref": "#/$defs/evidenceMetadata" },
     "sourceSnapshot": {
       "type": "object",
       "additionalProperties": false,
@@ -76,6 +81,49 @@
       "maxLength": 120,
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
+    "evidenceMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confidence",
+        "citations",
+        "assumptions",
+        "omissions",
+        "conflictingSources",
+        "unresolvedQuestions"
+      ],
+      "properties": {
+        "confidence": { "enum": ["high", "medium", "low", "unknown"] },
+        "citations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": { "$ref": "#/$defs/sourceCitation" }
+        },
+        "assumptions": { "$ref": "#/$defs/evidenceNotes" },
+        "omissions": { "$ref": "#/$defs/evidenceNotes" },
+        "conflictingSources": { "$ref": "#/$defs/evidenceNotes" },
+        "unresolvedQuestions": { "$ref": "#/$defs/evidenceNotes" }
+      }
+    },
+    "sourceCitation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId", "document", "locator", "evidenceType"],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/identifier" },
+        "document": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "evidenceType": {
+          "enum": ["direct", "synthesis", "interpretation"]
+        }
+      }
+    },
+    "evidenceNotes": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+    },
     "repository": {
       "type": "object",
       "additionalProperties": false,
@@ -118,7 +166,11 @@
           "minItems": 1,
           "items": { "$ref": "#/$defs/relativePath" }
         },
-        "capturedAt": { "type": "string", "format": "date-time" }
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,7})?Z$"
+        }
       }
     },
     "relativePath": {
@@ -295,7 +347,8 @@
       "required": ["id", "statement"],
       "properties": {
         "id": { "$ref": "#/$defs/identifier" },
-        "statement": { "type": "string", "minLength": 1, "maxLength": 500 }
+        "statement": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "nonEmptyStrings": {
@@ -418,7 +471,8 @@
         },
         "rationale": { "type": "string", "minLength": 1, "maxLength": 5000 },
         "grading": { "$ref": "#/$defs/gradingDefinition" },
-        "answer": { "$ref": "#/$defs/protectedAnswer" }
+        "answer": { "$ref": "#/$defs/protectedAnswer" },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "gradingDefinition": {
@@ -445,7 +499,8 @@
       "required": ["type", "text"],
       "properties": {
         "type": { "const": "prose" },
-        "text": { "type": "string", "minLength": 1, "maxLength": 10000 }
+        "text": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "calloutBlock": {
@@ -456,7 +511,8 @@
         "type": { "const": "callout" },
         "tone": { "enum": ["information", "warning"] },
         "title": { "type": "string", "minLength": 1, "maxLength": 160 },
-        "text": { "type": "string", "minLength": 1, "maxLength": 5000 }
+        "text": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "codeReferenceBlock": {
@@ -490,7 +546,8 @@
           "enum": ["public", "internal", "confidential"]
         },
         "explanation": { "type": "string", "minLength": 1, "maxLength": 2000 },
-        "provenance": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        "provenance": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "diagramBlock": {
@@ -522,7 +579,8 @@
           "type": "string",
           "format": "uri",
           "maxLength": 2000
-        }
+        },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "codeTourBlock": {
@@ -537,7 +595,8 @@
           "minItems": 2,
           "maxItems": 20,
           "items": { "$ref": "#/$defs/codeTourStep" }
-        }
+        },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "codeTourStep": {
@@ -583,7 +642,8 @@
       "properties": {
         "type": { "const": "example" },
         "title": { "type": "string", "minLength": 1, "maxLength": 160 },
-        "text": { "type": "string", "minLength": 1, "maxLength": 5000 }
+        "text": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "glossaryLinkBlock": {
@@ -593,7 +653,8 @@
       "properties": {
         "type": { "const": "glossaryLink" },
         "term": { "type": "string", "minLength": 1, "maxLength": 160 },
-        "definition": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        "definition": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     },
     "knowledgeCheckBlock": {
@@ -603,7 +664,8 @@
       "properties": {
         "type": { "const": "knowledgeCheck" },
         "prompt": { "type": "string", "minLength": 1, "maxLength": 2000 },
-        "assessmentId": { "$ref": "#/$defs/identifier" }
+        "assessmentId": { "$ref": "#/$defs/identifier" },
+        "evidence": { "$ref": "#/$defs/evidenceMetadata" }
       }
     }
   }

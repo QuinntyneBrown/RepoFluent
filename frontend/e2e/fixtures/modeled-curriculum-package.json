@@ -8,6 +8,25 @@
   "locale": "en-CA",
   "createdAt": "2026-07-23T12:00:00Z",
   "createdBy": "curriculum-agent",
+  "evidence": {
+    "confidence": "high",
+    "citations": [
+      {
+        "sourceId": "order-service",
+        "document": "docs/orders.md",
+        "locator": "durable-handoff",
+        "evidenceType": "direct"
+      }
+    ],
+    "assumptions": [
+      "The supplied snapshot describes the persistence boundary."
+    ],
+    "omissions": ["Payment orchestration is outside this package."],
+    "conflictingSources": [
+      "The legacy runbook describes publication before persistence."
+    ],
+    "unresolvedQuestions": ["Which retry policy owns terminal failures?"]
+  },
   "sourceSnapshot": {
     "repositories": [
       {
@@ -84,7 +103,22 @@
       "objectives": [
         {
           "id": "trace-order",
-          "statement": "Trace an order from checkout to durable workflow."
+          "statement": "Trace an order from checkout to durable workflow.",
+          "evidence": {
+            "confidence": "high",
+            "citations": [
+              {
+                "sourceId": "order-service",
+                "document": "docs/orders.md",
+                "locator": "durable-handoff",
+                "evidenceType": "direct"
+              }
+            ],
+            "assumptions": [],
+            "omissions": [],
+            "conflictingSources": [],
+            "unresolvedQuestions": []
+          }
         },
         {
           "id": "explain-boundary",
@@ -121,7 +155,22 @@
               "blocks": [
                 {
                   "type": "prose",
-                  "text": "The API accepts the customer's intent, persists an order, and then publishes a message for downstream processing."
+                  "text": "The API accepts the customer's intent, persists an order, and then publishes a message for downstream processing.",
+                  "evidence": {
+                    "confidence": "high",
+                    "citations": [
+                      {
+                        "sourceId": "order-service",
+                        "document": "docs/orders.md",
+                        "locator": "durable-handoff",
+                        "evidenceType": "direct"
+                      }
+                    ],
+                    "assumptions": [],
+                    "omissions": [],
+                    "conflictingSources": [],
+                    "unresolvedQuestions": []
+                  }
                 },
                 {
                   "type": "codeReference",
@@ -185,6 +234,21 @@
               "answer": {
                 "visibility": "protected",
                 "value": "Persist the order, then publish the message"
+              },
+              "evidence": {
+                "confidence": "high",
+                "citations": [
+                  {
+                    "sourceId": "order-service",
+                    "document": "docs/orders.md",
+                    "locator": "durable-handoff",
+                    "evidenceType": "direct"
+                  }
+                ],
+                "assumptions": [],
+                "omissions": [],
+                "conflictingSources": [],
+                "unresolvedQuestions": []
               }
             }
           ]

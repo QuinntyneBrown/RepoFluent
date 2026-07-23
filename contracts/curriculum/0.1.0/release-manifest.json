@@ -4,20 +4,20 @@
   "status": "prerelease",
   "publishedAt": "2026-07-23T12:00:00Z",
   "checksumAlgorithm": "sha256",
-  "releaseChecksum": "sha256:74c7c944d532b69d2c009899802a52b0b202aadb5c99ee46404c94cbf823cb10",
+  "releaseChecksum": "sha256:d315463c29cc8211a0a20c0964735287b11dc536c78930823c9b1b40b34c379d",
   "checksumInput": "Artifact path and SHA-256 pairs sorted by ordinal path and terminated by LF.",
   "artifacts": [
     {
       "name": "JSON Schema",
       "path": "curriculum.schema.json",
       "mediaType": "application/schema+json",
-      "sha256": "d9b712a90278b457e1037ea575c598b701be93b79b7e85c5b394e1b87a5f59e2"
+      "sha256": "1a6a92db6804f28d1a3b748f6bc7f70b2121e5db1cdac83ca23b969413539baa"
     },
     {
       "name": "Interface control document",
       "path": "ICD.md",
       "mediaType": "text/markdown",
-      "sha256": "8cb7d5f644987cfe8d5c6027521c8322a9dcb9a723d965de004b3bbfd37fa280"
+      "sha256": "351be92fcba3127a45fa08396b9963c94fac1aed2b652f91a64a9afa5a7b73e1"
     },
     {
       "name": "Compatibility declaration",
@@ -29,7 +29,7 @@
       "name": "Validation code catalog",
       "path": "validation-codes.json",
       "mediaType": "application/json",
-      "sha256": "771cf17300786c443b86a920566816e4e0f665179543fb101f4554b42cbc87df"
+      "sha256": "5c7cec5f978977d6ff1c1d4e5ea0573624026cf6a0c8a94f6833756bc238f4d6"
     },
     {
       "name": "Minimal valid fixture",
@@ -41,7 +41,7 @@
       "name": "Representative C# and Angular fixture",
       "path": "fixtures/order-processing.json",
       "mediaType": "application/json",
-      "sha256": "6ec57410815c75ed63e2fff56ef2ab11162233588b30c417fe3edd9152880f49"
+      "sha256": "40e02b45d4de119980ae8cc42375e153567a29db149d257eb6705ea3ebc79a36"
     },
     {
       "name": "Conformance fixtures",
@@ -53,7 +53,7 @@
       "name": "Release notes",
       "path": "release-notes.md",
       "mediaType": "text/markdown",
-      "sha256": "0f2a06c035a61828d278e5c76083bb602a391b56f73e6fef56360ca9622f26f5"
+      "sha256": "9fcbb69554be7e33b2743452b249a557d7abc7f98236337fa5eec8bdfa2b5a9d"
     }
   ],
   "fixtureSummary": {

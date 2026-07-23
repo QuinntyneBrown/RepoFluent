@@ -34,3 +34,6 @@
 - Eight allow-listed, accessible lesson blocks with revision-bound C# and
   Angular code tours, supplied excerpt classification and provenance, plus
   exact-path rejection of active and undeclared remote content.
+- Snapshot-resolved evidence and explicit uncertainty metadata, deterministic
+  stable identifiers with all-path collision reporting, canonical primitive
+  validation, and a token-conformant provenance workbench.
