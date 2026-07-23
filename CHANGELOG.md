@@ -13,3 +13,5 @@
 - Versioned design-system consumption with default and tenant themes,
   semantic-token enforcement, reduced-motion behavior, and visual conformance
   evidence.
+- WCAG 2.2 AA shell checks, contained and restored modal focus, route-heading
+  announcements, described validation errors, and persistent live status.

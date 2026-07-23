@@ -74,8 +74,14 @@ h3 {
 }
 
 .panel-actions {
+  align-items: center;
   display: flex;
+  gap: var(--rf-space-3);
   justify-content: flex-end;
+}
+
+.operation-status {
+  margin-right: auto;
 }
 
 .actions {
@@ -149,5 +155,14 @@ h3 {
   .panel-actions .rf-button,
   .actions .rf-button {
     width: 100%;
+  }
+
+  .panel-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .operation-status {
+    margin-right: 0;
   }
 }

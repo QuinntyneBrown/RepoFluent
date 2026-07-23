@@ -4,12 +4,14 @@
 
 RepoFluent's Experience Platform subsystem provides design-system,
 accessibility, responsive, capability, and performance foundations. This
-feature provides semantic structure, deterministic focus, and perceivable asynchronous status. It covers *semantic structure and accessible names*, *focus management*, *status, errors, and live announcements*.
+feature provides semantic structure, deterministic focus, and perceivable asynchronous status. It covers _semantic structure and accessible names_, _focus management_, _status, errors, and live announcements_.
 
 The checked-in reference implementation is the static `desigh-system/` site.
 Its HTML, CSS, and JavaScript work from `file://` without a runtime dependency.
-The production Angular consumer, telemetry integration, supported-browser
-matrix, and production measurement profile remain `<TO SUPPLY>`.
+The production Angular consumer now applies the same semantics, modal focus,
+route focus, described-error, and live-status contracts. Telemetry,
+supported-browser policy, and production measurement are implemented by their
+dedicated detailed-design features.
 
 ## Description
 
@@ -20,12 +22,13 @@ The feature uses the following checked-in assets and planned integration seam.
 - **`desigh-system/components/overlays-feedback.html`** — dialog, callout, toast, and focus-restoration examples.
 - **`desigh-system/components/toolbars-tabs.html`** — keyboard tab-selection and toolbar interaction examples.
 - **`desigh-system/assets/docs.js`** — focus trapping, focus restoration, tab, tree, and announcement behaviors.
-- **`ExperiencePlatformAdapter`** — planned Angular library boundary that maps
-  the accepted `.rf-*` contracts into product components; implementation remains
-  `<TO SUPPLY>` because `frontend/angular.json` contains no application project.
+- **`ExperiencePlatformAdapter`** — Angular library boundary that applies
+  route-heading focus and announces the new primary heading while product
+  components consume the accepted `.rf-*` interaction contracts.
 - **`ExperienceConformanceSuite`** — quality boundary composed from Playwright,
-  `html-validate`, Prettier, accessibility checks, and production performance
-  gates. Production performance and browser-matrix checks remain `<TO SUPPLY>`.
+  axe-core, `html-validate`, Prettier, accessibility checks, visual regression,
+  and production performance gates. Production performance and browser-matrix
+  checks remain owned by their dedicated experience-platform features.
 
 The structural diagram models source artifacts as typed contracts. It does not
 claim that the current static JavaScript defines application classes.
@@ -90,3 +93,19 @@ The reference assets apply `L2-EXP-09` through a semantic contract and an access
 The reference assets apply `L2-EXP-10` through a semantic contract and an accessible fallback. The conformance suite checks the available reference behavior before the contract is consumed by the production application.
 
 ![Sequence diagram for status, errors, and live announcements](diagrams/sequence-l2-exp-10.png)
+
+### Implementation evidence
+
+Status: **Implemented**
+
+- `accessible-interaction.spec.ts` starts from a Page Object and runs automated
+  WCAG 2.2 AA analysis against the live Angular shell with no serious or
+  critical violations.
+- The command search uses the native modal contract, contains keyboard focus,
+  closes with Escape, and restores focus to its invoker.
+- `ExperiencePlatformAdapter` focuses and announces the primary heading after
+  route navigation without moving focus during busy updates.
+- Curriculum validation associates its persistent recovery text with the file
+  control and exposes atomic visible live states from upload through validation.
+- Desktop modal and narrow validation-error snapshots verify the production
+  consumer against the shared design-system tokens and component patterns.

@@ -57,6 +57,7 @@
 }
 
 .command-trigger {
+  cursor: pointer;
   width: 100%;
 }
 
@@ -217,6 +218,32 @@
   font: var(--rf-type-overline);
   letter-spacing: var(--rf-tracking-caps);
   text-transform: uppercase;
+}
+
+.command-dialog {
+  background: transparent;
+  border: 0;
+  color: var(--rf-color-ink);
+  max-height: calc(100vh - (var(--rf-space-8) * 2));
+  max-width: calc(100vw - (var(--rf-space-4) * 2));
+  padding: 0;
+  width: min(38rem, calc(100vw - (var(--rf-space-4) * 2)));
+}
+
+.command-dialog::backdrop {
+  background: var(--rf-color-scrim);
+}
+
+.command-dialog .rf-command {
+  width: 100%;
+}
+
+.command-dialog__empty {
+  border: 1px dashed var(--rf-color-line-strong);
+  color: var(--rf-color-ink-subtle);
+  font: var(--rf-type-data);
+  margin: var(--rf-space-4) 0 0;
+  padding: var(--rf-space-4);
 }
 
 @media (max-width: 64rem) {

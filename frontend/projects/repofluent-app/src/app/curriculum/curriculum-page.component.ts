@@ -23,6 +23,8 @@ export class CurriculumPageComponent {
   protected readonly isBusy = signal(false);
   protected readonly message = signal('');
   protected readonly error = signal('');
+  protected readonly packageError = signal('');
+  protected readonly operationStatus = signal('Ready for a curriculum package');
   protected learnerId = 'learner';
   protected isRequired = false;
 
@@ -35,50 +37,76 @@ export class CurriculumPageComponent {
 
   protected chooseFile(event: Event): void {
     this.selectedFile = (event.target as HTMLInputElement).files?.item(0) ?? null;
+    if (this.selectedFile) {
+      this.packageError.set('');
+      this.operationStatus.set('Curriculum package selected');
+    }
   }
 
   protected async upload(): Promise<void> {
+    if (this.isBusy()) return;
     if (!this.selectedFile) {
-      this.error.set('Choose a curriculum package first.');
+      this.packageError.set('Choose a curriculum package first.');
+      this.operationStatus.set('Curriculum package is required');
       return;
     }
 
-    await this.run(async () => {
-      const receipt = await firstValueFrom(this.api.upload(this.selectedFile!));
-      localStorage.setItem(importStorageKey, receipt.id);
-      await this.pollUntilValidated(receipt.id);
-    });
+    this.packageError.set('');
+    await this.run(
+      async () => {
+        const receipt = await firstValueFrom(this.api.upload(this.selectedFile!));
+        localStorage.setItem(importStorageKey, receipt.id);
+        this.operationStatus.set('Validating curriculum package');
+        await this.pollUntilValidated(receipt.id);
+      },
+      'Uploading curriculum package',
+      'Curriculum package is ready for review',
+    );
   }
 
   protected async openPreview(): Promise<void> {
     const current = this.status();
     if (!current) return;
-    await this.run(async () =>
-      this.preview.set(await firstValueFrom(this.api.getPreview(current.id))),
+    await this.run(
+      async () => this.preview.set(await firstValueFrom(this.api.getPreview(current.id))),
+      'Loading draft preview',
+      'Draft preview loaded',
     );
   }
 
   protected async approve(): Promise<void> {
     const current = this.status();
     if (!current) return;
-    await this.run(async () => {
-      this.status.set(await firstValueFrom(this.api.approve(current.id, current.checksum)));
-    });
+    await this.run(
+      async () => {
+        this.status.set(await firstValueFrom(this.api.approve(current.id, current.checksum)));
+      },
+      'Approving curriculum checksum',
+      'Curriculum checksum approved',
+    );
   }
 
   protected async publish(): Promise<void> {
     const current = this.status();
     if (!current) return;
-    await this.run(async () => this.status.set(await firstValueFrom(this.api.publish(current.id))));
+    await this.run(
+      async () => this.status.set(await firstValueFrom(this.api.publish(current.id))),
+      'Publishing curriculum version',
+      'Curriculum version published',
+    );
   }
 
   protected async assign(): Promise<void> {
     const versionId = this.status()?.publishedVersionId;
     if (!versionId) return;
-    await this.run(async () => {
-      await firstValueFrom(this.api.assign(versionId, this.learnerId, this.isRequired));
-      this.message.set('Assignment created');
-    });
+    await this.run(
+      async () => {
+        await firstValueFrom(this.api.assign(versionId, this.learnerId, this.isRequired));
+        this.message.set('Assignment created');
+      },
+      'Assigning published curriculum',
+      'Assignment created',
+    );
   }
 
   protected statusLabel(value: ImportStatus): string {
@@ -115,16 +143,24 @@ export class CurriculumPageComponent {
     throw new Error('Validation did not complete in time.');
   }
 
-  private async run(action: () => Promise<void>): Promise<void> {
+  private async run(
+    action: () => Promise<void>,
+    startingStatus: string,
+    completedStatus: string,
+  ): Promise<void> {
+    if (this.isBusy()) return;
     this.isBusy.set(true);
     this.error.set('');
     this.message.set('');
+    this.operationStatus.set(startingStatus);
     try {
       await action();
+      this.operationStatus.set(completedStatus);
     } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : 'The request could not be completed.',
-      );
+      const message =
+        error instanceof Error ? error.message : 'The request could not be completed.';
+      this.error.set(message);
+      this.operationStatus.set(`Curriculum operation failed: ${message}`);
     } finally {
       this.isBusy.set(false);
     }

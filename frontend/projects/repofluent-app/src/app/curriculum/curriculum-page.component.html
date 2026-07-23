@@ -41,17 +41,38 @@
           class="rf-input file-input"
           type="file"
           accept="application/json,.json"
+          [attr.aria-invalid]="packageError() ? 'true' : null"
+          [attr.aria-describedby]="
+            packageError()
+              ? 'curriculum-package-hint curriculum-package-error'
+              : 'curriculum-package-hint'
+          "
           (change)="chooseFile($event)"
         />
-        <span class="rf-field__hint">
+        <span class="rf-field__hint" id="curriculum-package-hint">
           JSON · validated against schema and policy · active content is rejected
         </span>
+        @if (packageError()) {
+          <span class="rf-field__error" id="curriculum-package-error">
+            {{ packageError() }} Select a JSON package, then try again.
+          </span>
+        }
       </label>
       <div class="panel-actions">
+        <p
+          class="rf-status rf-status--info operation-status"
+          role="status"
+          aria-label="Curriculum operation status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {{ operationStatus() }}
+        </p>
         <button
           class="rf-button rf-button--primary"
           type="button"
-          [disabled]="isBusy()"
+          [attr.aria-busy]="isBusy()"
+          [attr.aria-disabled]="isBusy()"
           (click)="upload()"
         >
           Upload and validate
@@ -175,7 +196,7 @@
 </div>
 
 @if (message()) {
-  <p class="rf-toast notice" role="status">{{ message() }}</p>
+  <p class="rf-toast notice">{{ message() }}</p>
 }
 @if (error()) {
   <div class="rf-callout rf-callout--danger error" role="alert">

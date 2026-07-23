@@ -62,6 +62,7 @@ production-readiness conditions are satisfied.
 | Administrator publishes and directly assigns one learner                               | L2-CLI-08; partial L2-ATO-05                  | API integration test and Playwright golden path        | Implemented direct-assignment scenario |
 | Learner sees assigned learning and renders hierarchy, safe blocks, and code reference  | L2-LEX-01, L2-LEX-03, L2-LEX-04               | Angular component test and Playwright golden path      | Implemented scenario                   |
 | Angular consumes versioned default/tenant tokens and preserves state under zoom/motion | L2-EXP-01–03                                  | Consumer guard, static conformance, Playwright visuals | Implemented scenarios                  |
+| Shell, modal, route, error, and validation status preserve accessible interaction      | L2-EXP-08–10                                  | Axe, component tests, Playwright POM and visuals       | Implemented scenarios                  |
 
 ## Open decisions before baseline approval
 
