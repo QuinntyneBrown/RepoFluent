@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { PerformanceBudgetAdapter } from 'components';
+import { BrowserCapabilityAdapter, PerformanceBudgetAdapter } from 'components';
 
 @Component({
   selector: 'app-performance-budget-page',
@@ -9,4 +9,5 @@ import { PerformanceBudgetAdapter } from 'components';
 })
 export class PerformanceBudgetPageComponent {
   protected readonly performanceBudget = inject(PerformanceBudgetAdapter);
+  protected readonly browserCapability = inject(BrowserCapabilityAdapter);
 }

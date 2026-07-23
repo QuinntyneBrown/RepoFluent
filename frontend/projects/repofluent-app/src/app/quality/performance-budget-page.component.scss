@@ -103,6 +103,67 @@ h1 {
   padding: var(--rf-space-3);
 }
 
+.browser-policy {
+  margin-top: var(--rf-space-5);
+}
+
+.browser-policy__body {
+  display: grid;
+  gap: var(--rf-space-5);
+  padding: var(--rf-space-5);
+}
+
+.policy-summary {
+  align-items: center;
+  display: flex;
+  gap: var(--rf-space-5);
+  justify-content: space-between;
+}
+
+.policy-summary h2 {
+  font: var(--rf-type-section);
+  margin: var(--rf-space-2) 0;
+}
+
+.policy-summary p,
+.capability-grid p {
+  color: var(--rf-color-ink-muted);
+  margin: 0;
+}
+
+.policy-source {
+  color: var(--rf-color-link);
+  display: inline-block;
+  font: var(--rf-type-data);
+  margin-top: var(--rf-space-2);
+}
+
+.capability-grid {
+  display: grid;
+  gap: var(--rf-space-4);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.capability-grid > div {
+  background: var(--rf-color-surface-1);
+  border: 1px solid var(--rf-color-line);
+  padding: var(--rf-space-4);
+}
+
+.capability-grid h3 {
+  color: var(--rf-color-primary);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
+  margin: 0 0 var(--rf-space-3);
+  text-transform: uppercase;
+}
+
+.capability-grid ul {
+  color: var(--rf-color-ink-muted);
+  margin: 0;
+  padding-left: var(--rf-space-5);
+}
+
 @media (max-width: 64rem) {
   .budget-grid {
     grid-template-columns: 1fr;
@@ -115,7 +176,13 @@ h1 {
 
 @media (max-width: 48rem) {
   .measurement-layout,
-  .profile .rf-property-list {
+  .profile .rf-property-list,
+  .capability-grid {
     grid-template-columns: 1fr;
+  }
+
+  .policy-summary {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

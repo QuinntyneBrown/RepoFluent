@@ -22,3 +22,6 @@
 - Versioned production performance profile with p75 shell and interaction
   gates, privacy-safe RUM events, long-task protection, and reduced-motion
   precedence.
+- Angular 21 Baseline browser policy with pinned Chromium, Firefox, and WebKit
+  release gates, capability-based fallback, and non-disclosing compatibility
+  guidance.

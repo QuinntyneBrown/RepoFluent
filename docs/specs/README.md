@@ -66,6 +66,7 @@ production-readiness conditions are satisfied.
 | Lesson source context and large content preserve route, focus, position, and reflow     | L2-EXP-06–07, L2-EXP-14                       | Component tests and responsive Playwright POM visuals  | Implemented scenarios                  |
 | System map preserves content, selection, relationships, and descriptions without GPU   | L2-EXP-04–05, L2-EXP-11                       | Capability unit test and Playwright POM visuals        | Implemented scenarios                  |
 | Approved profile gates shell, interaction, animation, and privacy-safe measurements    | L2-EXP-12–13                                  | Adapter unit tests and Playwright POM performance gate | Implemented scenarios                  |
+| Browser matrix preserves critical flow, fallback, guidance, and safe access             | L2-EXP-15                                     | Three-engine Playwright POM and adapter unit tests      | Implemented scenarios                  |
 
 ## Open decisions before baseline approval
 

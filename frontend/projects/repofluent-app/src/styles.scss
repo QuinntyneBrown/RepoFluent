@@ -17,9 +17,75 @@ body {
   min-height: 100vh;
 }
 
+.bootstrap-guidance,
+noscript {
+  background: var(--rf-color-warning-dim);
+  border: 1px solid var(--rf-color-warning-border);
+  color: var(--rf-color-ink);
+  display: block;
+  margin: var(--rf-space-7);
+  max-width: var(--rf-layout-reading);
+  padding: var(--rf-space-6);
+}
+
+.bootstrap-guidance h1 {
+  font: var(--rf-type-page-title);
+}
+
+.browser-guidance {
+  align-items: center;
+  background: var(--rf-color-warning-dim);
+  border-bottom: 1px solid var(--rf-color-warning-border);
+  color: var(--rf-color-ink);
+  display: flex;
+  gap: var(--rf-space-5);
+  justify-content: space-between;
+  padding: var(--rf-space-3) var(--rf-space-5);
+}
+
+.browser-guidance div {
+  align-items: baseline;
+  display: flex;
+  gap: var(--rf-space-3);
+}
+
+.browser-guidance strong,
+.browser-guidance span {
+  color: var(--rf-color-warning);
+  font: var(--rf-type-overline);
+  letter-spacing: var(--rf-tracking-caps);
+  text-transform: uppercase;
+}
+
+.browser-guidance p {
+  color: var(--rf-color-ink-muted);
+  margin: 0;
+}
+
+.browser-guidance span {
+  white-space: nowrap;
+}
+
 button,
 input,
 select,
 textarea {
   font: inherit;
+}
+
+@media (max-width: 48rem) {
+  .browser-guidance,
+  .browser-guidance div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--rf-space-2);
+  }
+
+  .browser-guidance {
+    padding: var(--rf-space-3) var(--rf-space-4);
+  }
+
+  .browser-guidance span {
+    white-space: normal;
+  }
 }

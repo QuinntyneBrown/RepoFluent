@@ -7,6 +7,24 @@
     <span class="development-banner__compact">Development identities · local only</span>
   </div>
 
+  @if (browserCapability.state() === 'unsupported') {
+    <section
+      class="browser-guidance"
+      role="alert"
+      aria-label="Browser compatibility guidance"
+      aria-describedby="browser-guidance-description"
+    >
+      <div>
+        <strong id="browser-guidance-title">Browser compatibility mode</strong>
+        <p id="browser-guidance-description">
+          Use a current Chrome, Edge, Firefox, or Safari for the supported experience. Curriculum,
+          learning, and semantic system information remain available.
+        </p>
+      </div>
+      <span>Effects reduced · safe access active</span>
+    </section>
+  }
+
   <header class="app-header">
     <a class="rf-brand brand" routerLink="/" aria-label="RepoFluent" role="heading" aria-level="1">
       <span class="rf-brand__mark" aria-hidden="true">RF</span>

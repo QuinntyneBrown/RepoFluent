@@ -64,7 +64,7 @@ jobs:
 
       - name: Install acceptance browser
         working-directory: frontend
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run live-stack acceptance test
         working-directory: frontend

@@ -10,7 +10,11 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { DevPersonaService, Persona } from 'api';
-import { ExperiencePlatformAdapter, PerformanceBudgetAdapter } from 'components';
+import {
+  BrowserCapabilityAdapter,
+  ExperiencePlatformAdapter,
+  PerformanceBudgetAdapter,
+} from 'components';
 import { filter } from 'rxjs';
 
 @Component({
@@ -23,6 +27,7 @@ import { filter } from 'rxjs';
 export class App {
   protected readonly personas = inject(DevPersonaService);
   protected readonly experiencePlatform = inject(ExperiencePlatformAdapter);
+  protected readonly browserCapability = inject(BrowserCapabilityAdapter);
   private readonly performanceBudget = inject(PerformanceBudgetAdapter);
   private readonly router = inject(Router);
   private readonly commandDialog =
@@ -34,6 +39,7 @@ export class App {
 
   constructor() {
     this.experiencePlatform.initialize();
+    this.browserCapability.initialize();
     this.performanceBudget.initialize();
     afterNextRender(() => this.performanceBudget.markShellUsable());
     this.router.events

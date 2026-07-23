@@ -132,3 +132,97 @@
     </div>
   </article>
 </section>
+
+<section
+  class="rf-panel browser-policy"
+  aria-labelledby="browser-policy-title"
+  aria-label="Supported browser policy"
+>
+  <div class="rf-panel__header">
+    <span id="browser-policy-title">Supported browser policy</span>
+    <span>{{ browserCapability.policy.id }}</span>
+  </div>
+  <div class="browser-policy__body">
+    <div class="policy-summary">
+      <div>
+        <p class="eyebrow">Production support</p>
+        <h2>{{ browserCapability.policy.framework }}</h2>
+        <p>
+          Baseline date · {{ browserCapability.policy.baselineDate }} · reviewed with each Angular
+          major or emergency browser advisory.
+        </p>
+        <a
+          class="policy-source"
+          [href]="browserCapability.policy.source"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Angular browser support source
+        </a>
+      </div>
+      <span
+        class="rf-status"
+        [class.rf-status--success]="browserCapability.state() === 'supported'"
+        [class.rf-status--warning]="browserCapability.state() === 'unsupported'"
+        role="status"
+        aria-label="Current browser capability status"
+      >
+        @if (browserCapability.state() === 'supported') {
+          Supported capabilities · full safe access
+        } @else {
+          Outside supported capabilities · safe fallback active
+        }
+      </span>
+    </div>
+
+    <div class="rf-table-wrap">
+      <table class="rf-table">
+        <caption>
+          Production browser families and exact release-gate engines
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Browser family</th>
+            <th scope="col">Production version policy</th>
+            <th scope="col">Pinned CI engine</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (profile of browserCapability.policy.releaseProfiles; track profile.family) {
+            <tr>
+              <td class="rf-table__primary">{{ profile.family }}</td>
+              <td>{{ profile.productionPolicy }}</td>
+              <td>{{ profile.ciEngine }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="capability-grid">
+      <div>
+        <h3>Required core capabilities</h3>
+        <ul>
+          @for (capability of browserCapability.policy.requiredCapabilities; track capability) {
+            <li>{{ capability }}</li>
+          }
+        </ul>
+      </div>
+      <div>
+        <h3>Optional enhancements</h3>
+        <ul>
+          @for (capability of browserCapability.policy.optionalCapabilities; track capability) {
+            <li>{{ capability }}</li>
+          }
+        </ul>
+      </div>
+      <div>
+        <h3>Monitoring boundary</h3>
+        <p>
+          Support class, fallback presentation, performance outcome, and critical error count only.
+          No user-agent string or feature vector is recorded.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
