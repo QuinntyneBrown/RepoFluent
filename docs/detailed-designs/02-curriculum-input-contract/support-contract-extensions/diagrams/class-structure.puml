@@ -11,48 +11,40 @@ skinparam class {
 }
 title Class structure — Support contract extensions
 
-class SupportContractExtensionsRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class ContractExtension {
+  +string Namespace
+  +string Version
+  +bool? Critical
+  +JsonElement Data
 }
 
-class SupportContractExtensionsResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class Package {
+  +string PackageId
+  +string Version
+  +string Title
+  +IReadOnlyList<ContractExtension>? Extensions
 }
 
-class SupportContractExtensionsRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: SupportContractExtensionsResult): void
+class PackageValidator {
+  +Validate(json: string): (Package?, IReadOnlyList<ValidationIssue>)
+  -ValidateExtensions(extensions, issues): void
 }
 
-class SupportContractExtensionsPolicy {
-  +Evaluate(request: SupportContractExtensionsRequest, current: SupportContractExtensionsRecord): SupportContractExtensionsResult
+class ValidationIssue {
+  +string Code
+  +string Severity
+  +bool IsBlocking
+  +string Message
+  +string Path
 }
 
-interface ISupportContractExtensionsRepository {
-  +Load(scopeId: string, targetId: string): Task<SupportContractExtensionsRecord>
-  +Save(record: SupportContractExtensionsRecord, expectedVersion: long): Task
+class CurriculumWorkflow {
+  +ValidateNextAsync(cancellationToken): Task
 }
 
-class SupportContractExtensionsHandler {
-  +Handle(request: SupportContractExtensionsRequest): Task<SupportContractExtensionsResult>
-}
-
-SupportContractExtensionsHandler ..> SupportContractExtensionsRequest : handles
-SupportContractExtensionsHandler ..> SupportContractExtensionsPolicy : invokes
-SupportContractExtensionsHandler ..> ISupportContractExtensionsRepository : uses
-ISupportContractExtensionsRepository --> SupportContractExtensionsRecord : loads / saves
-SupportContractExtensionsPolicy ..> SupportContractExtensionsRecord : evaluates
-SupportContractExtensionsPolicy ..> SupportContractExtensionsResult : creates
-SupportContractExtensionsRecord ..> SupportContractExtensionsResult : applies
+Package "1" *-- "0..*" ContractExtension : owns
+PackageValidator ..> Package : deserializes / validates
+PackageValidator ..> ValidationIssue : creates
+CurriculumWorkflow ..> PackageValidator : invokes
+CurriculumWorkflow --> ValidationIssue : persists outcome
 @enduml

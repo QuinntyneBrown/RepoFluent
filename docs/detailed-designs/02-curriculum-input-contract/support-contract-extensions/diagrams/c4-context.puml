@@ -3,10 +3,8 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Support contract extensions
 
-Person(actor, "Contract maintainer", "Publishes and validates curriculum contract releases")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Artifact distribution service", "Distributes checksummed schema, ICD, fixture, and release artifacts")
+Person(author, "Curriculum author", "Uploads a portable curriculum package")
+System(repofluent, "RepoFluent", "Validates core curriculum and extension semantics")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(author, repofluent, "Uploads a package and inspects extension outcomes", "HTTPS")
 @enduml

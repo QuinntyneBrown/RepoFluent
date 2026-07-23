@@ -105,6 +105,27 @@ changes.
 - JSON object member order carries no meaning. Release checksum normalization
   is the path-and-digest procedure declared by `release-manifest.json`.
 
+## Contract extensions
+
+The optional package-level `extensions` array contains closed extension
+envelopes. Each envelope declares a normalized reverse-domain `namespace`, a
+canonical `major.minor.patch` `version`, explicit `critical` behavior, and an
+isolated JSON object named `data`. A namespace has at least three lowercase
+segments, for example `com.acme.learning.insights`.
+
+Extension ownership does not transfer core semantics. An extension payload
+shall not contain a top-level key that matches a core package field. The
+validator reports `CIC_EXTENSION_REDEFINES_CORE` at the conflicting extension
+data path when this boundary is crossed.
+
+The `0.1.0` consumer recognizes no extension namespaces. It preserves an
+unsupported noncritical envelope in the accepted package, reports
+`CIC_EXTENSION_IGNORED` as a nonblocking warning, and excludes the payload from
+core interpretation. It rejects an unsupported critical envelope with
+`CIC_UNSUPPORTED_CRITICAL_EXTENSION`. This criticality rule permits later
+consumers to add namespaced semantics without changing the meaning of existing
+core fields.
+
 ## Conformance
 
 `fixtures/conformance-catalog.json` declares two successful fixtures and eight

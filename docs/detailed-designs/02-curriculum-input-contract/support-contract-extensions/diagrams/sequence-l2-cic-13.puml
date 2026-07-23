@@ -14,44 +14,61 @@ skinparam package {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-actor "Contract maintainer" as actor
-box "Frontend — Contract workbench" #E0F2FE
-  participant "SupportContractExtensionsWorkbench" as entry
-  participant "ContractRegistryClient" as client
+actor "Curriculum author" as author
+box "Frontend — RepoFluent Angular application" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
+  participant "ContractExtensionPolicyComponent" as workbench
 end box
-box "Backend — Contract Registry API application" #D1FADF
-  participant "SupportContractExtensionsController" as controller
+box "Backend — RepoFluent API application" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
+  participant "CurriculumValidationWorker" as worker
 end box
-box "Backend — Curriculum Input Contract Application and Domain" #ECFDF3
-  participant "SupportContractExtensionsHandler" as handler
-  participant "SupportContractExtensionsPolicy" as policy
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "CurriculumWorkflow" as workflow
+  participant "PackageValidator" as validator
 end box
-box "Backend — Curriculum Input Contract Infrastructure" #FFF4E5
-  participant "ISupportContractExtensionsRepository" as repository
-  database "Contract artifact store" as store
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  participant "ICurriculumStore" as store
+  database "RepoFluent database" as db
 end box
-actor -> entry : Start support contract extensions
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch SupportContractExtensionsRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CIC-13
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+author -> page : Upload package with extension
+page -> client : Build multipart request
+client -> endpoints : POST /api/curriculum-imports
+endpoints -> workflow : ReceiveAsync(package bytes)
+workflow -> store : AddImportAsync(raw package)
+store -> db : Insert received import
+db --> store : Stored import
+store --> workflow : Receipt state
+workflow --> endpoints : ImportReceipt
+endpoints --> client : 202 Accepted
+client --> page : Receipt
+worker -> workflow : ValidateNextAsync
+workflow -> store : Claim received import
+store -> db : Read and mark validating
+db --> store : Raw package
+store --> workflow : CurriculumRecord
+workflow -> validator : Apply L2-CIC-13
+alt Unsupported noncritical extension
+  validator --> workflow : Package + CIC_EXTENSION_IGNORED warning
+  workflow -> store : Save Draft with preserved raw package
+else Unsupported critical extension or core redefinition
+  validator --> workflow : Blocking extension issue at exact path
+  workflow -> store : Save ValidationFailed
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+store -> db : Persist state and issues
+db --> store : Saved result
+loop Until validation completes
+  page -> client : Request import status
+  client -> endpoints : GET /api/curriculum-imports/{id}
+  endpoints -> workflow : GetStatusAsync(id)
+  workflow -> store : GetImportAsync(id)
+  store --> workflow : Status and issues
+  workflow --> endpoints : ImportStatus
+  endpoints --> client : 200 OK
+  client --> page : Typed status
+end
+page -> workbench : Present accepted extension boundary
+workbench --> author : Warning or blocking outcome
 @enduml

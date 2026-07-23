@@ -15,6 +15,38 @@ public sealed class PackageValidator
         RegexOptions.CultureInvariant,
         TimeSpan.FromMilliseconds(100));
 
+    private static readonly Regex ExtensionNamespacePattern = new(
+        "^[a-z][a-z0-9]*(?:\\.[a-z](?:[a-z0-9-]*[a-z0-9])?){2,}$",
+        RegexOptions.CultureInvariant,
+        TimeSpan.FromMilliseconds(100));
+
+    private static readonly Regex SemanticVersionPattern = new(
+        "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+        RegexOptions.CultureInvariant,
+        TimeSpan.FromMilliseconds(100));
+
+    private static readonly HashSet<string> CorePackageFields = new(
+        [
+            "contractVersion",
+            "packageId",
+            "version",
+            "title",
+            "description",
+            "owner",
+            "locale",
+            "createdAt",
+            "createdBy",
+            "sourceSnapshot",
+            "systems",
+            "relationships",
+            "terminology",
+            "courses",
+            "assessments",
+            "evidence",
+            "extensions"
+        ],
+        StringComparer.Ordinal);
+
     private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true
@@ -104,6 +136,7 @@ public sealed class PackageValidator
             }
         }
         ValidateEvidence(package.Evidence, "/evidence", repositoryById, issues);
+        ValidateExtensions(package.Extensions ?? [], issues);
         var systems = package.Systems ?? [];
         var systemIds = new HashSet<string>(StringComparer.Ordinal);
         var subsystemIds = new HashSet<string>(StringComparer.Ordinal);
@@ -639,6 +672,104 @@ public sealed class PackageValidator
         }
     }
 
+    private static void ValidateExtensions(
+        IReadOnlyList<ContractExtension> extensions,
+        List<ValidationIssue> issues)
+    {
+        for (var extensionIndex = 0; extensionIndex < extensions.Count; extensionIndex++)
+        {
+            var extension = extensions[extensionIndex];
+            var path = $"/extensions/{extensionIndex}";
+            var hasNamespace = !string.IsNullOrWhiteSpace(extension.Namespace);
+            var hasVersion = !string.IsNullOrWhiteSpace(extension.Version);
+            var hasCriticality = extension.Critical.HasValue;
+
+            Require(
+                hasNamespace,
+                "CIC_REQUIRED",
+                $"{path}/namespace",
+                issues);
+            var hasValidNamespace = hasNamespace
+                && ExtensionNamespacePattern.IsMatch(extension.Namespace);
+            if (hasNamespace)
+            {
+                Require(
+                    hasValidNamespace,
+                    "CIC_INVALID_EXTENSION_NAMESPACE",
+                    $"{path}/namespace",
+                    issues);
+            }
+
+            Require(
+                hasVersion,
+                "CIC_REQUIRED",
+                $"{path}/version",
+                issues);
+            var hasValidVersion = hasVersion
+                && SemanticVersionPattern.IsMatch(extension.Version);
+            if (hasVersion)
+            {
+                Require(
+                    hasValidVersion,
+                    "CIC_INVALID_EXTENSION_VERSION",
+                    $"{path}/version",
+                    issues);
+            }
+
+            Require(
+                hasCriticality,
+                "CIC_REQUIRED",
+                $"{path}/critical",
+                issues);
+            var hasValidData = extension.Data.ValueKind == JsonValueKind.Object
+                && extension.Data.EnumerateObject().Count() is >= 1 and <= 50;
+            Require(
+                hasValidData,
+                "CIC_INVALID_EXTENSION_DATA",
+                $"{path}/data",
+                issues);
+            var redefinesCore = false;
+            if (extension.Data.ValueKind == JsonValueKind.Object)
+            {
+                foreach (var property in extension.Data.EnumerateObject())
+                {
+                    if (CorePackageFields.Contains(property.Name))
+                    {
+                        redefinesCore = true;
+                        issues.Add(Issue(
+                            "CIC_EXTENSION_REDEFINES_CORE",
+                            "Extensions cannot redefine core package fields.",
+                            $"{path}/data/{property.Name}"));
+                    }
+                }
+            }
+
+            if (!hasValidNamespace
+                || !hasValidVersion
+                || !hasCriticality
+                || !hasValidData
+                || redefinesCore)
+            {
+                continue;
+            }
+
+            if (extension.Critical is true)
+            {
+                issues.Add(Issue(
+                    "CIC_UNSUPPORTED_CRITICAL_EXTENSION",
+                    "The critical extension namespace is not supported.",
+                    $"{path}/namespace"));
+            }
+            else if (extension.Critical is false)
+            {
+                issues.Add(Warning(
+                    "CIC_EXTENSION_IGNORED",
+                    "The unsupported noncritical extension was ignored without changing core interpretation.",
+                    $"{path}/namespace"));
+            }
+        }
+    }
+
     private static void ValidateEvidence(
         EvidenceMetadata? evidence,
         string path,
@@ -872,4 +1003,7 @@ public sealed class PackageValidator
 
     private static ValidationIssue Issue(string code, string message, string path) =>
         new(code, "error", true, message, path);
+
+    private static ValidationIssue Warning(string code, string message, string path) =>
+        new(code, "warning", false, message, path);
 }

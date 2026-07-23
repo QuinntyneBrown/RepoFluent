@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import type { Assessment, CurriculumPackage } from 'api';
+import { ContractExtensionPolicyComponent } from './contract-extension-policy.component';
 
 @Component({
   selector: 'app-contract-model-workbench',
+  imports: [ContractExtensionPolicyComponent],
   templateUrl: './contract-model-workbench.component.html',
   styleUrl: './contract-model-workbench.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

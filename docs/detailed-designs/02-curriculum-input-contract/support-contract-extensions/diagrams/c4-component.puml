@@ -3,16 +3,26 @@
 LAYOUT_WITH_LEGEND()
 title Components — Support contract extensions
 
-Container_Boundary(api, "Contract Registry API") {
-  Component(controller, "SupportContractExtensionsController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "SupportContractExtensionsHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "SupportContractExtensionsPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "ISupportContractExtensionsRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Contract artifact store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+Container_Boundary(spa, "RepoFluent Angular application") {
+  Component(page, "CurriculumPageComponent", "Angular component", "Uploads packages and presents validation issues")
+  Component(client, "RepoFluentApiService", "Angular HTTP client", "Calls curriculum import endpoints")
+  Component(workbench, "ContractExtensionPolicyComponent", "Angular component", "Presents namespace and core-boundary policy")
 }
+Container_Boundary(api, "RepoFluent API") {
+  Component(endpoints, "CurriculumEndpoints", "ASP.NET Core endpoints", "Receives uploads and returns import status")
+  Component(worker, "CurriculumValidationWorker", "Background service", "Claims received imports")
+  Component(workflow, "CurriculumWorkflow", "Application service", "Coordinates validation and lifecycle state")
+  Component(validator, "PackageValidator", "Application validator", "Applies extension shape, isolation, and criticality rules")
+  Component(store, "ICurriculumStore", "Application port", "Persists raw packages and path-addressed issues")
+}
+ContainerDb(db, "RepoFluent database", "SQLite", "Curriculum imports")
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(page, client, "Uploads and polls through")
+Rel(page, workbench, "Supplies accepted package")
+Rel(client, endpoints, "Calls", "HTTPS")
+Rel(endpoints, workflow, "Receives and reads through")
+Rel(worker, workflow, "Requests next validation")
+Rel(workflow, validator, "Validates package")
+Rel(workflow, store, "Claims and saves through")
+Rel(store, db, "Reads and writes", "EF Core")
 @enduml

@@ -2,80 +2,109 @@
 
 ## Overview
 
-RepoFluent's Curriculum Input Contract subsystem defines the portable curriculum package, its compatibility rules, and its conformance artifacts. This feature
-brings *extension mechanism* into one vertical slice. The slice preserves tenant,
-actor, version, authorization, and correlation context wherever the cited
-requirements apply.
+RepoFluent's Curriculum Input Contract provides a bounded extension mechanism
+for producer-specific metadata that does not belong in the core curriculum
+model. An *extension envelope* is a package-level record that declares its
+owner through a reverse-domain namespace, identifies its semantic version,
+states whether its semantics are critical, and isolates its payload in `data`.
 
-The contract maintainer starts the outcome through Contract workbench.
-Contract Registry API applies server-side policy before state is read or changed.
-The external dependency and persistent technology remain `<TO SUPPLY>` where
-the requirements baseline does not select them.
+The `0.1.0` consumer recognizes no extension namespaces. It preserves an
+unsupported noncritical envelope, emits a warning, and interprets the core
+package exactly as if the extension were absent. It blocks an unsupported
+critical envelope because ignoring required producer semantics could change the
+intended curriculum. An extension payload cannot redefine a core package field.
+
+Authors upload the package through the governed curriculum workflow and inspect
+the result in the Angular contract workbench. The workbench distinguishes a
+warning from a blocking issue and shows the namespace boundary without treating
+extension payload values as core content.
 
 ## Description
 
-The greenfield slice introduces the following building blocks. The endpoint
-route, deployment topology, and unresolved provider choices remain `<TO SUPPLY>`.
+The implemented vertical slice uses the existing upload and validation boundary:
 
-- **`SupportContractExtensionsWorkbench`** — .NET tool entry component that presents
-  the feature state and submits a typed intent.
-- **`ContractRegistryClient`** — typed client that carries tenant, actor, version,
-  idempotency, and correlation context required by the operation.
-- **`SupportContractExtensionsController`** — ASP.NET Core boundary that authenticates
-  the caller, applies endpoint policy, and dispatches `SupportContractExtensionsRequest`.
-- **`SupportContractExtensionsRequest`** — application request containing scope, actor, target,
-  expected version, correlation identifier, and feature payload.
-- **`SupportContractExtensionsHandler`** — application handler that loads authorized state,
-  invokes `SupportContractExtensionsPolicy`, and commits one result.
-- **`SupportContractExtensionsPolicy`** — domain policy that evaluates the cited L2 rules without
-  relying on client presentation state.
-- **`ISupportContractExtensionsRepository`** — application abstraction for tenant-scoped reads,
-  writes, optimistic concurrency, and idempotency lookup.
-- **`SupportContractExtensionsRecord`** — persisted feature record containing identity, tenant,
-  version, status, timestamps, and safe evidence references.
+- **`ContractExtension`** — typed application record containing `Namespace`,
+  `Version`, optional `Critical`, and JSON-object `Data`.
+- **`Package`** — preserves the optional ordered extension collection alongside
+  core package content.
+- **`PackageValidator`** — validates reverse-domain namespaces, canonical
+  semantic versions, object payloads, criticality, and core-field isolation. It
+  reports stable issue codes at exact JSON Pointer paths.
+- **`curriculum.schema.json`** — exposes the closed extension envelope to
+  offline producers and rejects structural core-field redefinitions.
+- **`CurriculumWorkflow`** — stores accepted noncritical envelopes in the
+  tenant-scoped raw package while blocking imports that contain extension
+  errors.
+- **`ContractExtensionPolicyComponent`** — renders namespace, version,
+  criticality, payload keys, and core-boundary outcome with design-system
+  tokens.
+- **`ContractExtensionsPage`** — Playwright Page Object that drives upload,
+  warning, blocking, workbench, and visual acceptance behavior.
+
+The validation vocabulary separates `CIC_EXTENSION_IGNORED`,
+`CIC_UNSUPPORTED_CRITICAL_EXTENSION`, and
+`CIC_EXTENSION_REDEFINES_CORE`. Namespace, version, and data-shape failures have
+their own stable codes.
 
 ## Requirements
 
-The feature realizes the following level-2 (L2) requirements. Each row cites
-the first L1 identifier named by the source requirement as its primary parent.
+The feature realizes the following level-2 (L2) requirement. The row cites the
+L1 parent named by the source requirement.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
 | `L2-CIC-13` | `L1-CIC-06` | Extensions shall use a documented namespace mechanism, shall not redefine core fields, and shall be ignorable or rejectable according to declared criticality. Unsupported critical extensions shall block import; unsupported noncritical extensions may produce a warning without changing core interpretation. |
 
+### Implementation evidence
+
+- `contract-extensions.spec.ts` starts the slice with Page Object acceptance
+  coverage for noncritical preservation, warning presentation, critical
+  rejection, exact paths, and the extension-policy visual.
+- `ContractExtensionTests` exercises the application validator and verifies that
+  the core title and extension envelope survive nonblocking validation.
+- The representative release fixture includes a noncritical namespaced
+  extension and validates against JSON Schema 2020-12.
+- Windows and Linux Chromium baselines capture the token-conformant workbench at
+  the design-system desktop profile.
+
 ## Diagrams
 
 ### System context
 
-The contract maintainer uses RepoFluent to complete the feature outcome.
-RepoFluent interacts with Artifact distribution service only through the boundary
-described by the requirements and approved configuration.
+A curriculum producer supplies a package to RepoFluent. RepoFluent validates the
+core contract and applies the declared extension criticality policy.
 
-![C4 system context for support contract extensions](diagrams/c4-context.png)
+![C4 system context for contract extensions](diagrams/c4-context.png)
 
 ### Containers
 
-Contract workbench sends typed requests to Contract Registry API. The API applies
-server-owned rules and records the accepted outcome in Contract artifact store.
+The Angular application uploads JSON to the RepoFluent API. The API validates
+the package and records accepted raw content and path-addressed issues in
+SQLite.
 
-![C4 container view for support contract extensions](diagrams/c4-container.png)
+![C4 container view for contract extensions](diagrams/c4-container.png)
 
 ### Components
 
-`SupportContractExtensionsController` dispatches `SupportContractExtensionsRequest` to `SupportContractExtensionsHandler`. The handler
-uses `SupportContractExtensionsPolicy` and `ISupportContractExtensionsRepository` before it commits a state change.
+`CurriculumPageComponent` calls `RepoFluentApiService`; `CurriculumEndpoints`
+dispatches to `CurriculumWorkflow`, which uses `PackageValidator` before the
+store records the result. `ContractExtensionPolicyComponent` presents the
+accepted extension boundary.
 
-![C4 component view for support contract extensions](diagrams/c4-component.png)
+![C4 component view for contract extensions](diagrams/c4-component.png)
 
 ### Class structure
 
-`SupportContractExtensionsHandler` depends on the request, policy, and repository abstractions.
-`ISupportContractExtensionsRepository` stores `SupportContractExtensionsRecord` under tenant and version context.
+`Package` owns zero or more `ContractExtension` records. `PackageValidator`
+creates `ValidationIssue` results that drive `CurriculumWorkflow` blocking
+behavior.
 
-![Class diagram for support contract extensions](diagrams/class-structure.png)
+![Class diagram for contract extensions](diagrams/class-structure.png)
 
 ### Behaviour — extension mechanism
 
-The sequence applies `L2-CIC-13` before the handler persists an accepted result. A rejected policy or validation result returns without a state change.
+The validation sequence applies `L2-CIC-13`. A noncritical unknown namespace
+returns a warning and preserves core interpretation; a critical namespace or
+core-field redefinition returns a blocking issue.
 
 ![Sequence diagram for extension mechanism](diagrams/sequence-l2-cic-13.png)

@@ -18,4 +18,6 @@ public sealed record Package(
     IReadOnlyList<Assessment> Assessments)
 {
     public EvidenceMetadata? Evidence { get; init; }
+
+    public IReadOnlyList<ContractExtension>? Extensions { get; init; }
 }

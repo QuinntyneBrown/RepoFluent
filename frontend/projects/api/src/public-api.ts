@@ -7,6 +7,7 @@ export * from './lib/assessment-selection';
 export * from './lib/code-tour-step';
 export * from './lib/contract-artifact';
 export * from './lib/contract-compatibility';
+export * from './lib/contract-extension';
 export * from './lib/contract-fixture-summary';
 export * from './lib/contract-release';
 export * from './lib/course';

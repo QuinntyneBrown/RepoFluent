@@ -37,3 +37,6 @@
 - Snapshot-resolved evidence and explicit uncertainty metadata, deterministic
   stable identifiers with all-path collision reporting, canonical primitive
   validation, and a token-conformant provenance workbench.
+- Versioned reverse-domain contract extensions with isolated payloads,
+  noncritical warning semantics, exact-path critical rejection, and a
+  token-conformant extension-policy workbench.

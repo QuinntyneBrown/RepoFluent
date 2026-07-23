@@ -116,18 +116,36 @@
         </dl>
 
         @if (current.issues.length) {
-          <div class="issues" role="alert">
-            <div class="rf-callout rf-callout--danger">
-              <div>
-                <strong>Blocking validation issues</strong>
-                <p>Resolve each issue, regenerate the package, and validate again.</p>
+          <div
+            class="issues"
+            [attr.role]="hasBlockingIssues(current) ? 'alert' : 'region'"
+            [attr.aria-label]="
+              hasBlockingIssues(current)
+                ? 'Blocking validation issues'
+                : 'Extension validation notices'
+            "
+          >
+            @if (hasBlockingIssues(current)) {
+              <div class="rf-callout rf-callout--danger">
+                <div>
+                  <strong>Blocking validation issues</strong>
+                  <p>Resolve each issue, regenerate the package, and validate again.</p>
+                </div>
               </div>
-            </div>
+            } @else {
+              <div class="rf-callout rf-callout--warning">
+                <div>
+                  <strong>Noncritical extension ignored</strong>
+                  <p>Core interpretation is unchanged and the package remains reviewable.</p>
+                </div>
+              </div>
+            }
             <div class="rf-table-wrap">
               <table class="rf-table">
                 <thead>
                   <tr>
                     <th>Code</th>
+                    <th>Severity</th>
                     <th>JSON path</th>
                     <th>Message</th>
                   </tr>
@@ -138,6 +156,7 @@
                       <td>
                         <code>{{ issue.code }}</code>
                       </td>
+                      <td>{{ titleCase(issue.severity) }}</td>
                       <td>
                         <code>{{ issue.path }}</code>
                       </td>

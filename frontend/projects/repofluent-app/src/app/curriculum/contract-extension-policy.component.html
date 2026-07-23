@@ -1,0 +1,73 @@
+<section
+  class="rf-panel contract-section contract-section--wide extension-section"
+  aria-label="Contract extension policy"
+>
+  <div class="rf-panel__header">
+    <span>06 · Contract extensions</span>
+    <span class="rf-badge">namespace isolated</span>
+  </div>
+  <div class="rf-panel__body">
+    <div class="extension-heading">
+      <div>
+        <span class="micro-label">Bounded evolution</span>
+        <h2>Contract extensions</h2>
+        <p>
+          Extension data stays inside its declared namespace and never changes the meaning of a core
+          field.
+        </p>
+      </div>
+      <span class="rf-status rf-status--info"> {{ extensions().length }} declared </span>
+    </div>
+
+    <div class="extension-layout">
+      <div class="extension-list">
+        @for (extension of extensions(); track extension.namespace) {
+          <article class="extension-card">
+            <div class="extension-card__heading">
+              <div>
+                <span class="micro-label">Extension namespace</span>
+                <strong>{{ extension.namespace }}</strong>
+                <span>Version {{ extension.version }}</span>
+              </div>
+              <span
+                class="rf-status"
+                [class.rf-status--danger]="extension.critical"
+                [class.rf-status--warning]="!extension.critical"
+              >
+                {{ extension.critical ? 'Critical' : 'Noncritical' }}
+              </span>
+            </div>
+            <div class="extension-payload">
+              @for (key of extensionKeys(extension.data); track key) {
+                <code>{{ key }}</code>
+              }
+            </div>
+            <div class="extension-outcome">
+              <span aria-hidden="true">{{ extension.critical ? '×' : '✓' }}</span>
+              <div>
+                <strong>{{ extension.critical ? 'Import blocked' : 'Ignored safely' }}</strong>
+                <p>
+                  {{
+                    extension.critical
+                      ? 'A consumer must understand this namespace before import.'
+                      : 'Unsupported data is preserved without changing core interpretation.'
+                  }}
+                </p>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      <aside class="extension-boundary">
+        <span class="micro-label">Core boundary</span>
+        <h3>Core interpretation unchanged</h3>
+        <ol>
+          <li><span>01</span>Namespace declares ownership.</li>
+          <li><span>02</span>Criticality controls warn or block.</li>
+          <li><span>03</span>Core fields cannot be redefined.</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>

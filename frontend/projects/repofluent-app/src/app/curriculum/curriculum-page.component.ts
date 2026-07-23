@@ -75,6 +75,14 @@ export class CurriculumPageComponent {
     );
   }
 
+  protected hasBlockingIssues(status: ImportStatus): boolean {
+    return status.issues.some((issue) => issue.isBlocking);
+  }
+
+  protected titleCase(value: string): string {
+    return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+  }
+
   protected async approve(): Promise<void> {
     const current = this.status();
     if (!current) return;

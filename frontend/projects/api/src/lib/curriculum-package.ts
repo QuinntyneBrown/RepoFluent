@@ -1,5 +1,6 @@
 import type { ArchitectureRelationship } from './architecture-relationship';
 import type { Assessment } from './assessment';
+import type { ContractExtension } from './contract-extension';
 import type { Course } from './course';
 import type { CurriculumSystem } from './curriculum-system';
 import type { EvidenceMetadata } from './evidence-metadata';
@@ -17,6 +18,7 @@ export interface CurriculumPackage {
   createdAt: string;
   createdBy: string;
   evidence?: EvidenceMetadata;
+  extensions?: ContractExtension[];
   sourceSnapshot: SourceSnapshot;
   systems: CurriculumSystem[];
   relationships: ArchitectureRelationship[];

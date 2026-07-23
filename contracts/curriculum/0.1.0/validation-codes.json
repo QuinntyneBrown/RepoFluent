@@ -57,6 +57,16 @@
       "meaning": "A stable identifier is duplicated in the package."
     },
     {
+      "code": "CIC_EXTENSION_IGNORED",
+      "category": "extensions",
+      "meaning": "An unsupported noncritical extension was ignored without changing core interpretation."
+    },
+    {
+      "code": "CIC_EXTENSION_REDEFINES_CORE",
+      "category": "extensions",
+      "meaning": "An extension payload attempts to redefine a core package field."
+    },
+    {
       "code": "CIC_EMPTY_PACKAGE",
       "category": "required-fields",
       "meaning": "Package content is absent."
@@ -75,6 +85,21 @@
       "code": "CIC_INVALID_DURATION",
       "category": "limits",
       "meaning": "A duration or time limit is outside the supported range."
+    },
+    {
+      "code": "CIC_INVALID_EXTENSION_DATA",
+      "category": "extensions",
+      "meaning": "An extension payload is absent or is not a JSON object."
+    },
+    {
+      "code": "CIC_INVALID_EXTENSION_NAMESPACE",
+      "category": "extensions",
+      "meaning": "An extension namespace is not normalized reverse-domain notation."
+    },
+    {
+      "code": "CIC_INVALID_EXTENSION_VERSION",
+      "category": "extensions",
+      "meaning": "An extension version is not a canonical semantic version."
     },
     {
       "code": "CIC_INVALID_ID",
@@ -160,6 +185,11 @@
       "code": "CIC_UNSUPPORTED_CONFIDENCE",
       "category": "types",
       "meaning": "Evidence confidence is not one of the supported explicit states."
+    },
+    {
+      "code": "CIC_UNSUPPORTED_CRITICAL_EXTENSION",
+      "category": "extensions",
+      "meaning": "A critical extension namespace is not supported by this consumer."
     },
     {
       "code": "CIC_UNSUPPORTED_DIFFICULTY",

@@ -362,4 +362,8 @@
       </div>
     </section>
   }
+
+  @if (package().extensions?.length) {
+    <app-contract-extension-policy [extensions]="package().extensions ?? []" />
+  }
 </section>

@@ -33,6 +33,11 @@ case. Canonical package primitives use supported locales, RFC 3339 UTC
 timestamps, positive integer-minute durations, UTF-8 JSON, and no implicit
 defaults.
 
+Package-level extensions use closed, versioned reverse-domain envelopes.
+Unsupported noncritical extensions remain preserved but do not change core
+interpretation; unsupported critical extensions block import. Extension data
+cannot redefine a core package field.
+
 `curriculum.schema.json` is the author-facing structural contract. The server adds
 semantic validation for stable identifier normalization and uniqueness,
 repository, citation, and architecture references, repository-relative paths,
