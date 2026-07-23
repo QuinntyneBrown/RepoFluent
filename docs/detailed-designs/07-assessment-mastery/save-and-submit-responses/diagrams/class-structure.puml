@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Save and submit responses
+
+class SaveAndSubmitResponsesRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class SaveAndSubmitResponsesResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class SaveAndSubmitResponsesRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: SaveAndSubmitResponsesResult): void
+}
+
+class SaveAndSubmitResponsesPolicy {
+  +Evaluate(request: SaveAndSubmitResponsesRequest, current: SaveAndSubmitResponsesRecord): SaveAndSubmitResponsesResult
+}
+
+interface ISaveAndSubmitResponsesRepository {
+  +Load(scopeId: string, targetId: string): Task<SaveAndSubmitResponsesRecord>
+  +Save(record: SaveAndSubmitResponsesRecord, expectedVersion: long): Task
+}
+
+class SaveAndSubmitResponsesHandler {
+  +Handle(request: SaveAndSubmitResponsesRequest): Task<SaveAndSubmitResponsesResult>
+}
+
+SaveAndSubmitResponsesHandler ..> SaveAndSubmitResponsesRequest : handles
+SaveAndSubmitResponsesHandler ..> SaveAndSubmitResponsesPolicy : invokes
+SaveAndSubmitResponsesHandler ..> ISaveAndSubmitResponsesRepository : uses
+ISaveAndSubmitResponsesRepository --> SaveAndSubmitResponsesRecord : loads / saves
+SaveAndSubmitResponsesPolicy ..> SaveAndSubmitResponsesRecord : evaluates
+SaveAndSubmitResponsesPolicy ..> SaveAndSubmitResponsesResult : creates
+SaveAndSubmitResponsesRecord ..> SaveAndSubmitResponsesResult : applies
+@enduml

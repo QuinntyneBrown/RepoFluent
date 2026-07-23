@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Edit contract-compatible content
+
+class EditContractContentRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class EditContractContentResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class EditContractContentRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: EditContractContentResult): void
+}
+
+class EditContractContentPolicy {
+  +Evaluate(request: EditContractContentRequest, current: EditContractContentRecord): EditContractContentResult
+}
+
+interface IEditContractContentRepository {
+  +Load(scopeId: string, targetId: string): Task<EditContractContentRecord>
+  +Save(record: EditContractContentRecord, expectedVersion: long): Task
+}
+
+class EditContractContentHandler {
+  +Handle(request: EditContractContentRequest): Task<EditContractContentResult>
+}
+
+EditContractContentHandler ..> EditContractContentRequest : handles
+EditContractContentHandler ..> EditContractContentPolicy : invokes
+EditContractContentHandler ..> IEditContractContentRepository : uses
+IEditContractContentRepository --> EditContractContentRecord : loads / saves
+EditContractContentPolicy ..> EditContractContentRecord : evaluates
+EditContractContentPolicy ..> EditContractContentResult : creates
+EditContractContentRecord ..> EditContractContentResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Generate stable curriculum
+
+class GenerateStableCurriculumRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GenerateStableCurriculumResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GenerateStableCurriculumRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GenerateStableCurriculumResult): void
+}
+
+class GenerateStableCurriculumPolicy {
+  +Evaluate(request: GenerateStableCurriculumRequest, current: GenerateStableCurriculumRecord): GenerateStableCurriculumResult
+}
+
+interface IGenerateStableCurriculumRepository {
+  +Load(scopeId: string, targetId: string): Task<GenerateStableCurriculumRecord>
+  +Save(record: GenerateStableCurriculumRecord, expectedVersion: long): Task
+}
+
+class GenerateStableCurriculumHandler {
+  +Handle(request: GenerateStableCurriculumRequest): Task<GenerateStableCurriculumResult>
+}
+
+GenerateStableCurriculumHandler ..> GenerateStableCurriculumRequest : handles
+GenerateStableCurriculumHandler ..> GenerateStableCurriculumPolicy : invokes
+GenerateStableCurriculumHandler ..> IGenerateStableCurriculumRepository : uses
+IGenerateStableCurriculumRepository --> GenerateStableCurriculumRecord : loads / saves
+GenerateStableCurriculumPolicy ..> GenerateStableCurriculumRecord : evaluates
+GenerateStableCurriculumPolicy ..> GenerateStableCurriculumResult : creates
+GenerateStableCurriculumRecord ..> GenerateStableCurriculumResult : applies
+@enduml

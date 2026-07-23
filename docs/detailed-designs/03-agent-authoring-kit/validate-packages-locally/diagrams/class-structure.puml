@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Validate packages locally
+
+class ValidatePackagesLocallyRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ValidatePackagesLocallyResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ValidatePackagesLocallyRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ValidatePackagesLocallyResult): void
+}
+
+class ValidatePackagesLocallyPolicy {
+  +Evaluate(request: ValidatePackagesLocallyRequest, current: ValidatePackagesLocallyRecord): ValidatePackagesLocallyResult
+}
+
+interface IValidatePackagesLocallyRepository {
+  +Load(scopeId: string, targetId: string): Task<ValidatePackagesLocallyRecord>
+  +Save(record: ValidatePackagesLocallyRecord, expectedVersion: long): Task
+}
+
+class ValidatePackagesLocallyHandler {
+  +Handle(request: ValidatePackagesLocallyRequest): Task<ValidatePackagesLocallyResult>
+}
+
+ValidatePackagesLocallyHandler ..> ValidatePackagesLocallyRequest : handles
+ValidatePackagesLocallyHandler ..> ValidatePackagesLocallyPolicy : invokes
+ValidatePackagesLocallyHandler ..> IValidatePackagesLocallyRepository : uses
+IValidatePackagesLocallyRepository --> ValidatePackagesLocallyRecord : loads / saves
+ValidatePackagesLocallyPolicy ..> ValidatePackagesLocallyRecord : evaluates
+ValidatePackagesLocallyPolicy ..> ValidatePackagesLocallyResult : creates
+ValidatePackagesLocallyRecord ..> ValidatePackagesLocallyResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Analyze content and cohorts
+
+class AnalyzeContentAndCohortsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class AnalyzeContentAndCohortsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class AnalyzeContentAndCohortsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: AnalyzeContentAndCohortsResult): void
+}
+
+class AnalyzeContentAndCohortsPolicy {
+  +Evaluate(request: AnalyzeContentAndCohortsRequest, current: AnalyzeContentAndCohortsRecord): AnalyzeContentAndCohortsResult
+}
+
+interface IAnalyzeContentAndCohortsRepository {
+  +Load(scopeId: string, targetId: string): Task<AnalyzeContentAndCohortsRecord>
+  +Save(record: AnalyzeContentAndCohortsRecord, expectedVersion: long): Task
+}
+
+class AnalyzeContentAndCohortsHandler {
+  +Handle(request: AnalyzeContentAndCohortsRequest): Task<AnalyzeContentAndCohortsResult>
+}
+
+AnalyzeContentAndCohortsHandler ..> AnalyzeContentAndCohortsRequest : handles
+AnalyzeContentAndCohortsHandler ..> AnalyzeContentAndCohortsPolicy : invokes
+AnalyzeContentAndCohortsHandler ..> IAnalyzeContentAndCohortsRepository : uses
+IAnalyzeContentAndCohortsRepository --> AnalyzeContentAndCohortsRecord : loads / saves
+AnalyzeContentAndCohortsPolicy ..> AnalyzeContentAndCohortsRecord : evaluates
+AnalyzeContentAndCohortsPolicy ..> AnalyzeContentAndCohortsResult : creates
+AnalyzeContentAndCohortsRecord ..> AnalyzeContentAndCohortsResult : applies
+@enduml

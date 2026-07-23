@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Export reports
+
+class ExportReportsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ExportReportsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ExportReportsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ExportReportsResult): void
+}
+
+class ExportReportsPolicy {
+  +Evaluate(request: ExportReportsRequest, current: ExportReportsRecord): ExportReportsResult
+}
+
+interface IExportReportsRepository {
+  +Load(scopeId: string, targetId: string): Task<ExportReportsRecord>
+  +Save(record: ExportReportsRecord, expectedVersion: long): Task
+}
+
+class ExportReportsHandler {
+  +Handle(request: ExportReportsRequest): Task<ExportReportsResult>
+}
+
+ExportReportsHandler ..> ExportReportsRequest : handles
+ExportReportsHandler ..> ExportReportsPolicy : invokes
+ExportReportsHandler ..> IExportReportsRepository : uses
+IExportReportsRepository --> ExportReportsRecord : loads / saves
+ExportReportsPolicy ..> ExportReportsRecord : evaluates
+ExportReportsPolicy ..> ExportReportsResult : creates
+ExportReportsRecord ..> ExportReportsResult : applies
+@enduml

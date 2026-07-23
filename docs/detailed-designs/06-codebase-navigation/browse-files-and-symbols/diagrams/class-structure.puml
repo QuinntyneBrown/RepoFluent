@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Browse files and symbols
+
+class BrowseFilesAndSymbolsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class BrowseFilesAndSymbolsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class BrowseFilesAndSymbolsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: BrowseFilesAndSymbolsResult): void
+}
+
+class BrowseFilesAndSymbolsPolicy {
+  +Evaluate(request: BrowseFilesAndSymbolsRequest, current: BrowseFilesAndSymbolsRecord): BrowseFilesAndSymbolsResult
+}
+
+interface IBrowseFilesAndSymbolsRepository {
+  +Load(scopeId: string, targetId: string): Task<BrowseFilesAndSymbolsRecord>
+  +Save(record: BrowseFilesAndSymbolsRecord, expectedVersion: long): Task
+}
+
+class BrowseFilesAndSymbolsHandler {
+  +Handle(request: BrowseFilesAndSymbolsRequest): Task<BrowseFilesAndSymbolsResult>
+}
+
+BrowseFilesAndSymbolsHandler ..> BrowseFilesAndSymbolsRequest : handles
+BrowseFilesAndSymbolsHandler ..> BrowseFilesAndSymbolsPolicy : invokes
+BrowseFilesAndSymbolsHandler ..> IBrowseFilesAndSymbolsRepository : uses
+IBrowseFilesAndSymbolsRepository --> BrowseFilesAndSymbolsRecord : loads / saves
+BrowseFilesAndSymbolsPolicy ..> BrowseFilesAndSymbolsRecord : evaluates
+BrowseFilesAndSymbolsPolicy ..> BrowseFilesAndSymbolsResult : creates
+BrowseFilesAndSymbolsRecord ..> BrowseFilesAndSymbolsResult : applies
+@enduml

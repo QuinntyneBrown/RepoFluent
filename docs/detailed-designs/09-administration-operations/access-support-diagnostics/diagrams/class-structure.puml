@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Access support diagnostics
+
+class AccessSupportDiagnosticsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class AccessSupportDiagnosticsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class AccessSupportDiagnosticsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: AccessSupportDiagnosticsResult): void
+}
+
+class AccessSupportDiagnosticsPolicy {
+  +Evaluate(request: AccessSupportDiagnosticsRequest, current: AccessSupportDiagnosticsRecord): AccessSupportDiagnosticsResult
+}
+
+interface IAccessSupportDiagnosticsRepository {
+  +Load(scopeId: string, targetId: string): Task<AccessSupportDiagnosticsRecord>
+  +Save(record: AccessSupportDiagnosticsRecord, expectedVersion: long): Task
+}
+
+class AccessSupportDiagnosticsHandler {
+  +Handle(request: AccessSupportDiagnosticsRequest): Task<AccessSupportDiagnosticsResult>
+}
+
+AccessSupportDiagnosticsHandler ..> AccessSupportDiagnosticsRequest : handles
+AccessSupportDiagnosticsHandler ..> AccessSupportDiagnosticsPolicy : invokes
+AccessSupportDiagnosticsHandler ..> IAccessSupportDiagnosticsRepository : uses
+IAccessSupportDiagnosticsRepository --> AccessSupportDiagnosticsRecord : loads / saves
+AccessSupportDiagnosticsPolicy ..> AccessSupportDiagnosticsRecord : evaluates
+AccessSupportDiagnosticsPolicy ..> AccessSupportDiagnosticsResult : creates
+AccessSupportDiagnosticsRecord ..> AccessSupportDiagnosticsResult : applies
+@enduml

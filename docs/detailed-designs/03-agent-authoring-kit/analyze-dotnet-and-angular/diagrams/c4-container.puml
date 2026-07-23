@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Analyze .NET and Angular
+
+Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Authoring Kit CLI", ".NET tool", "Offline authoring and validation interface")
+  Container(api, "Local Validator", ".NET", "Applies application and domain policy")
+  ContainerDb(store, "Authoring workspace", "File system", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

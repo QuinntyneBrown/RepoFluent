@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Receive and validate a package
+
+class ReceiveAndValidatePackageRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ReceiveAndValidatePackageResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ReceiveAndValidatePackageRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ReceiveAndValidatePackageResult): void
+}
+
+class ReceiveAndValidatePackagePolicy {
+  +Evaluate(request: ReceiveAndValidatePackageRequest, current: ReceiveAndValidatePackageRecord): ReceiveAndValidatePackageResult
+}
+
+interface IReceiveAndValidatePackageRepository {
+  +Load(scopeId: string, targetId: string): Task<ReceiveAndValidatePackageRecord>
+  +Save(record: ReceiveAndValidatePackageRecord, expectedVersion: long): Task
+}
+
+class ReceiveAndValidatePackageHandler {
+  +Handle(request: ReceiveAndValidatePackageRequest): Task<ReceiveAndValidatePackageResult>
+}
+
+ReceiveAndValidatePackageHandler ..> ReceiveAndValidatePackageRequest : handles
+ReceiveAndValidatePackageHandler ..> ReceiveAndValidatePackagePolicy : invokes
+ReceiveAndValidatePackageHandler ..> IReceiveAndValidatePackageRepository : uses
+IReceiveAndValidatePackageRepository --> ReceiveAndValidatePackageRecord : loads / saves
+ReceiveAndValidatePackagePolicy ..> ReceiveAndValidatePackageRecord : evaluates
+ReceiveAndValidatePackagePolicy ..> ReceiveAndValidatePackageResult : creates
+ReceiveAndValidatePackageRecord ..> ReceiveAndValidatePackageResult : applies
+@enduml

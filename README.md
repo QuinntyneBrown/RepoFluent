@@ -10,8 +10,8 @@ courses, lessons, code tours, quizzes, and tests, while helping learners build
 codebase fluency and giving managers visibility into progress and knowledge gaps.
 
 > **Project status:** product definition and design exploration. The current
-> checked-in baseline contains requirements, UI prototypes, and design-system
-> foundations; it does not yet contain a production application.
+> checked-in baseline contains requirements, detailed designs, UI prototypes,
+> and design-system foundations; it does not yet contain a production application.
 
 ## Product flow
 
@@ -31,11 +31,12 @@ one experience, and humans approve agent-generated material before publication.
 | Path | Contents |
 | --- | --- |
 | [`docs/PRD.md`](docs/PRD.md) | Product vision, users, journeys, requirements, release scope, risks, and open decisions |
-| [`docs/spects/`](docs/spects/) | L1 outcome requirements and traceable L2 acceptance requirements organized by subsystem |
+| [`docs/specs/`](docs/specs/) | L1 outcome requirements and traceable L2 acceptance requirements organized by subsystem |
+| [`docs/detailed-designs/`](docs/detailed-designs/) | Requirement-traceable vertical feature designs with rendered C4, class, and sequence diagrams |
 | [`docs/mocks/`](docs/mocks/) | Standalone interface concepts for learner, lesson, code-navigation, and analytics experiences |
 | [`desigh-system/assets/`](desigh-system/assets/) | Shared CSS tokens, components, and documentation styles |
 
-The [subsystem requirements index](docs/spects/README.md) explains requirement
+The [subsystem requirements index](docs/specs/README.md) explains requirement
 ownership, identifier conventions, traceability, and the shared quality baseline.
 
 ## Explore the UI concepts
@@ -75,6 +76,18 @@ All RepoFluent development shall follow PRD requirements `ENG-01` through
 `ENG-03` and the normative
 [Engineering handbook](https://github.com/QuinntyneBrown/engineering-handbook).
 This obligation applies equally to human contributors and automated agents.
+
+The [detailed-design index](docs/detailed-designs/README.md) maps each subsystem
+to its vertical feature designs. Regenerate the tree after an approved
+requirements or feature-slice change with:
+
+```sh
+python eng/generate_detailed_designs.py
+python eng/verify_detailed_designs.py
+```
+
+Render all changed PlantUML sources with the renderer documented by the
+`software-design-document` skill before handoff.
 
 ## Initial product scope
 

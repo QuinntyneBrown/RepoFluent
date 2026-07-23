@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Manage private learning artifacts
+
+class ManagePrivateLearningArtifactsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ManagePrivateLearningArtifactsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ManagePrivateLearningArtifactsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ManagePrivateLearningArtifactsResult): void
+}
+
+class ManagePrivateLearningArtifactsPolicy {
+  +Evaluate(request: ManagePrivateLearningArtifactsRequest, current: ManagePrivateLearningArtifactsRecord): ManagePrivateLearningArtifactsResult
+}
+
+interface IManagePrivateLearningArtifactsRepository {
+  +Load(scopeId: string, targetId: string): Task<ManagePrivateLearningArtifactsRecord>
+  +Save(record: ManagePrivateLearningArtifactsRecord, expectedVersion: long): Task
+}
+
+class ManagePrivateLearningArtifactsHandler {
+  +Handle(request: ManagePrivateLearningArtifactsRequest): Task<ManagePrivateLearningArtifactsResult>
+}
+
+ManagePrivateLearningArtifactsHandler ..> ManagePrivateLearningArtifactsRequest : handles
+ManagePrivateLearningArtifactsHandler ..> ManagePrivateLearningArtifactsPolicy : invokes
+ManagePrivateLearningArtifactsHandler ..> IManagePrivateLearningArtifactsRepository : uses
+IManagePrivateLearningArtifactsRepository --> ManagePrivateLearningArtifactsRecord : loads / saves
+ManagePrivateLearningArtifactsPolicy ..> ManagePrivateLearningArtifactsRecord : evaluates
+ManagePrivateLearningArtifactsPolicy ..> ManagePrivateLearningArtifactsResult : creates
+ManagePrivateLearningArtifactsRecord ..> ManagePrivateLearningArtifactsResult : applies
+@enduml

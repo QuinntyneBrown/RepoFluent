@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Record provenance and identities
+
+Person(actor, "Contract maintainer", "Publishes and validates curriculum contract releases")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(dependency, "Artifact distribution service", "Distributes checksummed schema, ICD, fixture, and release artifacts")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, dependency, "Uses through an approved boundary")
+@enduml

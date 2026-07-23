@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Invalidate defective items
+
+Person(actor, "Learner", "Completes formative and summative assessments")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(dependency, "Time service", "Provides trusted assessment timing")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, dependency, "Uses through an approved boundary")
+@enduml

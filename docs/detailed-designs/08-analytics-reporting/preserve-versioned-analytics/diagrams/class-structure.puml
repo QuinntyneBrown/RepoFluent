@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Preserve versioned analytics
+
+class PreserveVersionedAnalyticsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class PreserveVersionedAnalyticsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class PreserveVersionedAnalyticsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: PreserveVersionedAnalyticsResult): void
+}
+
+class PreserveVersionedAnalyticsPolicy {
+  +Evaluate(request: PreserveVersionedAnalyticsRequest, current: PreserveVersionedAnalyticsRecord): PreserveVersionedAnalyticsResult
+}
+
+interface IPreserveVersionedAnalyticsRepository {
+  +Load(scopeId: string, targetId: string): Task<PreserveVersionedAnalyticsRecord>
+  +Save(record: PreserveVersionedAnalyticsRecord, expectedVersion: long): Task
+}
+
+class PreserveVersionedAnalyticsHandler {
+  +Handle(request: PreserveVersionedAnalyticsRequest): Task<PreserveVersionedAnalyticsResult>
+}
+
+PreserveVersionedAnalyticsHandler ..> PreserveVersionedAnalyticsRequest : handles
+PreserveVersionedAnalyticsHandler ..> PreserveVersionedAnalyticsPolicy : invokes
+PreserveVersionedAnalyticsHandler ..> IPreserveVersionedAnalyticsRepository : uses
+IPreserveVersionedAnalyticsRepository --> PreserveVersionedAnalyticsRecord : loads / saves
+PreserveVersionedAnalyticsPolicy ..> PreserveVersionedAnalyticsRecord : evaluates
+PreserveVersionedAnalyticsPolicy ..> PreserveVersionedAnalyticsResult : creates
+PreserveVersionedAnalyticsRecord ..> PreserveVersionedAnalyticsResult : applies
+@enduml

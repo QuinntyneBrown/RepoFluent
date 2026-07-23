@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Publish an immutable version
+
+Container_Boundary(api, "Curriculum Lifecycle API") {
+  Component(controller, "PublishImmutableVersionController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "PublishImmutableVersionHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "PublishImmutableVersionPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "IPublishImmutableVersionRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Curriculum store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

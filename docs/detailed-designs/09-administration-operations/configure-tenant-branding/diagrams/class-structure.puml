@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Configure tenant branding
+
+class ConfigureTenantBrandingRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ConfigureTenantBrandingResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ConfigureTenantBrandingRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ConfigureTenantBrandingResult): void
+}
+
+class ConfigureTenantBrandingPolicy {
+  +Evaluate(request: ConfigureTenantBrandingRequest, current: ConfigureTenantBrandingRecord): ConfigureTenantBrandingResult
+}
+
+interface IConfigureTenantBrandingRepository {
+  +Load(scopeId: string, targetId: string): Task<ConfigureTenantBrandingRecord>
+  +Save(record: ConfigureTenantBrandingRecord, expectedVersion: long): Task
+}
+
+class ConfigureTenantBrandingHandler {
+  +Handle(request: ConfigureTenantBrandingRequest): Task<ConfigureTenantBrandingResult>
+}
+
+ConfigureTenantBrandingHandler ..> ConfigureTenantBrandingRequest : handles
+ConfigureTenantBrandingHandler ..> ConfigureTenantBrandingPolicy : invokes
+ConfigureTenantBrandingHandler ..> IConfigureTenantBrandingRepository : uses
+IConfigureTenantBrandingRepository --> ConfigureTenantBrandingRecord : loads / saves
+ConfigureTenantBrandingPolicy ..> ConfigureTenantBrandingRecord : evaluates
+ConfigureTenantBrandingPolicy ..> ConfigureTenantBrandingResult : creates
+ConfigureTenantBrandingRecord ..> ConfigureTenantBrandingResult : applies
+@enduml

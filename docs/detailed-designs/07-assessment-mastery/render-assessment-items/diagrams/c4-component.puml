@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Render assessment items
+
+Container_Boundary(api, "Assessment API") {
+  Component(controller, "RenderAssessmentItemsController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "RenderAssessmentItemsHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "RenderAssessmentItemsPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "IRenderAssessmentItemsRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Assessment evidence store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

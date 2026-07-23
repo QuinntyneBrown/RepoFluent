@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Monitor import and learning
+
+Person(actor, "Platform operator", "Monitors and supports RepoFluent within approved operational access")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Operations console", "Angular 21", "Operational monitoring and support interface")
+  Container(api, "Operations API", "ASP.NET Core", "Applies application and domain policy")
+  ContainerDb(store, "Operational telemetry store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Monitoring and alerting platform", "Collects approved telemetry and routes actionable alerts")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

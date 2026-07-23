@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Govern retention and deletion
+
+class GovernRetentionAndDeletionRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GovernRetentionAndDeletionResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GovernRetentionAndDeletionRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GovernRetentionAndDeletionResult): void
+}
+
+class GovernRetentionAndDeletionPolicy {
+  +Evaluate(request: GovernRetentionAndDeletionRequest, current: GovernRetentionAndDeletionRecord): GovernRetentionAndDeletionResult
+}
+
+interface IGovernRetentionAndDeletionRepository {
+  +Load(scopeId: string, targetId: string): Task<GovernRetentionAndDeletionRecord>
+  +Save(record: GovernRetentionAndDeletionRecord, expectedVersion: long): Task
+}
+
+class GovernRetentionAndDeletionHandler {
+  +Handle(request: GovernRetentionAndDeletionRequest): Task<GovernRetentionAndDeletionResult>
+}
+
+GovernRetentionAndDeletionHandler ..> GovernRetentionAndDeletionRequest : handles
+GovernRetentionAndDeletionHandler ..> GovernRetentionAndDeletionPolicy : invokes
+GovernRetentionAndDeletionHandler ..> IGovernRetentionAndDeletionRepository : uses
+IGovernRetentionAndDeletionRepository --> GovernRetentionAndDeletionRecord : loads / saves
+GovernRetentionAndDeletionPolicy ..> GovernRetentionAndDeletionRecord : evaluates
+GovernRetentionAndDeletionPolicy ..> GovernRetentionAndDeletionResult : creates
+GovernRetentionAndDeletionRecord ..> GovernRetentionAndDeletionResult : applies
+@enduml

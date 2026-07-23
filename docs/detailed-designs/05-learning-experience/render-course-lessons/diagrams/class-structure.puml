@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Render course lessons
+
+class RenderCourseLessonsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RenderCourseLessonsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RenderCourseLessonsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RenderCourseLessonsResult): void
+}
+
+class RenderCourseLessonsPolicy {
+  +Evaluate(request: RenderCourseLessonsRequest, current: RenderCourseLessonsRecord): RenderCourseLessonsResult
+}
+
+interface IRenderCourseLessonsRepository {
+  +Load(scopeId: string, targetId: string): Task<RenderCourseLessonsRecord>
+  +Save(record: RenderCourseLessonsRecord, expectedVersion: long): Task
+}
+
+class RenderCourseLessonsHandler {
+  +Handle(request: RenderCourseLessonsRequest): Task<RenderCourseLessonsResult>
+}
+
+RenderCourseLessonsHandler ..> RenderCourseLessonsRequest : handles
+RenderCourseLessonsHandler ..> RenderCourseLessonsPolicy : invokes
+RenderCourseLessonsHandler ..> IRenderCourseLessonsRepository : uses
+IRenderCourseLessonsRepository --> RenderCourseLessonsRecord : loads / saves
+RenderCourseLessonsPolicy ..> RenderCourseLessonsRecord : evaluates
+RenderCourseLessonsPolicy ..> RenderCourseLessonsResult : creates
+RenderCourseLessonsRecord ..> RenderCourseLessonsResult : applies
+@enduml

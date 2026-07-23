@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Record provenance and identities
+
+class RecordProvenanceAndIdentitiesRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RecordProvenanceAndIdentitiesResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RecordProvenanceAndIdentitiesRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RecordProvenanceAndIdentitiesResult): void
+}
+
+class RecordProvenanceAndIdentitiesPolicy {
+  +Evaluate(request: RecordProvenanceAndIdentitiesRequest, current: RecordProvenanceAndIdentitiesRecord): RecordProvenanceAndIdentitiesResult
+}
+
+interface IRecordProvenanceAndIdentitiesRepository {
+  +Load(scopeId: string, targetId: string): Task<RecordProvenanceAndIdentitiesRecord>
+  +Save(record: RecordProvenanceAndIdentitiesRecord, expectedVersion: long): Task
+}
+
+class RecordProvenanceAndIdentitiesHandler {
+  +Handle(request: RecordProvenanceAndIdentitiesRequest): Task<RecordProvenanceAndIdentitiesResult>
+}
+
+RecordProvenanceAndIdentitiesHandler ..> RecordProvenanceAndIdentitiesRequest : handles
+RecordProvenanceAndIdentitiesHandler ..> RecordProvenanceAndIdentitiesPolicy : invokes
+RecordProvenanceAndIdentitiesHandler ..> IRecordProvenanceAndIdentitiesRepository : uses
+IRecordProvenanceAndIdentitiesRepository --> RecordProvenanceAndIdentitiesRecord : loads / saves
+RecordProvenanceAndIdentitiesPolicy ..> RecordProvenanceAndIdentitiesRecord : evaluates
+RecordProvenanceAndIdentitiesPolicy ..> RecordProvenanceAndIdentitiesResult : creates
+RecordProvenanceAndIdentitiesRecord ..> RecordProvenanceAndIdentitiesResult : applies
+@enduml

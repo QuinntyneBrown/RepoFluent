@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Record identity audit evidence
+
+class RecordIdentityAuditEvidenceRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RecordIdentityAuditEvidenceResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RecordIdentityAuditEvidenceRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RecordIdentityAuditEvidenceResult): void
+}
+
+class RecordIdentityAuditEvidencePolicy {
+  +Evaluate(request: RecordIdentityAuditEvidenceRequest, current: RecordIdentityAuditEvidenceRecord): RecordIdentityAuditEvidenceResult
+}
+
+interface IRecordIdentityAuditEvidenceRepository {
+  +Load(scopeId: string, targetId: string): Task<RecordIdentityAuditEvidenceRecord>
+  +Save(record: RecordIdentityAuditEvidenceRecord, expectedVersion: long): Task
+}
+
+class RecordIdentityAuditEvidenceHandler {
+  +Handle(request: RecordIdentityAuditEvidenceRequest): Task<RecordIdentityAuditEvidenceResult>
+}
+
+RecordIdentityAuditEvidenceHandler ..> RecordIdentityAuditEvidenceRequest : handles
+RecordIdentityAuditEvidenceHandler ..> RecordIdentityAuditEvidencePolicy : invokes
+RecordIdentityAuditEvidenceHandler ..> IRecordIdentityAuditEvidenceRepository : uses
+IRecordIdentityAuditEvidenceRepository --> RecordIdentityAuditEvidenceRecord : loads / saves
+RecordIdentityAuditEvidencePolicy ..> RecordIdentityAuditEvidenceRecord : evaluates
+RecordIdentityAuditEvidencePolicy ..> RecordIdentityAuditEvidenceResult : creates
+RecordIdentityAuditEvidenceRecord ..> RecordIdentityAuditEvidenceResult : applies
+@enduml

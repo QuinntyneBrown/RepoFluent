@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Open external code links
+
+class OpenExternalCodeLinksRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class OpenExternalCodeLinksResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class OpenExternalCodeLinksRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: OpenExternalCodeLinksResult): void
+}
+
+class OpenExternalCodeLinksPolicy {
+  +Evaluate(request: OpenExternalCodeLinksRequest, current: OpenExternalCodeLinksRecord): OpenExternalCodeLinksResult
+}
+
+interface IOpenExternalCodeLinksRepository {
+  +Load(scopeId: string, targetId: string): Task<OpenExternalCodeLinksRecord>
+  +Save(record: OpenExternalCodeLinksRecord, expectedVersion: long): Task
+}
+
+class OpenExternalCodeLinksHandler {
+  +Handle(request: OpenExternalCodeLinksRequest): Task<OpenExternalCodeLinksResult>
+}
+
+OpenExternalCodeLinksHandler ..> OpenExternalCodeLinksRequest : handles
+OpenExternalCodeLinksHandler ..> OpenExternalCodeLinksPolicy : invokes
+OpenExternalCodeLinksHandler ..> IOpenExternalCodeLinksRepository : uses
+IOpenExternalCodeLinksRepository --> OpenExternalCodeLinksRecord : loads / saves
+OpenExternalCodeLinksPolicy ..> OpenExternalCodeLinksRecord : evaluates
+OpenExternalCodeLinksPolicy ..> OpenExternalCodeLinksResult : creates
+OpenExternalCodeLinksRecord ..> OpenExternalCodeLinksResult : applies
+@enduml

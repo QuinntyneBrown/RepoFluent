@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Calculate explainable mastery
+
+class CalculateExplainableMasteryRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class CalculateExplainableMasteryResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class CalculateExplainableMasteryRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: CalculateExplainableMasteryResult): void
+}
+
+class CalculateExplainableMasteryPolicy {
+  +Evaluate(request: CalculateExplainableMasteryRequest, current: CalculateExplainableMasteryRecord): CalculateExplainableMasteryResult
+}
+
+interface ICalculateExplainableMasteryRepository {
+  +Load(scopeId: string, targetId: string): Task<CalculateExplainableMasteryRecord>
+  +Save(record: CalculateExplainableMasteryRecord, expectedVersion: long): Task
+}
+
+class CalculateExplainableMasteryHandler {
+  +Handle(request: CalculateExplainableMasteryRequest): Task<CalculateExplainableMasteryResult>
+}
+
+CalculateExplainableMasteryHandler ..> CalculateExplainableMasteryRequest : handles
+CalculateExplainableMasteryHandler ..> CalculateExplainableMasteryPolicy : invokes
+CalculateExplainableMasteryHandler ..> ICalculateExplainableMasteryRepository : uses
+ICalculateExplainableMasteryRepository --> CalculateExplainableMasteryRecord : loads / saves
+CalculateExplainableMasteryPolicy ..> CalculateExplainableMasteryRecord : evaluates
+CalculateExplainableMasteryPolicy ..> CalculateExplainableMasteryResult : creates
+CalculateExplainableMasteryRecord ..> CalculateExplainableMasteryResult : applies
+@enduml

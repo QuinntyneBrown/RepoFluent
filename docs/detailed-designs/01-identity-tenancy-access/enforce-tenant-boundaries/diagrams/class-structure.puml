@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Enforce tenant boundaries
+
+class EnforceTenantBoundariesRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class EnforceTenantBoundariesResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class EnforceTenantBoundariesRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: EnforceTenantBoundariesResult): void
+}
+
+class EnforceTenantBoundariesPolicy {
+  +Evaluate(request: EnforceTenantBoundariesRequest, current: EnforceTenantBoundariesRecord): EnforceTenantBoundariesResult
+}
+
+interface IEnforceTenantBoundariesRepository {
+  +Load(scopeId: string, targetId: string): Task<EnforceTenantBoundariesRecord>
+  +Save(record: EnforceTenantBoundariesRecord, expectedVersion: long): Task
+}
+
+class EnforceTenantBoundariesHandler {
+  +Handle(request: EnforceTenantBoundariesRequest): Task<EnforceTenantBoundariesResult>
+}
+
+EnforceTenantBoundariesHandler ..> EnforceTenantBoundariesRequest : handles
+EnforceTenantBoundariesHandler ..> EnforceTenantBoundariesPolicy : invokes
+EnforceTenantBoundariesHandler ..> IEnforceTenantBoundariesRepository : uses
+IEnforceTenantBoundariesRepository --> EnforceTenantBoundariesRecord : loads / saves
+EnforceTenantBoundariesPolicy ..> EnforceTenantBoundariesRecord : evaluates
+EnforceTenantBoundariesPolicy ..> EnforceTenantBoundariesResult : creates
+EnforceTenantBoundariesRecord ..> EnforceTenantBoundariesResult : applies
+@enduml

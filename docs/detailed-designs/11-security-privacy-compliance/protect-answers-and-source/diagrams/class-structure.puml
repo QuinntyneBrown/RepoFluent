@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Protect answers and source
+
+class ProtectAnswersAndSourceRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ProtectAnswersAndSourceResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ProtectAnswersAndSourceRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ProtectAnswersAndSourceResult): void
+}
+
+class ProtectAnswersAndSourcePolicy {
+  +Evaluate(request: ProtectAnswersAndSourceRequest, current: ProtectAnswersAndSourceRecord): ProtectAnswersAndSourceResult
+}
+
+interface IProtectAnswersAndSourceRepository {
+  +Load(scopeId: string, targetId: string): Task<ProtectAnswersAndSourceRecord>
+  +Save(record: ProtectAnswersAndSourceRecord, expectedVersion: long): Task
+}
+
+class ProtectAnswersAndSourceHandler {
+  +Handle(request: ProtectAnswersAndSourceRequest): Task<ProtectAnswersAndSourceResult>
+}
+
+ProtectAnswersAndSourceHandler ..> ProtectAnswersAndSourceRequest : handles
+ProtectAnswersAndSourceHandler ..> ProtectAnswersAndSourcePolicy : invokes
+ProtectAnswersAndSourceHandler ..> IProtectAnswersAndSourceRepository : uses
+IProtectAnswersAndSourceRepository --> ProtectAnswersAndSourceRecord : loads / saves
+ProtectAnswersAndSourcePolicy ..> ProtectAnswersAndSourceRecord : evaluates
+ProtectAnswersAndSourcePolicy ..> ProtectAnswersAndSourceResult : creates
+ProtectAnswersAndSourceRecord ..> ProtectAnswersAndSourceResult : applies
+@enduml

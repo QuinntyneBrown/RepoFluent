@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Secure content intake and rendering
+
+class SecureContentIntakeAndRenderingRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class SecureContentIntakeAndRenderingResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class SecureContentIntakeAndRenderingRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: SecureContentIntakeAndRenderingResult): void
+}
+
+class SecureContentIntakeAndRenderingPolicy {
+  +Evaluate(request: SecureContentIntakeAndRenderingRequest, current: SecureContentIntakeAndRenderingRecord): SecureContentIntakeAndRenderingResult
+}
+
+interface ISecureContentIntakeAndRenderingRepository {
+  +Load(scopeId: string, targetId: string): Task<SecureContentIntakeAndRenderingRecord>
+  +Save(record: SecureContentIntakeAndRenderingRecord, expectedVersion: long): Task
+}
+
+class SecureContentIntakeAndRenderingHandler {
+  +Handle(request: SecureContentIntakeAndRenderingRequest): Task<SecureContentIntakeAndRenderingResult>
+}
+
+SecureContentIntakeAndRenderingHandler ..> SecureContentIntakeAndRenderingRequest : handles
+SecureContentIntakeAndRenderingHandler ..> SecureContentIntakeAndRenderingPolicy : invokes
+SecureContentIntakeAndRenderingHandler ..> ISecureContentIntakeAndRenderingRepository : uses
+ISecureContentIntakeAndRenderingRepository --> SecureContentIntakeAndRenderingRecord : loads / saves
+SecureContentIntakeAndRenderingPolicy ..> SecureContentIntakeAndRenderingRecord : evaluates
+SecureContentIntakeAndRenderingPolicy ..> SecureContentIntakeAndRenderingResult : creates
+SecureContentIntakeAndRenderingRecord ..> SecureContentIntakeAndRenderingResult : applies
+@enduml

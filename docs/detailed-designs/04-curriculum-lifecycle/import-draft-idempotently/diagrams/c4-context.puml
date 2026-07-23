@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Import a draft idempotently
+
+Person(actor, "Curriculum operator", "Authors, reviews, publishes, or retires curriculum within an assigned role")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(dependency, "Content scanning service", "Evaluates uploaded packages for configured content threats")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, dependency, "Uses through an approved boundary")
+@enduml

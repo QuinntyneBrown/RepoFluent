@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Publish a versioned contract
+
+class PublishVersionedContractRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class PublishVersionedContractResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class PublishVersionedContractRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: PublishVersionedContractResult): void
+}
+
+class PublishVersionedContractPolicy {
+  +Evaluate(request: PublishVersionedContractRequest, current: PublishVersionedContractRecord): PublishVersionedContractResult
+}
+
+interface IPublishVersionedContractRepository {
+  +Load(scopeId: string, targetId: string): Task<PublishVersionedContractRecord>
+  +Save(record: PublishVersionedContractRecord, expectedVersion: long): Task
+}
+
+class PublishVersionedContractHandler {
+  +Handle(request: PublishVersionedContractRequest): Task<PublishVersionedContractResult>
+}
+
+PublishVersionedContractHandler ..> PublishVersionedContractRequest : handles
+PublishVersionedContractHandler ..> PublishVersionedContractPolicy : invokes
+PublishVersionedContractHandler ..> IPublishVersionedContractRepository : uses
+IPublishVersionedContractRepository --> PublishVersionedContractRecord : loads / saves
+PublishVersionedContractPolicy ..> PublishVersionedContractRecord : evaluates
+PublishVersionedContractPolicy ..> PublishVersionedContractResult : creates
+PublishVersionedContractRecord ..> PublishVersionedContractResult : applies
+@enduml

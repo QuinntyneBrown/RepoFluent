@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Model a curriculum package
+
+class ModelCurriculumPackageRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ModelCurriculumPackageResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ModelCurriculumPackageRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ModelCurriculumPackageResult): void
+}
+
+class ModelCurriculumPackagePolicy {
+  +Evaluate(request: ModelCurriculumPackageRequest, current: ModelCurriculumPackageRecord): ModelCurriculumPackageResult
+}
+
+interface IModelCurriculumPackageRepository {
+  +Load(scopeId: string, targetId: string): Task<ModelCurriculumPackageRecord>
+  +Save(record: ModelCurriculumPackageRecord, expectedVersion: long): Task
+}
+
+class ModelCurriculumPackageHandler {
+  +Handle(request: ModelCurriculumPackageRequest): Task<ModelCurriculumPackageResult>
+}
+
+ModelCurriculumPackageHandler ..> ModelCurriculumPackageRequest : handles
+ModelCurriculumPackageHandler ..> ModelCurriculumPackagePolicy : invokes
+ModelCurriculumPackageHandler ..> IModelCurriculumPackageRepository : uses
+IModelCurriculumPackageRepository --> ModelCurriculumPackageRecord : loads / saves
+ModelCurriculumPackagePolicy ..> ModelCurriculumPackageRecord : evaluates
+ModelCurriculumPackagePolicy ..> ModelCurriculumPackageResult : creates
+ModelCurriculumPackageRecord ..> ModelCurriculumPackageResult : applies
+@enduml

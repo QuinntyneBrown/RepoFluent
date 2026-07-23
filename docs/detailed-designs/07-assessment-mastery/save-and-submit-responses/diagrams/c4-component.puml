@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Save and submit responses
+
+Container_Boundary(api, "Assessment API") {
+  Component(controller, "SaveAndSubmitResponsesController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "SaveAndSubmitResponsesHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "SaveAndSubmitResponsesPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "ISaveAndSubmitResponsesRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Assessment evidence store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

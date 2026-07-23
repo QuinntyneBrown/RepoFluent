@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Follow code tours
+
+class FollowCodeToursRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class FollowCodeToursResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class FollowCodeToursRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: FollowCodeToursResult): void
+}
+
+class FollowCodeToursPolicy {
+  +Evaluate(request: FollowCodeToursRequest, current: FollowCodeToursRecord): FollowCodeToursResult
+}
+
+interface IFollowCodeToursRepository {
+  +Load(scopeId: string, targetId: string): Task<FollowCodeToursRecord>
+  +Save(record: FollowCodeToursRecord, expectedVersion: long): Task
+}
+
+class FollowCodeToursHandler {
+  +Handle(request: FollowCodeToursRequest): Task<FollowCodeToursResult>
+}
+
+FollowCodeToursHandler ..> FollowCodeToursRequest : handles
+FollowCodeToursHandler ..> FollowCodeToursPolicy : invokes
+FollowCodeToursHandler ..> IFollowCodeToursRepository : uses
+IFollowCodeToursRepository --> FollowCodeToursRecord : loads / saves
+FollowCodeToursPolicy ..> FollowCodeToursRecord : evaluates
+FollowCodeToursPolicy ..> FollowCodeToursResult : creates
+FollowCodeToursRecord ..> FollowCodeToursResult : applies
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Access support diagnostics
+
+Person(actor, "Tenant administrator", "Operates authorized tenant configuration and workflows")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(dependency, "Notification provider", "Delivers configured tenant notification channels")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, dependency, "Uses through an approved boundary")
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Manage groups and provisioning
+
+class ManageGroupsAndProvisioningRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ManageGroupsAndProvisioningResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ManageGroupsAndProvisioningRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ManageGroupsAndProvisioningResult): void
+}
+
+class ManageGroupsAndProvisioningPolicy {
+  +Evaluate(request: ManageGroupsAndProvisioningRequest, current: ManageGroupsAndProvisioningRecord): ManageGroupsAndProvisioningResult
+}
+
+interface IManageGroupsAndProvisioningRepository {
+  +Load(scopeId: string, targetId: string): Task<ManageGroupsAndProvisioningRecord>
+  +Save(record: ManageGroupsAndProvisioningRecord, expectedVersion: long): Task
+}
+
+class ManageGroupsAndProvisioningHandler {
+  +Handle(request: ManageGroupsAndProvisioningRequest): Task<ManageGroupsAndProvisioningResult>
+}
+
+ManageGroupsAndProvisioningHandler ..> ManageGroupsAndProvisioningRequest : handles
+ManageGroupsAndProvisioningHandler ..> ManageGroupsAndProvisioningPolicy : invokes
+ManageGroupsAndProvisioningHandler ..> IManageGroupsAndProvisioningRepository : uses
+IManageGroupsAndProvisioningRepository --> ManageGroupsAndProvisioningRecord : loads / saves
+ManageGroupsAndProvisioningPolicy ..> ManageGroupsAndProvisioningRecord : evaluates
+ManageGroupsAndProvisioningPolicy ..> ManageGroupsAndProvisioningResult : creates
+ManageGroupsAndProvisioningRecord ..> ManageGroupsAndProvisioningResult : applies
+@enduml

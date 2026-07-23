@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Deliver tenant notifications
+
+class DeliverTenantNotificationsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class DeliverTenantNotificationsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class DeliverTenantNotificationsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: DeliverTenantNotificationsResult): void
+}
+
+class DeliverTenantNotificationsPolicy {
+  +Evaluate(request: DeliverTenantNotificationsRequest, current: DeliverTenantNotificationsRecord): DeliverTenantNotificationsResult
+}
+
+interface IDeliverTenantNotificationsRepository {
+  +Load(scopeId: string, targetId: string): Task<DeliverTenantNotificationsRecord>
+  +Save(record: DeliverTenantNotificationsRecord, expectedVersion: long): Task
+}
+
+class DeliverTenantNotificationsHandler {
+  +Handle(request: DeliverTenantNotificationsRequest): Task<DeliverTenantNotificationsResult>
+}
+
+DeliverTenantNotificationsHandler ..> DeliverTenantNotificationsRequest : handles
+DeliverTenantNotificationsHandler ..> DeliverTenantNotificationsPolicy : invokes
+DeliverTenantNotificationsHandler ..> IDeliverTenantNotificationsRepository : uses
+IDeliverTenantNotificationsRepository --> DeliverTenantNotificationsRecord : loads / saves
+DeliverTenantNotificationsPolicy ..> DeliverTenantNotificationsRecord : evaluates
+DeliverTenantNotificationsPolicy ..> DeliverTenantNotificationsResult : creates
+DeliverTenantNotificationsRecord ..> DeliverTenantNotificationsResult : applies
+@enduml

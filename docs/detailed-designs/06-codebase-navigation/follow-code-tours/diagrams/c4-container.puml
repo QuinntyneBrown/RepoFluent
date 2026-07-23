@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Follow code tours
+
+Person(actor, "Learner", "Explores approved source context while retaining lesson position")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Code navigator", "Angular 21", "Source, tour, tree, and relationship interface")
+  Container(api, "Code Navigation API", "ASP.NET Core", "Applies application and domain policy")
+  ContainerDb(store, "Code metadata store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Repository provider", "Provides authorized read-only repository metadata where configured")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

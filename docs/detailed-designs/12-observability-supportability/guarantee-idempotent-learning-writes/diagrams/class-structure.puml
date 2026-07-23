@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Guarantee idempotent learning writes
+
+class GuaranteeIdempotentLearningWritesRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GuaranteeIdempotentLearningWritesResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GuaranteeIdempotentLearningWritesRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GuaranteeIdempotentLearningWritesResult): void
+}
+
+class GuaranteeIdempotentLearningWritesPolicy {
+  +Evaluate(request: GuaranteeIdempotentLearningWritesRequest, current: GuaranteeIdempotentLearningWritesRecord): GuaranteeIdempotentLearningWritesResult
+}
+
+interface IGuaranteeIdempotentLearningWritesRepository {
+  +Load(scopeId: string, targetId: string): Task<GuaranteeIdempotentLearningWritesRecord>
+  +Save(record: GuaranteeIdempotentLearningWritesRecord, expectedVersion: long): Task
+}
+
+class GuaranteeIdempotentLearningWritesHandler {
+  +Handle(request: GuaranteeIdempotentLearningWritesRequest): Task<GuaranteeIdempotentLearningWritesResult>
+}
+
+GuaranteeIdempotentLearningWritesHandler ..> GuaranteeIdempotentLearningWritesRequest : handles
+GuaranteeIdempotentLearningWritesHandler ..> GuaranteeIdempotentLearningWritesPolicy : invokes
+GuaranteeIdempotentLearningWritesHandler ..> IGuaranteeIdempotentLearningWritesRepository : uses
+IGuaranteeIdempotentLearningWritesRepository --> GuaranteeIdempotentLearningWritesRecord : loads / saves
+GuaranteeIdempotentLearningWritesPolicy ..> GuaranteeIdempotentLearningWritesRecord : evaluates
+GuaranteeIdempotentLearningWritesPolicy ..> GuaranteeIdempotentLearningWritesResult : creates
+GuaranteeIdempotentLearningWritesRecord ..> GuaranteeIdempotentLearningWritesResult : applies
+@enduml

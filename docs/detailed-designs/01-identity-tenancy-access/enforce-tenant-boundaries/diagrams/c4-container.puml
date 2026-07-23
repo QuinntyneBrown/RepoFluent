@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Enforce tenant boundaries
+
+Person(actor, "Tenant administrator", "Administers tenant identities and access policy")
+System_Boundary(repofluent, "RepoFluent") {
+  Container(entry, "Identity administration", "Angular 21", "Tenant-scoped identity and access interface")
+  Container(api, "RepoFluent Identity API", "ASP.NET Core", "Applies application and domain policy")
+  ContainerDb(store, "Identity and access store", "<TO SUPPLY>", "Stores tenant-scoped state and evidence")
+}
+System_Ext(dependency, "Enterprise identity provider", "Authenticates or provisions users through a selected enterprise standard")
+
+Rel(actor, entry, "Uses", "HTTPS or local invocation")
+Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
+Rel(api, store, "Reads and writes", "Application abstraction")
+Rel(api, dependency, "Calls through approved adapter")
+@enduml

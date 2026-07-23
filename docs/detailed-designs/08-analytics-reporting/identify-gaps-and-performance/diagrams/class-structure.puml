@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Identify gaps and performance
+
+class IdentifyGapsAndPerformanceRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class IdentifyGapsAndPerformanceResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class IdentifyGapsAndPerformanceRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: IdentifyGapsAndPerformanceResult): void
+}
+
+class IdentifyGapsAndPerformancePolicy {
+  +Evaluate(request: IdentifyGapsAndPerformanceRequest, current: IdentifyGapsAndPerformanceRecord): IdentifyGapsAndPerformanceResult
+}
+
+interface IIdentifyGapsAndPerformanceRepository {
+  +Load(scopeId: string, targetId: string): Task<IdentifyGapsAndPerformanceRecord>
+  +Save(record: IdentifyGapsAndPerformanceRecord, expectedVersion: long): Task
+}
+
+class IdentifyGapsAndPerformanceHandler {
+  +Handle(request: IdentifyGapsAndPerformanceRequest): Task<IdentifyGapsAndPerformanceResult>
+}
+
+IdentifyGapsAndPerformanceHandler ..> IdentifyGapsAndPerformanceRequest : handles
+IdentifyGapsAndPerformanceHandler ..> IdentifyGapsAndPerformancePolicy : invokes
+IdentifyGapsAndPerformanceHandler ..> IIdentifyGapsAndPerformanceRepository : uses
+IIdentifyGapsAndPerformanceRepository --> IdentifyGapsAndPerformanceRecord : loads / saves
+IdentifyGapsAndPerformancePolicy ..> IdentifyGapsAndPerformanceRecord : evaluates
+IdentifyGapsAndPerformancePolicy ..> IdentifyGapsAndPerformanceResult : creates
+IdentifyGapsAndPerformanceRecord ..> IdentifyGapsAndPerformanceResult : applies
+@enduml

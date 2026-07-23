@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Navigate tenant administration
+
+Container_Boundary(api, "Administration API") {
+  Component(controller, "NavigateTenantAdministrationController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
+  Component(handler, "NavigateTenantAdministrationHandler", "Application handler", "Coordinates one feature result")
+  Component(policy, "NavigateTenantAdministrationPolicy", "Domain policy", "Enforces the cited L2 rules")
+  Component(repository, "INavigateTenantAdministrationRepository", "Application port", "Reads and writes tenant-scoped state")
+  ComponentDb(store, "Tenant operations store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+}
+
+Rel(controller, handler, "Dispatches typed request")
+Rel(handler, policy, "Evaluates")
+Rel(handler, repository, "Loads and saves through")
+Rel(repository, store, "Persists")
+@enduml

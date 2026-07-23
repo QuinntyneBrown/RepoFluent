@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Gate production releases
+
+class GateProductionReleasesRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class GateProductionReleasesResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class GateProductionReleasesRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: GateProductionReleasesResult): void
+}
+
+class GateProductionReleasesPolicy {
+  +Evaluate(request: GateProductionReleasesRequest, current: GateProductionReleasesRecord): GateProductionReleasesResult
+}
+
+interface IGateProductionReleasesRepository {
+  +Load(scopeId: string, targetId: string): Task<GateProductionReleasesRecord>
+  +Save(record: GateProductionReleasesRecord, expectedVersion: long): Task
+}
+
+class GateProductionReleasesHandler {
+  +Handle(request: GateProductionReleasesRequest): Task<GateProductionReleasesResult>
+}
+
+GateProductionReleasesHandler ..> GateProductionReleasesRequest : handles
+GateProductionReleasesHandler ..> GateProductionReleasesPolicy : invokes
+GateProductionReleasesHandler ..> IGateProductionReleasesRepository : uses
+IGateProductionReleasesRepository --> GateProductionReleasesRecord : loads / saves
+GateProductionReleasesPolicy ..> GateProductionReleasesRecord : evaluates
+GateProductionReleasesPolicy ..> GateProductionReleasesResult : creates
+GateProductionReleasesRecord ..> GateProductionReleasesResult : applies
+@enduml

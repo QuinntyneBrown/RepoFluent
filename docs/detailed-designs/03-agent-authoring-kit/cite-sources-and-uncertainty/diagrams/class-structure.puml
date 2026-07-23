@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Cite sources and uncertainty
+
+class CiteSourcesAndUncertaintyRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class CiteSourcesAndUncertaintyResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class CiteSourcesAndUncertaintyRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: CiteSourcesAndUncertaintyResult): void
+}
+
+class CiteSourcesAndUncertaintyPolicy {
+  +Evaluate(request: CiteSourcesAndUncertaintyRequest, current: CiteSourcesAndUncertaintyRecord): CiteSourcesAndUncertaintyResult
+}
+
+interface ICiteSourcesAndUncertaintyRepository {
+  +Load(scopeId: string, targetId: string): Task<CiteSourcesAndUncertaintyRecord>
+  +Save(record: CiteSourcesAndUncertaintyRecord, expectedVersion: long): Task
+}
+
+class CiteSourcesAndUncertaintyHandler {
+  +Handle(request: CiteSourcesAndUncertaintyRequest): Task<CiteSourcesAndUncertaintyResult>
+}
+
+CiteSourcesAndUncertaintyHandler ..> CiteSourcesAndUncertaintyRequest : handles
+CiteSourcesAndUncertaintyHandler ..> CiteSourcesAndUncertaintyPolicy : invokes
+CiteSourcesAndUncertaintyHandler ..> ICiteSourcesAndUncertaintyRepository : uses
+ICiteSourcesAndUncertaintyRepository --> CiteSourcesAndUncertaintyRecord : loads / saves
+CiteSourcesAndUncertaintyPolicy ..> CiteSourcesAndUncertaintyRecord : evaluates
+CiteSourcesAndUncertaintyPolicy ..> CiteSourcesAndUncertaintyResult : creates
+CiteSourcesAndUncertaintyRecord ..> CiteSourcesAndUncertaintyResult : applies
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Validate packages and limits
+
+class ValidatePackagesAndLimitsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class ValidatePackagesAndLimitsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class ValidatePackagesAndLimitsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: ValidatePackagesAndLimitsResult): void
+}
+
+class ValidatePackagesAndLimitsPolicy {
+  +Evaluate(request: ValidatePackagesAndLimitsRequest, current: ValidatePackagesAndLimitsRecord): ValidatePackagesAndLimitsResult
+}
+
+interface IValidatePackagesAndLimitsRepository {
+  +Load(scopeId: string, targetId: string): Task<ValidatePackagesAndLimitsRecord>
+  +Save(record: ValidatePackagesAndLimitsRecord, expectedVersion: long): Task
+}
+
+class ValidatePackagesAndLimitsHandler {
+  +Handle(request: ValidatePackagesAndLimitsRequest): Task<ValidatePackagesAndLimitsResult>
+}
+
+ValidatePackagesAndLimitsHandler ..> ValidatePackagesAndLimitsRequest : handles
+ValidatePackagesAndLimitsHandler ..> ValidatePackagesAndLimitsPolicy : invokes
+ValidatePackagesAndLimitsHandler ..> IValidatePackagesAndLimitsRepository : uses
+IValidatePackagesAndLimitsRepository --> ValidatePackagesAndLimitsRecord : loads / saves
+ValidatePackagesAndLimitsPolicy ..> ValidatePackagesAndLimitsRecord : evaluates
+ValidatePackagesAndLimitsPolicy ..> ValidatePackagesAndLimitsResult : creates
+ValidatePackagesAndLimitsRecord ..> ValidatePackagesAndLimitsResult : applies
+@enduml

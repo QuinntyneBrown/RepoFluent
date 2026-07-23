@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Recommend remediation and review
+
+Person(actor, "Learner", "Studies assigned curriculum and records learning activity")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System_Ext(dependency, "Search service", "Indexes permitted published learning content")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, dependency, "Uses through an approved boundary")
+@enduml

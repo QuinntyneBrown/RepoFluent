@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Render assessment items
+
+class RenderAssessmentItemsRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class RenderAssessmentItemsResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class RenderAssessmentItemsRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: RenderAssessmentItemsResult): void
+}
+
+class RenderAssessmentItemsPolicy {
+  +Evaluate(request: RenderAssessmentItemsRequest, current: RenderAssessmentItemsRecord): RenderAssessmentItemsResult
+}
+
+interface IRenderAssessmentItemsRepository {
+  +Load(scopeId: string, targetId: string): Task<RenderAssessmentItemsRecord>
+  +Save(record: RenderAssessmentItemsRecord, expectedVersion: long): Task
+}
+
+class RenderAssessmentItemsHandler {
+  +Handle(request: RenderAssessmentItemsRequest): Task<RenderAssessmentItemsResult>
+}
+
+RenderAssessmentItemsHandler ..> RenderAssessmentItemsRequest : handles
+RenderAssessmentItemsHandler ..> RenderAssessmentItemsPolicy : invokes
+RenderAssessmentItemsHandler ..> IRenderAssessmentItemsRepository : uses
+IRenderAssessmentItemsRepository --> RenderAssessmentItemsRecord : loads / saves
+RenderAssessmentItemsPolicy ..> RenderAssessmentItemsRecord : evaluates
+RenderAssessmentItemsPolicy ..> RenderAssessmentItemsResult : creates
+RenderAssessmentItemsRecord ..> RenderAssessmentItemsResult : applies
+@enduml

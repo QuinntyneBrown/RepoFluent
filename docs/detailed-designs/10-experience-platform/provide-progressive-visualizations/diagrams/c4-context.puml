@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Provide progressive visualizations
+
+Person(actor, "Learner", "Uses visual and semantic representations of learning content")
+System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
+System(design_reference, "RepoFluent design-system reference", "Static HTML, CSS, and JavaScript interaction contract")
+System_Ext(browser, "Browser platform", "Renders semantic content and optional capabilities")
+
+Rel(actor, repofluent, "Uses")
+Rel(repofluent, design_reference, "Consumes accepted interaction contracts from")
+Rel(repofluent, browser, "Runs within")
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Track and resume progress
+
+class TrackAndResumeProgressRequest {
+  +string ScopeId
+  +string ActorId
+  +string TargetId
+  +long ExpectedVersion
+  +string CorrelationId
+  +object Payload
+}
+
+class TrackAndResumeProgressResult {
+  +string Outcome
+  +long Version
+  +string SupportId
+}
+
+class TrackAndResumeProgressRecord {
+  +string Id
+  +string TenantId
+  +long Version
+  +string Status
+  +DateTimeOffset UpdatedAt
+  +Apply(result: TrackAndResumeProgressResult): void
+}
+
+class TrackAndResumeProgressPolicy {
+  +Evaluate(request: TrackAndResumeProgressRequest, current: TrackAndResumeProgressRecord): TrackAndResumeProgressResult
+}
+
+interface ITrackAndResumeProgressRepository {
+  +Load(scopeId: string, targetId: string): Task<TrackAndResumeProgressRecord>
+  +Save(record: TrackAndResumeProgressRecord, expectedVersion: long): Task
+}
+
+class TrackAndResumeProgressHandler {
+  +Handle(request: TrackAndResumeProgressRequest): Task<TrackAndResumeProgressResult>
+}
+
+TrackAndResumeProgressHandler ..> TrackAndResumeProgressRequest : handles
+TrackAndResumeProgressHandler ..> TrackAndResumeProgressPolicy : invokes
+TrackAndResumeProgressHandler ..> ITrackAndResumeProgressRepository : uses
+ITrackAndResumeProgressRepository --> TrackAndResumeProgressRecord : loads / saves
+TrackAndResumeProgressPolicy ..> TrackAndResumeProgressRecord : evaluates
+TrackAndResumeProgressPolicy ..> TrackAndResumeProgressResult : creates
+TrackAndResumeProgressRecord ..> TrackAndResumeProgressResult : applies
+@enduml
