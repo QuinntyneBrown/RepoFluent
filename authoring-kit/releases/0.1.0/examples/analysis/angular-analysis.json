@@ -1,0 +1,110 @@
+{
+  "analysisVersion": "0.1.0",
+  "profile": "angular",
+  "repositoryRoot": "examples/fixtures/repositories/angular-storefront",
+  "coverage": [
+    {
+      "category": "application-bootstrap",
+      "evidence": { "path": "src/main.ts", "locator": "bootstrapApplication" }
+    },
+    {
+      "category": "route-boundaries",
+      "evidence": { "path": "src/app/app.routes.ts", "locator": "checkout route" }
+    },
+    {
+      "category": "components-modules",
+      "evidence": {
+        "path": "src/app/checkout/checkout-page.component.ts",
+        "locator": "CheckoutPageComponent"
+      }
+    },
+    {
+      "category": "services",
+      "evidence": {
+        "path": "src/app/checkout/checkout.service.ts",
+        "locator": "CheckoutService.submit"
+      }
+    },
+    {
+      "category": "dependency-injection",
+      "evidence": { "path": "src/app/app.config.ts", "locator": "providers" }
+    },
+    {
+      "category": "state-flow",
+      "evidence": {
+        "path": "src/app/checkout/checkout.store.ts",
+        "locator": "CheckoutStore.submit"
+      }
+    },
+    {
+      "category": "http-integration",
+      "evidence": {
+        "path": "src/app/checkout/checkout.service.ts",
+        "locator": "HttpClient.post"
+      }
+    },
+    {
+      "category": "guards-interceptors",
+      "evidence": {
+        "path": "src/app/auth/correlation.interceptor.ts",
+        "locator": "correlationInterceptor"
+      }
+    },
+    {
+      "category": "templates",
+      "evidence": {
+        "path": "src/app/checkout/checkout-page.component.html",
+        "locator": "submit order form"
+      }
+    },
+    {
+      "category": "configuration",
+      "evidence": {
+        "path": "src/environments/environment.ts",
+        "locator": "ordersApi"
+      }
+    },
+    {
+      "category": "tests",
+      "evidence": {
+        "path": "src/app/checkout/checkout.store.spec.ts",
+        "locator": "submits through the checkout service"
+      }
+    }
+  ],
+  "unresolvedBehaviors": [],
+  "flow": [
+    {
+      "step": "The user enters the guarded checkout route.",
+      "evidence": { "path": "src/app/app.routes.ts", "locator": "checkout route" }
+    },
+    {
+      "step": "The checkout component accepts the submit action.",
+      "evidence": {
+        "path": "src/app/checkout/checkout-page.component.ts",
+        "locator": "submit"
+      }
+    },
+    {
+      "step": "The component delegates state transition to the store.",
+      "evidence": {
+        "path": "src/app/checkout/checkout.store.ts",
+        "locator": "CheckoutStore.submit"
+      }
+    },
+    {
+      "step": "The store delegates the request to the checkout service.",
+      "evidence": {
+        "path": "src/app/checkout/checkout.service.ts",
+        "locator": "CheckoutService.submit"
+      }
+    },
+    {
+      "step": "The service posts the order intent to the configured API.",
+      "evidence": {
+        "path": "src/app/checkout/checkout.service.ts",
+        "locator": "HttpClient.post"
+      }
+    }
+  ]
+}

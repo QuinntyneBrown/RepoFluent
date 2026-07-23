@@ -35,6 +35,9 @@ await mkdir(path.join(releaseRoot, "examples", "warnings"), {
 await mkdir(path.join(releaseRoot, "examples", "evidence"), {
   recursive: true,
 });
+await mkdir(path.join(releaseRoot, "examples", "analysis"), {
+  recursive: true,
+});
 await mkdir(path.join(releaseRoot, "scripts"), { recursive: true });
 
 await copyFile(
@@ -141,6 +144,8 @@ const artifactDefinitions = [
   ],
   ["Stable generation guide", "guides/stable-generation.md", "text/markdown"],
   ["Local validation guide", "guides/local-validation.md", "text/markdown"],
+  ["C# analysis guide", "guides/dotnet-analysis.md", "text/markdown"],
+  ["Angular analysis guide", "guides/angular-analysis.md", "text/markdown"],
   [
     "Curriculum JSON Schema",
     "contracts/curriculum.schema.json",
@@ -207,6 +212,16 @@ const artifactDefinitions = [
     "application/json",
   ],
   [
+    "C# ecosystem analysis report",
+    "examples/analysis/dotnet-analysis.json",
+    "application/json",
+  ],
+  [
+    "Angular ecosystem analysis report",
+    "examples/analysis/angular-analysis.json",
+    "application/json",
+  ],
+  [
     "Approved repository instructions",
     "examples/fixtures/repositories/order-platform/AGENTS.md",
     "text/markdown",
@@ -256,6 +271,121 @@ const artifactDefinitions = [
     "examples/fixtures/repositories/secret-exposure/src/config/application.env",
     "text/plain",
   ],
+  [
+    "C# solution fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/OrderPlatform.sln",
+    "text/plain",
+  ],
+  [
+    "C# project fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Orders.Api.csproj",
+    "text/xml",
+  ],
+  [
+    "C# composition fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Program.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# dynamic registration fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/DynamicRegistration.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# controller fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Controllers/OrdersController.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# domain service fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Domain/OrderService.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# repository fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/OrderRepository.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# publisher fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/OrderPublisher.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# external client fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/InventoryClient.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# worker fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Worker/OrderWorker.cs",
+    "text/x-csharp",
+  ],
+  [
+    "C# test fixture",
+    "examples/fixtures/repositories/dotnet-order-platform/tests/Orders.Api.Tests/OrdersControllerTests.cs",
+    "text/x-csharp",
+  ],
+  [
+    "Angular package fixture",
+    "examples/fixtures/repositories/angular-storefront/package.json",
+    "application/json",
+  ],
+  [
+    "Angular bootstrap fixture",
+    "examples/fixtures/repositories/angular-storefront/src/main.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular application configuration fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/app.config.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular routes fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/app.routes.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular guard fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/auth/signed-in.guard.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular interceptor fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/auth/correlation.interceptor.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular checkout component fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout-page.component.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular checkout template fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout-page.component.html",
+    "text/html",
+  ],
+  [
+    "Angular checkout service fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.service.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular checkout store fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.store.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular checkout test fixture",
+    "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.store.spec.ts",
+    "text/typescript",
+  ],
+  [
+    "Angular environment fixture",
+    "examples/fixtures/repositories/angular-storefront/src/environments/environment.ts",
+    "text/typescript",
+  ],
   ["Source-scope preflight", "scripts/preflight.mjs", "text/javascript"],
   [
     "Evidence and uncertainty validator",
@@ -270,6 +400,11 @@ const artifactDefinitions = [
   [
     "Generation manifest finalizer",
     "scripts/finalize-generation.mjs",
+    "text/javascript",
+  ],
+  [
+    "Ecosystem analysis verifier",
+    "scripts/verify-ecosystem-analysis.mjs",
     "text/javascript",
   ],
   ["Local validation command", "scripts/validate.mjs", "text/javascript"],

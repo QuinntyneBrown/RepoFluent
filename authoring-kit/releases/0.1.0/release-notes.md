@@ -17,6 +17,9 @@ This prerelease includes:
   safe, checksummed generation manifest finalizer;
 - a noninteractive local validator with contract selection, JSON or text output,
   severity thresholds, validation issue envelopes, and five distinct statuses;
+- C# and Angular analysis guides, representative fixture repositories, and an
+  offline evidence verifier that preserves dynamic uncertainty and rejects
+  source-absent flow steps;
 - an explicit offline policy with optional network features disabled by default.
 
 There is no preceding authoring-kit release to migrate.

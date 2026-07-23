@@ -1,0 +1,86 @@
+{
+  "analysisVersion": "0.1.0",
+  "profile": "dotnet",
+  "repositoryRoot": "examples/fixtures/repositories/dotnet-order-platform",
+  "coverage": [
+    {
+      "category": "solution-project-structure",
+      "evidence": { "path": "OrderPlatform.sln", "locator": "Project entries" }
+    },
+    {
+      "category": "application-boundaries",
+      "evidence": {
+        "path": "src/Orders.Api/Controllers/OrdersController.cs",
+        "locator": "OrdersController.Create"
+      }
+    },
+    {
+      "category": "dependency-injection",
+      "evidence": { "path": "src/Orders.Api/Program.cs", "locator": "builder.Services" }
+    },
+    {
+      "category": "controllers-endpoints",
+      "evidence": {
+        "path": "src/Orders.Api/Controllers/OrdersController.cs",
+        "locator": "HttpPost"
+      }
+    },
+    {
+      "category": "domain-services",
+      "evidence": {
+        "path": "src/Orders.Domain/OrderService.cs",
+        "locator": "OrderService.Place"
+      }
+    },
+    {
+      "category": "persistence",
+      "evidence": {
+        "path": "src/Orders.Infrastructure/OrderRepository.cs",
+        "locator": "OrderRepository.SaveAsync"
+      }
+    },
+    {
+      "category": "messaging",
+      "evidence": {
+        "path": "src/Orders.Infrastructure/OrderPublisher.cs",
+        "locator": "OrderPublisher.PublishAsync"
+      }
+    },
+    {
+      "category": "configuration",
+      "evidence": { "path": "src/Orders.Api/Program.cs", "locator": "OrderOptions" }
+    },
+    {
+      "category": "background-workers",
+      "evidence": {
+        "path": "src/Orders.Worker/OrderWorker.cs",
+        "locator": "OrderWorker.ExecuteAsync"
+      }
+    },
+    {
+      "category": "external-clients",
+      "evidence": {
+        "path": "src/Orders.Infrastructure/InventoryClient.cs",
+        "locator": "InventoryClient.ReserveAsync"
+      }
+    },
+    {
+      "category": "tests",
+      "evidence": {
+        "path": "tests/Orders.Api.Tests/OrdersControllerTests.cs",
+        "locator": "Create_returns_accepted"
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "code": "AAK_DYNAMIC_BEHAVIOR_UNRESOLVED",
+      "explanation": "The supplied snapshot does not identify which runtime assemblies contribute handlers.",
+      "evidence": {
+        "path": "src/Orders.Api/DynamicRegistration.cs",
+        "locator": "AddDynamicHandlers"
+      }
+    }
+  ],
+  "flow": []
+}

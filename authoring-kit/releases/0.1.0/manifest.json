@@ -10,7 +10,7 @@
     "version": ">=22.0.0"
   },
   "checksumAlgorithm": "sha256",
-  "releaseChecksum": "sha256:1dfd4a65991b1690c7d2621a05987774de34666c158e5e2daab8529327a57081",
+  "releaseChecksum": "sha256:2e1b0a48aeaaa7fa894363a6d89e80fe6f670ee477a9ee91a31dc72673884a71",
   "checksumInput": "Artifact path and SHA-256 pairs sorted by ordinal path and terminated by LF.",
   "offline": {
     "supported": true,
@@ -25,25 +25,25 @@
       "name": "Quick start",
       "path": "README.md",
       "mediaType": "text/markdown",
-      "sha256": "a720a6d0a132426cd8aaa9f173ce1604d03d3d557e24fa84feaee49799842a25"
+      "sha256": "4072b0b982cc751f12b5efcf8f30dcee887ae5d8bde449e25c2960a79eafbb82"
     },
     {
       "name": "Agent instructions",
       "path": "AGENTS.md",
       "mediaType": "text/markdown",
-      "sha256": "b09499fdd4dda6ab5f9f261bc606262a51e6b67214c0a3c41351633e815ff8ec"
+      "sha256": "68781ad03a61a8db995f7623e0d5aea6c9906b9b8ed3bf81bd88a221cd006c63"
     },
     {
       "name": "Generation prompt",
       "path": "prompts/generate-curriculum.md",
       "mediaType": "text/markdown",
-      "sha256": "6571eeaa2989ebe361038aa2070a27c10045c15728851270bddc995cceb63026"
+      "sha256": "b8452099d7c5221762438640bda68be0b1c6eb957e88b9299e77f92583909620"
     },
     {
       "name": "Authoring skill",
       "path": "skills/repofluent-authoring/SKILL.md",
       "mediaType": "text/markdown",
-      "sha256": "844eb6648006f3e7de0f16ea178ef1f1b014d8023c6bacfea5936ae68c5daa84"
+      "sha256": "1e6480fb586336a3e8b1ae2e59535fe64a12204ad1fd2e5d2fe52a34507ce468"
     },
     {
       "name": "Citation and uncertainty guide",
@@ -62,6 +62,18 @@
       "path": "guides/local-validation.md",
       "mediaType": "text/markdown",
       "sha256": "535acbfc70ab0010611bf3e36e1741eb94b1e55202afa65fc68300cf2263d5bc"
+    },
+    {
+      "name": "C# analysis guide",
+      "path": "guides/dotnet-analysis.md",
+      "mediaType": "text/markdown",
+      "sha256": "ebb452611e8eed3b9ee87a1a31721f4f5b27eea223d3d88943e11a9fd29ae154"
+    },
+    {
+      "name": "Angular analysis guide",
+      "path": "guides/angular-analysis.md",
+      "mediaType": "text/markdown",
+      "sha256": "8afc7bf53617825ee812bdbf77e3e8c4422d103b38e78675dc0f93a0c6a8d515"
     },
     {
       "name": "Curriculum JSON Schema",
@@ -142,6 +154,18 @@
       "sha256": "fcf09beca4435f784bce8837935d77ad8d108ac7559713cc879cc597174dbe6e"
     },
     {
+      "name": "C# ecosystem analysis report",
+      "path": "examples/analysis/dotnet-analysis.json",
+      "mediaType": "application/json",
+      "sha256": "a60398644cbf21e4093f2445a8cf875bf4f092be194a8a6e6ad5f4918e8f825a"
+    },
+    {
+      "name": "Angular ecosystem analysis report",
+      "path": "examples/analysis/angular-analysis.json",
+      "mediaType": "application/json",
+      "sha256": "59035bdb676fd8441fe5cb52e4c1a065bb250ac8eeb3945ecc2a7aeda7f20a0d"
+    },
+    {
       "name": "Approved repository instructions",
       "path": "examples/fixtures/repositories/order-platform/AGENTS.md",
       "mediaType": "text/markdown",
@@ -202,6 +226,144 @@
       "sha256": "99c7ea303e000e95c61495975770c5e60438574f65f34875bfc7771b23be87d6"
     },
     {
+      "name": "C# solution fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/OrderPlatform.sln",
+      "mediaType": "text/plain",
+      "sha256": "c3d4da028408b9828d96b73dbb8d7ebeaadb4a7c49e83698c355d4af94f23de7"
+    },
+    {
+      "name": "C# project fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Orders.Api.csproj",
+      "mediaType": "text/xml",
+      "sha256": "bd40fc1564e417ecc93fa85839a87fad537567ea03eb2123d48ddc9967fef36d"
+    },
+    {
+      "name": "C# composition fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Program.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "9d67f103ca8a71dfccd2eeaa7bf3a4a95df2704b9d0a9fb497ddeff4f9d9aea9"
+    },
+    {
+      "name": "C# dynamic registration fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/DynamicRegistration.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "7bd077ae4f9d903b4bf0fd7a94323c517a088d431a5ad77ea64b60381852fecd"
+    },
+    {
+      "name": "C# controller fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Controllers/OrdersController.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "57028b2755b792de1603ce278b82b63081efa7df174b1a10fc73a82d2d0f144a"
+    },
+    {
+      "name": "C# domain service fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Domain/OrderService.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "123d22ca363fdf486f46e599648f8f84bbae4ad9500437f8ffc6fcad3219fcec"
+    },
+    {
+      "name": "C# repository fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/OrderRepository.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "32c52039132d3a9bb738203314539e6a50106d8000376862d1a3ec63db8f9c01"
+    },
+    {
+      "name": "C# publisher fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/OrderPublisher.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "5d6c71df0728eb635c1eb7ea8aed364ec3049b860c6c61b833d97ac93c560ba1"
+    },
+    {
+      "name": "C# external client fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/InventoryClient.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "31d10db9ba2707a195d3d45110e6dac660a49ca816f2040231edc7821af9dd1a"
+    },
+    {
+      "name": "C# worker fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Worker/OrderWorker.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "a40baa4d9db356fed926291733425fdaf2fe7375dbdf225c46e1164778146f61"
+    },
+    {
+      "name": "C# test fixture",
+      "path": "examples/fixtures/repositories/dotnet-order-platform/tests/Orders.Api.Tests/OrdersControllerTests.cs",
+      "mediaType": "text/x-csharp",
+      "sha256": "2b6a3a3d4de88c020a62f7c06019f6dd70b3582a67da6f654b3d92ab67b1e080"
+    },
+    {
+      "name": "Angular package fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/package.json",
+      "mediaType": "application/json",
+      "sha256": "098ed9d72cb8ea6eee719a01da996a80868935ae2f20b711bdcc6c28c6549dd9"
+    },
+    {
+      "name": "Angular bootstrap fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/main.ts",
+      "mediaType": "text/typescript",
+      "sha256": "7136cb9634860f393fa08e6a9fd29853b05fe56d85d602fb45bdbc19e9e3818c"
+    },
+    {
+      "name": "Angular application configuration fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/app.config.ts",
+      "mediaType": "text/typescript",
+      "sha256": "47e705f4f2d37cdcfec37270e56ee645c4dd97b151ed97e46244fd03ead0ed1d"
+    },
+    {
+      "name": "Angular routes fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/app.routes.ts",
+      "mediaType": "text/typescript",
+      "sha256": "beca66ad0b5ba432056378aaa8dc86501d57a8f38fe19b772721f13b58f4c4cc"
+    },
+    {
+      "name": "Angular guard fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/auth/signed-in.guard.ts",
+      "mediaType": "text/typescript",
+      "sha256": "fa158bcabf2e613fc07fc13e302e209e0e66e806038faaac90ff974544e0cbf6"
+    },
+    {
+      "name": "Angular interceptor fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/auth/correlation.interceptor.ts",
+      "mediaType": "text/typescript",
+      "sha256": "8b2110122987166fb0b4c73ddc1fe860705ce3c533686a2bf67230628f408e39"
+    },
+    {
+      "name": "Angular checkout component fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout-page.component.ts",
+      "mediaType": "text/typescript",
+      "sha256": "ff2d41720a17a856ce404a4f106fea92bc1acf8424e57df3e4d79a321a865424"
+    },
+    {
+      "name": "Angular checkout template fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout-page.component.html",
+      "mediaType": "text/html",
+      "sha256": "4a03f6c72fd12e6770ccd3985970101793388ea19b793b2144ea9a771d626990"
+    },
+    {
+      "name": "Angular checkout service fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.service.ts",
+      "mediaType": "text/typescript",
+      "sha256": "997d006bc70e7d6355467cbe269b818714f5a9ceffd793b7234ae5426b7a1a42"
+    },
+    {
+      "name": "Angular checkout store fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.store.ts",
+      "mediaType": "text/typescript",
+      "sha256": "f7d3bda191f82617ebb021517da5091419cde95742ef09a76196de2bc904a0dc"
+    },
+    {
+      "name": "Angular checkout test fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.store.spec.ts",
+      "mediaType": "text/typescript",
+      "sha256": "1decf404649cc3d1a11a57f29e4404a4024513fac92b1dd4fa30f6fc30632a62"
+    },
+    {
+      "name": "Angular environment fixture",
+      "path": "examples/fixtures/repositories/angular-storefront/src/environments/environment.ts",
+      "mediaType": "text/typescript",
+      "sha256": "87af5c7755013a21ffec7413dae30275e78f16c1856e66013280a0496981b277"
+    },
+    {
       "name": "Source-scope preflight",
       "path": "scripts/preflight.mjs",
       "mediaType": "text/javascript",
@@ -226,6 +388,12 @@
       "sha256": "0e07626e671f3b40ecd8b1fc5cd6058971e5830a578a8c71a4a2e91c06903839"
     },
     {
+      "name": "Ecosystem analysis verifier",
+      "path": "scripts/verify-ecosystem-analysis.mjs",
+      "mediaType": "text/javascript",
+      "sha256": "39631e4973429a3e4d1e62d9edb1a9997904fc709271b911ebb2460c3e3496a5"
+    },
+    {
       "name": "Local validation command",
       "path": "scripts/validate.mjs",
       "mediaType": "text/javascript",
@@ -247,13 +415,13 @@
       "name": "Release notes",
       "path": "release-notes.md",
       "mediaType": "text/markdown",
-      "sha256": "0a09b3ba86e668af342226eb014d621ae911e97059a1627b2a7da5f331bacf4d"
+      "sha256": "e6f903a896225f6bf6152d41b5c994eab3ec6d7c35e1cd40569149c439bd76b7"
     },
     {
       "name": "Artifact checksums",
       "path": "checksums.sha256",
       "mediaType": "text/plain",
-      "sha256": "31ed69490b1c217c6bb956a40098e5fc067fec5da223844b5748a3830d03f8f3"
+      "sha256": "14f318602ebb4c32d074c4c34014baa6a77d816629c061bc08b32a3d253219e9"
     }
   ]
 }

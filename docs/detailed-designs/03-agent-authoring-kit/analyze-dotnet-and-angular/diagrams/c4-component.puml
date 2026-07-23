@@ -3,16 +3,26 @@
 LAYOUT_WITH_LEGEND()
 title Components — Analyze .NET and Angular
 
-Container_Boundary(api, "Local Validator") {
-  Component(controller, "AnalyzeDotnetAndAngularController", ".NET boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "AnalyzeDotnetAndAngularHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "AnalyzeDotnetAndAngularPolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IAnalyzeDotnetAndAngularRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Authoring workspace", "File system", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(policyView, "AuthoringEcosystemPolicyComponent", "Angular component", "Presents both source-grounded profile contracts")
 }
+Container_Boundary(command, "Ecosystem analysis verifier") {
+  Component(entry, "verify-ecosystem-analysis.mjs", "Node.js command", "Coordinates one profile report")
+  Component(selector, "Profile selector", "Local constant", "Selects eleven C# or Angular categories")
+  Component(coverage, "Coverage validator", "Local function", "Requires every category exactly once")
+  Component(confinement, "Path confinement", "Local function", "Restricts citations to the declared fixture root")
+  Component(resolver, "Source resolver", "Local function", "Confirms every cited file exists")
+  Component(uncertainty, "Uncertainty validator", "Local function", "Preserves unresolved dynamic C# behavior")
+  Component(flow, "Flow validator", "Local function", "Requires five cited Angular steps")
+}
+ContainerDb(files, "Local reports and snapshots", "Files", "Guides, reports, C# source, and Angular source")
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(policyView, entry, "Documents invocation of")
+Rel(entry, selector, "Selects through")
+Rel(entry, coverage, "Checks through")
+Rel(entry, confinement, "Confines through")
+Rel(entry, resolver, "Resolves through")
+Rel(entry, uncertainty, "Preserves through")
+Rel(entry, flow, "Traces through")
+Rel(resolver, files, "Reads inert bytes from")
 @enduml

@@ -25,11 +25,17 @@ revision, exclusions, output location, and data-handling constraints.
 10. Read `guides/stable-generation.md` and run
     `node scripts/generate-identities.mjs <identities.json>`.
 11. Write the generated package to the declared output location.
-12. Read `guides/local-validation.md`, then run
+12. When the source contains C#, read `guides/dotnet-analysis.md`, record all
+    eleven categories, and preserve unresolved dynamic behavior.
+13. When the source contains Angular, read `guides/angular-analysis.md`, record
+    all eleven categories, and cite the user-to-API flow.
+14. Run
+    `node scripts/verify-ecosystem-analysis.mjs <dotnet|angular> <analysis-report.json>`.
+15. Read `guides/local-validation.md`, then run
     `node scripts/validate.mjs <package.json> --contract auto --format json --threshold warning`.
-13. Run
+16. Run
     `node scripts/finalize-generation.mjs <completed-run.json> <package.json>`.
-14. Return the package, warnings, and safe generation manifest. Return
+17. Return the package, warnings, and safe generation manifest. Return
     validation issues with stable paths. Do not include source excerpts,
     answers, secrets, or personal data in issue messages.
 

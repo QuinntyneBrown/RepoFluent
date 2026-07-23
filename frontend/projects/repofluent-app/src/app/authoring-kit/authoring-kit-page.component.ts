@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@ang
 import { AuthoringKitRelease, RepoFluentApiService } from 'api';
 import { firstValueFrom } from 'rxjs';
 import { AuthoringEvidencePolicyComponent } from './authoring-evidence-policy.component';
+import { AuthoringEcosystemPolicyComponent } from './authoring-ecosystem-policy.component';
 import { AuthoringGenerationPolicyComponent } from './authoring-generation-policy.component';
 import { AuthoringScopePolicyComponent } from './authoring-scope-policy.component';
 import { AuthoringValidatorPolicyComponent } from './authoring-validator-policy.component';
@@ -13,6 +14,7 @@ import { AuthoringValidatorPolicyComponent } from './authoring-validator-policy.
   imports: [
     AuthoringScopePolicyComponent,
     AuthoringEvidencePolicyComponent,
+    AuthoringEcosystemPolicyComponent,
     AuthoringGenerationPolicyComponent,
     AuthoringValidatorPolicyComponent,
   ],

@@ -2,87 +2,116 @@
 
 ## Overview
 
-RepoFluent's Agent Authoring Kit subsystem guides approved agents from declared source scope to a locally validated curriculum package. This feature
-brings *c# analysis guidance*, *angular analysis guidance* into one vertical slice. The slice preserves tenant,
-actor, version, authorization, and correlation context wherever the cited
-requirements apply.
+The acquired RepoFluent authoring kit provides source-grounded analysis profiles
+for representative C# and Angular repositories. Each profile defines eleven
+structural evidence categories and requires repository-relative paths with
+stable locators.
 
-The curriculum authoring agent starts the outcome through Authoring Kit CLI.
-Local Validator applies server-side policy before state is read or changed.
-The external dependency and persistent technology remain `<TO SUPPLY>` where
-the requirements baseline does not select them.
+The C# profile covers solution structure, boundaries, composition, endpoints,
+domain services, persistence, messaging, configuration, workers, clients, and
+tests. Dynamic assembly registration remains an explicit unresolved behavior
+when the supplied snapshot cannot determine runtime contributions.
+
+The Angular profile covers bootstrap, routes, components or modules, services,
+injection, state, HTTP, guards and interceptors, templates, configuration, and
+tests. Its user-to-API trace contains five source-supported steps.
 
 ## Description
 
-The greenfield slice introduces the following building blocks. The endpoint
-route, deployment topology, and unresolved provider choices remain `<TO SUPPLY>`.
+The implemented vertical slice contains the following building blocks.
 
-- **`AnalyzeDotnetAndAngularCli`** — .NET tool entry component that presents
-  the feature state and submits a typed intent.
-- **`AuthoringKitClient`** — typed client that carries tenant, actor, version,
-  idempotency, and correlation context required by the operation.
-- **`AnalyzeDotnetAndAngularController`** — .NET boundary that authenticates
-  the caller, applies endpoint policy, and dispatches `AnalyzeDotnetAndAngularRequest`.
-- **`AnalyzeDotnetAndAngularRequest`** — application request containing scope, actor, target,
-  expected version, correlation identifier, and feature payload.
-- **`AnalyzeDotnetAndAngularHandler`** — application handler that loads authorized state,
-  invokes `AnalyzeDotnetAndAngularPolicy`, and commits one result.
-- **`AnalyzeDotnetAndAngularPolicy`** — domain policy that evaluates the cited L2 rules without
-  relying on client presentation state.
-- **`IAnalyzeDotnetAndAngularRepository`** — application abstraction for tenant-scoped reads,
-  writes, optimistic concurrency, and idempotency lookup.
-- **`AnalyzeDotnetAndAngularRecord`** — persisted feature record containing identity, tenant,
-  version, status, timestamps, and safe evidence references.
+- **C# analysis guide** — defines eleven categories, citation requirements,
+  inert inspection rules, corroborating test use, and dynamic-behavior
+  reporting.
+- **Angular analysis guide** — defines eleven categories, a source-supported
+  user-flow procedure, and boundaries around build-time or absent behavior.
+- **Representative C# fixture** — supplies a solution, web composition,
+  controller, domain service, repository, publisher, client, worker, test, and
+  intentionally dynamic registration.
+- **Representative Angular fixture** — supplies standalone bootstrap, routes,
+  component, template, store, service, HTTP configuration, guard, interceptor,
+  environment, and test.
+- **Analysis reports** — map every category to a local path and locator, retain
+  C# uncertainty, and map the Angular flow from route to API.
+- **`verify-ecosystem-analysis.mjs`** — validates profile coverage, confines
+  repository paths, resolves cited files, preserves unresolved behavior, and
+  emits a safe summary.
+- **`build_authoring_kit.mjs` and `verify_authoring_kits.mjs`** — hash the
+  guides, reports, fixture snapshots, and verifier, then execute both profiles
+  without network access.
+- **`AuthoringEcosystemPolicyComponent`** — presents both profile contracts,
+  evidence gates, dynamic uncertainty, and local commands with design tokens.
+- **`AuthoringEcosystemPage`** — provides the Playwright Page Object for profile
+  outcomes, absent-source rejection, accessible content, and visual evidence.
+
+The verifier reads reports and fixture bytes as inert local data. It does not
+restore packages, compile projects, execute source, or contact an API.
 
 ## Requirements
 
-The feature realizes the following level-2 (L2) requirements. Each row cites
-the first L1 identifier named by the source requirement as its primary parent.
+The feature realizes the following level-2 requirements. Each row cites the L1
+parent named by the source requirement.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
 | `L2-AAK-09` | `L1-AAK-07` | C# guidance should cover solution/project structure, application boundaries, dependency injection, controllers/endpoints, domain services, persistence, messaging, configuration, background workers, external clients, and tests. It shall tell the agent to report dynamic or unresolved behavior rather than infer it as fact. |
 | `L2-AAK-10` | `L1-AAK-07` | Angular guidance should cover application bootstrap, route boundaries, standalone components or modules, services, dependency injection, state flow, HTTP integration, guards/interceptors, templates, configuration, and tests. |
 
+### Implementation evidence
+
+- `analyze-dotnet-and-angular.spec.ts` begins the slice with Page Object
+  acceptance for both eleven-category profiles.
+- The C# report cites ten supplied files and retains one
+  `AAK_DYNAMIC_BEHAVIOR_UNRESOLVED` finding.
+- The Angular report cites five ordered user-to-API steps across route,
+  component, state, service, and HTTP evidence.
+- A source-absent flow step emits `AAK_ANALYSIS_SOURCE_MISSING` at its evidence
+  path.
+- Windows and Linux Chromium baselines capture the complete 560-pixel profile
+  panel.
+
 ## Diagrams
 
 ### System context
 
-The curriculum authoring agent uses RepoFluent to complete the feature outcome.
-RepoFluent interacts with Approved source repositories only through the boundary
-described by the requirements and approved configuration.
+The curriculum-authoring agent applies acquired profiles to approved C# and
+Angular snapshots. Every accepted analysis claim resolves to local source.
 
-![C4 system context for analyze .net and angular](diagrams/c4-context.png)
+![C4 system context for ecosystem analysis](diagrams/c4-context.png)
 
 ### Containers
 
-Authoring Kit CLI sends typed requests to Local Validator. The API applies
-server-owned rules and records the accepted outcome in Authoring workspace.
+The Angular view communicates the profile contract. The Node.js verifier reads
+reports, guides, and fixture snapshots from the acquired release.
 
-![C4 container view for analyze .net and angular](diagrams/c4-container.png)
+![C4 container view for ecosystem analysis](diagrams/c4-container.png)
 
 ### Components
 
-`AnalyzeDotnetAndAngularController` dispatches `AnalyzeDotnetAndAngularRequest` to `AnalyzeDotnetAndAngularHandler`. The handler
-uses `AnalyzeDotnetAndAngularPolicy` and `IAnalyzeDotnetAndAngularRepository` before it commits a state change.
+The verifier coordinates profile selection, category coverage, path
+confinement, source resolution, unresolved behavior, flow validation, and safe
+summary projection.
 
-![C4 component view for analyze .net and angular](diagrams/c4-component.png)
+![C4 component view for ecosystem analysis](diagrams/c4-component.png)
 
 ### Class structure
 
-`AnalyzeDotnetAndAngularHandler` depends on the request, policy, and repository abstractions.
-`IAnalyzeDotnetAndAngularRepository` stores `AnalyzeDotnetAndAngularRecord` under tenant and version context.
+An analysis report owns one profile, eleven category entries, optional
+unresolved behaviors, and profile-specific flow steps. Each entry contains one
+source reference.
 
-![Class diagram for analyze .net and angular](diagrams/class-structure.png)
+![Class diagram for ecosystem analysis](diagrams/class-structure.png)
 
-### Behaviour — c# analysis guidance
+### Behaviour — C# analysis guidance
 
-The sequence applies `L2-AAK-09` before the handler persists an accepted result. A rejected policy or validation result returns without a state change.
+For `L2-AAK-09`, the verifier confirms eleven categories and supplied source
+while retaining the unresolved dynamic registration.
 
-![Sequence diagram for c# analysis guidance](diagrams/sequence-l2-aak-09.png)
+![Sequence diagram for C# analysis guidance](diagrams/sequence-l2-aak-09.png)
 
-### Behaviour — angular analysis guidance
+### Behaviour — Angular analysis guidance
 
-The sequence applies `L2-AAK-10` before the handler persists an accepted result. A rejected policy or validation result returns without a state change.
+For `L2-AAK-10`, the verifier confirms eleven categories and resolves every
+user-to-API step to the supplied Angular snapshot.
 
-![Sequence diagram for angular analysis guidance](diagrams/sequence-l2-aak-10.png)
+![Sequence diagram for Angular analysis guidance](diagrams/sequence-l2-aak-10.png)

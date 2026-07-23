@@ -3,10 +3,13 @@
 LAYOUT_WITH_LEGEND()
 title System Context — Analyze .NET and Angular
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System(repofluent, "RepoFluent", "Enterprise codebase learning platform")
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+Person(agent, "Curriculum authoring agent", "Analyzes approved ecosystem source under repository instructions")
+System(kit, "Acquired RepoFluent authoring kit", "Defines and verifies C# and Angular analysis profiles")
+System_Ext(dotnet, "Approved C# snapshot", "Supplies solution, application, infrastructure, worker, and test source")
+System_Ext(angular, "Approved Angular snapshot", "Supplies bootstrap, route, component, state, HTTP, and test source")
 
-Rel(actor, repofluent, "Uses")
-Rel(repofluent, dependency, "Uses through an approved boundary")
+Rel(agent, kit, "Applies ecosystem profiles")
+Rel(kit, dotnet, "Resolves cited evidence inside")
+Rel(kit, angular, "Resolves cited evidence inside")
+Rel(kit, agent, "Returns coverage and safe findings", "Standard output")
 @enduml

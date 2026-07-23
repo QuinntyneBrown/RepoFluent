@@ -54,3 +54,6 @@
 - Noninteractive offline package validation with contract auto-detection, JSON
   or text reports, severity thresholds, safe issue envelopes, and distinct
   success, warning, package, invocation, and internal statuses.
+- Source-resolved C# and Angular authoring profiles with eleven evidence
+  categories each, explicit dynamic-registration uncertainty, five-step
+  user-to-API tracing, and offline fixture verification.

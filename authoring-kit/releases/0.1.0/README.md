@@ -66,6 +66,22 @@ Identity inputs exclude display titles from the namespace hash. The manifest
 allow-lists tool, model, version, source snapshot, time, checksum, options, and
 validation fields without hidden reasoning, credentials, or full prompts.
 
+Verify the supplied C# and Angular analysis profiles:
+
+```sh
+node scripts/verify-ecosystem-analysis.mjs \
+  dotnet \
+  examples/analysis/dotnet-analysis.json
+node scripts/verify-ecosystem-analysis.mjs \
+  angular \
+  examples/analysis/angular-analysis.json
+```
+
+The profile guides define eleven evidence categories per ecosystem. The
+verifier resolves every cited path inside the supplied fixture snapshot,
+preserves unresolved dynamic .NET registration, and requires five cited Angular
+user-to-API steps.
+
 ## Offline boundary
 
 Schema resolution, examples, instructions, validation, checksums, and

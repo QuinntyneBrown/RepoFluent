@@ -3,16 +3,19 @@
 LAYOUT_WITH_LEGEND()
 title Containers — Analyze .NET and Angular
 
-Person(actor, "Curriculum authoring agent", "Analyzes approved source material under repository instructions")
-System_Boundary(repofluent, "RepoFluent") {
-  Container(entry, "Authoring Kit CLI", ".NET tool", "Offline authoring and validation interface")
-  Container(api, "Local Validator", ".NET", "Applies application and domain policy")
-  ContainerDb(store, "Authoring workspace", "File system", "Stores tenant-scoped state and evidence")
+Person(agent, "Curriculum authoring agent", "Produces source-grounded ecosystem reports")
+System_Boundary(repofluent, "RepoFluent authoring workflow") {
+  Container(policyView, "Ecosystem policy view", "Angular", "Explains profile coverage and evidence gates")
+  Container(verifier, "Ecosystem analysis verifier", "Dependency-free Node.js 22 command", "Validates profile coverage and resolves cited files")
+  ContainerDb(release, "Acquired authoring-kit release", "Versioned files", "Stores guides, reports, fixture snapshots, command, and checksums")
 }
-System_Ext(dependency, "Approved source repositories", "Provide the declared code and document snapshot")
+System_Ext(dotnet, "Approved C# snapshot", "Solution and source files")
+System_Ext(angular, "Approved Angular snapshot", "Application and source files")
 
-Rel(actor, entry, "Uses", "HTTPS or local invocation")
-Rel(entry, api, "Sends typed requests", "JSON/HTTPS or local contract")
-Rel(api, store, "Reads and writes", "Application abstraction")
-Rel(api, dependency, "Calls through approved adapter")
+Rel(agent, policyView, "Reviews profile contract")
+Rel(agent, verifier, "Verifies report", "Local process")
+Rel(verifier, release, "Runs from verified")
+Rel(verifier, dotnet, "Reads cited local files from")
+Rel(verifier, angular, "Reads cited local files from")
+Rel(verifier, agent, "Returns safe summary", "Standard output")
 @enduml

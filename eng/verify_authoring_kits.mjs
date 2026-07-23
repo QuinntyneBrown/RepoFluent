@@ -17,6 +17,8 @@ const requiredArtifacts = new Set([
   "guides/citations-and-uncertainty.md",
   "guides/stable-generation.md",
   "guides/local-validation.md",
+  "guides/dotnet-analysis.md",
+  "guides/angular-analysis.md",
   "contracts/curriculum.schema.json",
   "contracts/ICD.md",
   "examples/valid/order-processing.json",
@@ -30,6 +32,8 @@ const requiredArtifacts = new Set([
   "examples/identities/regeneration-b.json",
   "examples/identities/collision.json",
   "examples/generation/completed-run.json",
+  "examples/analysis/dotnet-analysis.json",
+  "examples/analysis/angular-analysis.json",
   "examples/fixtures/repositories/order-platform/AGENTS.md",
   "examples/fixtures/repositories/order-platform/docs/architecture.md",
   "examples/fixtures/repositories/order-platform/docs/operations.md",
@@ -40,10 +44,34 @@ const requiredArtifacts = new Set([
   "examples/fixtures/repositories/secret-exposure/AGENTS.md",
   "examples/fixtures/repositories/secret-exposure/docs/architecture.md",
   "examples/fixtures/repositories/secret-exposure/src/config/application.env",
+  "examples/fixtures/repositories/dotnet-order-platform/OrderPlatform.sln",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Orders.Api.csproj",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Program.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/DynamicRegistration.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Api/Controllers/OrdersController.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Domain/OrderService.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/OrderRepository.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/OrderPublisher.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Infrastructure/InventoryClient.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/src/Orders.Worker/OrderWorker.cs",
+  "examples/fixtures/repositories/dotnet-order-platform/tests/Orders.Api.Tests/OrdersControllerTests.cs",
+  "examples/fixtures/repositories/angular-storefront/package.json",
+  "examples/fixtures/repositories/angular-storefront/src/main.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/app.config.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/app.routes.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/auth/signed-in.guard.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/auth/correlation.interceptor.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout-page.component.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout-page.component.html",
+  "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.service.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.store.ts",
+  "examples/fixtures/repositories/angular-storefront/src/app/checkout/checkout.store.spec.ts",
+  "examples/fixtures/repositories/angular-storefront/src/environments/environment.ts",
   "scripts/preflight.mjs",
   "scripts/validate-evidence.mjs",
   "scripts/generate-identities.mjs",
   "scripts/finalize-generation.mjs",
+  "scripts/verify-ecosystem-analysis.mjs",
   "scripts/validate.mjs",
   "scripts/curriculum.validator.mjs",
   "scripts/verify-release.mjs",
@@ -138,6 +166,7 @@ async function verifyRelease(version) {
       "scripts/validate-evidence.mjs",
       "scripts/generate-identities.mjs",
       "scripts/finalize-generation.mjs",
+      "scripts/verify-ecosystem-analysis.mjs",
       "scripts/validate.mjs",
       "scripts/curriculum.validator.mjs",
     ].map((relativePath) =>
@@ -449,6 +478,48 @@ async function verifyRelease(version) {
   ) {
     errors.push(`${version}: safe generation manifest did not finalize`);
   }
+
+  const dotnetAnalysis = runEcosystemAnalysis(
+    releaseRoot,
+    "dotnet",
+    "dotnet-analysis.json",
+  );
+  const dotnetReport = parseReport(
+    version,
+    "C# ecosystem analysis",
+    dotnetAnalysis.stdout,
+  );
+  if (
+    dotnetAnalysis.status !== 0 ||
+    dotnetReport?.coverage !== 11 ||
+    dotnetReport?.unresolvedBehaviorCount !== 1 ||
+    !dotnetReport?.citedPaths?.includes(
+      "src/Orders.Api/DynamicRegistration.cs",
+    )
+  ) {
+    errors.push(`${version}: C# analysis did not preserve dynamic uncertainty`);
+  }
+
+  const angularAnalysis = runEcosystemAnalysis(
+    releaseRoot,
+    "angular",
+    "angular-analysis.json",
+  );
+  const angularReport = parseReport(
+    version,
+    "Angular ecosystem analysis",
+    angularAnalysis.stdout,
+  );
+  if (
+    angularAnalysis.status !== 0 ||
+    angularReport?.coverage !== 11 ||
+    angularReport?.flowSteps !== 5 ||
+    !angularReport?.citedPaths?.includes(
+      "src/app/checkout/checkout.service.ts",
+    )
+  ) {
+    errors.push(`${version}: Angular analysis flow did not resolve to source`);
+  }
 }
 
 function runPreflight(releaseRoot, scopePath) {
@@ -485,6 +556,22 @@ function runIdentityGeneration(releaseRoot, fixtureName) {
     [
       path.join(releaseRoot, "scripts", "generate-identities.mjs"),
       path.join(releaseRoot, "examples", "identities", fixtureName),
+    ],
+    {
+      cwd: releaseRoot,
+      encoding: "utf8",
+      env: { ...process.env, REPOFLUENT_OFFLINE: "true" },
+    },
+  );
+}
+
+function runEcosystemAnalysis(releaseRoot, profile, fixtureName) {
+  return spawnSync(
+    process.execPath,
+    [
+      path.join(releaseRoot, "scripts", "verify-ecosystem-analysis.mjs"),
+      profile,
+      path.join(releaseRoot, "examples", "analysis", fixtureName),
     ],
     {
       cwd: releaseRoot,

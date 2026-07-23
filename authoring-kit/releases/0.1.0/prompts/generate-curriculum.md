@@ -33,6 +33,16 @@ During generation:
 - use only inert lesson blocks and repository-relative code references;
 - keep producer-specific metadata inside a declared extension namespace.
 
+For supplied C# source, follow `guides/dotnet-analysis.md`. Cover solution and
+project structure, boundaries, composition, endpoints, domain, persistence,
+messaging, configuration, workers, clients, and tests. Report unresolved
+dynamic behavior without inferring runtime registrations.
+
+For supplied Angular source, follow `guides/angular-analysis.md`. Cover
+bootstrap, routes, components or modules, services, injection, state, HTTP,
+guards and interceptors, templates, configuration, and tests. Cite every
+user-to-API flow step.
+
 After generation, run:
 
 ```sh
@@ -42,6 +52,7 @@ node scripts/validate.mjs <package.json> \
   --contract auto \
   --format json \
   --threshold warning
+node scripts/verify-ecosystem-analysis.mjs <dotnet|angular> <analysis-report.json>
 node scripts/finalize-generation.mjs <completed-run.json> <package.json>
 ```
 

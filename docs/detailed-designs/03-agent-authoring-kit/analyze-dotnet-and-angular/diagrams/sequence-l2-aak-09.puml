@@ -9,49 +9,32 @@ skinparam rectangle {
   BorderColor #344054
   FontColor #101828
 }
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "AnalyzeDotnetAndAngularCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum authoring agent" as agent
+box "Frontend — Acquired authoring-kit command" #E0F2FE
+  participant "verify-ecosystem-analysis.mjs" as command
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "AnalyzeDotnetAndAngularController" as controller
+box "Backend — Agent Authoring Kit Application and Domain" #D1FADF
+  participant "C# coverage validator" as coverage
+  participant "Path and source resolver" as resolver
+  participant "Uncertainty validator" as uncertainty
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "AnalyzeDotnetAndAngularHandler" as handler
-  participant "AnalyzeDotnetAndAngularPolicy" as policy
+box "Backend — Authoring-kit release Infrastructure" #FFF4E5
+  collections "C# analysis report" as report
+  collections "Approved C# snapshot" as source
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IAnalyzeDotnetAndAngularRepository" as repository
-  database "Authoring workspace" as store
-end box
-actor -> entry : Start analyze .net and angular
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch AnalyzeDotnetAndAngularRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-09
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+agent -> command : Verify C# analysis report
+command -> report : Read structured local report
+report --> command : Eleven categories and unresolved behavior
+command -> coverage : Apply L2-AAK-09 category profile
+coverage --> command : Complete category set
+loop Every category citation
+  command -> resolver : Confine path and resolve locator
+  resolver -> source : Read cited inert file
+  source --> resolver : Supplied source bytes
+  resolver --> command : Resolved evidence
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+command -> uncertainty : Validate dynamic registration finding
+uncertainty --> command : Explicit unresolved behavior retained
+command --> agent : Safe coverage summary and status
 @enduml

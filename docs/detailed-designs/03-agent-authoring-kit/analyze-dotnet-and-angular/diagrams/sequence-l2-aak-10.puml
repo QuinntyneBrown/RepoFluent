@@ -9,49 +9,37 @@ skinparam rectangle {
   BorderColor #344054
   FontColor #101828
 }
-skinparam package {
-  BorderColor #667085
-  FontColor #101828
-  BackgroundColor #F9FAFB
-}
-actor "Curriculum authoring agent" as actor
-box "Frontend — Authoring Kit CLI" #E0F2FE
-  participant "AnalyzeDotnetAndAngularCli" as entry
-  participant "AuthoringKitClient" as client
+actor "Curriculum authoring agent" as agent
+box "Frontend — Acquired authoring-kit command" #E0F2FE
+  participant "verify-ecosystem-analysis.mjs" as command
 end box
-box "Backend — Local Validator application" #D1FADF
-  participant "AnalyzeDotnetAndAngularController" as controller
+box "Backend — Agent Authoring Kit Application and Domain" #D1FADF
+  participant "Angular coverage validator" as coverage
+  participant "Path and source resolver" as resolver
+  participant "User-flow validator" as flow
 end box
-box "Backend — Agent Authoring Kit Application and Domain" #ECFDF3
-  participant "AnalyzeDotnetAndAngularHandler" as handler
-  participant "AnalyzeDotnetAndAngularPolicy" as policy
+box "Backend — Authoring-kit release Infrastructure" #FFF4E5
+  collections "Angular analysis report" as report
+  collections "Approved Angular snapshot" as source
 end box
-box "Backend — Agent Authoring Kit Infrastructure" #FFF4E5
-  participant "IAnalyzeDotnetAndAngularRepository" as repository
-  database "Authoring workspace" as store
-end box
-actor -> entry : Start analyze .net and angular
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch AnalyzeDotnetAndAngularRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-AAK-10
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+agent -> command : Verify Angular analysis report
+command -> report : Read structured local report
+report --> command : Eleven categories and five flow steps
+command -> coverage : Apply L2-AAK-10 category profile
+coverage --> command : Complete category set
+loop Every category and flow citation
+  command -> resolver : Confine path and resolve locator
+  resolver -> source : Read cited inert file
+  alt Supplied source exists
+    source --> resolver : Local source bytes
+    resolver --> command : Resolved evidence
+  else Source step is absent
+    source --> resolver : File not found
+    resolver --> command : AAK_ANALYSIS_SOURCE_MISSING
+  end
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+command -> flow : Validate route-to-API ordering
+flow --> command : Five source-supported steps
+command --> agent : Safe coverage summary and status
 @enduml

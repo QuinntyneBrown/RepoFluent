@@ -9,50 +9,52 @@ skinparam class {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-title Class structure — Analyze .NET and Angular
+title Information structure — Analyze .NET and Angular
 
-class AnalyzeDotnetAndAngularRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
-  +string CorrelationId
-  +object Payload
+class EcosystemAnalysisReport {
+  +analysisVersion: string
+  +profile: EcosystemProfile
+  +repositoryRoot: relative-path
 }
 
-class AnalyzeDotnetAndAngularResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+enum EcosystemProfile {
+  dotnet
+  angular
 }
 
-class AnalyzeDotnetAndAngularRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: AnalyzeDotnetAndAngularResult): void
+class CoverageEntry {
+  +category: string
 }
 
-class AnalyzeDotnetAndAngularPolicy {
-  +Evaluate(request: AnalyzeDotnetAndAngularRequest, current: AnalyzeDotnetAndAngularRecord): AnalyzeDotnetAndAngularResult
+class SourceEvidence {
+  +path: relative-path
+  +locator: string
 }
 
-interface IAnalyzeDotnetAndAngularRepository {
-  +Load(scopeId: string, targetId: string): Task<AnalyzeDotnetAndAngularRecord>
-  +Save(record: AnalyzeDotnetAndAngularRecord, expectedVersion: long): Task
+class UnresolvedBehavior {
+  +code: AAK_DYNAMIC_BEHAVIOR_UNRESOLVED
+  +explanation: string
 }
 
-class AnalyzeDotnetAndAngularHandler {
-  +Handle(request: AnalyzeDotnetAndAngularRequest): Task<AnalyzeDotnetAndAngularResult>
+class FlowStep {
+  +step: string
 }
 
-AnalyzeDotnetAndAngularHandler ..> AnalyzeDotnetAndAngularRequest : handles
-AnalyzeDotnetAndAngularHandler ..> AnalyzeDotnetAndAngularPolicy : invokes
-AnalyzeDotnetAndAngularHandler ..> IAnalyzeDotnetAndAngularRepository : uses
-IAnalyzeDotnetAndAngularRepository --> AnalyzeDotnetAndAngularRecord : loads / saves
-AnalyzeDotnetAndAngularPolicy ..> AnalyzeDotnetAndAngularRecord : evaluates
-AnalyzeDotnetAndAngularPolicy ..> AnalyzeDotnetAndAngularResult : creates
-AnalyzeDotnetAndAngularRecord ..> AnalyzeDotnetAndAngularResult : applies
+class AnalysisSummary {
+  +valid: boolean
+  +profile: EcosystemProfile
+  +coverage: 11
+  +unresolvedBehaviorCount: integer
+  +flowSteps: integer
+  +citedPaths: string[]
+}
+
+EcosystemAnalysisReport --> EcosystemProfile
+EcosystemAnalysisReport "1" *-- "11" CoverageEntry
+EcosystemAnalysisReport "1" *-- "0..*" UnresolvedBehavior
+EcosystemAnalysisReport "1" *-- "0..5" FlowStep
+CoverageEntry "1" *-- "1" SourceEvidence
+UnresolvedBehavior "1" *-- "1" SourceEvidence
+FlowStep "1" *-- "1" SourceEvidence
+AnalysisSummary --> EcosystemProfile
 @enduml

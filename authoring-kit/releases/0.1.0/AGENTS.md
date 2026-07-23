@@ -39,6 +39,14 @@ the parent repository's engineering instructions.
 17. Run
     `node scripts/finalize-generation.mjs <completed-run.json> <package.json>`
     and return the safe generation manifest with the package.
-18. Preserve protected-answer boundaries. Do not invent evidence.
-19. Do not require network access for scope preflight, evidence validation,
+18. For a C# source scope, follow `guides/dotnet-analysis.md`, cite all eleven
+    categories, and record dynamic or unresolved behavior without inference.
+19. For an Angular source scope, follow `guides/angular-analysis.md`, cite all
+    eleven categories, and trace the user-to-API flow only through supplied
+    source.
+20. Run
+    `node scripts/verify-ecosystem-analysis.mjs <dotnet|angular> <analysis-report.json>`
+    before using ecosystem findings.
+21. Preserve protected-answer boundaries. Do not invent evidence.
+22. Do not require network access for scope preflight, evidence validation,
     schema resolution, or package validation.

@@ -1,0 +1,79 @@
+<section class="rf-panel authoring-ecosystem-policy" aria-label="Ecosystem analysis guidance">
+  <div class="rf-panel__header">
+    <span>06 · Ecosystem analysis guidance</span>
+    <span class="rf-badge">source resolved</span>
+  </div>
+
+  <div class="rf-panel__body ecosystem-policy__body">
+    <div class="ecosystem-policy__heading">
+      <div>
+        <span class="micro-label">Two profiles · supplied evidence only</span>
+        <h2>Ecosystem analysis profiles</h2>
+        <p>
+          Cover the ecosystem’s structural seams, resolve every citation to the approved snapshot,
+          and keep dynamic or absent behavior visibly unresolved.
+        </p>
+      </div>
+      <span class="rf-status rf-status--success">22 checks</span>
+    </div>
+
+    <div class="ecosystem-policy__profiles">
+      <article>
+        <div class="profile-heading">
+          <span class="profile-mark">.N</span>
+          <div>
+            <span class="micro-label">.NET · 11 evidence categories</span>
+            <h3>Runtime boundaries</h3>
+          </div>
+        </div>
+        <p>API · domain · persistence · messaging · workers</p>
+        <div class="profile-detail profile-detail--warning">
+          <span aria-hidden="true">!</span>
+          <div>
+            <strong>Dynamic registration</strong>
+            <p>Report unresolved · never infer</p>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <div class="profile-heading">
+          <span class="profile-mark">NG</span>
+          <div>
+            <span class="micro-label">Angular · 11 evidence categories</span>
+            <h3>User-to-API flow</h3>
+          </div>
+        </div>
+        <p>Bootstrap · routes · state · HTTP · guards</p>
+        <div class="profile-detail">
+          <span aria-hidden="true">→</span>
+          <div>
+            <strong>Five cited steps</strong>
+            <p>User → route → component → service → API</p>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="ecosystem-policy__evidence">
+      <span class="micro-label">Evidence gate</span>
+      <ol>
+        <li><span>01</span> category</li>
+        <li><span>02</span> relative path</li>
+        <li><span>03</span> stable locator</li>
+        <li><span>04</span> supplied file</li>
+      </ol>
+    </div>
+
+    <div class="ecosystem-policy__commands" aria-label="Ecosystem analysis commands">
+      <code
+        ><span aria-hidden="true">$</span> node scripts/verify-ecosystem-analysis.mjs dotnet
+        examples/analysis/dotnet-analysis.json</code
+      >
+      <code
+        ><span aria-hidden="true">$</span> node scripts/verify-ecosystem-analysis.mjs angular
+        examples/analysis/angular-analysis.json</code
+      >
+    </div>
+  </div>
+</section>
