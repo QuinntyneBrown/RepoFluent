@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Curriculum Lifecycle
+
+Person(actor, "Curriculum operator", "Uploads, reviews, approves, publishes, or retires curriculum within an assigned role")
+Container_Boundary(web, "repofluent-app") {
+  Component(curriculum_ui, "Curriculum Workspace", "Angular 21", "Presents upload, validation, preview, review, publication, comparison, and retirement")
+  Component(preview_router, "Learner-equivalent Preview", "Angular 21", "Renders a draft through production lesson components and access policy")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(lifecycle_endpoints, "CurriculumEndpoints", "ASP.NET Core", "Exposes role-gated lifecycle commands and status queries")
+  Component(workflow, "CurriculumWorkflow", ".NET application service", "Coordinates authorization, state transitions, persistence, and audit evidence")
+  Component(lifecycle_domain, "CurriculumLifecycle", ".NET domain model", "Enforces legal status transitions and immutable publication")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(validation_worker, "CurriculumValidationProcessor", ".NET worker", "Scans, validates, normalizes, and imports packages idempotently")
+  Component(publication_projector, "PublicationProjector", ".NET worker", "Builds learner and search projections after publication")
+}
+ContainerDb(lifecycle_store, "Curriculum lifecycle schema", "Production relational database <TO SUPPLY>", "Stores receipts, drafts, decisions, versions, and state transitions")
+ContainerDb(package_store, "Curriculum object store", "Encrypted object storage <TO SUPPLY>", "Stores quarantined uploads and approved immutable package bytes")
+ContainerQueue(work_queue, "Platform work queue", "Durable message broker <TO SUPPLY>", "Carries validation and projection jobs")
+System_Ext(scanner, "Content scanning service", "Evaluates uploaded packages using approved threat and secret policies")
+
+Rel(actor, curriculum_ui, "Operates curriculum using", "HTTPS")
+Rel(curriculum_ui, lifecycle_endpoints, "Calls", "JSON and multipart/HTTPS")
+Rel(preview_router, lifecycle_endpoints, "Reads authorized draft preview from", "JSON/HTTPS")
+Rel(lifecycle_endpoints, workflow, "Dispatches commands to", "in process")
+Rel(workflow, lifecycle_domain, "Applies transitions through", "in process")
+Rel(workflow, lifecycle_store, "Persists lifecycle state in", "SQL")
+Rel(workflow, package_store, "Writes uploaded bytes to", "object API")
+Rel(workflow, work_queue, "Enqueues validation through", "transactional outbox")
+Rel(validation_worker, work_queue, "Consumes validation jobs from", "broker protocol")
+Rel(validation_worker, scanner, "Scans package with", "provider API <TO SUPPLY>")
+Rel(validation_worker, package_store, "Reads inert bytes from", "object API")
+Rel(validation_worker, lifecycle_store, "Commits issues or draft atomically to", "SQL")
+Rel(publication_projector, lifecycle_store, "Reads publication events from", "outbox")
+@enduml

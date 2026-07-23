@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — validate review and publish
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Curriculum operator" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Curriculum Workspace" as workspace
+  participant "Learner-equivalent Preview" as preview
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "CurriculumWorkflow" as workflow
+  participant "CurriculumLifecycle" as lifecycle
+  participant "CurriculumPackageValidator" as validator
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Curriculum lifecycle schema" as db
+  database "Curriculum object store" as objects
+  queue "Platform work queue" as queue
+  participant "CurriculumValidationProcessor" as worker
+end box
+actor -> workspace : Upload curriculum package
+workspace -> endpoints : POST curriculum import
+endpoints -> workflow : Receive authorized package
+workflow -> objects : Store inert bytes and checksum
+objects --> workflow : Object reference
+workflow -> db : Commit receipt and outbox event
+db --> workflow : Receipt identifier
+workflow --> endpoints : Accepted receipt
+endpoints --> workspace : Processing status
+queue -> worker : Deliver validation job
+worker -> objects : Read quarantined package bytes
+objects --> worker : Package stream
+worker -> validator : Validate contract and semantic rules
+validator --> worker : Stable issue set
+worker -> db : Commit issues or draft atomically
+actor -> preview : Preview valid draft
+preview -> endpoints : GET authorized draft preview
+endpoints -> db : Read draft projection
+db --> endpoints : Learner-equivalent content
+endpoints --> preview : Draft preview
+actor -> workspace : Approve exact checksum and publish
+workspace -> endpoints : Review and publication commands
+endpoints -> workflow : Apply authorized transitions
+workflow -> lifecycle : Verify state and checksum
+lifecycle --> workflow : Immutable version result
+workflow -> db : Commit decision, version, and outbox
+db --> workflow : Published version identifier
+workflow --> workspace : Publication result
+@enduml

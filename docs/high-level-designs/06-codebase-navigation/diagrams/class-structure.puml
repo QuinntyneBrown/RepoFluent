@@ -1,0 +1,66 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Codebase Navigation
+
+class SourceSnapshot {
+  +string RepositoryId
+  +string Revision
+  +DateTimeOffset CapturedAt
+  +Compare(current): DriftStatus
+}
+
+class CodeReference {
+  +string Id
+  +string RelativePath
+  +string? Symbol
+  +LineRange? Lines
+  +DataClassification Classification
+}
+
+class CodeExcerpt {
+  +string ReferenceId
+  +string Language
+  +string InertText
+  +Checksum Checksum
+}
+
+class CodeTour {
+  +string Id
+  +string LessonId
+  +IReadOnlyList<CodeTourStep> Steps
+}
+
+class CodeTourStep {
+  +int Order
+  +string ReferenceId
+  +string Explanation
+}
+
+class SymbolReference {
+  +string SymbolId
+  +SymbolKind Kind
+  +string ReferenceId
+}
+
+class ArchitectureRelationship {
+  +string FromId
+  +string ToId
+  +RelationshipKind Kind
+}
+
+SourceSnapshot "1" *-- "*" CodeReference : anchors
+CodeReference "1" --> "0..1" CodeExcerpt : resolves to
+CodeTour "1" *-- "*" CodeTourStep : orders
+CodeTourStep "*" --> "1" CodeReference : opens
+CodeReference "1" o-- "*" SymbolReference : identifies
+SymbolReference "1" o-- "*" ArchitectureRelationship : participates in
+@enduml

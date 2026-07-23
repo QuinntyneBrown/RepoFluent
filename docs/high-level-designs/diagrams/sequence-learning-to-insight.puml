@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — learning to authorized insight
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Learner" as learner
+actor "Authorized manager" as manager
+box "Frontend — repofluent-app" #E0F2FE
+  participant "Course and Lesson Player" as player
+  participant "Assessment Runner" as assessment
+  participant "Manager Analytics Workspace" as analytics
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "LearningEndpoints" as learningApi
+  participant "AssessmentEndpoints" as assessmentApi
+  participant "AnalyticsEndpoints" as analyticsApi
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "ProgressCoordinator" as progress
+  participant "GradingEngine" as grading
+  participant "AnalyticsPolicyGate" as policy
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Authoritative subsystem schemas + outbox" as db
+  queue "Platform message broker" as broker
+  participant "RepoFluent.Worker" as worker
+  database "Analytics projection store" as projections
+end box
+
+learner -> player : Open assigned immutable curriculum version
+player -> learningApi : GET learner-scoped course and resume state
+learningApi -> db : Read assignment, version, lesson, and progress
+db --> learningApi : Authorized learning projection
+learningApi --> player : Safe lesson and source context
+learner -> player : Complete lesson activity
+player -> learningApi : PUT progress with idempotency key
+learningApi -> progress : Apply monotonic version-bound event
+progress -> db : Commit progress and outbox atomically
+db --> progress : Accepted durable state
+progress --> learningApi : Current progress
+learningApi --> player : Completion result
+learner -> assessment : Submit governed assessment
+assessment -> assessmentApi : POST version-bound responses and idempotency key
+assessmentApi -> grading : Enforce policy and grade with protected answers
+grading -> db : Commit attempt, grade, mastery input, and outbox
+db --> grading : Immutable outcome
+grading --> assessmentApi : Learner-visible release state
+assessmentApi --> assessment : Score, held result, or remediation
+db -> broker : Publish committed learning and assessment evidence
+broker -> worker : Deliver idempotent projection events
+worker -> projections : Upsert versioned facts and aggregates
+projections --> worker : Projection checkpoints
+manager -> analytics : Select permitted team, version, and measure
+analytics -> analyticsApi : GET scoped analytics query
+analyticsApi -> policy : Evaluate role, population, dimensions, and minimum group
+policy -> projections : Read authorized population and metric inputs
+projections --> policy : Versioned measures and freshness
+policy --> analyticsApi : Permitted result or suppression decision
+analyticsApi --> analytics : Transparent measures and policy state
+analytics --> manager : Present authorized insight
+@enduml

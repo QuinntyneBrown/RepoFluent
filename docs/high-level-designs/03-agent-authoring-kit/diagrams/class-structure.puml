@@ -1,0 +1,63 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Agent Authoring Kit
+
+class AuthoringKitRelease {
+  +SemVer Version
+  +SemVer ContractVersion
+  +Checksum Checksum
+  +VerifySignature(): bool
+}
+
+class SourceScope {
+  +IReadOnlyList<SourceRef> Includes
+  +IReadOnlyList<Pattern> Excludes
+  +Validate(): ScopeResult
+}
+
+class AgentInstruction {
+  +string Path
+  +InstructionKind Kind
+  +int Precedence
+}
+
+class SkillDefinition {
+  +string Name
+  +string EntryPath
+  +IReadOnlyList<string> Resources
+}
+
+class GenerationRun {
+  +Guid Id
+  +DateTimeOffset StartedAt
+  +Generate(scope): GeneratedPackage
+}
+
+class GenerationManifest {
+  +string ToolIdentity
+  +SourceSnapshot Snapshot
+  +Checksum PackageChecksum
+}
+
+class LocalValidationResult {
+  +bool IsValid
+  +IReadOnlyList<ValidationIssue> Issues
+  +int ExitCode
+}
+
+AuthoringKitRelease "1" *-- "*" AgentInstruction : contains
+AuthoringKitRelease "1" *-- "*" SkillDefinition : contains
+GenerationRun --> SourceScope : obeys
+GenerationRun --> AuthoringKitRelease : uses
+GenerationRun *-- GenerationManifest : records
+GenerationRun ..> LocalValidationResult : produces
+@enduml

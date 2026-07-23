@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — generate and validate package
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Curriculum authoring agent" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Customer-selected agent" as agent
+  participant "RepoFluent.ContractCli" as cli
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "AuthoringKitDownloadEndpoint" as download
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "Agent Guidance Bundle" as guidance
+  participant "GenerationManifestWriter" as manifest
+  participant "CurriculumPackageValidator" as validator
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Authoring kit registry" as registry
+  database "Approved source snapshot" as source
+  database "Authoring workspace" as workspace
+end box
+actor -> download : Request a compatible kit release
+download -> registry : Read immutable release
+registry --> download : Signed bundle and checksum
+download --> agent : Authoring kit release
+agent -> guidance : Load repository and kit instructions
+guidance --> agent : Scope, provenance, and safety constraints
+agent -> source : Read declared repositories and documents
+source --> agent : Approved source material
+agent -> workspace : Write candidate curriculum package
+agent -> manifest : Record source snapshot and tool metadata
+manifest -> workspace : Write manifest and package checksum
+agent -> cli : Validate candidate package locally
+cli -> validator : Apply pinned contract release
+validator -> workspace : Read candidate bytes
+workspace --> validator : Package and manifest
+validator --> cli : Stable issue set
+cli --> agent : Exit status and safe report
+@enduml

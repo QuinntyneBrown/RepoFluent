@@ -1,0 +1,72 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Logical information model — Observability and Supportability
+
+class TelemetryEnvelope {
+  +TraceId TraceId
+  +CorrelationId CorrelationId
+  +string SignalName
+  +BoundedAttributes Attributes
+  +ValidateRedaction(): Result
+}
+
+class ServiceIndicator {
+  +string Id
+  +string Population
+  +string Formula
+  +Duration Window
+  +Evaluate(): IndicatorResult
+}
+
+class AlertRule {
+  +string Id
+  +string Owner
+  +AlertCondition Condition
+  +RunbookRef Runbook
+}
+
+class SupportReference {
+  +Guid Id
+  +Guid? TenantId
+  +CorrelationId CorrelationId
+  +SafeStatus Status
+}
+
+class IdempotencyRecord {
+  +Guid TenantId
+  +string Operation
+  +string Key
+  +OperationState State
+  +Claim(): ClaimResult
+}
+
+class BackupRecord {
+  +Guid Id
+  +BackupScope Scope
+  +DateTimeOffset CreatedAt
+  +Checksum Checksum
+  +RestoreEvidence? Verification
+}
+
+class ReleaseGateEvidence {
+  +string ReleaseId
+  +IReadOnlyList<GateResult> Results
+  +GateDecision Decision
+}
+
+TelemetryEnvelope "*" --> "*" ServiceIndicator : contributes to
+ServiceIndicator "1" --> "*" AlertRule : drives
+TelemetryEnvelope --> SupportReference : correlates
+IdempotencyRecord ..> TelemetryEnvelope : emits state through
+BackupRecord --> ReleaseGateEvidence : supplies restore evidence to
+ServiceIndicator --> ReleaseGateEvidence : supplies health evidence to
+@enduml

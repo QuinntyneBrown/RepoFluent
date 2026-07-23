@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — resume and complete lesson
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Learner" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "LearningHomePage" as home
+  participant "Course and Lesson Player" as player
+  participant "LearningApiClient" as client
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "LearningEndpoints" as endpoints
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "ProgressCoordinator" as progress
+  participant "NextActionSelector" as selector
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Learning schema" as db
+  database "Learning cache" as cache
+  database "Learning search index" as search
+end box
+actor -> home : Open learning home
+home -> client : Request assignments and next action
+client -> endpoints : GET learner assignments
+endpoints -> selector : Select explainable next action
+selector -> db : Read assignments, progress, and review candidates
+db --> selector : Learner-scoped state
+selector --> endpoints : Next action with explanation
+endpoints --> client : Home projection
+client --> home : Render assignments and next action
+actor -> player : Open assigned lesson
+player -> client : Request versioned lesson projection
+client -> endpoints : GET course and lesson
+endpoints -> cache : Read authorized published projection
+cache --> endpoints : Lesson and resume position
+endpoints --> player : Safe lesson blocks
+actor -> player : Advance and complete lesson
+player -> client : Save progress with idempotency key
+client -> endpoints : PUT progress event
+endpoints -> progress : Apply monotonic event
+progress -> db : Compare and commit accepted state
+db --> progress : Durable progress result
+progress --> endpoints : Accepted state
+endpoints --> player : Current progress
+player --> actor : Present completion and next action
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Security, Privacy, and Compliance
+
+Person(actor, "Security administrator", "Reviews policy, evidence, exceptions, and production readiness")
+Container_Boundary(web, "repofluent-app") {
+  Component(security_workspace, "Security and Privacy Workspace", "Angular 21", "Presents control status, classifications, retention policy, evidence, and exceptions")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(security_middleware, "SecurityPolicyMiddleware", "ASP.NET Core", "Applies transport, headers, request limits, classification, and deny-by-default controls")
+  Component(content_gate, "ContentSafetyGate", ".NET application service", "Coordinates type, schema, size, active-content, malware, and secret checks")
+  Component(audit_writer, "AuditWriter", ".NET application service", "Appends attributable tamper-evident security and administrative evidence")
+  Component(classification_service, "DataClassificationService", ".NET domain service", "Resolves handling policy for content, answers, activity, analytics, and exports")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(security_scan, "SecurityScanProcessor", ".NET worker", "Runs approved scanning stages against quarantined content")
+  Component(audit_sealer, "AuditIntegrityProcessor", ".NET worker", "Seals audit batches and verifies continuity")
+  Component(deletion_worker, "SecurityDeletionCoordinator", ".NET worker", "Verifies classification, retention, and legal constraints around deletion")
+}
+ContainerDb(security_store, "Security policy schema", "Production relational database <TO SUPPLY>", "Stores classification, policy versions, controls, reviews, and exceptions")
+ContainerDb(audit_store, "Tamper-evident audit ledger", "Append-only storage <TO SUPPLY>", "Stores attributable sensitive and administrative events")
+ContainerDb(quarantine, "Quarantine object store", "Encrypted isolated object storage <TO SUPPLY>", "Holds untrusted uploads until release or disposal")
+System_Ext(key_service, "Key and secret management service", "Protects keys, secrets, credentials, and approved cryptographic operations")
+System_Ext(scanner, "Threat and secret scanning providers", "Classify untrusted content using approved policy and signatures")
+
+Rel(actor, security_workspace, "Reviews security posture in", "HTTPS")
+Rel(security_workspace, security_middleware, "Calls protected security APIs through", "JSON/HTTPS")
+Rel(security_middleware, classification_service, "Requests handling policy from", "in process")
+Rel(classification_service, security_store, "Reads versioned policy from", "SQL")
+Rel(content_gate, quarantine, "Places untrusted bytes in", "object API")
+Rel(content_gate, security_scan, "Schedules scan through", "durable work")
+Rel(security_scan, scanner, "Scans quarantined object with", "provider API <TO SUPPLY>")
+Rel(security_scan, quarantine, "Releases or disposes object in", "object API")
+Rel(audit_writer, audit_store, "Appends evidence to", "append protocol")
+Rel(audit_sealer, audit_store, "Verifies and seals batches in", "append protocol")
+Rel(security_middleware, key_service, "Uses protected cryptographic operations from", "managed identity <TO SUPPLY>")
+Rel(deletion_worker, security_store, "Checks retention and exception policy in", "SQL")
+@enduml

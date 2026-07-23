@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Identity, Tenancy, and Access
+
+Person(actor, "Tenant administrator", "Administers identities, groups, roles, and access policy")
+Container_Boundary(web, "repofluent-app") {
+  Component(identity_ui, "Identity Administration Workspace", "Angular 21", "Presents invitations, users, groups, roles, sessions, and access reviews")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(identity_endpoints, "IdentityEndpoints", "ASP.NET Core", "Exposes tenant-scoped identity administration and sign-in callbacks")
+  Component(actor_context, "ActorContextResolver", ".NET application service", "Builds trusted actor context from server-side identity data")
+  Component(policy_engine, "AuthorizationPolicyEvaluator", ".NET domain service", "Evaluates action, tenant, role, group, and resource constraints")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(provisioning_worker, "ProvisioningProcessor", ".NET worker", "Applies idempotent user and group provisioning changes")
+  Component(access_review_worker, "AccessReviewScheduler", ".NET worker", "Creates periodic review snapshots and revocation tasks")
+}
+ContainerDb(identity_store, "Identity schema", "Production relational database <TO SUPPLY>", "Stores tenants, users, groups, grants, invitations, and sessions")
+ContainerDb(identity_audit, "Audit ledger", "Append-only relational or ledger storage <TO SUPPLY>", "Stores attributable identity and access events")
+System_Ext(idp, "Enterprise identity provider", "Authenticates production users and supplies approved identity claims")
+
+Rel(actor, identity_ui, "Administers tenant access using", "HTTPS")
+Rel(identity_ui, identity_endpoints, "Calls", "JSON/HTTPS")
+Rel(identity_endpoints, actor_context, "Requests trusted actor context from", "in process")
+Rel(actor_context, policy_engine, "Supplies identity facts to", "in process")
+Rel(policy_engine, identity_store, "Reads grants and resource scopes from", "SQL")
+Rel(identity_endpoints, identity_store, "Reads and writes identities in", "SQL")
+Rel(identity_endpoints, identity_audit, "Appends access changes to", "transactional outbox")
+Rel(provisioning_worker, idp, "Receives approved provisioning changes from", "standard <TO SUPPLY>")
+Rel(provisioning_worker, identity_store, "Applies idempotent changes to", "SQL")
+Rel(access_review_worker, identity_store, "Reads grants and records review state in", "SQL")
+Rel(identity_endpoints, idp, "Completes sign-in with", "OIDC or SAML <TO SUPPLY>")
+@enduml

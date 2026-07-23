@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Curriculum Input Contract
+
+Person(actor, "Contract maintainer", "Publishes schema, ICD, fixtures, and compatibility policy")
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(registry_endpoint, "ContractRegistryEndpoint", "ASP.NET Core", "Returns supported releases and checksummed contract artifacts")
+  Component(compatibility_policy, "ContractCompatibilityPolicy", ".NET application service", "Determines accepted versions and migration guidance")
+}
+Container_Boundary(tool, "Authoring and delivery environment") {
+  Component(contract_cli, "RepoFluent.ContractCli", ".NET tool", "Validates packages locally and emits human or machine output")
+  Component(validator, "CurriculumPackageValidator", "Shared .NET library", "Applies structural and semantic contract rules deterministically")
+  Component(release_verifier, "ContractReleaseVerifier", "Build pipeline tool", "Checks schema, ICD, fixtures, compatibility metadata, and checksums")
+}
+ContainerDb(artifact_store, "Contract artifact registry", "Versioned object or package storage <TO SUPPLY>", "Publishes immutable release bundles")
+
+Rel(actor, release_verifier, "Builds and verifies releases with", "delivery pipeline")
+Rel(release_verifier, validator, "Runs conformance fixtures through", "in process")
+Rel(release_verifier, artifact_store, "Publishes checksummed release to", "artifact protocol <TO SUPPLY>")
+Rel(registry_endpoint, artifact_store, "Reads supported releases from", "artifact API")
+Rel(registry_endpoint, compatibility_policy, "Applies", "in process")
+Rel(contract_cli, artifact_store, "Downloads an explicitly selected release from", "HTTPS")
+Rel(contract_cli, validator, "Validates local package with", "in process")
+@enduml

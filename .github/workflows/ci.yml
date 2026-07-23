@@ -78,5 +78,8 @@ jobs:
         working-directory: desigh-system
         run: npm test
 
+      - name: Validate high-level designs
+        run: python eng/verify_high_level_designs.py
+
       - name: Validate detailed designs
         run: python eng/verify_detailed_designs.py

@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — assign curriculum to group
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Tenant administrator" as actor
+box "Frontend — RepoFluent client application" #E0F2FE
+  participant "Administration Workspace" as workspace
+  participant "Operation Status Center" as status
+end box
+box "Backend — RepoFluent API application" #D1FADF
+  participant "AdministrationEndpoints" as endpoints
+end box
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "AssignmentService" as assignments
+  participant "AuthorizationPolicyEvaluator" as policy
+end box
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  database "Identity schema" as identity
+  database "Curriculum lifecycle schema" as curriculum
+  database "Tenant operations schema" as admin
+  queue "Platform work queue" as queue
+end box
+actor -> workspace : Select published version, group, kind, and due date
+workspace -> endpoints : POST assignment with idempotency key
+endpoints -> policy : Authorize tenant, curriculum, and group scope
+policy --> endpoints : Permit
+endpoints -> assignments : Create version-bound group assignment
+assignments -> identity : Resolve active group and membership version
+identity --> assignments : Authorized target snapshot
+assignments -> curriculum : Verify published curriculum version
+curriculum --> assignments : Immutable version metadata
+assignments -> admin : Commit assignment, provenance, and outbox
+admin --> assignments : Assignment identifier and affected count
+assignments -> queue : Publish learner-projection and notification work
+assignments --> endpoints : Per-target assignment result
+endpoints --> workspace : Created operation status
+workspace -> status : Open operation result
+status -> endpoints : GET safe operation status
+endpoints -> admin : Read assignment outcome
+admin --> endpoints : Status and correlation identifier
+endpoints --> status : Safe per-item result
+status --> actor : Present assignment outcome
+@enduml

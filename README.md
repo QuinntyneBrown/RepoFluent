@@ -29,16 +29,17 @@ one experience, and humans approve agent-generated material before publication.
 
 ## Repository guide
 
-| Path                                               | Contents                                                                                      |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| [`backend/`](backend/)                             | .NET 10 domain, application, SQLite infrastructure, API, migrations, and tests                |
-| [`frontend/`](frontend/)                           | Angular 21 application shell, API/components libraries, unit tests, and Playwright journey    |
-| [`contracts/`](contracts/)                         | Versioned curriculum schema, contract notes, and conformance fixtures                         |
-| [`docs/PRD.md`](docs/PRD.md)                       | Product vision, users, journeys, requirements, release scope, risks, and open decisions       |
-| [`docs/specs/`](docs/specs/)                       | L1 outcome requirements and traceable L2 acceptance requirements organized by subsystem       |
-| [`docs/detailed-designs/`](docs/detailed-designs/) | Requirement-traceable vertical feature designs with rendered C4, class, and sequence diagrams |
-| [`docs/mocks/`](docs/mocks/)                       | Standalone interface concepts for learner, lesson, code-navigation, and analytics experiences |
-| [`desigh-system/assets/`](desigh-system/assets/)   | Shared CSS tokens, components, and documentation styles                                       |
+| Path                                                   | Contents                                                                                                                         |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| [`backend/`](backend/)                                 | .NET 10 domain, application, SQLite infrastructure, API, migrations, and tests                                                   |
+| [`frontend/`](frontend/)                               | Angular 21 application shell, API/components libraries, unit tests, and Playwright journey                                       |
+| [`contracts/`](contracts/)                             | Versioned curriculum schema, contract notes, and conformance fixtures                                                            |
+| [`docs/PRD.md`](docs/PRD.md)                           | Product vision, users, journeys, requirements, release scope, risks, and open decisions                                          |
+| [`docs/specs/`](docs/specs/)                           | L1 outcome requirements and traceable L2 acceptance requirements organized by subsystem                                          |
+| [`docs/high-level-designs/`](docs/high-level-designs/) | Platform and subsystem target architecture with rendered context, container, component, class, deployment, and sequence diagrams |
+| [`docs/detailed-designs/`](docs/detailed-designs/)     | Requirement-traceable vertical feature designs with rendered C4, class, and sequence diagrams                                    |
+| [`docs/mocks/`](docs/mocks/)                           | Standalone interface concepts for learner, lesson, code-navigation, and analytics experiences                                    |
+| [`desigh-system/assets/`](desigh-system/assets/)       | Shared CSS tokens, components, and documentation styles                                                                          |
 
 The [subsystem requirements index](docs/specs/README.md) explains requirement
 ownership, identifier conventions, traceability, and the shared quality baseline.

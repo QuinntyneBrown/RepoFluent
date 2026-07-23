@@ -1,0 +1,65 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Logical Subsystems and Deployment Homes — RepoFluent
+
+Person(user, "RepoFluent user", "Uses role-authorized product workspaces")
+Person(agent, "Curriculum authoring agent", "Builds packages in a customer-controlled environment")
+
+Container_Boundary(web, "repofluent-app") {
+  Component(exp, "Experience Platform", "Angular shell and libraries", "Design system, accessibility, capability, navigation, and performance")
+  Component(product_ui, "Domain Workspaces", "Angular routes", "Learning, curriculum, code, assessment, analytics, administration, and security interfaces")
+}
+Container_Boundary(api, "RepoFluent.Api") {
+  Component(ita, "Identity, Tenancy, and Access", ".NET module", "Trusted actor and authorization context")
+  Component(cic, "Curriculum Input Contract", ".NET shared module", "Contract compatibility and validation semantics")
+  Component(cli, "Curriculum Lifecycle", ".NET module", "Intake, draft, review, publication, and retirement")
+  Component(lex, "Learning Experience", ".NET module", "Published learning, progress, search, and recommendations")
+  Component(cbn, "Codebase Navigation", ".NET module", "Authorized source references, tours, symbols, and drift")
+  Component(asm, "Assessment and Mastery", ".NET module", "Attempts, grading, answer protection, and mastery")
+  Component(anr, "Analytics and Reporting", ".NET module", "Metric policy, queries, privacy, and exports")
+  Component(ato, "Administration and Tenant Operations", ".NET module", "Tenant control plane, assignments, settings, and orchestration")
+  Component(spc, "Security, Privacy, and Compliance", ".NET cross-cutting module", "Classification, content safety, audit, retention, and controls")
+  Component(obs, "Observability and Supportability", ".NET cross-cutting module", "Correlation, diagnostics, idempotency, and health")
+}
+Container_Boundary(worker, "RepoFluent.Worker") {
+  Component(jobs, "Subsystem Job Processors", ".NET hosted processors", "Validation, projection, grading, export, notification, deletion, drift, and monitoring")
+}
+Container_Boundary(authoring, "Customer authoring environment") {
+  Component(aak, "Agent Authoring Kit", "AGENTS.md, prompts, skills, and tools", "Guided generation under declared source scope")
+  Component(contract_cli, "RepoFluent.ContractCli", ".NET tool", "Pinned local contract validation")
+}
+ContainerDb(data, "Owned Data and Projections", "Relational, object, cache, and search services <TO SUPPLY>", "Tenant-scoped authoritative and derived state")
+ContainerQueue(events, "Platform Event Stream", "Durable broker <TO SUPPLY>", "Committed asynchronous work and versioned events")
+
+Rel(user, exp, "Uses product through")
+Rel(exp, product_ui, "Hosts and governs")
+Rel(product_ui, ita, "Sends authenticated requests through", "HTTPS")
+Rel(ita, ato, "Supplies actor and resource policy to")
+Rel(ato, cli, "Coordinates curriculum operations through")
+Rel(cli, cic, "Validates packages with")
+Rel(cli, lex, "Publishes immutable versions to", "platform event")
+Rel(lex, cbn, "Embeds authorized source context from")
+Rel(lex, asm, "Hosts assessment interactions from")
+Rel(lex, anr, "Publishes versioned learning evidence to", "platform event")
+Rel(asm, anr, "Publishes attempt and mastery evidence to", "platform event")
+Rel(ato, lex, "Publishes assignments to", "platform event")
+Rel(spc, ita, "Constrains identity and access controls for")
+Rel(spc, cli, "Constrains intake, rendering, audit, and retention for")
+Rel(spc, asm, "Protects answers and evidence for")
+Rel(obs, cli, "Correlates and monitors")
+Rel(obs, lex, "Correlates and protects retry-safe writes for")
+Rel(obs, asm, "Correlates and protects submissions for")
+Rel(cic, data, "Reads contract releases from")
+Rel(cli, data, "Owns lifecycle records in")
+Rel(lex, data, "Owns learning records in")
+Rel(cbn, data, "Owns source metadata in")
+Rel(asm, data, "Owns assessment evidence in")
+Rel(anr, data, "Owns analytical projections in")
+Rel(ato, data, "Owns tenant operations in")
+Rel(jobs, events, "Consumes and publishes")
+Rel(jobs, data, "Reads and writes owned module state")
+Rel(agent, aak, "Executes")
+Rel(aak, contract_cli, "Validates generated package with")
+Rel(contract_cli, cic, "Shares versioned validation semantics with", "artifact release")
+@enduml
