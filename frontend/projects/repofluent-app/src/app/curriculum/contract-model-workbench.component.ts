@@ -1,0 +1,40 @@
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import type { Assessment, CurriculumPackage } from 'api';
+
+@Component({
+  selector: 'app-contract-model-workbench',
+  templateUrl: './contract-model-workbench.component.html',
+  styleUrl: './contract-model-workbench.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ContractModelWorkbenchComponent {
+  readonly package = input.required<CurriculumPackage>();
+
+  protected titleCase(value: string): string {
+    const label = value.replaceAll('-', ' ');
+    return `${label.charAt(0).toUpperCase()}${label.slice(1)}`;
+  }
+
+  protected architectureName(identifier: string): string {
+    for (const system of this.package().systems) {
+      if (system.id === identifier) return system.name;
+      const subsystem = system.subsystems.find((item) => item.id === identifier);
+      if (subsystem) return subsystem.name;
+    }
+    return identifier;
+  }
+
+  protected itemTypes(assessment: Assessment): string[] {
+    return [
+      ...new Set(
+        assessment.pools.flatMap((pool) => pool.items.map((item) => this.titleCase(item.type))),
+      ),
+    ];
+  }
+
+  protected protectedItemCount(assessment: Assessment): number {
+    return assessment.pools
+      .flatMap((pool) => pool.items)
+      .filter((item) => item.answer.visibility === 'protected').length;
+  }
+}

@@ -1,4 +1,5 @@
 import type { CourseModule } from './course-module';
+import type { LearningObjective } from './learning-objective';
 
 export interface Course {
   id: string;
@@ -6,6 +7,12 @@ export interface Course {
   description: string;
   difficulty: string;
   estimatedMinutes: number;
-  objectives: string[];
+  audience: string[];
+  tags: string[];
+  isRequired: boolean;
+  order: number;
+  prerequisites: string[];
+  completionRules: string[];
+  objectives: LearningObjective[];
   modules: CourseModule[];
 }

@@ -1,3 +1,7 @@
 namespace RepoFluent.Application;
 
-public sealed record CourseModule(string Id, string Title, IReadOnlyList<Lesson> Lessons);
+public sealed record CourseModule(
+    string Id,
+    string Title,
+    int Order,
+    IReadOnlyList<Lesson> Lessons);

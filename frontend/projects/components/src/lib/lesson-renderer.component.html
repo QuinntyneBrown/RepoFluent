@@ -15,8 +15,8 @@
         <section class="rf-objectives lesson__objectives" aria-labelledby="objectives-title">
           <span class="rf-objectives__label" id="objectives-title">By the end, you can</span>
           <div>
-            @for (objective of lesson().objectives; track objective) {
-              <p><span>[✓]</span>{{ objective }}</p>
+            @for (objective of lesson().objectives; track objective.id) {
+              <p><span>[✓]</span>{{ objective.statement }}</p>
             }
           </div>
         </section>

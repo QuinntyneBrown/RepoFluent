@@ -8,5 +8,11 @@ public sealed record Package(
     string Description,
     string Owner,
     string Locale,
+    DateTimeOffset CreatedAt,
+    string CreatedBy,
     SourceSnapshot SourceSnapshot,
-    IReadOnlyList<Course> Courses);
+    IReadOnlyList<CurriculumSystem> Systems,
+    IReadOnlyList<ArchitectureRelationship> Relationships,
+    IReadOnlyList<TerminologyDefinition> Terminology,
+    IReadOnlyList<Course> Courses,
+    IReadOnlyList<Assessment> Assessments);

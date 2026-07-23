@@ -11,7 +11,7 @@ describe('LessonRendererComponent', () => {
     const lesson: RenderableLesson = {
       title: 'Safe rendering',
       estimatedMinutes: 5,
-      objectives: ['Recognize safe failure'],
+      objectives: [{ id: 'recognize-safe-failure', statement: 'Recognize safe failure' }],
       blocks: [
         { type: 'prose', text: 'Visible learning remains available.' },
         { type: 'unsupported' },
@@ -33,7 +33,7 @@ describe('LessonRendererComponent', () => {
     const lesson: RenderableLesson = {
       title: 'Progressive rendering',
       estimatedMinutes: 15,
-      objectives: ['Navigate long content'],
+      objectives: [{ id: 'navigate-long-content', statement: 'Navigate long content' }],
       blocks: Array.from({ length: 12 }, (_, index) => ({
         type: 'prose',
         text: `Lesson block ${index + 1}`,

@@ -4,14 +4,23 @@ This prerelease contract is the bounded input for RepoFluent's first
 curriculum-to-learning vertical slice. It is not the complete pilot Curriculum Input
 Contract described by `L2-CIC-01` through `L2-CIC-14`.
 
-The package supports metadata, a reproducible repository snapshot, ordered
-course/module/lesson content, objectives, and three allow-listed content blocks:
-`prose`, `callout`, and `codeReference`. Text is rendered as text; arbitrary HTML,
-scripts, remote resources, absolute paths, and path traversal are not supported.
+The package supports stable metadata and creation evidence, reproducible
+repository snapshots, systems and subsystems, typed relationships, terminology,
+ordered course/module/lesson content, and formative or summative assessments.
+Assessment pools carry selection rules, limits, mappings, grading definitions,
+rationales, and explicitly protected answers. Learning objectives have stable
+identifiers so assessment mappings are validated rather than merely labeled.
+
+Lessons support three allow-listed content blocks: `prose`, `callout`, and
+`codeReference`. Text is rendered as text; arbitrary HTML, scripts, remote
+resources, absolute paths, and path traversal are not supported.
 
 `curriculum.schema.json` is the author-facing structural contract. The server adds
-semantic validation for stable identifier uniqueness, repository references,
-repository-relative paths, supported version, and valid line ranges. Validation
-issues have stable codes and JSON Pointer paths.
+semantic validation for stable identifier uniqueness, repository and
+architecture references, repository-relative paths, ordered learning metadata,
+assessment constraints, protected answers, supported version, and valid line
+ranges. Validation issues have stable codes and JSON Pointer paths. Review
+responses preserve the assessment contract but replace protected answer values
+with `null`.
 
 The `fixtures/` directory contains the acceptance-tested representative package.

@@ -25,3 +25,6 @@
 - Angular 21 Baseline browser policy with pinned Chromium, Firefox, and WebKit
   release gates, capability-based fallback, and non-disclosing compatibility
   guidance.
+- Complete curriculum package modeling for source provenance, architecture,
+  ordered learning, and governed assessments, with protected answer values
+  removed from review responses and a token-conformant contract workbench.

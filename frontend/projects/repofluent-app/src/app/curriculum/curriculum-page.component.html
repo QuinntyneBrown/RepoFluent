@@ -151,6 +151,11 @@
         }
 
         <div class="actions">
+          @if (current.status === 'Draft' || current.status === 'Approved') {
+            <button class="rf-button" type="button" (click)="openPreview()">
+              Inspect contract model
+            </button>
+          }
           @if (current.allowedActions.includes('preview')) {
             <button class="rf-button" type="button" (click)="openPreview()">Preview draft</button>
           }
@@ -208,6 +213,7 @@
 }
 
 @if (preview(); as draft) {
+  <app-contract-model-workbench [package]="draft.package" />
   <section class="preview" aria-label="Draft preview workspace">
     <div class="preview-heading">
       <div>

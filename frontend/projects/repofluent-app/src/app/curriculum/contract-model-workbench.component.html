@@ -1,0 +1,254 @@
+<section
+  class="contract-workbench"
+  aria-labelledby="contract-model-title"
+  data-testid="contract-model-workbench"
+>
+  <div class="workbench-heading">
+    <div>
+      <p class="step">Contract workbench / schema 0.1.0</p>
+      <h2 id="contract-model-title">Contract model coverage</h2>
+      <p>
+        Review the portable model before approval. Protected grading values stay behind the API
+        boundary.
+      </p>
+    </div>
+    <span class="rf-status rf-status--success">typed package</span>
+  </div>
+
+  <section
+    class="rf-panel contract-section contract-section--wide"
+    aria-label="Package metadata and source snapshot"
+  >
+    <div class="rf-panel__header">
+      <span>01 · Package metadata</span>
+      <span class="rf-badge">{{ package().locale }}</span>
+    </div>
+    <div class="rf-panel__body metadata-layout">
+      <dl class="rf-property-list">
+        <div>
+          <dt>Stable package ID</dt>
+          <dd>
+            <code>{{ package().packageId }}</code>
+          </dd>
+        </div>
+        <div>
+          <dt>Contract / package version</dt>
+          <dd>{{ package().contractVersion }} · {{ package().version }}</dd>
+        </div>
+        <div>
+          <dt>Owner</dt>
+          <dd>{{ package().owner }}</dd>
+        </div>
+        <div>
+          <dt>Created by</dt>
+          <dd>{{ package().createdBy }}</dd>
+        </div>
+        <div>
+          <dt>Created</dt>
+          <dd>{{ package().createdAt }}</dd>
+        </div>
+      </dl>
+
+      <div class="source-list">
+        @for (repository of package().sourceSnapshot.repositories; track repository.id) {
+          <article class="source-card">
+            <div class="source-card__heading">
+              <div>
+                <strong>{{ repository.name }}</strong>
+                <code>{{ repository.id }}</code>
+              </div>
+              <span class="rf-badge">{{ repository.branch || 'detached' }}</span>
+            </div>
+            <dl>
+              <div>
+                <dt>Relative root</dt>
+                <dd>
+                  <code>{{ repository.relativeRoot }}</code>
+                </dd>
+              </div>
+              <div>
+                <dt>Commit</dt>
+                <dd>
+                  <code>{{ repository.commit || repository.revision }}</code>
+                </dd>
+              </div>
+              <div>
+                <dt>Documents</dt>
+                <dd>{{ repository.documents.join(', ') }}</dd>
+              </div>
+              <div>
+                <dt>Captured</dt>
+                <dd>{{ repository.capturedAt }}</dd>
+              </div>
+            </dl>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="contract-grid">
+    <section class="rf-panel contract-section" aria-label="Architecture model">
+      <div class="rf-panel__header">
+        <span>02 · Architecture model</span>
+        <span class="rf-badge">{{ package().systems.length }} systems</span>
+      </div>
+      <div class="rf-panel__body section-stack">
+        @for (system of package().systems; track system.id) {
+          <article class="model-card">
+            <div class="model-card__heading">
+              <strong>{{ system.name }}</strong>
+              <span class="rf-status rf-status--info">{{ system.boundary }}</span>
+            </div>
+            <p>{{ system.responsibility }}</p>
+            @for (subsystem of system.subsystems; track subsystem.id) {
+              <div class="subsystem">
+                <strong>{{ subsystem.name }}</strong>
+                <span>{{ subsystem.boundary }}</span>
+                <p>{{ subsystem.responsibility }}</p>
+              </div>
+            }
+          </article>
+        }
+
+        <div class="relationship-list">
+          <p class="micro-label">Typed relationships</p>
+          @for (relationship of package().relationships; track relationship.id) {
+            <div class="relationship">
+              <strong>{{ architectureName(relationship.sourceId) }}</strong>
+              <span class="relationship__type">{{ relationship.type }}</span>
+              <strong>{{ architectureName(relationship.targetId) }}</strong>
+              <p>{{ relationship.description }}</p>
+            </div>
+          }
+        </div>
+
+        <dl class="terminology">
+          @for (definition of package().terminology; track definition.term) {
+            <div>
+              <dt>{{ definition.term }}</dt>
+              <dd>{{ definition.definition }}</dd>
+            </div>
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section class="rf-panel contract-section" aria-label="Learning model">
+      <div class="rf-panel__header">
+        <span>03 · Learning model</span>
+        <span class="rf-badge">{{ package().courses.length }} course</span>
+      </div>
+      <div class="rf-panel__body section-stack">
+        @for (course of package().courses; track course.id) {
+          <article class="model-card">
+            <div class="model-card__heading">
+              <div>
+                <span class="micro-label">Order {{ course.order }}</span>
+                <strong>{{ course.title }}</strong>
+              </div>
+              <span
+                class="rf-status"
+                [class.rf-status--warning]="course.isRequired"
+                [class.rf-status--info]="!course.isRequired"
+              >
+                {{ course.isRequired ? 'Required' : 'Optional' }}
+              </span>
+            </div>
+            <p>{{ course.description }}</p>
+            <dl class="compact-properties">
+              <div>
+                <dt>Audience</dt>
+                <dd>{{ course.audience.join(', ') }}</dd>
+              </div>
+              <div>
+                <dt>Difficulty / duration</dt>
+                <dd>{{ titleCase(course.difficulty) }} · {{ course.estimatedMinutes }} min</dd>
+              </div>
+              <div>
+                <dt>Tags</dt>
+                <dd>{{ course.tags.join(' · ') }}</dd>
+              </div>
+              <div>
+                <dt>Prerequisites</dt>
+                <dd>{{ course.prerequisites.join(', ') }}</dd>
+              </div>
+              <div>
+                <dt>Completion</dt>
+                <dd>{{ course.completionRules.join(' · ') }}</dd>
+              </div>
+              <div>
+                <dt>Structure</dt>
+                <dd>
+                  {{ course.modules.length }} module · {{ course.modules[0].lessons.length }} lesson
+                </dd>
+              </div>
+            </dl>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
+
+  <section class="rf-panel contract-section contract-section--wide" aria-label="Assessment model">
+    <div class="rf-panel__header">
+      <span>04 · Assessment model</span>
+      <span class="rf-badge">answers isolated</span>
+    </div>
+    <div class="rf-panel__body assessment-grid">
+      @for (assessment of package().assessments; track assessment.id) {
+        <article class="assessment-card">
+          <div class="model-card__heading">
+            <div>
+              <span class="micro-label">{{ titleCase(assessment.purpose) }}</span>
+              <strong>{{ assessment.title }}</strong>
+            </div>
+            <span class="rf-status rf-status--success">{{ assessment.thresholdPercent }}%</span>
+          </div>
+
+          <div class="metric-strip">
+            <span>{{ assessment.maximumAttempts }} attempts</span>
+            <span>{{ assessment.timeLimitMinutes }} min</span>
+            <span>{{ titleCase(assessment.feedbackRelease) }}</span>
+            @for (itemType of itemTypes(assessment); track itemType) {
+              <span>{{ itemType }}</span>
+            }
+          </div>
+
+          <dl class="compact-properties">
+            <div>
+              <dt>Selection</dt>
+              <dd>
+                {{ titleCase(assessment.selection.mode) }} ·
+                {{ assessment.selection.itemCount }} from
+                {{ assessment.selection.poolIds.join(', ') }}
+              </dd>
+            </div>
+            <div>
+              <dt>Objective mappings</dt>
+              <dd>{{ assessment.mappings.objectiveIds.join(', ') }}</dd>
+            </div>
+            <div>
+              <dt>System mappings</dt>
+              <dd>{{ assessment.mappings.systemIds.join(', ') }}</dd>
+            </div>
+            <div>
+              <dt>Subsystem mappings</dt>
+              <dd>{{ assessment.mappings.subsystemIds.join(', ') }}</dd>
+            </div>
+          </dl>
+
+          <div class="rf-callout rf-callout--warning protected-material">
+            <div>
+              <strong>Protected grading material</strong>
+              <p>
+                {{ protectedItemCount(assessment) }} protected answer · values withheld from this
+                review response
+              </p>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+</section>

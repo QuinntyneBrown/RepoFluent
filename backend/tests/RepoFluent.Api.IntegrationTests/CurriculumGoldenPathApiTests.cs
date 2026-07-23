@@ -79,6 +79,77 @@ public sealed class CurriculumGoldenPathApiTests
         Assert.True(issue.IsBlocking);
     }
 
+    [Fact]
+    public async Task CompletePackagePreservesTypedModelsWithoutDisclosingProtectedAnswers()
+    {
+        using var factory = new TestApplicationFactory();
+        using var client = factory.CreateClient();
+        var receipt = await UploadAsync(client);
+        await WaitForStatusAsync(client, receipt.Id, CurriculumStatus.Draft);
+
+        SetPersona(client, "author");
+        var response = await client.GetAsync($"/api/curriculum-drafts/{receipt.Id}/preview");
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+        var preview = await response.Content.ReadFromJsonAsync<Preview>();
+
+        Assert.NotNull(preview);
+        Assert.Equal("curriculum-agent", preview.Package.CreatedBy);
+        Assert.Equal("services/order", preview.Package.SourceSnapshot.Repositories[0].RelativeRoot);
+        Assert.Equal("calls", Assert.Single(preview.Package.Relationships).Type);
+        Assert.Equal("formative", Assert.Single(preview.Package.Assessments).Purpose);
+        Assert.Contains(
+            "\"visibility\":\"protected\",\"value\":null",
+            json,
+            StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            "\"visibility\":\"protected\",\"value\":\"",
+            json,
+            StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task DanglingArchitectureRelationshipReturnsAStableIssue()
+    {
+        using var factory = new TestApplicationFactory();
+        using var client = factory.CreateClient();
+        var json = await File.ReadAllTextAsync(GetFixturePath());
+        json = json.Replace(
+            "\"targetId\": \"order-system\"",
+            "\"targetId\": \"missing-system\"",
+            StringComparison.Ordinal);
+        var receipt = await UploadAsync(client, json);
+
+        var failed = await WaitForStatusAsync(client, receipt.Id, CurriculumStatus.ValidationFailed);
+
+        var issue = Assert.Single(
+            failed.Issues,
+            item => item.Code == "CIC_DANGLING_RELATIONSHIP");
+        Assert.Equal("/relationships/0/targetId", issue.Path);
+        Assert.True(issue.IsBlocking);
+    }
+
+    [Fact]
+    public async Task DanglingAssessmentObjectiveReturnsAStableIssue()
+    {
+        using var factory = new TestApplicationFactory();
+        using var client = factory.CreateClient();
+        var json = await File.ReadAllTextAsync(GetFixturePath());
+        json = json.Replace(
+            "\"objectiveIds\": [\"trace-order\"]",
+            "\"objectiveIds\": [\"missing-objective\"]",
+            StringComparison.Ordinal);
+        var receipt = await UploadAsync(client, json);
+
+        var failed = await WaitForStatusAsync(client, receipt.Id, CurriculumStatus.ValidationFailed);
+
+        var issue = Assert.Single(
+            failed.Issues,
+            item => item.Code == "CIC_DANGLING_REFERENCE");
+        Assert.Equal("/assessments/0/mappings/objectiveIds/0", issue.Path);
+        Assert.True(issue.IsBlocking);
+    }
+
     private static async Task<ImportReceipt> UploadAsync(
         HttpClient client,
         string? json = null)

@@ -3,12 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { DevPersonaService, ImportStatus, Preview, RepoFluentApiService } from 'api';
 import { LessonRendererComponent } from 'components';
 import { firstValueFrom } from 'rxjs';
+import { ContractModelWorkbenchComponent } from './contract-model-workbench.component';
 
 const importStorageKey = 'repofluent-current-import';
 
 @Component({
   selector: 'app-curriculum-page',
-  imports: [FormsModule, LessonRendererComponent],
+  imports: [FormsModule, LessonRendererComponent, ContractModelWorkbenchComponent],
   templateUrl: './curriculum-page.component.html',
   styleUrl: './curriculum-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

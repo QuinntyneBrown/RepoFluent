@@ -70,7 +70,10 @@ public sealed class CurriculumWorkflow(
             throw Conflict("CLI_PREVIEW_GATE", "Only a valid draft can be previewed.");
         }
 
-        return new(record.Id, true, PackageValidator.ReadTrusted(record.RawPackage));
+        return new(
+            record.Id,
+            true,
+            PackagePresenter.ForReview(PackageValidator.ReadTrusted(record.RawPackage)));
     }
 
     public async Task<ImportStatus> ReviewAsync(
