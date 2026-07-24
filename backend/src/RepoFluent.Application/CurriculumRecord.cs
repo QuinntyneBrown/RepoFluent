@@ -18,6 +18,10 @@ public sealed class CurriculumRecord
 
     public required DateTimeOffset CreatedAt { get; init; }
 
+    public DateTimeOffset? ProcessingStartedAt { get; set; }
+
+    public DateTimeOffset? ValidationCompletedAt { get; set; }
+
     public CurriculumStatus Status { get; set; }
 
     public string Title { get; set; } = "Pending curriculum";

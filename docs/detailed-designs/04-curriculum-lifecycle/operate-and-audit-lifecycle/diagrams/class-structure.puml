@@ -11,48 +11,91 @@ skinparam class {
 }
 title Class structure — Operate and audit the lifecycle
 
-class OperateAndAuditLifecycleRequest {
-  +string ScopeId
-  +string ActorId
-  +string TargetId
-  +long ExpectedVersion
+class CurriculumPageComponent {
+  +openHistory(): Promise<void>
+  +retryValidation(): Promise<void>
+  +auditLabel(action: string): string
+}
+
+class RepoFluentApiService {
+  +getImport(id: string): Observable<ImportStatus>
+  +getLifecycleHistory(id: string): Observable<LifecycleHistory>
+  +retryValidation(id: string): Observable<ImportStatus>
+}
+
+class ImportStatus {
+  +Guid Id
+  +CurriculumStatus Status
   +string CorrelationId
-  +object Payload
+  +IReadOnlyList<string> AllowedActions
+  +LifecycleProgress Progress
 }
 
-class OperateAndAuditLifecycleResult {
-  +string Outcome
-  +long Version
-  +string SupportId
+class LifecycleProgress {
+  +string ActiveStage
+  +IReadOnlyList<string> CompletedStages
+  +DateTimeOffset CreatedAt
+  +DateTimeOffset? ProcessingStartedAt
+  +DateTimeOffset? ValidationCompletedAt
+  +bool IsStale
+  +bool IsActionRequired
+  +string? FailureCode
+  +string? FailureDetail
 }
 
-class OperateAndAuditLifecycleRecord {
-  +string Id
-  +string TenantId
-  +long Version
-  +string Status
-  +DateTimeOffset UpdatedAt
-  +Apply(result: OperateAndAuditLifecycleResult): void
+class LifecycleHistory {
+  +Guid ImportId
+  +string PackageVersion
+  +string PackageChecksum
+  +CurriculumStatus CurrentStatus
+  +string CorrelationId
+  +IReadOnlyList<LifecycleAuditEntry> Entries
 }
 
-class OperateAndAuditLifecyclePolicy {
-  +Evaluate(request: OperateAndAuditLifecycleRequest, current: OperateAndAuditLifecycleRecord): OperateAndAuditLifecycleResult
+class LifecycleAuditEntry {
+  +long Id
+  +string Action
+  +string ActorId
+  +DateTimeOffset OccurredAt
+  +string CorrelationId
+  +string? PackageChecksum
+  +string? PackageVersion
+  +string? LifecycleStatus
 }
 
-interface IOperateAndAuditLifecycleRepository {
-  +Load(scopeId: string, targetId: string): Task<OperateAndAuditLifecycleRecord>
-  +Save(record: OperateAndAuditLifecycleRecord, expectedVersion: long): Task
+class CurriculumWorkflow {
+  +TimeSpan StaleValidationThreshold
+  +GetStatusAsync(actor, id): Task<ImportStatus>
+  +RetryValidationAsync(actor, id): Task<ImportStatus>
+  +GetHistoryAsync(actor, id): Task<LifecycleHistory>
 }
 
-class OperateAndAuditLifecycleHandler {
-  +Handle(request: OperateAndAuditLifecycleRequest): Task<OperateAndAuditLifecycleResult>
+class CurriculumLifecycle {
+  +CurriculumStatus Status
+  +RecoverValidation(): void
 }
 
-OperateAndAuditLifecycleHandler ..> OperateAndAuditLifecycleRequest : handles
-OperateAndAuditLifecycleHandler ..> OperateAndAuditLifecyclePolicy : invokes
-OperateAndAuditLifecycleHandler ..> IOperateAndAuditLifecycleRepository : uses
-IOperateAndAuditLifecycleRepository --> OperateAndAuditLifecycleRecord : loads / saves
-OperateAndAuditLifecyclePolicy ..> OperateAndAuditLifecycleRecord : evaluates
-OperateAndAuditLifecyclePolicy ..> OperateAndAuditLifecycleResult : creates
-OperateAndAuditLifecycleRecord ..> OperateAndAuditLifecycleResult : applies
+interface ICurriculumStore {
+  +ClaimReceivedAsync(): Task<CurriculumRecord?>
+  +SaveImportAsync(record, action, actor): Task
+  +GetLifecycleAuditAsync(tenantId, importId): Task<IReadOnlyList<LifecycleAuditEntry>>
+}
+
+class CurriculumStore {
+  +ClaimReceivedAsync(): Task<CurriculumRecord?>
+  +SaveImportAsync(record, action, actor): Task
+  +GetLifecycleAuditAsync(tenantId, importId): Task<IReadOnlyList<LifecycleAuditEntry>>
+}
+
+CurriculumPageComponent ..> RepoFluentApiService : uses
+RepoFluentApiService ..> ImportStatus : returns
+RepoFluentApiService ..> LifecycleHistory : returns
+ImportStatus *-- LifecycleProgress : owns
+LifecycleHistory "1" *-- "*" LifecycleAuditEntry : orders
+CurriculumWorkflow ..> ImportStatus : creates
+CurriculumWorkflow ..> LifecycleHistory : creates
+CurriculumWorkflow ..> CurriculumLifecycle : applies
+CurriculumWorkflow ..> ICurriculumStore : uses
+ICurriculumStore <|.. CurriculumStore : implements
+CurriculumStore ..> LifecycleAuditEntry : reads
 @enduml

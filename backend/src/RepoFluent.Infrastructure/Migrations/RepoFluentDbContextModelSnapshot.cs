@@ -71,7 +71,19 @@ namespace RepoFluent.Infrastructure.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("LifecycleStatus")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTimeOffset>("OccurredAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PackageChecksum")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PackageVersion")
+                        .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TargetId")
@@ -131,6 +143,9 @@ namespace RepoFluent.Infrastructure.Migrations
                     b.Property<Guid?>("PublishedVersionId")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTimeOffset?>("ProcessingStartedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PublicationJson")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
@@ -170,6 +185,9 @@ namespace RepoFluent.Infrastructure.Migrations
 
                     b.Property<string>("ValidationIssuesJson")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("ValidationCompletedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ValidationReportJson")

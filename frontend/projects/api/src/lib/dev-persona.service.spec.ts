@@ -16,4 +16,12 @@ describe('DevPersonaService', () => {
     expect(service.current()).toBe('reviewer');
     expect(localStorage.getItem('repofluent-development-persona')).toBe('reviewer');
   });
+
+  it('restores the auditor persona for lifecycle evidence', () => {
+    localStorage.setItem('repofluent-development-persona', 'auditor');
+
+    const service = TestBed.inject(DevPersonaService);
+
+    expect(service.current()).toBe('auditor');
+  });
 });

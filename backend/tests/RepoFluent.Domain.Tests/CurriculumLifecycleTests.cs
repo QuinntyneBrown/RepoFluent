@@ -27,6 +27,18 @@ public sealed class CurriculumLifecycleTests
     }
 
     [Fact]
+    public void InterruptedValidationCanRecoverOnlyToTheReceivedGate()
+    {
+        var lifecycle = CurriculumLifecycle.Receive(Guid.NewGuid(), "author");
+        lifecycle.BeginValidation();
+
+        lifecycle.RecoverValidation();
+
+        Assert.Equal(CurriculumStatus.Received, lifecycle.Status);
+        Assert.Throws<CurriculumLifecycleException>(() => lifecycle.RecoverValidation());
+    }
+
+    [Fact]
     public void AuthorCannotApproveTheirOwnPackage()
     {
         var lifecycle = CurriculumLifecycle.Receive(Guid.NewGuid(), "author");

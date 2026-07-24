@@ -14,44 +14,64 @@ skinparam package {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "OperateAndAuditLifecyclePage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Author or Administrator" as actor
+box "Frontend — RepoFluent Angular application" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "OperateAndAuditLifecycleController" as controller
+box "Backend — RepoFluent API application" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
-box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "OperateAndAuditLifecycleHandler" as handler
-  participant "OperateAndAuditLifecyclePolicy" as policy
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "CurriculumWorkflow" as workflow
+  participant "CurriculumLifecycle" as lifecycle
 end box
-box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IOperateAndAuditLifecycleRepository" as repository
-  database "Curriculum store" as store
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  participant "CurriculumStore" as repository
+  database "RepoFluent database" as db
 end box
-actor -> entry : Start operate and audit the lifecycle
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch OperateAndAuditLifecycleRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-13
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+actor -> page : Open curriculum operations
+page -> client : getImport(importId)
+client -> endpoints : GET /api/curriculum-imports/{id}
+endpoints -> workflow : GetStatusAsync(actor, importId)
+workflow -> repository : GetImportAsync(tenantId, importId)
+repository -> db : Read tenant-scoped import
+db --> repository : Validating import and processing time
+repository --> workflow : CurriculumRecord
+workflow -> workflow : Apply L2-CLI-13 5-minute stale threshold
+workflow --> endpoints : ImportStatus with actionable safe detail
+endpoints --> client : 200 status and support correlation
+client --> page : Present active and completed stages
+page --> actor : Show Retry validation when authorized
+
+actor -> page : Retry validation
+page -> client : retryValidation(importId)
+client -> endpoints : POST /api/curriculum-imports/{id}/retry-validation
+endpoints -> workflow : RetryValidationAsync(actor, importId)
+workflow -> repository : Load tenant-scoped import
+repository --> workflow : Current Validating record
+alt Lease is stale and actor is authorized
+  workflow -> lifecycle : RecoverValidation()
+  lifecycle --> workflow : Received
+  workflow -> repository : Save Received + retry-requested audit
+  repository -> db : Commit state and evidence
+  db --> repository : Commit result
+  repository --> workflow : Saved import
+  workflow --> endpoints : ImportStatus at Received
+else Lease is active or actor is unauthorized
+  workflow --> endpoints : Conflict or forbidden result
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+endpoints --> client : HTTP result
+client --> page : Updated operational state
+
+workflow -> repository : ValidateNextAsync claims Received
+repository -> db : Set Validating, increment attempt, append validation-retried
+db --> repository : Claimed import
+repository --> workflow : Retry attempt
+workflow -> lifecycle : CompleteValidation(false)
+lifecycle --> workflow : Draft
+workflow -> repository : Save validation-completed + draft-imported
+repository -> db : Commit one Draft and evidence
+db --> repository : Commit result
 @enduml

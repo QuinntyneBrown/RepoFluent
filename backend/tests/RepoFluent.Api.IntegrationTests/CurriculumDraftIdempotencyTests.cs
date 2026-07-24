@@ -52,7 +52,7 @@ public sealed class CurriculumDraftIdempotencyTests
     }
 
     [Fact]
-    public async Task InterruptedConversionCanRetryToOneCompleteDraft()
+    public async Task InterruptedConversionIsNotReclaimedWithoutAuthorizedRetry()
     {
         using var factory = new TestApplicationFactory(enableValidationWorker: false);
         using var client = factory.CreateClient();
@@ -70,24 +70,15 @@ public sealed class CurriculumDraftIdempotencyTests
         await using (var scope = factory.Services.CreateAsyncScope())
         {
             var store = scope.ServiceProvider.GetRequiredService<ICurriculumStore>();
-            var retry = await store.ClaimReceivedAsync(CancellationToken.None);
-            Assert.Equal(receipt.Id, retry?.Id);
-            Assert.Equal(2, retry?.ValidationAttemptCount);
-            Assert.Equal(CurriculumStatus.Validating, retry?.Status);
-        }
-
-        await using (var scope = factory.Services.CreateAsyncScope())
-        {
-            var workflow = scope.ServiceProvider.GetRequiredService<CurriculumWorkflow>();
-            await workflow.ValidateNextAsync(CancellationToken.None);
+            Assert.Null(await store.ClaimReceivedAsync(CancellationToken.None));
         }
 
         SetPersona(client, "author");
-        var completed = await client.GetFromJsonAsync<ImportStatus>(
+        var interrupted = await client.GetFromJsonAsync<ImportStatus>(
             $"/api/curriculum-imports/{receipt.Id}");
-        Assert.Equal(CurriculumStatus.Draft, completed?.Status);
-        Assert.Equal(3, completed?.ValidationAttemptCount);
-        Assert.NotNull(completed?.ValidationReport);
+        Assert.Equal(CurriculumStatus.Validating, interrupted?.Status);
+        Assert.Equal(1, interrupted?.ValidationAttemptCount);
+        Assert.DoesNotContain("retry", interrupted?.AllowedActions ?? []);
     }
 
     private static async Task<ImportReceipt> UploadAsync(HttpClient client)

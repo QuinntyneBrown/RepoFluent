@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import {
   DevPersonaService,
   ImportStatus,
+  LifecycleHistory,
   Preview,
   RepoFluentApiService,
   VersionComparison,
@@ -28,6 +29,7 @@ export class CurriculumPageComponent {
   protected readonly status = signal<ImportStatus | null>(null);
   protected readonly preview = signal<Preview | null>(null);
   protected readonly comparison = signal<VersionComparison | null>(null);
+  protected readonly history = signal<LifecycleHistory | null>(null);
   protected readonly isBusy = signal(false);
   protected readonly message = signal('');
   protected readonly error = signal('');
@@ -167,6 +169,31 @@ export class CurriculumPageComponent {
       'Publishing curriculum version',
       'Curriculum version published',
     );
+  }
+
+  protected async openHistory(): Promise<void> {
+    const current = this.status();
+    if (!current) return;
+    await this.run(
+      async () => this.history.set(await firstValueFrom(this.api.getLifecycleHistory(current.id))),
+      'Loading immutable lifecycle history',
+      'Lifecycle audit evidence loaded',
+    );
+  }
+
+  protected async retryValidation(): Promise<void> {
+    const current = this.status();
+    if (!current) return;
+    await this.run(
+      async () => this.status.set(await firstValueFrom(this.api.retryValidation(current.id))),
+      'Retrying stale validation from its safe stage',
+      'Validation retry queued',
+    );
+  }
+
+  protected auditLabel(action: string): string {
+    const value = action.replace(/^curriculum\./, '').replaceAll('-', ' ');
+    return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
   }
 
   protected async compareVersions(): Promise<void> {

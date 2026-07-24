@@ -16,7 +16,24 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         CancellationToken cancellationToken)
     {
         dbContext.CurriculumImports.Add(ToEntity(record));
-        AddAudit(record.TenantId, record.AuthorId, "curriculum.uploaded", record.Id.ToString(), record.CorrelationId);
+        AddAudit(
+            record.TenantId,
+            record.AuthorId,
+            "curriculum.uploaded",
+            record.Id.ToString(),
+            record.CorrelationId,
+            record.Checksum,
+            record.PackageVersion,
+            record.Status.ToString());
+        AddAudit(
+            record.TenantId,
+            "system",
+            "curriculum.scan-completed",
+            record.Id.ToString(),
+            record.CorrelationId,
+            record.Checksum,
+            record.PackageVersion,
+            record.Status.ToString());
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
@@ -56,26 +73,23 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         var entity = await dbContext.CurriculumImports
             .OrderBy(item => item.Id)
             .FirstOrDefaultAsync(
-                item => item.Status == nameof(CurriculumStatus.Received)
-                    || item.Status == nameof(CurriculumStatus.Validating),
+                item => item.Status == nameof(CurriculumStatus.Received),
                 cancellationToken);
         if (entity is null)
         {
             return null;
         }
 
-        if (entity.Status == nameof(CurriculumStatus.Received))
-        {
-            var lifecycle = CurriculumLifecycle.Rehydrate(
-                entity.Id,
-                entity.AuthorId,
-                CurriculumStatus.Received,
-                entity.ReviewerId,
-                entity.PublishedVersionId);
-            lifecycle.BeginValidation();
-            entity.Status = lifecycle.Status.ToString();
-        }
+        var lifecycle = CurriculumLifecycle.Rehydrate(
+            entity.Id,
+            entity.AuthorId,
+            CurriculumStatus.Received,
+            entity.ReviewerId,
+            entity.PublishedVersionId);
+        lifecycle.BeginValidation();
+        entity.Status = lifecycle.Status.ToString();
         entity.ValidationAttemptCount++;
+        entity.ProcessingStartedAt = timeProvider.GetUtcNow();
         AddAudit(
             entity.TenantId,
             "system",
@@ -83,7 +97,10 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
                 ? "curriculum.validation-started"
                 : "curriculum.validation-retried",
             entity.Id.ToString(),
-            entity.CorrelationId);
+            entity.CorrelationId,
+            entity.Checksum,
+            entity.PackageVersion,
+            entity.Status);
         await dbContext.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
         return ToRecord(entity);
@@ -147,6 +164,8 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         entity.ReviewedAt = record.ReviewedAt;
         entity.PublishedVersionId = record.PublishedVersionId;
         entity.PublishedAt = record.PublishedAt;
+        entity.ProcessingStartedAt = record.ProcessingStartedAt;
+        entity.ValidationCompletedAt = record.ValidationCompletedAt;
         entity.ValidationIssuesJson = JsonSerializer.Serialize(record.Issues, SerializerOptions);
         entity.ValidationReportJson = record.ValidationReport is null
             ? null
@@ -183,7 +202,31 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             });
         }
 
-        AddAudit(record.TenantId, actorId, auditAction, record.Id.ToString(), record.CorrelationId);
+        AddAudit(
+            record.TenantId,
+            actorId,
+            auditAction,
+            record.Id.ToString(),
+            record.CorrelationId,
+            record.Checksum,
+            record.PackageVersion,
+            record.Status.ToString());
+        if (string.Equals(
+                auditAction,
+                "curriculum.validation-completed",
+                StringComparison.Ordinal)
+            && record.Status == CurriculumStatus.Draft)
+        {
+            AddAudit(
+                record.TenantId,
+                "system",
+                "curriculum.draft-imported",
+                record.Id.ToString(),
+                record.CorrelationId,
+                record.Checksum,
+                record.PackageVersion,
+                record.Status.ToString());
+        }
         try
         {
             await dbContext.SaveChangesAsync(cancellationToken);
@@ -318,6 +361,25 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         return entity is null ? null : ToRecord(entity);
     }
 
+    public async Task<IReadOnlyList<LifecycleAuditEntry>> GetLifecycleAuditAsync(
+        string tenantId,
+        Guid importId,
+        CancellationToken cancellationToken) =>
+        await dbContext.AuditEvents
+            .AsNoTracking()
+            .Where(item => item.TenantId == tenantId && item.TargetId == importId.ToString())
+            .OrderBy(item => item.Id)
+            .Select(item => new LifecycleAuditEntry(
+                item.Id,
+                item.Action,
+                item.ActorId,
+                item.OccurredAt,
+                item.CorrelationId,
+                item.PackageChecksum,
+                item.PackageVersion,
+                item.LifecycleStatus))
+            .ToListAsync(cancellationToken);
+
     public async Task RecordAuditAsync(
         string tenantId,
         string actorId,
@@ -326,11 +388,37 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
         string correlationId,
         CancellationToken cancellationToken)
     {
-        AddAudit(tenantId, actorId, action, targetId, correlationId);
+        CurriculumImportEntity? import = null;
+        if (Guid.TryParse(targetId, out var importId))
+        {
+            import = await dbContext.CurriculumImports
+                .AsNoTracking()
+                .SingleOrDefaultAsync(
+                    item => item.TenantId == tenantId && item.Id == importId,
+                    cancellationToken);
+        }
+
+        AddAudit(
+            tenantId,
+            actorId,
+            action,
+            targetId,
+            correlationId,
+            import?.Checksum,
+            import?.PackageVersion,
+            import?.Status);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private void AddAudit(string tenantId, string actorId, string action, string targetId, string correlationId) =>
+    private void AddAudit(
+        string tenantId,
+        string actorId,
+        string action,
+        string targetId,
+        string correlationId,
+        string? packageChecksum = null,
+        string? packageVersion = null,
+        string? lifecycleStatus = null) =>
         dbContext.AuditEvents.Add(new AuditEventEntity
         {
             TenantId = tenantId,
@@ -338,7 +426,10 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             Action = action,
             TargetId = targetId,
             CorrelationId = correlationId,
-            OccurredAt = timeProvider.GetUtcNow()
+            OccurredAt = timeProvider.GetUtcNow(),
+            PackageChecksum = packageChecksum,
+            PackageVersion = packageVersion,
+            LifecycleStatus = lifecycleStatus
         });
 
     private static CurriculumImportEntity ToEntity(CurriculumRecord record) =>
@@ -357,6 +448,8 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             ValidationAttemptCount = record.ValidationAttemptCount,
             ValidationIssuesJson = "[]",
             CreatedAt = record.CreatedAt,
+            ProcessingStartedAt = record.ProcessingStartedAt,
+            ValidationCompletedAt = record.ValidationCompletedAt,
             ValidationReportJson = null,
             WarningAcknowledgementJson = null,
             ReviewDecisionJson = null,
@@ -374,6 +467,8 @@ public sealed class CurriculumStore(RepoFluentDbContext dbContext, TimeProvider 
             Checksum = entity.Checksum,
             CorrelationId = entity.CorrelationId,
             CreatedAt = entity.CreatedAt,
+            ProcessingStartedAt = entity.ProcessingStartedAt,
+            ValidationCompletedAt = entity.ValidationCompletedAt,
             Status = Enum.Parse<CurriculumStatus>(entity.Status),
             Title = entity.Title,
             PackageId = entity.PackageId,

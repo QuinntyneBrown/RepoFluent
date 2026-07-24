@@ -10,6 +10,8 @@ public static class CurriculumEndpoints
 
         api.MapPost("/curriculum-imports", ReceiveAsync).DisableAntiforgery();
         api.MapGet("/curriculum-imports/{id:guid}", GetStatusAsync);
+        api.MapGet("/curriculum-imports/{id:guid}/history", GetHistoryAsync);
+        api.MapPost("/curriculum-imports/{id:guid}/retry-validation", RetryValidationAsync);
         api.MapGet("/curriculum-drafts/{id:guid}/preview", GetPreviewAsync);
         api.MapPost(
             "/curriculum-drafts/{id:guid}/warning-acknowledgements",
@@ -60,6 +62,24 @@ public static class CurriculumEndpoints
         CurriculumWorkflow workflow,
         CancellationToken cancellationToken) =>
         Results.Ok(await workflow.GetStatusAsync(context.GetActor(), id, cancellationToken));
+
+    private static async Task<IResult> GetHistoryAsync(
+        Guid id,
+        HttpContext context,
+        CurriculumWorkflow workflow,
+        CancellationToken cancellationToken) =>
+        Results.Ok(await workflow.GetHistoryAsync(context.GetActor(), id, cancellationToken));
+
+    private static async Task<IResult> RetryValidationAsync(
+        Guid id,
+        HttpContext context,
+        CurriculumWorkflow workflow,
+        CancellationToken cancellationToken) =>
+        Results.Ok(
+            await workflow.RetryValidationAsync(
+                context.GetActor(),
+                id,
+                cancellationToken));
 
     private static async Task<IResult> GetPreviewAsync(
         Guid id,

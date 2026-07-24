@@ -12,6 +12,7 @@ public sealed class CurriculumWorkflow(
     public const int MaximumPackageBytes = 512 * 1024;
     public const string ContractVersion = "0.1.0";
     public const string ValidatorVersion = "0.1.0";
+    public static readonly TimeSpan StaleValidationThreshold = TimeSpan.FromMinutes(5);
 
     private static readonly IReadOnlyList<string> ValidationCheckCategories =
     [
@@ -142,8 +143,56 @@ public sealed class CurriculumWorkflow(
         Guid id,
         CancellationToken cancellationToken)
     {
-        RequireAnyRole(actor, "Author", "Reviewer", "Administrator");
+        RequireAnyRole(actor, "Author", "Reviewer", "Administrator", "Auditor");
         var record = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        return ToStatus(actor, record);
+    }
+
+    public async Task<LifecycleHistory> GetHistoryAsync(
+        ActorContext actor,
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        RequireAnyRole(actor, "Author", "Administrator", "Auditor");
+        var record = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        var entries = await store.GetLifecycleAuditAsync(
+            actor.TenantId,
+            id,
+            cancellationToken);
+        return new(
+            record.Id,
+            record.PackageId,
+            record.PackageVersion,
+            record.Checksum,
+            record.Status,
+            record.CorrelationId,
+            entries);
+    }
+
+    public async Task<ImportStatus> RetryValidationAsync(
+        ActorContext actor,
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        RequireAnyRole(actor, "Author", "Administrator");
+        var record = await GetImportAsync(actor.TenantId, id, cancellationToken);
+        if (record.Status != CurriculumStatus.Validating || !IsStale(record))
+        {
+            throw Conflict(
+                "CLI_RETRY_NOT_ACTIONABLE",
+                "Only stale validation processing can be retried.");
+        }
+
+        var lifecycle = Rehydrate(record);
+        TryTransition(lifecycle.RecoverValidation);
+        record.Status = lifecycle.Status;
+        record.ProcessingStartedAt = null;
+        record.ValidationCompletedAt = null;
+        await store.SaveImportAsync(
+            record,
+            "curriculum.retry-requested",
+            actor.UserId,
+            cancellationToken);
         return ToStatus(actor, record);
     }
 
@@ -595,6 +644,7 @@ public sealed class CurriculumWorkflow(
         record.Status = lifecycle.Status;
         record.Issues = issues;
         var issueChecksum = ComputeIssueChecksum(issues);
+        var validationCompletedAt = timeProvider.GetUtcNow();
         record.ValidationReport = new(
             ValidatorVersion,
             package?.ContractVersion ?? ContractVersion,
@@ -603,7 +653,8 @@ public sealed class CurriculumWorkflow(
             ValidationCheckCategories,
             issues.Count(issue => issue.IsBlocking),
             issues.Count(issue => !issue.IsBlocking),
-            timeProvider.GetUtcNow());
+            validationCompletedAt);
+        record.ValidationCompletedAt = validationCompletedAt;
         if (record.WarningAcknowledgement is { } acknowledgement
             && (!string.Equals(acknowledgement.PackageChecksum, record.Checksum, StringComparison.Ordinal)
                 || !string.Equals(acknowledgement.IssueChecksum, issueChecksum, StringComparison.Ordinal)))
@@ -649,7 +700,7 @@ public sealed class CurriculumWorkflow(
             assignment.IsRequired ? "Begin your required course" : "Explore this course",
             package.Courses[0].Id);
 
-    private static ImportStatus ToStatus(
+    private ImportStatus ToStatus(
         ActorContext actor,
         CurriculumRecord record)
     {
@@ -689,6 +740,20 @@ public sealed class CurriculumWorkflow(
             actions.Add("compare");
         }
 
+        if (actor.IsInRole("Author")
+            || actor.IsInRole("Administrator")
+            || actor.IsInRole("Auditor"))
+        {
+            actions.Add("audit");
+        }
+
+        if (record.Status == CurriculumStatus.Validating
+            && IsStale(record)
+            && (actor.IsInRole("Author") || actor.IsInRole("Administrator")))
+        {
+            actions.Add("retry");
+        }
+
         return new(
             record.Id,
             record.Title,
@@ -705,8 +770,69 @@ public sealed class CurriculumWorkflow(
             record.ValidationAttemptCount,
             record.ReviewDecision,
             record.Publication,
-            record.Retirement);
+            record.Retirement,
+            ToProgress(record));
     }
+
+    private LifecycleProgress ToProgress(CurriculumRecord record)
+    {
+        (string activeStage, IReadOnlyList<string> completedStages) = record.Status switch
+        {
+            CurriculumStatus.Received => ("Intake queued", Array.Empty<string>()),
+            CurriculumStatus.Validating => ("Validation", ["Intake"]),
+            CurriculumStatus.ValidationFailed => (
+                "Validation action required",
+                ["Intake", "Validation"]),
+            CurriculumStatus.Draft => ("Review", ["Intake", "Validation", "Draft import"]),
+            CurriculumStatus.Approved => (
+                "Publication",
+                ["Intake", "Validation", "Draft import", "Review"]),
+            CurriculumStatus.Rejected => (
+                "Review action required",
+                ["Intake", "Validation", "Draft import", "Review"]),
+            CurriculumStatus.Published => (
+                "Published availability",
+                ["Intake", "Validation", "Draft import", "Review", "Publication"]),
+            CurriculumStatus.Retired => (
+                "Retired history",
+                ["Intake", "Validation", "Draft import", "Review", "Publication", "Retirement"]),
+            _ => ("Lifecycle", Array.Empty<string>())
+        };
+        var stale = IsStale(record);
+        var blockingIssue = record.Issues.FirstOrDefault(issue => issue.IsBlocking);
+        var failureCode = stale
+            ? "CLI_VALIDATION_STALE"
+            : record.Status == CurriculumStatus.Rejected
+                ? "CLI_REVIEW_REJECTED"
+                : blockingIssue?.Code;
+        var failureDetail = stale
+            ? "Validation processing exceeded its lease. Retry resumes at validation."
+            : record.Status == CurriculumStatus.Rejected
+                ? "Review rejected this package checksum. Submit a corrected package version for validation."
+                : blockingIssue is null
+                    ? null
+                    : $"{blockingIssue.Message} Resolve {blockingIssue.Path} and submit a new version.";
+        return new(
+            activeStage,
+            completedStages,
+            record.CreatedAt,
+            record.ProcessingStartedAt,
+            record.ValidationCompletedAt,
+            record.ReviewedAt,
+            record.PublishedAt,
+            record.Retirement?.RetiredAt,
+            stale,
+            stale
+                || record.Status is CurriculumStatus.ValidationFailed
+                    or CurriculumStatus.Rejected,
+            failureCode,
+            failureDetail);
+    }
+
+    private bool IsStale(CurriculumRecord record) =>
+        record.Status == CurriculumStatus.Validating
+        && record.ProcessingStartedAt is { } startedAt
+        && timeProvider.GetUtcNow() - startedAt >= StaleValidationThreshold;
 
     private static bool HasUnacknowledgedWarnings(CurriculumRecord record)
     {

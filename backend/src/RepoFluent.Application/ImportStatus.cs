@@ -18,4 +18,5 @@ public sealed record ImportStatus(
     int ValidationAttemptCount,
     ReviewDecision? ReviewDecision,
     Publication? Publication,
-    Retirement? Retirement);
+    Retirement? Retirement,
+    LifecycleProgress Progress);

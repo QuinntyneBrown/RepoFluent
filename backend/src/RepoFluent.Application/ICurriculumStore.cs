@@ -53,6 +53,11 @@ public interface ICurriculumStore
         Guid publishedVersionId,
         CancellationToken cancellationToken);
 
+    Task<IReadOnlyList<LifecycleAuditEntry>> GetLifecycleAuditAsync(
+        string tenantId,
+        Guid importId,
+        CancellationToken cancellationToken);
+
     Task RecordAuditAsync(
         string tenantId,
         string actorId,

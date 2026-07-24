@@ -84,6 +84,12 @@ public sealed class CurriculumLifecycle
         Status = CurriculumStatus.Retired;
     }
 
+    public void RecoverValidation()
+    {
+        Require(CurriculumStatus.Validating, "Only interrupted validation can be retried.");
+        Status = CurriculumStatus.Received;
+    }
+
     private void Require(CurriculumStatus expected, string message)
     {
         if (Status != expected)

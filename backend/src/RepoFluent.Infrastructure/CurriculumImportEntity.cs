@@ -28,6 +28,10 @@ internal sealed class CurriculumImportEntity
 
     public DateTimeOffset CreatedAt { get; set; }
 
+    public DateTimeOffset? ProcessingStartedAt { get; set; }
+
+    public DateTimeOffset? ValidationCompletedAt { get; set; }
+
     public string? ReviewerId { get; set; }
 
     public DateTimeOffset? ReviewedAt { get; set; }

@@ -3,16 +3,26 @@
 LAYOUT_WITH_LEGEND()
 title Components — Operate and audit the lifecycle
 
-Container_Boundary(api, "Curriculum Lifecycle API") {
-  Component(controller, "OperateAndAuditLifecycleController", "ASP.NET Core boundary", "Authenticates, authorizes, and dispatches the request")
-  Component(handler, "OperateAndAuditLifecycleHandler", "Application handler", "Coordinates one feature result")
-  Component(policy, "OperateAndAuditLifecyclePolicy", "Domain policy", "Enforces the cited L2 rules")
-  Component(repository, "IOperateAndAuditLifecycleRepository", "Application port", "Reads and writes tenant-scoped state")
-  ComponentDb(store, "Curriculum store", "<TO SUPPLY>", "Persists feature state and safe evidence")
+Container_Boundary(web, "RepoFluent Angular application") {
+  Component(page, "CurriculumPageComponent", "Angular component", "Presents lifecycle progress, recovery, and ordered evidence")
+  Component(client, "RepoFluentApiService", "Angular HTTP client", "Calls typed lifecycle endpoints")
+}
+Container_Boundary(api, "RepoFluent API") {
+  Component(endpoints, "CurriculumEndpoints", "ASP.NET Core endpoints", "Authenticates requests and exposes status, retry, and history")
+  Component(workflow, "CurriculumWorkflow", "Application service", "Detects stale work and coordinates lifecycle operations")
+  Component(lifecycle, "CurriculumLifecycle", "Domain state machine", "Restricts recovery to the Received gate")
+  Component(port, "ICurriculumStore", "Application port", "Defines tenant-scoped import and audit persistence")
+}
+Container_Boundary(infrastructure, "RepoFluent Infrastructure") {
+  Component(repository, "CurriculumStore", "EF Core repository", "Claims work and appends lifecycle evidence")
+  ComponentDb(store, "RepoFluent database", "SQLite", "Persists imports, audits, and events")
 }
 
-Rel(controller, handler, "Dispatches typed request")
-Rel(handler, policy, "Evaluates")
-Rel(handler, repository, "Loads and saves through")
-Rel(repository, store, "Persists")
+Rel(page, client, "Requests status, retry, and history")
+Rel(client, endpoints, "Calls", "JSON/HTTPS")
+Rel(endpoints, workflow, "Delegates to")
+Rel(workflow, lifecycle, "Applies transitions through")
+Rel(workflow, port, "Loads and saves through")
+Rel(port, repository, "Implemented by")
+Rel(repository, store, "Reads and commits", "EF Core")
 @enduml

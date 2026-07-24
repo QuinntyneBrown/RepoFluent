@@ -15,4 +15,10 @@ internal sealed class AuditEventEntity
     public required string CorrelationId { get; set; }
 
     public DateTimeOffset OccurredAt { get; set; }
+
+    public string? PackageChecksum { get; set; }
+
+    public string? PackageVersion { get; set; }
+
+    public string? LifecycleStatus { get; set; }
 }

@@ -8,6 +8,7 @@ import type { ImportReceipt } from './import-receipt';
 import type { ImportStatus } from './import-status';
 import type { LearningAssignment } from './learning-assignment';
 import type { LessonView } from './lesson-view';
+import type { LifecycleHistory } from './lifecycle-history';
 import type { Preview } from './preview';
 import type { VersionComparison } from './version-comparison';
 
@@ -31,6 +32,14 @@ export class RepoFluentApiService {
 
   getImport(id: string): Observable<ImportStatus> {
     return this.http.get<ImportStatus>(`/api/curriculum-imports/${id}`);
+  }
+
+  getLifecycleHistory(id: string): Observable<LifecycleHistory> {
+    return this.http.get<LifecycleHistory>(`/api/curriculum-imports/${id}/history`);
+  }
+
+  retryValidation(id: string): Observable<ImportStatus> {
+    return this.http.post<ImportStatus>(`/api/curriculum-imports/${id}/retry-validation`, {});
   }
 
   getPreview(id: string): Observable<Preview> {

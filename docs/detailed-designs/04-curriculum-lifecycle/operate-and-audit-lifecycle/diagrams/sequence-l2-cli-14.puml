@@ -14,44 +14,49 @@ skinparam package {
   FontColor #101828
   BackgroundColor #F9FAFB
 }
-actor "Curriculum operator" as actor
-box "Frontend — Curriculum administration" #E0F2FE
-  participant "OperateAndAuditLifecyclePage" as entry
-  participant "CurriculumLifecycleApiClient" as client
+actor "Lifecycle actor or system" as lifecycleActor
+actor "Auditor" as auditor
+box "Frontend — RepoFluent Angular application" #E0F2FE
+  participant "CurriculumPageComponent" as page
+  participant "RepoFluentApiService" as client
 end box
-box "Backend — Curriculum Lifecycle API application" #D1FADF
-  participant "OperateAndAuditLifecycleController" as controller
+box "Backend — RepoFluent API application" #D1FADF
+  participant "CurriculumEndpoints" as endpoints
 end box
-box "Backend — Curriculum Lifecycle Application and Domain" #ECFDF3
-  participant "OperateAndAuditLifecycleHandler" as handler
-  participant "OperateAndAuditLifecyclePolicy" as policy
+box "Backend — RepoFluent Application and Domain" #ECFDF3
+  participant "CurriculumWorkflow" as workflow
 end box
-box "Backend — Curriculum Lifecycle Infrastructure" #FFF4E5
-  participant "IOperateAndAuditLifecycleRepository" as repository
-  database "Curriculum store" as store
+box "Backend — RepoFluent Infrastructure" #FFF4E5
+  participant "CurriculumStore" as repository
+  database "RepoFluent database" as db
 end box
-actor -> entry : Start operate and audit the lifecycle
-entry -> client : Build typed request
-client -> controller : Send request with scope and correlation
-controller -> controller : Authenticate and apply endpoint policy
-controller -> handler : Dispatch OperateAndAuditLifecycleRequest
-handler -> repository : Load authorized current state
-repository -> store : Read tenant-scoped record
-store --> repository : Current record
-repository --> handler : Authorized state
-handler -> policy : Apply L2-CLI-14
-alt Policy and validation accept the request
-  policy --> handler : Typed accepted result
-  handler -> repository : Save with expected version and idempotency key
-  repository -> store : Commit one result
-  store --> repository : Durable version
-  repository --> handler : Commit result
-  handler --> controller : Typed feature result
-else Policy or validation rejects the request
-  policy --> handler : Typed rejection without mutation
-  handler --> controller : Safe failure result
+
+loop Upload through retirement
+  lifecycleActor -> endpoints : Submit authorized lifecycle command
+  endpoints -> workflow : Apply role, tenant, and transition policy
+  workflow -> repository : Save state with L2-CLI-14 action and evidence
+  repository -> db : Commit state, actor/system, version, checksum, time, correlation
+  db --> repository : Append-only audit identifier
+  repository --> workflow : Commit result
+  workflow --> endpoints : Typed lifecycle result
+  endpoints --> lifecycleActor : HTTP result
 end
-controller --> client : HTTP response or Problem Details
-client --> entry : Typed outcome
-entry --> actor : Present accessible feature state
+
+auditor -> page : Inspect lifecycle history
+page -> client : getLifecycleHistory(importId)
+client -> endpoints : GET /api/curriculum-imports/{id}/history
+endpoints -> endpoints : Authenticate Auditor
+endpoints -> workflow : GetHistoryAsync(actor, importId)
+workflow -> repository : GetImportAsync(tenantId, importId)
+repository -> db : Read tenant-scoped import
+db --> repository : Current package identity and state
+repository --> workflow : CurriculumRecord
+workflow -> repository : GetLifecycleAuditAsync(tenantId, importId)
+repository -> db : Read matching audit rows ordered by Id
+db --> repository : Immutable ordered rows
+repository --> workflow : LifecycleAuditEntry list
+workflow --> endpoints : LifecycleHistory
+endpoints --> client : 200 ordered evidence
+client --> page : Render action, actor, state, time, and correlation
+page --> auditor : Present lifecycle audit evidence
 @enduml

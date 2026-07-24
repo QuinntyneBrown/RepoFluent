@@ -16,6 +16,7 @@ export class DevPersonaService {
     const stored = localStorage.getItem(storageKey);
     return stored === 'reviewer' ||
       stored === 'administrator' ||
+      stored === 'auditor' ||
       stored === 'learner' ||
       stored === 'author'
       ? stored

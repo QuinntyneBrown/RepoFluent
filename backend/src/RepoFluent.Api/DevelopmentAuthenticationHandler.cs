@@ -34,6 +34,7 @@ public sealed class DevelopmentAuthenticationHandler(
             "author" => "Author",
             "reviewer" => "Reviewer",
             "administrator" => "Administrator",
+            "auditor" => "Auditor",
             "learner" => "Learner",
             _ => null
         };

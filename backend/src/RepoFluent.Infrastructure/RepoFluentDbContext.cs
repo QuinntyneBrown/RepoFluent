@@ -54,6 +54,9 @@ public sealed class RepoFluentDbContext(DbContextOptions<RepoFluentDbContext> op
             entity.Property(item => item.Action).HasMaxLength(100);
             entity.Property(item => item.TargetId).HasMaxLength(120);
             entity.Property(item => item.CorrelationId).HasMaxLength(120);
+            entity.Property(item => item.PackageChecksum).HasMaxLength(80);
+            entity.Property(item => item.PackageVersion).HasMaxLength(40);
+            entity.Property(item => item.LifecycleStatus).HasMaxLength(40);
             entity.HasIndex(item => new { item.TenantId, item.OccurredAt });
         });
 

@@ -150,6 +150,86 @@
           </section>
         }
 
+        <section class="validation-evidence" aria-label="Lifecycle operational evidence">
+          <div class="validation-evidence__heading">
+            <div>
+              <p class="step">Lifecycle operations</p>
+              <h3>{{ current.progress.activeStage }}</h3>
+            </div>
+            <span
+              class="rf-status"
+              [class.rf-status--warning]="current.progress.isActionRequired"
+              [class.rf-status--success]="!current.progress.isActionRequired"
+            >
+              {{ current.progress.isActionRequired ? 'Action required' : 'In control' }}
+            </span>
+          </div>
+
+          <div class="publication-evidence__safeguards" aria-label="Completed lifecycle stages">
+            @for (stage of current.progress.completedStages; track stage) {
+              <span>{{ stage }}</span>
+            }
+          </div>
+
+          <div class="review-decision__grid">
+            <article>
+              <span>Intake recorded</span>
+              <strong>{{ current.progress.createdAt }}</strong>
+            </article>
+            <article>
+              <span>Validation started</span>
+              <strong>
+                {{
+                  current.progress.processingStartedAt ??
+                    (current.status === 'Received' ? 'Awaiting worker' : 'Not recorded')
+                }}
+              </strong>
+            </article>
+            <article>
+              <span>Validation completed</span>
+              <strong>
+                {{
+                  current.progress.validationCompletedAt ??
+                    (current.status === 'Received' || current.status === 'Validating'
+                      ? 'Not completed'
+                      : 'Not recorded')
+                }}
+              </strong>
+            </article>
+            <article>
+              <span>Review recorded</span>
+              <strong>{{ current.progress.reviewedAt ?? 'Not reviewed' }}</strong>
+            </article>
+            <article>
+              <span>Publication recorded</span>
+              <strong>{{ current.progress.publishedAt ?? 'Not published' }}</strong>
+            </article>
+            <article>
+              <span>Retirement recorded</span>
+              <strong>{{ current.progress.retiredAt ?? 'Not retired' }}</strong>
+            </article>
+          </div>
+
+          <div class="validation-evidence__checksum">
+            <span class="step">Support correlation</span>
+            <code>{{ current.correlationId }}</code>
+          </div>
+
+          @if (current.progress.failureDetail) {
+            <div
+              class="rf-callout"
+              [class.rf-callout--danger]="!current.progress.isStale"
+              [class.rf-callout--warning]="current.progress.isStale"
+              role="alert"
+            >
+              <div>
+                <strong>{{ current.progress.failureCode }}</strong>
+                <p>{{ current.progress.failureDetail }}</p>
+              </div>
+            </div>
+          }
+        </section>
+
         @if (current.validationReport; as report) {
           <section class="validation-evidence" aria-label="Validation evidence">
             <div class="validation-evidence__heading">
@@ -463,7 +543,78 @@
               Publish version
             </button>
           }
+          @if (current.allowedActions.includes('retry')) {
+            <button class="rf-button rf-button--primary" type="button" (click)="retryValidation()">
+              Retry validation
+            </button>
+          }
+          @if (current.allowedActions.includes('audit')) {
+            <button class="rf-button" type="button" (click)="openHistory()">
+              Inspect lifecycle history
+            </button>
+          }
         </div>
+
+        @if (history(); as trail) {
+          <section class="validation-evidence" aria-label="Lifecycle audit evidence">
+            <div class="validation-evidence__heading">
+              <div>
+                <p class="step">Tenant-scoped immutable evidence</p>
+                <h3>Ordered lifecycle record</h3>
+              </div>
+              <span class="rf-badge">{{ trail.entries.length }} events</span>
+            </div>
+
+            <div class="validation-evidence__versions">
+              <article>
+                <span>Package</span>
+                <strong>{{ trail.packageId }}</strong>
+              </article>
+              <article>
+                <span>Version</span>
+                <strong>{{ trail.packageVersion }}</strong>
+              </article>
+              <article>
+                <span>Current state</span>
+                <strong>{{ trail.currentStatus }}</strong>
+              </article>
+            </div>
+
+            <div class="validation-evidence__checksum">
+              <span class="step">Package checksum</span>
+              <code>{{ trail.packageChecksum }}</code>
+            </div>
+
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th>Sequence</th>
+                    <th>Lifecycle evidence</th>
+                    <th>Actor or system</th>
+                    <th>State</th>
+                    <th>Timestamp</th>
+                    <th>Correlation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (entry of trail.entries; track entry.id) {
+                    <tr>
+                      <td>{{ entry.id }}</td>
+                      <td>{{ auditLabel(entry.action) }}</td>
+                      <td>{{ entry.actorId }}</td>
+                      <td>{{ entry.lifecycleStatus ?? 'Operational event' }}</td>
+                      <td>{{ entry.occurredAt }}</td>
+                      <td>
+                        <code>{{ entry.correlationId }}</code>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
+        }
 
         @if (current.allowedActions.includes('compare')) {
           <form class="assignment" (ngSubmit)="compareVersions()">
