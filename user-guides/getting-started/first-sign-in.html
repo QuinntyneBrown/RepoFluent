@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Opening RepoFluent for the first time: the development identity banner, choosing a persona, and what your persona controls."
+    />
+    <title>Opening RepoFluent — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Start here" data-page="getting-started/first-sign-in">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Start here / 03</p>
+              <h1>Opening RepoFluent</h1>
+              <p class="ug-hero__lede">
+                There is no sign-in page. You open the address, and you are
+                already inside as one of five identities. Which identity you are
+                is entirely under your control, and changing it changes what you
+                can see and do. Understanding this is the most important thing
+                on your first day.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Everyone</span></li>
+                <li>
+                  <span class="rf-status rf-status--warning"
+                    >Read this first</span
+                  >
+                </li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-03</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="banner">
+            <h2>The banner at the top of every page</h2>
+            <p>
+              The first thing you will see is a narrow amber strip pinned above
+              everything else. On a wide screen it reads:
+            </p>
+            <div class="ug-figure">
+              <div class="ug-figure__head">
+                <span>Top of the window</span><span>always present</span>
+              </div>
+              <div class="ug-figure__body ug-figure__body--flush">
+                <div class="ug-screen">
+                  <div class="ug-screen__part ug-screen__part--banner">
+                    <span class="ug-screen__tag">Banner</span>
+                    <span
+                      >Development identities only — not production
+                      authentication</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <p class="ug-figure__caption">
+                On a narrow window the same strip shortens to
+                <em>Development identities · local only</em>. It is announced to
+                screen readers as a status, and it never scrolls away.
+              </p>
+            </div>
+            <p>This banner is telling you three separate things.</p>
+            <ol>
+              <li>
+                <strong>You are not authenticated.</strong> Nothing has verified
+                who you are. There is no password, no token, and no single
+                sign-on in this release.
+              </li>
+              <li>
+                <strong>Your identity is a simulation.</strong> The five people
+                you can be are fixed test personas, not accounts belonging to
+                real colleagues.
+              </li>
+              <li>
+                <strong>This is not a production environment.</strong> Do not
+                put anything into RepoFluent that you would mind other people
+                seeing.
+              </li>
+            </ol>
+            <div class="rf-callout rf-callout--danger">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="m7.5 7.5 5 5M12.5 7.5l-5 5" />
+              </svg>
+              <div>
+                <strong>Do not upload real proprietary source code</strong>
+                <p>
+                  Because there is no authentication, anyone who can reach the
+                  address is every persona at once, including the administrator.
+                  Treat the instance as an open demonstration environment. Use
+                  the example package or content you are comfortable sharing.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="persona">
+            <h2>Choosing your persona</h2>
+            <p>
+              In the top-right corner of the header there is a menu labelled
+              <strong>Development persona</strong>. It has five options, and
+              whichever one is selected is who RepoFluent thinks you are.
+            </p>
+            <div class="ug-figure">
+              <div class="ug-figure__head">
+                <span>Header, right side</span><span>persona selector</span>
+              </div>
+              <div class="ug-figure__body">
+                <div class="ug-row">
+                  <span class="rf-status rf-status--success">synced</span>
+                  <span class="rf-badge">Development persona</span>
+                  <span class="rf-badge">Author ▾</span>
+                </div>
+              </div>
+              <p class="ug-figure__caption">
+                The <em>synced</em> pill beside it is decorative in this release
+                — it always says <em>synced</em> and does not report anything
+                real.
+              </p>
+            </div>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Choose</th>
+                    <th scope="col">To do this</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Author</td>
+                    <td>
+                      Upload a curriculum package, watch it validate, read the
+                      receipt, and retry validation if it stalls.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Reviewer</td>
+                    <td>
+                      Preview a draft, acknowledge warnings, approve or reject a
+                      specific version, and compare published versions.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Administrator</td>
+                    <td>
+                      Publish an approved version, assign it to a learner,
+                      compare versions, and retire a version.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Auditor</td>
+                    <td>
+                      Read the lifecycle history and operational evidence. An
+                      auditor can change nothing at all.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Learner</td>
+                    <td>
+                      Open the learning assigned to you and work through
+                      courses, lessons, and source context.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>How to switch</h3>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Open the persona menu</span>
+                <p>
+                  Click the menu labelled
+                  <strong>Development persona</strong> in the header, or reach
+                  it with <kbd>Tab</kbd> and open it with the keyboard.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Pick a role</span>
+                <p>
+                  The change takes effect immediately. There is no confirmation
+                  step, no reload, and no sign-out.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Watch the page change</span>
+                <p>
+                  The current page re-fetches its data as the new persona, so
+                  buttons appear and disappear as you switch. This is the
+                  fastest way to understand the permission model — walk one
+                  curriculum through the lifecycle, switching persona at each
+                  stage.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    Switching to <strong>Learner</strong> while looking at the
+                    Curricula page leaves only the upload panel visible.
+                    Switching to <strong>Auditor</strong> removes every action
+                    except <em>Inspect lifecycle history</em>.
+                  </div>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <section class="ug-section" id="how-it-works">
+            <h2>What your persona actually controls</h2>
+            <p>
+              Your selection is remembered in your browser and attached to every
+              request RepoFluent makes. Three consequences follow, and they
+              explain most of the surprises people hit in their first hour.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>It is per browser</dt>
+                <dd>
+                  The choice is stored locally in the browser you are using,
+                  under the key <code>repofluent-development-persona</code>. A
+                  different browser, a different profile, or a private window
+                  starts again as the default. Clearing site data resets it.
+                </dd>
+              </div>
+              <div>
+                <dt>It is enforced by the server, not hidden by the page</dt>
+                <dd>
+                  RepoFluent does not merely hide buttons you should not press.
+                  The API refuses the action too. If you construct a request you
+                  are not entitled to make, you get a refusal rather than a
+                  result.
+                </dd>
+              </div>
+              <div>
+                <dt>Everyone shares one workspace</dt>
+                <dd>
+                  All five personas operate inside the same single tenant. A
+                  package you upload as Author is the same package you review as
+                  Reviewer a moment later. That is what makes it possible to
+                  walk the whole lifecycle alone.
+                </dd>
+              </div>
+            </dl>
+            <h3>The only learner that exists</h3>
+            <p>
+              There is exactly one learner in the directory:
+              <strong>Maya Quinn</strong>. When an administrator assigns
+              learning, Maya is the only choice in the list. When you switch to
+              the <strong>Learner</strong> persona, you are Maya. There is no
+              user management, no groups, and no way to add a second learner in
+              this release.
+            </p>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>Preview limitation</strong>
+                <p>
+                  Personas are available only when the instance is running in a
+                  development, test, or acceptance-test configuration. If an
+                  operator starts RepoFluent in any other configuration, the
+                  persona menu stops working and every protected request is
+                  refused. That is intentional: these identities must never
+                  reach a real deployment.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="where-next">
+            <h2>Where you land</h2>
+            <p>
+              Whatever persona you choose, the address opens the
+              <strong>Curricula</strong> page — the governed content pipeline
+              where packages are uploaded, validated, reviewed, published, and
+              retired. If you are a learner, the page you want is
+              <strong>Learning</strong>, one click away in the left rail.
+            </p>
+            <p>
+              Next, learn the name of every part of the screen so the rest of
+              this guide can point at things precisely.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

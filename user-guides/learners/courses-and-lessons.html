@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Working through a RepoFluent course: outcomes, outline, every kind of lesson block, and how long lessons reveal themselves."
+    />
+    <title>Courses and lessons — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="For learners" data-page="learners/courses-and-lessons">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">For learners / 07</p>
+              <h1>Courses and lessons</h1>
+              <p class="ug-hero__lede">
+                A course is an ordered set of modules; a module is an ordered
+                set of lessons; a lesson is an ordered set of blocks. Everything
+                is deliberately linear, so there is always an obvious next thing
+                to read.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Learner</span></li>
+                <li><span class="rf-badge">Reviewer</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-07</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="course-page">
+            <h2>The course page</h2>
+            <p>
+              Pressing <strong>Start course</strong> brings you here. The page
+              has four parts.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Header</dt>
+                <dd>
+                  A <strong>← My learning</strong> link back to your dashboard,
+                  an <em>assigned</em> pill confirming this course really is
+                  assigned to you, and the course's difficulty and estimated
+                  minutes.
+                </dd>
+              </div>
+              <div>
+                <dt>Title and description</dt>
+                <dd>The author's summary of what the course covers.</dd>
+              </div>
+              <div>
+                <dt>Course outcomes</dt>
+                <dd>
+                  A checklist of the objectives you should be able to
+                  demonstrate when you finish. These are the units RepoFluent is
+                  designed to report against, so they are worth reading before
+                  you start rather than after.
+                </dd>
+              </div>
+              <div>
+                <dt>Course outline</dt>
+                <dd>
+                  Every module, and inside each module the numbered lessons with
+                  their individual estimated minutes. Each lesson title is a
+                  link. This outline is your position marker — since progress is
+                  not saved, note where you stopped.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              If the page shows <strong>Course unavailable</strong>, either the
+              course is not assigned to you or the version has been withdrawn.
+              See
+              <a href="../advanced/troubleshooting.html">Troubleshooting</a>.
+            </p>
+          </section>
+
+          <section class="ug-section" id="lesson-page">
+            <h2>The lesson page</h2>
+            <p>
+              A lesson opens with its estimated reading time, its title, and a
+              <strong>By the end, you can</strong> panel listing the specific
+              objectives this lesson serves. Then comes the body: a sequence of
+              blocks.
+            </p>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong
+                  >Preview limitation — the Rendered / Source toggle</strong
+                >
+                <p>
+                  At the top of every lesson there is a pair of controls reading
+                  <em>Rendered</em> and <em>Source</em>, and a
+                  <em>source verified</em> pill. The toggle is decorative — it
+                  is not a button and pressing it does nothing. There is no
+                  raw-source view of a lesson in this release. To see the code
+                  behind an explanation, use a code reference block instead,
+                  described on
+                  <a href="source-context.html">Reading source context</a>.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="blocks">
+            <h2>The eight kinds of lesson block</h2>
+            <p>
+              RepoFluent renders a fixed, allow-listed set of block types.
+              Nothing else is permitted — a package cannot introduce arbitrary
+              markup, scripts, or remote content, which is why lessons are safe
+              to read even though they were generated by an agent.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Block</th>
+                    <th scope="col">Looks like</th>
+                    <th scope="col">What to do with it</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Prose</td>
+                    <td>A plain paragraph.</td>
+                    <td>Read it. This is the bulk of a lesson.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Callout</td>
+                    <td>
+                      An indented aside with a bold title and an
+                      <span aria-hidden="true">↳</span> mark.
+                    </td>
+                    <td>
+                      Something the author thought you would otherwise miss.
+                      Worth slowing down for.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Diagram</td>
+                    <td>
+                      A chain of labelled nodes with a
+                      <strong>described</strong> badge and a caption.
+                    </td>
+                    <td>
+                      Read the caption — it carries the meaning. The diagram is
+                      decorative and has a hidden text alternative for screen
+                      readers, so nothing is lost if you cannot see it.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Code reference</td>
+                    <td>
+                      A pressable row showing a symbol name, a line range, and a
+                      language, with an <strong>open</strong> badge.
+                    </td>
+                    <td>
+                      Press it to open the actual source. See
+                      <a href="source-context.html">Reading source context</a>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Code tour</td>
+                    <td>
+                      A numbered list of steps, each with guidance, a repository
+                      and path, and a branch, commit, symbol, and line range.
+                    </td>
+                    <td>
+                      Follow the steps in order. A tour walks one behavior
+                      across several files, which is the fastest way to
+                      understand a flow.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Example</td>
+                    <td>A titled section of worked explanation.</td>
+                    <td>A concrete case for the concept just described.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Glossary link</td>
+                    <td>A term and its definition, inline.</td>
+                    <td>
+                      Definitions come to you rather than making you leave the
+                      lesson to look them up.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Knowledge check</td>
+                    <td>
+                      A boxed question mark, a prompt, and a line reading
+                      <em>Assessment · &lt;identifier&gt;</em>.
+                    </td>
+                    <td>
+                      Read the prompt and answer it in your head — see the
+                      limitation below.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong
+                  >Preview limitation — you cannot answer a knowledge
+                  check</strong
+                >
+                <p>
+                  Knowledge-check blocks display the question and the identifier
+                  of the assessment it belongs to, and nothing more. There are
+                  no answer options, no submit control, no scoring, and no
+                  feedback. Quizzes and tests are fully modelled in the
+                  curriculum package and validated on upload, but the interface
+                  for taking one has not been built. Nothing you do in a lesson
+                  is scored or recorded.
+                </p>
+              </div>
+            </div>
+            <h3>If a block cannot be shown</h3>
+            <p>
+              Occasionally you may see a red box reading
+              <strong>Unsupported lesson block</strong> with the support code
+              <code>LEX-BLOCK-UNSUPPORTED</code>. It means the package used a
+              block type this version of RepoFluent does not render. The rest of
+              the lesson is unaffected. Quote that code and the lesson title
+              when you report it.
+            </p>
+          </section>
+
+          <section class="ug-section" id="long-lessons">
+            <h2>Long lessons reveal themselves in batches</h2>
+            <p>
+              A lesson with more than ten blocks does not render all at once —
+              this keeps very long lessons fast to open. You will see a footer
+              reading
+              <em>Showing 10 of 33 lesson blocks</em> and a button reading
+              <strong>Show 10 more lesson blocks</strong>.
+            </p>
+            <ul>
+              <li>
+                Each press reveals up to ten more blocks. The final press
+                reveals however many remain and the button disappears.
+              </li>
+              <li>
+                Keyboard focus moves to the first newly revealed block, so you
+                continue reading from exactly the right place instead of being
+                dropped back at the top.
+              </li>
+              <li>
+                The count is announced to assistive technology as it changes.
+              </li>
+            </ul>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>Use the browser's own find</strong>
+                <p>
+                  Because hidden blocks are genuinely not on the page, your
+                  browser's find-in-page will not match text you have not
+                  revealed yet. If you are searching for something specific in a
+                  long lesson, reveal everything first.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

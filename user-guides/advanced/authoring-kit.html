@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Using the RepoFluent authoring kit: downloading it, bounding scope, checking evidence, generating stable identifiers, and validating offline."
+    />
+    <title>The authoring kit — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Advanced" data-page="advanced/authoring-kit">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Advanced / 20</p>
+              <h1>The authoring kit</h1>
+              <p class="ug-hero__lede">
+                The kit is everything an agent needs to turn approved source
+                material into a valid curriculum package, plus the tools to
+                prove the package is valid before it leaves your environment. It
+                runs entirely offline and needs no network access at any point.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Author</span></li>
+                <li>
+                  <span class="rf-status rf-status--info"
+                    >Node.js 22 or later</span
+                  >
+                </li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-20</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="getting-it">
+            <h2>Getting the kit</h2>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>This page has no navigation link either</strong>
+                <p>
+                  Add <code>/authoring-kit</code> to your instance address. No
+                  persona is required.
+                </p>
+              </div>
+            </div>
+            <p>
+              The page shows one release — kit <strong>0.1.0</strong> — with a
+              version grid covering the kit, the contract it targets, the
+              validator it bundles, and the runtime it needs. An
+              <strong>Offline ready</strong> boundary states that network access
+              is optional and disabled, alongside the release checksum.
+            </p>
+            <p>
+              Below that, the page states how many portable artifacts the
+              release contains and lists every one of them — several dozen —
+              with a download link, its path inside the release, and its hash.
+              Download what you need and check the hashes. The table groups into
+              the following.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">In the kit</th>
+                    <th scope="col">Purpose</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>AGENTS.md</code></td>
+                    <td>
+                      The instructions an authoring agent must follow, including
+                      scope, access, exclusions, and secret handling.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>prompts/generate-curriculum.md</code></td>
+                    <td>A reusable generation prompt.</td>
+                  </tr>
+                  <tr>
+                    <td><code>skills/repofluent-authoring/SKILL.md</code></td>
+                    <td>The packaged authoring skill.</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>contracts/curriculum.schema.json</code>,
+                      <code>contracts/ICD.md</code>
+                    </td>
+                    <td>
+                      The same schema and interface document published with the
+                      contract release.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>guides/</code></td>
+                    <td>
+                      Local validation, citations and uncertainty, stable
+                      generation, and the C# and Angular analysis profiles.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>examples/</code></td>
+                    <td>
+                      Valid, warning-producing, and invalid packages, plus
+                      scope, evidence, identity, generation, and analysis
+                      inputs, and sample repositories.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>scripts/</code></td>
+                    <td>The tools described below.</td>
+                  </tr>
+                  <tr>
+                    <td><code>checksums.sha256</code></td>
+                    <td>Hashes for everything in the release.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Verify what you downloaded</h3>
+            <div class="ug-figure" data-copy-source>
+              <div class="ug-figure__head">
+                <span>From the release directory</span>
+                <button
+                  class="ug-copy-button"
+                  type="button"
+                  data-copy="node scripts/verify-release.mjs"
+                >
+                  Copy command
+                </button>
+              </div>
+              <div class="ug-figure__body">
+                <p><code>node scripts/verify-release.mjs</code></p>
+              </div>
+              <p class="ug-figure__caption">
+                Checks every declared artifact against its recorded hash. Run
+                this first; a kit that does not verify should not be used.
+              </p>
+            </div>
+          </section>
+
+          <section class="ug-section" id="workflow">
+            <h2>The authoring workflow</h2>
+            <p>
+              The kit's tools are meant to run in order. Each one gates the
+              next, so a problem is found at the earliest point where it can
+              still be cheap to fix. All of them read only the files you name.
+            </p>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title"
+                  >Bound the scope, before reading anything</span
+                >
+                <p>
+                  <code>node scripts/preflight.mjs &lt;scope.json&gt;</code>
+                </p>
+                <p>
+                  Resolves the repository's own policy files from the root down
+                  to each directory, applies your explicit exclusions, requires
+                  a declared repository revision and document scope, and scans
+                  the resulting file set for suspected credentials.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">Why this runs first</span>
+                    It is deny-by-default: nothing is in scope unless it was
+                    declared. If a suspected credential is found, preflight
+                    stops — and the report gives you the path and a code but
+                    <strong>never reproduces the value</strong>, so the report
+                    itself is safe to share.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Check the evidence and the uncertainty</span
+                >
+                <p>
+                  <code
+                    >node scripts/validate-evidence.mjs &lt;evidence.json&gt;
+                    &lt;scope.json&gt;</code
+                  >
+                </p>
+                <p>
+                  Reruns preflight, then binds every citation to a repository
+                  revision, an effective path, a file hash, and a line range. It
+                  also requires that material uncertainty stays visible in the
+                  package rather than being smoothed away.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <circle cx="10" cy="10" r="7" />
+                    <path d="M10 9v5M10 6h.01" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label"
+                      >This is the honesty gate</span
+                    >
+                    A conflict between sources that is not represented in the
+                    package is blocking. An agent is not permitted to pick a
+                    side silently.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Verify the ecosystem analysis</span
+                >
+                <p>
+                  <code
+                    >node scripts/verify-ecosystem-analysis.mjs dotnet
+                    &lt;analysis.json&gt;</code
+                  ><br />
+                  <code
+                    >node scripts/verify-ecosystem-analysis.mjs angular
+                    &lt;analysis.json&gt;</code
+                  >
+                </p>
+                <p>
+                  Each ecosystem profile defines eleven categories of evidence.
+                  Verification confirms the analysis is resolved from supplied
+                  source rather than inferred — for example, an Angular flow
+                  step with no supporting source evidence is blocking.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Generate stable identifiers</span>
+                <p>
+                  <code
+                    >node scripts/generate-identities.mjs
+                    &lt;identities.json&gt;</code
+                  >
+                </p>
+                <p>
+                  Identifiers are derived from semantics, not from display
+                  titles. Rewording a lesson keeps its identity, which is what
+                  makes version comparison meaningful later. A semantic-key
+                  collision is reported and blocks, rather than one entity
+                  quietly overwriting another.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Validate the package</span>
+                <p>
+                  <code
+                    >node scripts/validate.mjs &lt;package.json&gt; --contract
+                    auto --format json --threshold warning</code
+                  >
+                </p>
+                <p>
+                  This is the same validation RepoFluent applies, reporting the
+                  same stable codes. Options: <code>--contract</code> takes
+                  <code>auto</code> or <code>0.1.0</code>;
+                  <code>--format</code> takes <code>json</code> or
+                  <code>text</code>; <code>--threshold</code> takes
+                  <code>info</code>, <code>warning</code>, or
+                  <code>error</code> and hides lower severities without changing
+                  whether the package is valid.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Finalize the generation manifest</span
+                >
+                <p>
+                  <code
+                    >node scripts/finalize-generation.mjs &lt;run.json&gt;
+                    &lt;package.json&gt;</code
+                  >
+                </p>
+                <p>
+                  Produces a manifest binding the tool, model, version, source
+                  snapshot, time, package checksum, options, and validation
+                  result. The fields are allow-listed: no hidden reasoning, no
+                  credentials, and no full prompts can end up in it.
+                </p>
+              </li>
+            </ol>
+          </section>
+
+          <section class="ug-section" id="exit-statuses">
+            <h2>Validator exit statuses</h2>
+            <p>
+              The statuses are deterministic, which is what makes the validator
+              safe to put in a build. Note that a warning is <em>not</em> a
+              failure — it exits 3, distinctly from both success and failure, so
+              you can decide your own policy.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Status</th>
+                    <th scope="col">Outcome</th>
+                    <th scope="col">Meaning and what to do</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>0</code></td>
+                    <td><code>success</code></td>
+                    <td>
+                      Nothing at or above your threshold. Upload with
+                      confidence.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>3</code></td>
+                    <td><code>warnings-only</code></td>
+                    <td>
+                      Warnings without any blocking issue. The package will
+                      import, but a reviewer will have to acknowledge the exact
+                      warnings — so tell them what they are and why.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>1</code></td>
+                    <td><code>validation-failure</code></td>
+                    <td>
+                      A blocking issue. Fix it. RepoFluent would reject this
+                      package too.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>2</code></td>
+                    <td><code>invalid-invocation</code></td>
+                    <td>
+                      Your arguments or the package path are wrong. Nothing was
+                      validated — this is not a verdict on your content.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>4</code></td>
+                    <td><code>internal-failure</code></td>
+                    <td>
+                      The bundled validator could not start or finish. Re-verify
+                      the release; again, not a verdict on your content.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              JSON output contains <code>valid</code>, <code>outcome</code>,
+              <code>contractVersion</code>, <code>threshold</code>, and ordered
+              <code>issues</code>. Each issue carries a stable
+              <code>code</code>, a <code>severity</code>, whether it
+              <code>isBlocking</code>, a <code>path</code>, and a safe
+              <code>message</code>. Every code is explained on
+              <a href="../reference/validation-issues.html">Validation issues</a
+              >.
+            </p>
+            <div class="rf-callout rf-callout--success">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong
+                  >Nothing has to leave your environment to be checked</strong
+                >
+                <p>
+                  Every tool here runs locally with no network access, and the
+                  kit installs no dependencies. You can hold a package to the
+                  full contract before anyone outside your approved environment
+                  ever sees it. That is the point of the kit.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="policy-panels">
+            <h2>The five policy panels on the page</h2>
+            <p>
+              Beneath the artifact table the page presents five reference
+              panels. They are documentation, not controls — nothing on them is
+              interactive — and each one states the rule its corresponding
+              script enforces.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Scope preflight</dt>
+                <dd>
+                  Deny by default; repository policy resolved from root to
+                  directory; declared sources only; explicit exclusions; secret
+                  patterns stop analysis before it starts.
+                </dd>
+              </div>
+              <div>
+                <dt>Evidence ledger</dt>
+                <dd>
+                  Claims bound to snapshots, uncertainty recorded explicitly,
+                  unrepresented material conflicts blocked.
+                </dd>
+              </div>
+              <div>
+                <dt>Deterministic generation</dt>
+                <dd>
+                  Prose-independent identities for each entity kind, collisions
+                  stopped rather than merged, and a manifest that cannot leak
+                  private data.
+                </dd>
+              </div>
+              <div>
+                <dt>Local validation matrix</dt>
+                <dd>
+                  Contract auto-detection, JSON or text output, severity
+                  thresholds, and the distinct exit statuses above.
+                </dd>
+              </div>
+              <div>
+                <dt>Ecosystem analysis profiles</dt>
+                <dd>
+                  Eleven evidence categories each for C# and Angular, explicit
+                  uncertainty for dynamic registration, and a five-step trace
+                  from a user action to an API boundary.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              With a validated package in hand, the next step is
+              <a href="../authors/upload-a-package.html">Uploading a package</a
+              >.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

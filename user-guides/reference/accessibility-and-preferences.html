@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Keyboard operation, screen reader behavior, reduced motion, high zoom, and the display options RepoFluent honors."
+    />
+    <title>Accessibility and preferences — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body
+    data-category="Reference"
+    data-page="reference/accessibility-and-preferences"
+  >
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Reference / 15</p>
+              <h1>Accessibility and preferences</h1>
+              <p class="ug-hero__lede">
+                RepoFluent targets WCAG 2.2 AA for its critical flows and is
+                designed to be fully operable without a pointer. This page
+                covers what that means in practice, and the settings — yours and
+                the product's — that change how it behaves.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">All roles</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-15</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="keyboard">
+            <h2>Keyboard operation</h2>
+            <p>
+              Every control in RepoFluent is reachable and operable by keyboard,
+              and focus is always visible — a cyan outline is used for nothing
+              else, so if you see it, that is where you are.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>Tab</kbd> from page load</td>
+                    <td>
+                      Reveals <strong>Skip to content</strong>, which jumps past
+                      the banner, header, and navigation straight into the page.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <kbd>Ctrl</kbd> <kbd>K</kbd> or <kbd>⌘</kbd> <kbd>K</kbd>
+                    </td>
+                    <td>
+                      Opens the command search dialog. It traps focus while
+                      open. Note that the search itself is not implemented.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><kbd>Esc</kbd></td>
+                    <td>
+                      Closes the command search and returns focus to the button
+                      that opened it.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Back</strong></td>
+                    <td>
+                      Closes an open source-context panel in a lesson rather
+                      than leaving the lesson. See
+                      <a href="../learners/source-context.html"
+                        >Reading source context</a
+                      >.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Where focus goes, and why it matters</h3>
+            <ul>
+              <li>
+                <strong>On navigation</strong>, focus moves to the new page's
+                main heading. You are never dropped at the top of the document
+                to tab through the whole frame again.
+              </li>
+              <li>
+                <strong>On opening a dialog</strong>, focus moves inside it and
+                is contained there; on closing, it returns to the control you
+                used.
+              </li>
+              <li>
+                <strong>On opening source context</strong>, focus moves into the
+                panel; on closing, it returns to the code reference you pressed.
+              </li>
+              <li>
+                <strong>On revealing more lesson blocks</strong>, focus moves to
+                the first newly revealed block, so you resume reading in the
+                right place.
+              </li>
+            </ul>
+          </section>
+
+          <section class="ug-section" id="screen-readers">
+            <h2>Screen readers and announcements</h2>
+            <p>
+              RepoFluent announces things that happen without your involvement,
+              which is most of what makes the upload flow usable non-visually.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Page changes</dt>
+                <dd>
+                  Announced as <em>&lt;Heading&gt; page loaded</em> after every
+                  navigation.
+                </dd>
+              </div>
+              <div>
+                <dt>Curriculum operations</dt>
+                <dd>
+                  A live region named
+                  <em>Curriculum operation status</em> reports selection,
+                  upload, validation, success, and failure as they happen. You
+                  can follow an entire upload by listening.
+                </dd>
+              </div>
+              <div>
+                <dt>The warning gate</dt>
+                <dd>
+                  A region named
+                  <em>Warning acknowledgement status</em> announces the change
+                  from <em>Acknowledgement required</em> to
+                  <em>Warnings acknowledged</em>.
+                </dd>
+              </div>
+              <div>
+                <dt>Blocking issues</dt>
+                <dd>
+                  The issues table is announced as an alert when it contains
+                  blocking errors, and as an ordinary region when it contains
+                  only warnings.
+                </dd>
+              </div>
+              <div>
+                <dt>Field errors</dt>
+                <dd>
+                  The upload field's error message is programmatically
+                  associated with the field, so it is read out with the field
+                  rather than being visual only.
+                </dd>
+              </div>
+              <div>
+                <dt>Lesson progress</dt>
+                <dd>
+                  <em>Showing 10 of 33 lesson blocks</em> is announced as the
+                  count changes.
+                </dd>
+              </div>
+              <div>
+                <dt>The development banner</dt>
+                <dd>
+                  Announced as a status, so you know you are in a non-production
+                  environment.
+                </dd>
+              </div>
+            </dl>
+            <h3>Visual content always has a text equivalent</h3>
+            <ul>
+              <li>
+                <strong>Lesson diagrams</strong> are decorative and carry both a
+                hidden text alternative and a visible caption. The caption
+                carries the meaning.
+              </li>
+              <li>
+                <strong>The system map</strong> has an
+                <em>Accessible relationship companion</em> — a table of every
+                relationship with its direction and status, whose cells are
+                buttons that select the same node the graph would. It is a full
+                equivalent, not a summary, and it is always present rather than
+                being a fallback.
+              </li>
+              <li>
+                <strong>Status is never colour alone.</strong> Every status pill
+                carries a word as well as a colour, and severity in the issues
+                table is a column, not a shade.
+              </li>
+            </ul>
+          </section>
+
+          <section class="ug-section" id="motion">
+            <h2>Reduced motion</h2>
+            <p>
+              If your operating system or browser is set to reduce motion,
+              RepoFluent detects it and reduces every animation to effectively
+              nothing. Two guarantees come with that.
+            </p>
+            <ul>
+              <li>
+                <strong>State changes remain immediate.</strong> Nothing is only
+                visible partway through a transition, and you never wait out an
+                animation to see a result.
+              </li>
+              <li>
+                <strong>Nothing is hidden.</strong> Reducing motion removes
+                movement, not information.
+              </li>
+            </ul>
+            <p>
+              Your reduced-motion preference also takes precedence over the
+              product's own visual enhancements, including the graphical system
+              map.
+            </p>
+          </section>
+
+          <section class="ug-section" id="zoom">
+            <h2>Zoom and small windows</h2>
+            <p>
+              Zooming a browser to 200% is equivalent to halving the window
+              width, so RepoFluent's responsive layout is what makes high zoom
+              work.
+            </p>
+            <ul>
+              <li>
+                Interactive controls stay visible and operable at high zoom —
+                nothing is clipped or pushed off screen.
+              </li>
+              <li>
+                The page never scrolls sideways. Wide content such as tables and
+                code excerpts scrolls inside its own frame instead.
+              </li>
+              <li>
+                Below tablet width the workspace explorer is dropped; on a
+                phone-sized window navigation moves to the bottom and source
+                context becomes a drawer.
+              </li>
+            </ul>
+          </section>
+
+          <section class="ug-section" id="query-parameters">
+            <h2>Diagnostic and display options</h2>
+            <p>
+              RepoFluent accepts a few options in the address bar. They are
+              intended for checking that fallbacks work, and they are genuinely
+              useful if you are assessing the product's accessibility or
+              explaining a problem to somebody.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Add to the address</th>
+                    <th scope="col">Effect</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>?theme=tenant</code></td>
+                    <td>
+                      Switches to the alternative tenant colour theme. Contrast
+                      and focus visibility are held to the same standard in
+                      both.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>?gpu=off</code></td>
+                    <td>
+                      Turns off graphical acceleration for the system map. It
+                      falls back to the semantic view and reports the reason as
+                      <em>policy-disabled</em>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>?gpu=fail</code></td>
+                    <td>
+                      Simulates acceleration failing to start. The same fallback
+                      applies and reports <em>initialization-failed</em>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>?browser=unsupported</code></td>
+                    <td>
+                      Shows the browser compatibility guidance and the
+                      reduced-effects safe-access mode, so you can see what an
+                      unsupported browser gets.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>?source=&lt;number&gt;</code></td>
+                    <td>
+                      On a lesson, opens a particular code reference's source
+                      context. This is added for you when you open one, which is
+                      what makes the address shareable.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              This guide has its own two controls in its header — a theme toggle
+              and a motion toggle — so you can see the same token system
+              RepoFluent uses without opening the application.
+            </p>
+          </section>
+
+          <section class="ug-section" id="reporting">
+            <h2>Reporting an accessibility problem</h2>
+            <p>
+              Accessibility defects are treated as defects, not preferences.
+              When you report one, include:
+            </p>
+            <ul>
+              <li>The page and the exact control.</li>
+              <li>
+                Your browser, your assistive technology and its version, and
+                your zoom level.
+              </li>
+              <li>
+                Whether reduced motion was on, and whether you had used any of
+                the diagnostic options above.
+              </li>
+              <li>
+                The correlation identifier if the problem involved a failed
+                action — see
+                <a href="lifecycle-and-evidence.html#identifiers">Identifiers</a
+                >.
+              </li>
+            </ul>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

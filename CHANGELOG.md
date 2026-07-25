@@ -4,6 +4,10 @@
 
 ### Added
 
+- Static end-user guide in `user-guides/` covering prerequisites, first sign-in,
+  the workspace, an end-to-end walkthrough, per-role tasks, validation-code and
+  lifecycle reference, and advanced governance workflows, with drift-gated
+  design-system branding and an Azure Static Web Apps deployment job.
 - Governed curriculum upload, validation, preview, approval, publication, and
   direct learner assignment.
 - Assigned-learning home, course outline, safe lesson blocks, and source-code

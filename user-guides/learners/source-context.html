@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Opening the source code behind a lesson: the split view, the drawer, provenance, and how to close it without losing your place."
+    />
+    <title>Reading source context — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="For learners" data-page="learners/source-context">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">For learners / 08</p>
+              <h1>Reading source context</h1>
+              <p class="ug-hero__lede">
+                This is the feature RepoFluent exists for: moving from an
+                explanation to the exact code it describes, at the exact
+                revision it described, without leaving the lesson.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Learner</span></li>
+                <li><span class="rf-badge">Reviewer</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-08</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="opening">
+            <h2>Opening it</h2>
+            <p>
+              Inside a lesson, a <strong>code reference</strong> block looks
+              like a pressable row: a symbol name in bold, a line range and
+              language underneath, and an <strong>open</strong> badge on the
+              right. Its accessible name is
+              <em>Open source context for &lt;symbol&gt;</em> — for example
+              <em>Open source context for OrderController.Create</em>.
+            </p>
+            <p>
+              Press it, and one of two things happens depending on your screen.
+            </p>
+            <div class="ug-grid">
+              <div class="rf-card">
+                <div class="rf-card__header">
+                  <span>WIDE SCREEN</span><span>split</span>
+                </div>
+                <div class="rf-card__body">
+                  <p>
+                    The lesson narrows and the source appears beside it. You can
+                    read the explanation and the code at the same time, which is
+                    the point.
+                  </p>
+                </div>
+              </div>
+              <div class="rf-card">
+                <div class="rf-card__header">
+                  <span>NARROW SCREEN</span><span>drawer</span>
+                </div>
+                <div class="rf-card__body">
+                  <p>
+                    The source slides in over the lesson as a drawer. Your
+                    scroll position in the lesson is kept, so closing it returns
+                    you exactly where you were.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p>
+              Either way, keyboard focus moves into the source panel so you can
+              read it immediately, and the code reference you pressed stays
+              marked as the active one.
+            </p>
+          </section>
+
+          <section class="ug-section" id="reading">
+            <h2>What the panel tells you</h2>
+            <p>
+              The panel is headed <strong>Source context</strong> and has five
+              parts, top to bottom.
+            </p>
+            <ol class="ug-anatomy">
+              <li>
+                <span
+                  ><strong>Language and symbol</strong> — for example
+                  <code>csharp · OrderController.Create</code> — with the close
+                  control.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>The path</strong>, repository-relative, such as
+                  <code>src/Order.Api/Controllers/OrderController.cs</code>. It
+                  is never an author's local absolute path.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Source location</strong> — the branch and commit the
+                  excerpt was taken from, the line range, the language, and the
+                  content classification.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>The excerpt itself</strong>, read-only, starting at
+                  the line number shown.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Provenance · verified</strong> — a green note stating
+                  where this evidence came from and what it is being used to
+                  explain.</span
+                >
+              </li>
+            </ol>
+            <h3>Why the commit matters</h3>
+            <p>
+              The excerpt is bound to a specific revision. It is what the code
+              looked like when the curriculum was generated, not what it looks
+              like on your branch right now. That is a feature: the explanation
+              and the code you are reading always agree with each other.
+            </p>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>Check the commit before you act on it</strong>
+                <p>
+                  If the branch and commit shown are old, the file may have
+                  moved or changed since. Use the excerpt to understand the
+                  design, then look at the current file in your own tools.
+                  Keeping content fresh is the authors' job, and it is why
+                  versions get compared and retired — see
+                  <a href="../advanced/compare-versions.html"
+                    >Comparing versions</a
+                  >.
+                </p>
+              </div>
+            </div>
+            <h3>Read-only, and only what was supplied</h3>
+            <p>
+              You cannot edit code here, and you are not browsing a repository.
+              You are seeing the specific excerpt the curriculum package
+              supplied, with its classification recorded. RepoFluent
+              deliberately stores the minimum amount of source needed for the
+              lesson to make sense.
+            </p>
+          </section>
+
+          <section class="ug-section" id="closing">
+            <h2>Closing it</h2>
+            <p>
+              There are two ways, and they behave slightly differently on
+              purpose.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>The close control</dt>
+                <dd>
+                  The <span aria-hidden="true">×</span> button labelled
+                  <em>Close source context</em>. Focus returns to the code
+                  reference you pressed, so you carry on reading from the same
+                  spot.
+                </dd>
+              </div>
+              <div>
+                <dt>The browser Back button</dt>
+                <dd>
+                  Opening source context adds an entry to your browser history,
+                  so
+                  <strong>Back</strong> closes the panel rather than leaving the
+                  lesson. This is what most people reach for, and it works.
+                </dd>
+              </div>
+            </dl>
+            <h3>The address bar changes, and that is useful</h3>
+            <p>
+              While the panel is open the address gains a
+              <code>?source=</code> parameter identifying which reference is
+              open. That means you can copy the address and send it to a
+              colleague, and they will open the same lesson with the same source
+              excerpt already showing. Bookmarking it works the same way.
+            </p>
+            <div class="rf-callout rf-callout--success">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong>Fully keyboard operable</strong>
+                <p>
+                  Every code reference is a real button, focus moves into the
+                  panel when it opens and back to the reference when it closes,
+                  and
+                  <kbd>Esc</kbd> or <strong>Back</strong> will get you out.
+                  Nothing here requires a pointer.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="tours">
+            <h2>Code tours: several references in order</h2>
+            <p>
+              A <strong>code tour</strong> block is a numbered walk through one
+              behavior across several files. Each step shows its own guidance,
+              repository and path, and branch, commit, symbol, and line range,
+              so a tour is readable straight through without opening anything.
+            </p>
+            <p>
+              Tours keep your course context: you are still inside the lesson,
+              moving down a list, rather than being sent off to a separate
+              viewer. If a tour has a companion code reference block, use that
+              to see the excerpt for a particular step.
+            </p>
+          </section>
+
+          <section class="ug-section" id="not-there">
+            <h2>What is not here</h2>
+            <ul>
+              <li>
+                No file tree and no repository browser. You see referenced
+                excerpts, not whole repositories.
+              </li>
+              <li>
+                No links out to a hosted repository provider. RepoFluent does
+                not connect to one in this release.
+              </li>
+              <li>
+                No search across code. The
+                <kbd>Ctrl</kbd> <kbd>K</kbd> command search in the header does
+                not search anything yet.
+              </li>
+              <li>
+                No syntax colouring guarantees beyond what the excerpt supplies;
+                the excerpt is presented faithfully and read-only.
+              </li>
+            </ul>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

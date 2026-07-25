@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="The complete RepoFluent permission matrix: which persona can take which action at which lifecycle state, and why a button is missing."
+    />
+    <title>Roles and permissions — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Reference" data-page="reference/roles-and-permissions">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Reference / 14</p>
+              <h1>Roles and permissions</h1>
+              <p class="ug-hero__lede">
+                RepoFluent decides which controls to offer you from two facts:
+                your persona, and the current lifecycle state. That is the
+                entire model. If a button is not there, one of those two is the
+                reason, and this page will tell you which.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">All roles</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-14</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="matrix">
+            <h2>The matrix</h2>
+            <p>
+              Each row is an action. It is offered to you only if your persona
+              is listed <em>and</em> the curriculum is in one of the states
+              listed.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Action</th>
+                    <th scope="col">Button</th>
+                    <th scope="col">Persona</th>
+                    <th scope="col">Required state</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Upload a package</td>
+                    <td>Upload and validate</td>
+                    <td>Author</td>
+                    <td>Any — this is what creates an import</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Inspect the contract model
+                    </td>
+                    <td>Inspect contract model</td>
+                    <td>Author, Reviewer, Administrator</td>
+                    <td>Draft or Approved</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Preview as a learner</td>
+                    <td>Preview draft</td>
+                    <td>Reviewer</td>
+                    <td>Draft or Approved</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Acknowledge warnings</td>
+                    <td>Acknowledge exact warnings</td>
+                    <td>Reviewer</td>
+                    <td>Draft, with unacknowledged warnings</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Approve or reject</td>
+                    <td>Approve / Reject this checksum</td>
+                    <td>Reviewer</td>
+                    <td>Draft, with no outstanding warning gate</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Publish</td>
+                    <td>Publish version</td>
+                    <td>Administrator</td>
+                    <td>Approved</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Assign a learner</td>
+                    <td>Assign learner</td>
+                    <td>Administrator</td>
+                    <td>Published and active</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Retire a version</td>
+                    <td>Retire version</td>
+                    <td>Administrator</td>
+                    <td>Published</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Compare versions</td>
+                    <td>Compare versions</td>
+                    <td>Reviewer, Administrator</td>
+                    <td>Published or Retired</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Read lifecycle history</td>
+                    <td>Inspect lifecycle history</td>
+                    <td>Author, Administrator, Auditor</td>
+                    <td>Any</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Retry validation</td>
+                    <td>Retry validation</td>
+                    <td>Author, Administrator</td>
+                    <td>Validating, and stale for over five minutes</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Open assigned learning</td>
+                    <td>Start course</td>
+                    <td>Learner</td>
+                    <td>Assigned to you</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>Note the two surprises</strong>
+                <p>
+                  A <strong>Reviewer</strong> cannot read the lifecycle history,
+                  and an <strong>Author</strong> does not get the
+                  <em>Preview draft</em> button — an author uses
+                  <em>Inspect contract model</em> instead, which shows the whole
+                  package rather than one rendered lesson. Both are deliberate.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="by-persona">
+            <h2>By persona</h2>
+            <p>
+              The same information read the other way round, which is more
+              useful when you are deciding which persona to switch to.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Author</dt>
+                <dd>
+                  Upload. Read import status, validation evidence, and lifecycle
+                  history. Inspect the contract model. Retry stale validation.
+                  <br /><strong>Cannot:</strong> acknowledge, approve, reject,
+                  publish, assign, retire, compare, or open the learner preview.
+                </dd>
+              </div>
+              <div>
+                <dt>Reviewer</dt>
+                <dd>
+                  Read import status. Inspect the contract model. Preview as a
+                  learner. Acknowledge exact warnings. Approve or reject a
+                  checksum. Compare published versions.
+                  <br /><strong>Cannot:</strong> upload, publish, assign,
+                  retire, retry validation, or read the lifecycle history.
+                </dd>
+              </div>
+              <div>
+                <dt>Administrator</dt>
+                <dd>
+                  Read import status and lifecycle history. Inspect the contract
+                  model. Publish. Assign. Retire. Compare. Retry stale
+                  validation.
+                  <br /><strong>Cannot:</strong> upload, acknowledge warnings,
+                  approve, or reject. Publication is deliberately separated from
+                  approval.
+                </dd>
+              </div>
+              <div>
+                <dt>Auditor</dt>
+                <dd>
+                  Read import status and the complete lifecycle history. Nothing
+                  else at all — no preview, no contract model, no decisions, no
+                  publication, no assignment. This is a genuine read-only role,
+                  not a role with restrictions.
+                </dd>
+              </div>
+              <div>
+                <dt>Learner</dt>
+                <dd>
+                  List your own assignments and open the courses, lessons, and
+                  source context they contain. Nothing on the Curricula page.
+                  You cannot see another learner's record, and there is no other
+                  learner to see.
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="ug-section" id="why-missing">
+            <h2>Why a button is missing</h2>
+            <p>
+              Work down this list; the first match is almost always the answer.
+            </p>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Check your persona</span>
+                <p>
+                  Look at the menu in the header. Switching persona is instant
+                  and the page re-fetches, so this takes five seconds to rule
+                  out.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Check the state</span>
+                <p>
+                  Read the status pill in panel <strong>02</strong>. Publishing
+                  needs <em>Approved</em>, not <em>Ready for review</em>.
+                  Comparing needs <em>Published</em>. Retrying needs a stale
+                  <em>Validating</em>.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Check for a gate</span>
+                <p>
+                  <strong>Approve this checksum</strong> is replaced by
+                  <strong>Acknowledge exact warnings</strong> while a warning is
+                  outstanding — the two are never both offered. Clear the gate
+                  and the approve button appears.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Check whether it already happened</span
+                >
+                <p>
+                  Review decisions and publications are one-time. If the
+                  evidence block is already there, the action is done and the
+                  button is gone for good.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Reload</span>
+                <p>
+                  If somebody else advanced the curriculum while your page was
+                  open, your page is out of date. Reload before concluding
+                  anything is wrong.
+                </p>
+              </li>
+            </ol>
+          </section>
+
+          <section class="ug-section" id="enforcement">
+            <h2>How the rules are enforced</h2>
+            <p>
+              The buttons you see are computed by the server, not decided by the
+              page. For each import, RepoFluent works out the list of actions
+              your persona may take in the current state and sends that list to
+              the page, which shows only those controls. Two consequences
+              matter.
+            </p>
+            <ul>
+              <li>
+                <strong>The interface cannot be tricked.</strong> Showing a
+                hidden button would not help — the API applies the same rules
+                and refuses.
+              </li>
+              <li>
+                <strong>Refusals are specific.</strong> A rejected action
+                returns a stable code and a correlation identifier rather than a
+                generic error, so you can tell a permission problem from a state
+                problem. See
+                <a href="../advanced/troubleshooting.html">Troubleshooting</a>.
+              </li>
+            </ul>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>What this model does not do yet</strong>
+                <p>
+                  Everything happens inside a single tenant with a single fixed
+                  set of five identities. There are no user accounts, no groups
+                  or teams, no way to grant one person two roles, no scoping of
+                  permissions to particular curricula or repositories, and no
+                  separation-of-duties rule stopping the same person from
+                  authoring and reviewing the same package. Those are design
+                  intentions, not present behavior.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

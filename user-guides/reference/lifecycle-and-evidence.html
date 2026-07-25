@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RepoFluent lifecycle states, the operational timeline, checksums, correlation identifiers, and what each evidence panel proves."
+    />
+    <title>Lifecycle and evidence — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Reference" data-page="reference/lifecycle-and-evidence">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Reference / 13</p>
+              <h1>Lifecycle and evidence</h1>
+              <p class="ug-hero__lede">
+                A curriculum moves through a fixed sequence of states, and every
+                transition leaves evidence that the next transition is bound to.
+                This page is the map: what each state means, what each evidence
+                panel proves, and which identifier to quote when you need help.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">All roles</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-13</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="states">
+            <h2>The states</h2>
+            <p>
+              The page header shows a strip reading
+              <em>Draft → Validate → Review → Publish → Retire</em>. The
+              underlying states are slightly more precise, and the status pill
+              in panel <strong>02</strong> names the one you are in.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">State</th>
+                    <th scope="col">Pill reads</th>
+                    <th scope="col">Meaning</th>
+                    <th scope="col">Next move</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Received</td>
+                    <td>Queued for validation</td>
+                    <td>
+                      Your bytes are accepted and have a checksum, but nothing
+                      has examined them yet.
+                    </td>
+                    <td>Wait. A worker picks it up automatically.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Validating</td>
+                    <td>Validating</td>
+                    <td>A worker is applying the eleven check categories.</td>
+                    <td>
+                      Wait. If it stays here over five minutes it is stale and
+                      can be retried.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">ValidationFailed</td>
+                    <td>Validation failed</td>
+                    <td>
+                      At least one blocking error. There is no draft and no way
+                      forward from here.
+                    </td>
+                    <td>
+                      The author fixes the package and uploads a new version.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Draft</td>
+                    <td>Ready for review</td>
+                    <td>
+                      Valid content imported, invisible to learners. Warnings
+                      may be outstanding.
+                    </td>
+                    <td>
+                      A reviewer previews, acknowledges warnings, and decides.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Approved</td>
+                    <td>Approved</td>
+                    <td>
+                      A reviewer has bound an approval to this exact checksum.
+                    </td>
+                    <td>An administrator publishes.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Rejected</td>
+                    <td>Rejected</td>
+                    <td>
+                      A reviewer refused these bytes, with a required rationale.
+                      Final.
+                    </td>
+                    <td>A new version. This one is finished.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Published</td>
+                    <td>Published</td>
+                    <td>
+                      One immutable version exists and is active for assignment.
+                    </td>
+                    <td>Assign it, compare it, or eventually retire it.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Retired</td>
+                    <td>Retired</td>
+                    <td>
+                      Withdrawn from new assignment. Existing assignments still
+                      work and the content is still resolvable.
+                    </td>
+                    <td>
+                      Nothing further. History is retained permanently. See
+                      <a href="../advanced/retire-a-version.html"
+                        >Retiring a version</a
+                      >.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>States only move forward</strong>
+                <p>
+                  There is no way back. Nothing is ever un-approved,
+                  un-published, or un-rejected. Correction always means a new
+                  version, which is what makes a learning record from six months
+                  ago still mean something.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="operations">
+            <h2>The lifecycle operations panel</h2>
+            <p>
+              Labelled <em>Lifecycle operational evidence</em>, this is the
+              fastest way to see where a curriculum has got to and whether it is
+              waiting on somebody. It has four parts.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Active stage and a pill</dt>
+                <dd>
+                  <strong>Action required</strong> means a person has to do
+                  something next. <strong>In control</strong> means the system
+                  is working and you should wait.
+                </dd>
+              </div>
+              <div>
+                <dt>Completed stage chips</dt>
+                <dd>
+                  Intake, Validation, Draft import, Review, Publication,
+                  Retirement. Each lights up as it completes, so you can see
+                  progress at a glance.
+                </dd>
+              </div>
+              <div>
+                <dt>A six-cell timeline</dt>
+                <dd>
+                  Intake recorded, Validation started, Validation completed,
+                  Review recorded, Publication recorded, Retirement recorded —
+                  each with a timestamp or a placeholder.
+                </dd>
+              </div>
+              <div>
+                <dt>Support correlation identifier</dt>
+                <dd>
+                  The value to quote when you report a problem. See
+                  <a href="#identifiers">Identifiers</a> below.
+                </dd>
+              </div>
+            </dl>
+            <h3>Reading the placeholders</h3>
+            <p>
+              An empty timeline cell tells you something specific rather than
+              nothing.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Placeholder</th>
+                    <th scope="col">Means</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>Awaiting worker</code></td>
+                    <td>
+                      Accepted but validation has not begun. If this persists,
+                      the background worker is not running.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>Not completed</code></td>
+                    <td>Validation started and has not finished.</td>
+                  </tr>
+                  <tr>
+                    <td><code>Not reviewed</code></td>
+                    <td>
+                      No review decision exists yet. A reviewer is the blocker.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>Not published</code></td>
+                    <td>
+                      No publication yet. If the state is Approved, an
+                      administrator is the blocker.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>Not retired</code></td>
+                    <td>Normal for live content.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>The failure callout</h3>
+            <p>
+              When something has gone wrong, this panel shows a failure code
+              with remediation text. Three codes appear here:
+            </p>
+            <ul>
+              <li>
+                <code>CLI_VALIDATION_STALE</code> — validation has been running
+                over five minutes. Press <strong>Retry validation</strong>.
+              </li>
+              <li>
+                <code>CLI_REVIEW_REJECTED</code> — a reviewer refused this
+                version. A new version is required.
+              </li>
+              <li>
+                The code of the first blocking validation issue — go to the
+                issues table and work through it. See
+                <a href="validation-issues.html">Validation issues</a>.
+              </li>
+            </ul>
+          </section>
+
+          <section class="ug-section" id="evidence">
+            <h2>What each evidence panel proves</h2>
+            <p>
+              Panel <strong>02</strong> grows as the curriculum advances. Each
+              block appears only once the corresponding thing has happened, so
+              their presence is itself information.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Block</th>
+                    <th scope="col">Appears when</th>
+                    <th scope="col">Proves</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Draft identity</td>
+                    <td>An import exists</td>
+                    <td>
+                      Which package and version this is, its opaque platform
+                      identifier, how many validation attempts have run, and
+                      whether this receipt is original or a replay.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Validation evidence</td>
+                    <td>Validation has completed</td>
+                    <td>
+                      Which contract and validator version judged the package,
+                      how many errors and warnings there were, that eleven
+                      categories were applied, and the checksum of the resulting
+                      issue set.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Review decision evidence</td>
+                    <td>A decision has been recorded</td>
+                    <td>
+                      Who decided, what they decided, which package checksum and
+                      which validation report they were looking at, whether
+                      warnings were acknowledged, and why.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Publication evidence</td>
+                    <td>A version has been published</td>
+                    <td>
+                      The version identity, who published it, the approved
+                      checksum it is bound to, the four immutability guarantees,
+                      the availability policy, and the publication event
+                      identifier.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Retirement evidence</td>
+                    <td>A version has been retired</td>
+                    <td>
+                      Who retired it and why, that no new assignments will be
+                      accepted, that existing assignments continue, and that
+                      historical content is retained.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Lifecycle audit evidence</td>
+                    <td>
+                      You press <strong>Inspect lifecycle history</strong>
+                    </td>
+                    <td>
+                      The complete ordered trail. See
+                      <a href="../advanced/audit-and-support.html"
+                        >Audit and support</a
+                      >.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="identifiers">
+            <h2>The identifiers, and which one you want</h2>
+            <p>
+              RepoFluent shows you several identifiers that look similar and are
+              not interchangeable. This table is the one worth remembering.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Identifier</th>
+                    <th scope="col">Chosen by</th>
+                    <th scope="col">Use it to</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Package identity</td>
+                    <td>The author's agent</td>
+                    <td>
+                      Recognize the same curriculum across regenerations and
+                      versions.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Package version</td>
+                    <td>The author</td>
+                    <td>
+                      Distinguish revisions of the same curriculum. Bumping it
+                      is how you resolve a byte conflict.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Content checksum</td>
+                    <td>Computed from your bytes</td>
+                    <td>
+                      Prove that what was reviewed is what was published.
+                      Approvals and acknowledgements are bound to it.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Issue-set checksum</td>
+                    <td>Computed from the validation result</td>
+                    <td>
+                      Prove which exact set of warnings a reviewer accepted.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Platform draft identifier</td>
+                    <td>RepoFluent</td>
+                    <td>
+                      Refer to this draft internally. It is opaque on purpose:
+                      an author cannot pick it, so an author cannot collide with
+                      anything.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Published version identity
+                    </td>
+                    <td>RepoFluent</td>
+                    <td>
+                      Compare versions and assign learning. Copy it when you
+                      publish — there is no picker to look it up later.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Correlation identifier</td>
+                    <td>RepoFluent, per request</td>
+                    <td>
+                      <strong>Report a problem.</strong> This is the one to
+                      quote. It lets an operator find the exact request in their
+                      records without you having to describe or send any
+                      content.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout rf-callout--success">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong
+                  >Quote the correlation identifier, not your content</strong
+                >
+                <p>
+                  Every response RepoFluent produces carries a correlation
+                  identifier, and every failure carries a stable code alongside
+                  it. Together they are enough for support to investigate, which
+                  means you never need to send a copy of your curriculum to get
+                  help.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

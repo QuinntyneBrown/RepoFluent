@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Symptom-first troubleshooting for RepoFluent: refused actions, missing buttons, stalled validation, and every workflow refusal code."
+    />
+    <title>Troubleshooting — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Advanced" data-page="advanced/troubleshooting">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Advanced / 21</p>
+              <h1>Troubleshooting</h1>
+              <p class="ug-hero__lede">
+                Start from what you see. Almost every problem in RepoFluent is
+                one of three things: you are the wrong persona, the curriculum
+                is in the wrong state, or something is genuinely not
+                implemented. This page sorts them out.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">All roles</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-21</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="first">
+            <h2>Check these three things first</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Which persona are you?</span>
+                <p>
+                  Look at the menu in the header. This explains most missing
+                  buttons and most refused actions, and switching takes a
+                  second. See
+                  <a href="../reference/roles-and-permissions.html"
+                    >Roles and permissions</a
+                  >.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >What state is the curriculum in?</span
+                >
+                <p>
+                  Read the status pill in panel <strong>02</strong>. Publishing
+                  needs <em>Approved</em>, not <em>Ready for review</em>. See
+                  <a href="../reference/lifecycle-and-evidence.html"
+                    >Lifecycle and evidence</a
+                  >.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Have you reloaded?</span>
+                <p>
+                  If somebody else advanced the curriculum while your page was
+                  open, your page is stale and RepoFluent will refuse actions on
+                  purpose rather than let you act on what you last saw.
+                </p>
+              </li>
+            </ol>
+          </section>
+
+          <section class="ug-section" id="access">
+            <h2>Access and identity</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Symptom</th>
+                    <th scope="col">Cause</th>
+                    <th scope="col">Fix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Nothing loads; every panel says unavailable
+                    </td>
+                    <td>
+                      The application is running but the API is not reachable.
+                    </td>
+                    <td>
+                      Report the address to whoever operates the instance. There
+                      is nothing to fix from your side.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Requests are refused as unauthenticated
+                    </td>
+                    <td>
+                      No persona is being sent, or the persona is not
+                      recognized.
+                    </td>
+                    <td>
+                      Re-pick a persona from the header menu. If that fails,
+                      clear site data for the instance and reload.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Everything is refused and the persona menu has no effect
+                    </td>
+                    <td>
+                      The instance is not running in a development, test, or
+                      acceptance-test configuration, so personas are disabled
+                      entirely.
+                    </td>
+                    <td>
+                      Nothing you can do. This is a deliberate safeguard so test
+                      identities never reach a real deployment.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <em>Learning dashboard unavailable</em>
+                    </td>
+                    <td>
+                      You are on the Learning page as Author, Reviewer,
+                      Administrator, or Auditor.
+                    </td>
+                    <td>Switch to the Learner persona.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      A colleague sees different buttons
+                    </td>
+                    <td>
+                      Different persona, or a different point in the lifecycle.
+                    </td>
+                    <td>
+                      Compare both. Persona is per browser, so two people on the
+                      same instance genuinely can be different roles.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="upload-problems">
+            <h2>Uploading</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Symptom</th>
+                    <th scope="col">Cause</th>
+                    <th scope="col">Fix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <em>Choose a curriculum package first</em>
+                    </td>
+                    <td>You pressed upload without selecting a file.</td>
+                    <td>Select the JSON file, then upload.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Refused for media type, size, or unsafe content
+                    </td>
+                    <td>
+                      Wrong kind of file, empty, over 512&nbsp;KiB, or not
+                      strict UTF-8 JSON.
+                    </td>
+                    <td>
+                      See
+                      <a href="../reference/validation-issues.html#intake"
+                        >Intake refusals</a
+                      >.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <code>CLI_PACKAGE_VERSION_CONFLICT</code>
+                    </td>
+                    <td>
+                      This identity and version already exist with different
+                      bytes.
+                    </td>
+                    <td>
+                      Increment the declared version in the package and upload
+                      again.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <code>CLI_INTAKE_RETRY</code>
+                    </td>
+                    <td>Two identical uploads collided.</td>
+                    <td>Wait a moment and upload again.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Badged <em>Existing receipt</em> when you expected a new
+                      draft
+                    </td>
+                    <td>
+                      Not a fault. Your bytes are identical to an existing
+                      upload, so the existing draft was reused.
+                    </td>
+                    <td>
+                      If you meant to change something, check you exported the
+                      file you edited.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Stuck on <em>Validating</em> or
+                      <code>CLI_VALIDATION_STALE</code>
+                    </td>
+                    <td>
+                      Validation has been running over five minutes. Usually the
+                      background worker is not running.
+                    </td>
+                    <td>
+                      Press <strong>Retry validation</strong>. If it stalls
+                      again, quote the correlation identifier to an operator.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <em>Awaiting worker</em> that never clears
+                    </td>
+                    <td>
+                      The package was accepted but nothing has picked it up.
+                    </td>
+                    <td>
+                      Same as above — this is an instance problem, not a content
+                      problem.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <code>CLI_RETRY_NOT_ACTIONABLE</code>
+                    </td>
+                    <td>
+                      You tried to retry something that is not a stale
+                      validation.
+                    </td>
+                    <td>
+                      Retry only applies while the state is
+                      <em>Validating</em> and it has gone stale.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <code>CLI_IMPORT_NOT_FOUND</code>
+                    </td>
+                    <td>
+                      The import your browser remembered no longer exists —
+                      commonly after the instance database was reset.
+                    </td>
+                    <td>Upload again.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="review-problems">
+            <h2>Review, publication, and retirement</h2>
+            <p>
+              These refusals almost always mean the lifecycle moved, or a gate
+              is open. They are guards, not faults.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Means</th>
+                    <th scope="col">Fix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CLI_STALE_CHECKSUM</code></td>
+                    <td>The package is not the one your page was showing.</td>
+                    <td>
+                      Reload and read the evidence again before deciding. Do not
+                      retry blind.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_STALE_VALIDATION_REPORT</code></td>
+                    <td>The validation report changed under you.</td>
+                    <td>Reload; the issue set may now be different.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_STALE_WARNING_REPORT</code></td>
+                    <td>
+                      The warnings you were about to acknowledge are no longer
+                      the current set.
+                    </td>
+                    <td>Reload and acknowledge the current set.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_WARNING_ACKNOWLEDGEMENT_REQUIRED</code></td>
+                    <td>You tried to approve with a warning outstanding.</td>
+                    <td>
+                      Press <strong>Acknowledge exact warnings</strong> first.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_WARNING_ACKNOWLEDGEMENT_GATE</code></td>
+                    <td>
+                      You tried to acknowledge when there is nothing to
+                      acknowledge, or errors exist.
+                    </td>
+                    <td>
+                      Acknowledgement needs zero errors and at least one
+                      warning.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_REVIEW_RATIONALE_REQUIRED</code></td>
+                    <td>A rejection without an explanation.</td>
+                    <td>Type a rationale; the button unlocks.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_REVIEW_DECISION_IMMUTABLE</code></td>
+                    <td>
+                      A decision already exists for this version and cannot be
+                      changed.
+                    </td>
+                    <td>
+                      A new version is the only way forward. This is by design.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_REVIEW_REJECTED</code></td>
+                    <td>This version was refused by a reviewer.</td>
+                    <td>The author produces a new version.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_PUBLICATION_REVIEW_REQUIRED</code></td>
+                    <td>Publishing something with no matching approval.</td>
+                    <td>It must be approved first, at this exact checksum.</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>CLI_PUBLICATION_CHANGED</code> or
+                      <code>CLI_PUBLICATION_CONFLICT</code>
+                    </td>
+                    <td>
+                      The publication state moved while you were acting, or two
+                      publications collided.
+                    </td>
+                    <td>
+                      Reload. If a version already exists, publishing again is
+                      unnecessary.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_RETIREMENT_REASON_REQUIRED</code></td>
+                    <td>The retirement reason box is empty.</td>
+                    <td>Write why, naming the successor if there is one.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_RETIREMENT_PUBLICATION_REQUIRED</code></td>
+                    <td>There is nothing published to retire.</td>
+                    <td>Publish first.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_INVALID_TRANSITION</code></td>
+                    <td>The action does not exist for the current state.</td>
+                    <td>
+                      Read the status pill. The lifecycle only moves forward.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_PREVIEW_GATE</code></td>
+                    <td>
+                      Preview is only available for a draft or an approved
+                      version.
+                    </td>
+                    <td>
+                      Check the state; a published version is read as learning,
+                      not previewed.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="compare-problems">
+            <h2>Comparison and assignment</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code or symptom</th>
+                    <th scope="col">Means</th>
+                    <th scope="col">Fix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CLI_COMPARISON_BASE_NOT_FOUND</code></td>
+                    <td>
+                      The base identifier does not name a retained published
+                      version.
+                    </td>
+                    <td>
+                      Check for a copy-paste error. There is no picker, so this
+                      is usually a typo.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_COMPARISON_PACKAGE_MISMATCH</code></td>
+                    <td>The two versions are different curricula.</td>
+                    <td>Compare within one package identity only.</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>CLI_COMPARISON_DISTINCT_VERSIONS_REQUIRED</code>
+                    </td>
+                    <td>You gave the same version twice.</td>
+                    <td>Use two different versions.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_COMPARISON_TARGET_REQUIRED</code></td>
+                    <td>No target version was identified.</td>
+                    <td>
+                      Run the comparison from the newer published version's own
+                      panel.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Assignment refused as not found
+                    </td>
+                    <td>The version has been retired.</td>
+                    <td>
+                      Publish a current version and assign that. Retired
+                      versions accept no new assignments — see
+                      <a href="retire-a-version.html">Retiring a version</a>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      The learner menu is empty or has one option
+                    </td>
+                    <td>One learner exists in this release. Not a fault.</td>
+                    <td>Assign to Maya Quinn.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="learning-problems">
+            <h2>Learning</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Symptom</th>
+                    <th scope="col">Cause and fix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <em>No learning assigned</em>
+                    </td>
+                    <td>
+                      You are a learner and nothing has been assigned. An
+                      administrator must publish a version and assign it.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <em>Course unavailable</em>
+                    </td>
+                    <td>
+                      The course is not assigned to you, or the address is
+                      wrong. Go back to
+                      <strong>My learning</strong> and use
+                      <strong>Start course</strong>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <em>Unsupported lesson block</em> with
+                      <code>LEX-BLOCK-UNSUPPORTED</code>
+                    </td>
+                    <td>
+                      The package used a block type this version cannot render.
+                      The rest of the lesson is fine. Report the code and the
+                      lesson title.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Progress never moves off zero
+                    </td>
+                    <td>
+                      Expected. Progress is not tracked in this release; every
+                      figure is a placeholder. See
+                      <a href="../learners/my-learning.html#progress"
+                        >About the progress figures</a
+                      >.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Find-in-page cannot find text you know is in the lesson
+                    </td>
+                    <td>
+                      Long lessons reveal ten blocks at a time and hidden blocks
+                      are genuinely absent from the page. Press
+                      <strong>Show more lesson blocks</strong> until everything
+                      is revealed.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      The code excerpt looks out of date
+                    </td>
+                    <td>
+                      It is bound to the commit shown, which is correct
+                      behavior. Check the branch and commit in the panel, then
+                      look at the current file in your own tools.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="display-problems">
+            <h2>Display and browser</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Symptom</th>
+                    <th scope="col">Cause and fix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <em>Browser compatibility mode</em> notice
+                    </td>
+                    <td>
+                      A required capability is missing. Content stays available
+                      with effects reduced. Use a current Chrome, Edge, Firefox,
+                      or Safari — see
+                      <a href="../getting-started/requirements.html"
+                        >Before you begin</a
+                      >.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      The system map is a table rather than a graphic
+                    </td>
+                    <td>
+                      Graphics acceleration is unavailable, disabled, or failed
+                      to start. The semantic view is a full equivalent, not a
+                      degraded one.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">The sidebar disappeared</td>
+                    <td>
+                      Your window or zoom level crossed a layout breakpoint.
+                      Expected.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Nothing animates</td>
+                    <td>
+                      Reduced motion is on, in your system or browser. State
+                      changes still happen immediately.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      <kbd>Ctrl</kbd> <kbd>K</kbd> search returns nothing
+                    </td>
+                    <td>
+                      Expected. The dialog exists; the search behind it does
+                      not. There is no search in this release.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      A control does nothing when pressed
+                    </td>
+                    <td>
+                      Check it is not one of the known inert controls: the
+                      lesson Rendered/Source toggle, the workspace explorer
+                      tree, the tab and breadcrumb strip, the sync pill, or
+                      <em>Open related learning</em> on the system map. See
+                      <a href="../getting-started/workspace-tour.html#scenery"
+                        >What is scenery</a
+                      >.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="escalating">
+            <h2>Still stuck</h2>
+            <p>
+              Collect the correlation identifier and the stable code, then
+              report the problem without sending your curriculum. What to
+              include, and why content is never necessary, is on
+              <a href="audit-and-support.html#support">Audit and support</a>.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

@@ -41,6 +41,7 @@ one experience, and humans approve agent-generated material before publication.
 | [`docs/detailed-designs/`](docs/detailed-designs/)     | Requirement-traceable vertical feature designs with rendered C4, class, and sequence diagrams                                    |
 | [`docs/mocks/`](docs/mocks/)                           | Standalone interface concepts for learner, lesson, code-navigation, and analytics experiences                                    |
 | [`desigh-system/assets/`](desigh-system/assets/)       | Shared CSS tokens, components, and documentation styles                                                                          |
+| [`user-guides/`](user-guides/)                         | Static end-user guide covering setup, everyday tasks per role, reference, and advanced workflows                                  |
 
 The [subsystem requirements index](docs/specs/README.md) explains requirement
 ownership, identifier conventions, traceability, and the shared quality baseline.
@@ -116,6 +117,21 @@ can be compared consistently:
 - **Editorial Atlas** — a calm, publication-inspired learning environment.
 - **Code Command** — a dense, keyboard-friendly developer workspace.
 - **System Constellation** — a spatial interface organized around architecture.
+
+## Read the user guide
+
+[`user-guides/`](user-guides/) is the end-user documentation: prerequisites,
+opening the application, a named tour of the workspace, a fifteen-minute
+walkthrough from upload to assigned learning, one page per role, and reference
+material for validation codes, the lifecycle, permissions, and accessibility. It
+is plain HTML, CSS, and JavaScript with no build step.
+
+Open [`user-guides/index.html`](user-guides/index.html) directly in a browser, or
+serve the repository locally with `python -m http.server 8000` and visit
+<http://localhost:8000/user-guides/>. CI validates it and deploys it to Azure
+Static Web Apps on a push to `main`; see
+[`user-guides/README.md`](user-guides/README.md) for its quality gates and the
+deployment secret it needs.
 
 ## Working with the requirements
 

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Retiring a published curriculum version: what stops, what keeps working, and how to write a retirement reason."
+    />
+    <title>Retiring a version — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Advanced" data-page="advanced/retire-a-version">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Advanced / 17</p>
+              <h1>Retiring a version</h1>
+              <p class="ug-hero__lede">
+                Retirement withdraws a version from future use without deleting
+                it or disrupting anyone currently using it. It is the correct
+                answer when content has gone stale, and it is deliberately not a
+                delete.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Administrator</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-17</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="what-it-does">
+            <h2>Exactly what retirement does</h2>
+            <p>
+              Retirement sets a version's availability to
+              <em>continue access</em>. Three things follow, and the panel
+              states all three back to you.
+            </p>
+            <div class="ug-row">
+              <span class="rf-badge">No new assignment</span>
+              <span class="rf-badge">Existing assignments continue</span>
+              <span class="rf-badge">Historical content retained</span>
+            </div>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">After retirement</th>
+                    <th scope="col">Result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Assigning it to somebody new
+                    </td>
+                    <td>
+                      <span class="rf-status rf-status--danger">refused</span>
+                      Not found. This is the intended effect.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      A learner who already has it opening a lesson
+                    </td>
+                    <td>
+                      <span class="rf-status rf-status--success">works</span>
+                      Unchanged. Nobody is interrupted mid-course.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">The content itself</td>
+                    <td>
+                      <span class="rf-status rf-status--success">retained</span>
+                      Still resolvable, still immutable. Nothing is deleted.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Comparing it with another version
+                    </td>
+                    <td>
+                      <span class="rf-status rf-status--success">works</span>
+                      Retired versions remain comparable.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">The lifecycle history</td>
+                    <td>
+                      <span class="rf-status rf-status--success">retained</span>
+                      Complete and permanent, with the retirement added to it.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong
+                  >Retirement is not deletion, and there is no deletion</strong
+                >
+                <p>
+                  Nothing in this release removes curriculum content or learning
+                  records. That is deliberate: a learning record has to keep
+                  pointing at retrievable content to mean anything. Retention
+                  and deletion workflows are a design intention, not a present
+                  capability.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="when">
+            <h2>When to retire</h2>
+            <div class="ug-grid">
+              <div class="rf-card">
+                <div class="rf-card__header">
+                  <span>GOOD REASONS</span>
+                  <span class="rf-status rf-status--success">retire</span>
+                </div>
+                <div class="rf-card__body">
+                  <ul>
+                    <li>
+                      A newer version is published and comparison shows real
+                      change — retire the old one so it stops being assigned.
+                    </li>
+                    <li>
+                      The system it describes has been restructured and the
+                      content is now misleading.
+                    </li>
+                    <li>
+                      The source repository has moved or been archived, so the
+                      code references no longer help.
+                    </li>
+                    <li>
+                      A defect was found in the content that cannot be corrected
+                      in place, because published versions are immutable.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="rf-card">
+                <div class="rf-card__header">
+                  <span>NOT REASONS</span>
+                  <span class="rf-status rf-status--danger">do not</span>
+                </div>
+                <div class="rf-card__body">
+                  <ul>
+                    <li>
+                      To tidy up. Retirement is permanent and appears in the
+                      audit trail forever.
+                    </li>
+                    <li>
+                      To stop one person seeing something. There is no
+                      per-learner withdrawal, and retirement does not remove
+                      existing access.
+                    </li>
+                    <li>
+                      To fix a typo. Publish a corrected version instead; the
+                      old one can simply stop being assigned.
+                    </li>
+                    <li>
+                      Before the replacement exists. Retire after the new
+                      version is published, not before.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="doing-it">
+            <h2>Retiring</h2>
+            <p>
+              As an administrator, with a published curriculum open, find
+              <strong>Retire published version</strong>.
+            </p>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Write a retirement reason</span>
+                <p>
+                  Required. The <strong>Retire version</strong> button stays
+                  disabled until the box has content. The reason is stored
+                  permanently with the retirement and is the first thing anybody
+                  reading the history later will look for, so write for that
+                  reader.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <circle cx="10" cy="10" r="7" />
+                    <path d="M10 9v5M10 6h.01" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label"
+                      >A good reason names the successor</span
+                    >
+                    <em
+                      >Superseded by version 2.0.0 after the order intake
+                      boundary moved to the workflow service; source references
+                      in three lessons no longer resolve.</em
+                    >
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Retire version</span>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The status pill changes to <strong>Retired</strong>, and a
+                    <strong>Retirement evidence</strong> block appears with the
+                    three guarantees, who retired it, the reason, the version
+                    identity, and the retirement event identifier.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Tell the people affected</span>
+                <p>
+                  RepoFluent sends no notifications. Anyone holding an
+                  assignment for the retired version keeps working through
+                  content you have just declared stale, and will not know unless
+                  you tell them.
+                </p>
+              </li>
+            </ol>
+            <p>
+              Retiring twice is harmless — the second attempt returns the
+              existing retirement rather than recording another.
+            </p>
+            <h3>When retirement is refused</h3>
+            <ul>
+              <li>
+                <strong>No retirement form.</strong> You are not an
+                administrator, or the curriculum is not published.
+              </li>
+              <li><strong>Reason required.</strong> The box is empty.</li>
+              <li>
+                <strong>Publication required.</strong> There is nothing
+                published to retire.
+              </li>
+            </ul>
+          </section>
+
+          <section class="ug-section" id="after">
+            <h2>After retiring</h2>
+            <p>
+              The <strong>Availability policy</strong> line in the publication
+              evidence changes from <em>Active for assignment</em> to reflect
+              retained history. That line is the quickest way to check whether a
+              version is still assignable.
+            </p>
+            <p>A sensible sequence for replacing stale content end to end:</p>
+            <ol>
+              <li>The author regenerates and publishes the new version.</li>
+              <li>
+                Compare the two and record what changed — see
+                <a href="compare-versions.html">Comparing versions</a>.
+              </li>
+              <li>Assign the new version to everyone who needs it.</li>
+              <li>
+                Retire the old version, naming the successor in the reason.
+              </li>
+              <li>Tell the affected learners, since the product will not.</li>
+            </ol>
+            <p>
+              Retirement is fully visible to an auditor as a
+              <em>Retired</em> entry with its actor, timestamp, and correlation
+              identifier — see
+              <a href="audit-and-support.html">Audit and support</a>.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

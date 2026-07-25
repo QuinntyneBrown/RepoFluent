@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Publishing an approved curriculum version and assigning it to a learner, and what publication guarantees permanently."
+    />
+    <title>Publishing and assigning — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body
+    data-category="For administrators"
+    data-page="administrators/publish-and-assign"
+  >
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">For administrators / 11</p>
+              <h1>Publishing and assigning</h1>
+              <p class="ug-hero__lede">
+                Publication is the moment content becomes real. It creates one
+                immutable version, binds it to the checksum a reviewer approved,
+                and makes it available to be assigned. Assignment is what
+                actually puts it in front of somebody.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Administrator</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-11</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="before">
+            <h2>Before you can publish</h2>
+            <p>
+              The <strong>Publish version</strong> button appears only when all
+              of the following are true.
+            </p>
+            <ul>
+              <li>Your persona is <strong>Administrator</strong>.</li>
+              <li>
+                The draft carries a recorded <strong>Approved</strong> review
+                decision.
+              </li>
+              <li>
+                That approval matches the package's current checksum. An
+                approval of different bytes does not count.
+              </li>
+            </ul>
+            <p>
+              If the button is missing, one of those three is not satisfied.
+              Check the
+              <strong>Review decision evidence</strong> block: no block means no
+              decision yet, and a <em>Rejected</em> pill means this version is
+              never going to be publishable.
+            </p>
+          </section>
+
+          <section class="ug-section" id="publishing">
+            <h2>Publishing</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Press Publish version</span>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The status pill changes to <strong>Published</strong> and a
+                    <strong>Publication evidence</strong> block appears carrying
+                    an <em>Active for assignment</em> pill.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Note the version identity</span>
+                <p>
+                  The evidence block shows the new version's identifier. Copy it
+                  somewhere. There is no version list or picker anywhere in the
+                  product, so when you later want to compare versions you will
+                  have to paste this identifier in by hand — see
+                  <a href="../advanced/compare-versions.html"
+                    >Comparing versions</a
+                  >.
+                </p>
+              </li>
+            </ol>
+            <p>
+              Pressing publish twice is harmless: if the version already exists,
+              RepoFluent returns the existing one rather than creating a second.
+            </p>
+            <h3>What the evidence block records</h3>
+            <dl class="rf-property-list">
+              <div>
+                <dt>Version identity</dt>
+                <dd>
+                  The identifier of the published version you just created.
+                </dd>
+              </div>
+              <div>
+                <dt>Package and package version</dt>
+                <dd>The author's stable identifier and declared version.</dd>
+              </div>
+              <div>
+                <dt>Published by</dt>
+                <dd>You. This is permanent.</dd>
+              </div>
+              <div>
+                <dt>Approved package checksum</dt>
+                <dd>
+                  The exact bytes that were approved and are now published. If
+                  this does not match what you expected, stop and investigate.
+                </dd>
+              </div>
+              <div>
+                <dt>Availability policy</dt>
+                <dd>
+                  Whether the version is currently active for new assignments,
+                  or retained as history after retirement.
+                </dd>
+              </div>
+              <div>
+                <dt>Publication event identifier</dt>
+                <dd>
+                  The audit event this action raised. It appears in the
+                  lifecycle history.
+                </dd>
+              </div>
+            </dl>
+            <h3>The four immutability guarantees</h3>
+            <p>
+              Publication displays four chips, and they are promises the product
+              keeps rather than settings you chose.
+            </p>
+            <div class="ug-row">
+              <span class="rf-badge">Read-only content</span>
+              <span class="rf-badge">Source snapshot</span>
+              <span class="rf-badge">Assessments</span>
+              <span class="rf-badge">Protected answer policy retained</span>
+            </div>
+            <p>
+              In plain terms: a published version's lessons, the commits its
+              code references point at, and its assessment definitions can never
+              change, and answer keys stay separated from learner-visible data
+              for as long as the version exists. To change anything, an author
+              publishes a new version.
+            </p>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>This is why learning records stay meaningful</strong>
+                <p>
+                  Because a version can never be edited, a record of somebody
+                  having learned from it always refers to specific, retrievable
+                  content. That property is what makes the audit trail worth
+                  anything.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="assigning">
+            <h2>Assigning it to a learner</h2>
+            <p>
+              Publication alone does not put content in front of anybody. Scroll
+              to
+              <strong>Assign published learning</strong>, which appears only
+              while a version is published and active.
+            </p>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Choose a learner</span>
+                <p>
+                  The <strong>Learner</strong> menu has exactly one option:
+                  <strong>Maya Quinn · Learner</strong>. There is no user
+                  management in this release and no way to add a second learner.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Decide required or optional</span>
+                <p>
+                  Tick <strong>Required assignment</strong> for work that is
+                  expected, or leave it clear for enrichment. The learner sees
+                  this as a <strong>Required</strong> or
+                  <strong>Optional</strong> badge on their assignment card, and
+                  as <code>REQ</code> or <code>OPTIONAL</code> in their queue
+                  table.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Assign learner</span>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The status region reads <em>Assignment created</em>. Switch
+                    to the Learner persona and it is on the
+                    <strong>My learning</strong> page immediately.
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <h3>When assignment is refused</h3>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Refusal</th>
+                    <th scope="col">Reason</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Not found</td>
+                    <td>
+                      The version has been retired. Retired versions keep
+                      existing assignments working but accept no new ones — that
+                      is the whole point of retirement. Publish a current
+                      version and assign that.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Learner does not exist</td>
+                    <td>
+                      Only the single seeded learner is recognized. You cannot
+                      invent a learner identifier.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">No assignment form at all</td>
+                    <td>
+                      Either you are not an administrator, or the curriculum is
+                      not currently published.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>Preview limitation — no assignment management</strong>
+                <p>
+                  There is no list of existing assignments, no way to change one
+                  from required to optional after the fact, and no way to remove
+                  one. There are also no groups, no teams, no due dates, and no
+                  notifications. Assignment in this release is a single one-way
+                  action.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="rest">
+            <h2>The rest of your job</h2>
+            <p>
+              Administrators own three further capabilities, each with its own
+              page.
+            </p>
+            <div class="ug-cards ug-cards--2">
+              <a class="ug-card" href="../advanced/compare-versions.html">
+                <small>Advanced</small>
+                <strong>Comparing versions</strong>
+                <span>
+                  See what changed between two published versions and decide
+                  whether learners need to redo anything.
+                </span>
+              </a>
+              <a class="ug-card" href="../advanced/retire-a-version.html">
+                <small>Advanced</small>
+                <strong>Retiring a version</strong>
+                <span>
+                  Withdraw content that is no longer accurate without breaking
+                  learners who are already using it.
+                </span>
+              </a>
+            </div>
+            <p>
+              You can also read the full lifecycle history for any curriculum
+              with
+              <strong>Inspect lifecycle history</strong>, and retry a stalled
+              validation on an author's behalf. Both are described on
+              <a href="../advanced/audit-and-support.html">Audit and support</a>
+              and
+              <a href="../authors/upload-a-package.html">Uploading a package</a
+              >.
+            </p>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>Preview limitation — no tenant administration</strong>
+                <p>
+                  Despite the role name, there is no settings area, no user or
+                  group management, no roles editor, no retention configuration,
+                  no branding controls, and no analytics. The administrator
+                  persona in this release means precisely: publish, assign,
+                  compare, and retire.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

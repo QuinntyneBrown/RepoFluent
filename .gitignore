@@ -6,6 +6,8 @@ frontend/playwright-report/
 frontend/test-results/
 desigh-system/playwright-report/
 desigh-system/test-results/
+user-guides/playwright-report/
+user-guides/test-results/
 .playwright-cli/
 .run/
 __pycache__/

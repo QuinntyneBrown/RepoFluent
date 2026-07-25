@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A complete reference to RepoFluent validation: how to read the issues table, intake refusals, and every contract validation code."
+    />
+    <title>Validation issues — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Reference" data-page="reference/validation-issues">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Reference / 12</p>
+              <h1>Validation issues</h1>
+              <p class="ug-hero__lede">
+                Every rejection RepoFluent issues carries a stable code, a
+                severity, and the exact location in your package that caused it.
+                This page explains how to read that, and lists every code with
+                what to do about it.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Author</span></li>
+                <li><span class="rf-badge">Reviewer</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-12</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="two-families">
+            <h2>Two families of problem</h2>
+            <p>
+              Codes beginning <code>CLI_</code> and codes beginning
+              <code>CIC_</code> mean quite different things, and knowing which
+              you are looking at tells you immediately where to look for the
+              cause.
+            </p>
+            <div class="ug-grid">
+              <div class="rf-card">
+                <div class="rf-card__header">
+                  <span>CLI_ — INTAKE AND WORKFLOW</span>
+                  <span class="rf-status rf-status--danger">no receipt</span>
+                </div>
+                <div class="rf-card__body">
+                  <p>
+                    The file was refused before it was accepted, or an action
+                    was refused because of the lifecycle state. Nothing was
+                    recorded and no draft exists. The problem is with the file
+                    itself or with what you were trying to do — not with the
+                    content inside.
+                  </p>
+                </div>
+              </div>
+              <div class="rf-card">
+                <div class="rf-card__header">
+                  <span>CIC_ — CONTRACT VALIDATION</span>
+                  <span class="rf-status rf-status--warning"
+                    >receipt exists</span
+                  >
+                </div>
+                <div class="rf-card__body">
+                  <p>
+                    The file was accepted and validated against the curriculum
+                    contract. Every issue names an exact JSON path inside your
+                    package. This is where you spend most of your time.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="reading">
+            <h2>Reading the issues table</h2>
+            <p>
+              Validation issues appear in a four-column table in panel
+              <strong>02</strong> of the Curricula page.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Code</dt>
+                <dd>
+                  A stable identifier such as <code>CIC_DUPLICATE_ID</code>.
+                  Stable means it will not be reworded between releases, so it
+                  is safe to search for, script against, and quote in a bug
+                  report.
+                </dd>
+              </div>
+              <div>
+                <dt>Severity</dt>
+                <dd>Either an error or a warning. See below.</dd>
+              </div>
+              <div>
+                <dt>JSON path</dt>
+                <dd>
+                  The precise location in your package. This is the single most
+                  useful column — go straight there rather than reading the
+                  whole file. RepoFluent reports <em>every</em> offending path,
+                  not just the first, so one pass through the table is enough.
+                </dd>
+              </div>
+              <div>
+                <dt>Message</dt>
+                <dd>A human explanation of what the rule requires.</dd>
+              </div>
+            </dl>
+            <h3>Errors block; warnings gate</h3>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Severity</th>
+                    <th scope="col">Effect</th>
+                    <th scope="col">Who clears it</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Error</td>
+                    <td>
+                      No draft. The table is announced as an alert with the
+                      heading
+                      <em
+                        >Blocking validation issues — Resolve each issue,
+                        regenerate the package, and validate again</em
+                      >. There is no override.
+                    </td>
+                    <td>
+                      The author, by fixing the package and uploading a new
+                      version.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Warning</td>
+                    <td>
+                      A perfectly reviewable draft, but publication is gated. A
+                      typical example reads
+                      <em
+                        >Noncritical extension ignored — Core interpretation is
+                        unchanged and the package remains reviewable</em
+                      >.
+                    </td>
+                    <td>
+                      A reviewer, with
+                      <strong>Acknowledge exact warnings</strong>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>The issue-set checksum</h3>
+            <p>
+              The validation receipt includes a checksum over the exact set of
+              issues found. A reviewer's warning acknowledgement is bound to it,
+              so if the package is revalidated and the issue set changes at all,
+              the acknowledgement is invalidated automatically. Nobody can
+              acknowledge one set of warnings and publish a different set.
+            </p>
+            <h3>The eleven check categories</h3>
+            <p>
+              Every validation run applies the same eleven categories of check,
+              and the receipt records that it did. Knowing them helps you
+              predict what will be examined.
+            </p>
+            <div class="ug-row">
+              <span class="rf-badge">version</span>
+              <span class="rf-badge">schema</span>
+              <span class="rf-badge">identifiers</span>
+              <span class="rf-badge">references</span>
+              <span class="rf-badge">ordering</span>
+              <span class="rf-badge">content-types</span>
+              <span class="rf-badge">source-references</span>
+              <span class="rf-badge">provenance</span>
+              <span class="rf-badge">assessment-integrity</span>
+              <span class="rf-badge">security-restrictions</span>
+              <span class="rf-badge">configured-limits</span>
+            </div>
+          </section>
+
+          <section class="ug-section" id="intake">
+            <h2>Intake refusals</h2>
+            <p>
+              These happen before a receipt exists. The upload did not take
+              place, so there is nothing to fix in RepoFluent — fix the file and
+              upload again. Every refusal is still recorded in the instance's
+              audit history.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Cause</th>
+                    <th scope="col">What to do</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CLI_FORM_REQUIRED</code></td>
+                    <td>The request carried no upload form at all.</td>
+                    <td>
+                      Use the <strong>Curriculum package</strong> field on the
+                      page rather than constructing a request by hand.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_FILE_REQUIRED</code></td>
+                    <td>No file was attached.</td>
+                    <td>Choose a file before pressing upload.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_UNSUPPORTED_MEDIA</code></td>
+                    <td>
+                      The file is not a <code>.json</code> file and was not sent
+                      as <code>application/json</code>.
+                    </td>
+                    <td>
+                      Upload the JSON package itself. Do not zip it, rename it,
+                      or wrap it in anything.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_PACKAGE_LIMIT</code></td>
+                    <td>Empty, or larger than 512&nbsp;KiB.</td>
+                    <td>
+                      Reduce the package. The usual cause is embedding long
+                      source excerpts; include only the lines the lesson needs.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_UNSAFE_CONTENT</code></td>
+                    <td>
+                      The file begins like an executable, a zip archive, or a
+                      PDF, or contains null bytes.
+                    </td>
+                    <td>
+                      You have almost certainly picked the wrong file. Check
+                      what you selected.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_MALFORMED_PACKAGE</code></td>
+                    <td>
+                      Not strict UTF-8 JSON with a single root object — or it
+                      uses comments, trailing commas, or nests deeper than 128
+                      levels.
+                    </td>
+                    <td>
+                      Run the offline validator, which reports the same problem
+                      with a location.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_PACKAGE_VERSION_CONFLICT</code></td>
+                    <td>
+                      This package identity and version already exist with
+                      different bytes.
+                    </td>
+                    <td>
+                      Increment the version in the package. This rule protects
+                      content that has already been reviewed.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CLI_INTAKE_RETRY</code></td>
+                    <td>
+                      Two identical uploads arrived at once and one lost the
+                      race.
+                    </td>
+                    <td>Wait a moment and upload again.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Codes for refused <em>workflow</em> actions — stale checksums,
+              review gates, publication and retirement conflicts — are listed
+              symptom-first on
+              <a href="../advanced/troubleshooting.html">Troubleshooting</a>.
+            </p>
+          </section>
+
+          <section class="ug-section" id="security">
+            <h2>Contract codes: security restrictions</h2>
+            <p>
+              These are the strictest rules in the contract, and none of them
+              can be waived. RepoFluent will never render active content or
+              reach out to an undeclared remote resource, because a curriculum
+              package is untrusted input.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Meaning and remedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CIC_ACTIVE_CONTENT</code></td>
+                    <td>
+                      A lesson block contains active HTML, script, executable,
+                      or macro content. Remove it. Lesson content is plain
+                      structured text; there is no way to embed behavior.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNDECLARED_RESOURCE</code></td>
+                    <td>
+                      A lesson block refers to a remote resource that no
+                      approved extension declared. Remove the reference or
+                      supply the content inline.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_FORBIDDEN_PATH</code></td>
+                    <td>
+                      A source path is absolute or escapes its repository root.
+                      Use repository-relative paths only — never a path from
+                      your own machine.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_CLASSIFICATION</code></td>
+                    <td>
+                      A supplied source excerpt has no supported content
+                      classification. Every excerpt must declare what kind of
+                      content it is.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_CONTRACT_ARTIFACT_PATH</code></td>
+                    <td>
+                      A requested contract artifact path escapes its release.
+                      This appears when retrieving release artifacts, not when
+                      validating a package.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="assessment">
+            <h2>Contract codes: assessment integrity</h2>
+            <p>
+              Assessments are validated even though this release cannot yet
+              administer one. That is deliberate: the content is correct now, so
+              it will work when the assessment interface arrives.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Meaning and remedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CIC_ANSWER_NOT_PROTECTED</code></td>
+                    <td>
+                      An answer is not classified as protected. Answer keys must
+                      be marked so RepoFluent can keep them out of
+                      learner-visible and reviewer-visible responses.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_ASSESSMENT</code></td>
+                    <td>The assessment purpose is not supported.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_ITEM</code></td>
+                    <td>
+                      The item type is not supported. Use a question type with a
+                      deterministic grading method.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_SELECTION</code></td>
+                    <td>The item selection mode is not supported.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_SELECTION</code></td>
+                    <td>Item selection is empty or out of range.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_FEEDBACK_RELEASE</code></td>
+                    <td>
+                      The feedback-release policy is not supported. Formative
+                      and summative assessments release feedback differently.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_ATTEMPTS</code></td>
+                    <td>The maximum attempts value is out of range.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_POINTS</code></td>
+                    <td>A grading points value is out of range.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_THRESHOLD</code></td>
+                    <td>
+                      A passing threshold is not between 0 and 100 percent.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="references">
+            <h2>Contract codes: references and provenance</h2>
+            <p>
+              This group is the most common source of real errors, because it is
+              where an agent's claims are checked against the sources it says it
+              used. An error here usually means the content is describing
+              something that is not actually there.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Meaning and remedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CIC_DANGLING_CITATION</code></td>
+                    <td>
+                      A citation does not resolve to a declared repository
+                      document. Either declare the document in the source
+                      snapshot or remove the claim that depends on it.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_DANGLING_REFERENCE</code></td>
+                    <td>
+                      A typed identifier points at nothing. Usually a lesson
+                      referring to an objective or assessment that was renamed
+                      or dropped.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_DANGLING_RELATIONSHIP</code></td>
+                    <td>
+                      An architecture relationship names an endpoint that was
+                      never declared as a system or subsystem.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_DANGLING_REPOSITORY</code></td>
+                    <td>
+                      A code reference points at a repository that the source
+                      snapshot does not declare.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_REVISION_MISMATCH</code></td>
+                    <td>
+                      A code reference's branch or commit does not match its
+                      declared source snapshot. This is the guard that stops a
+                      lesson claiming to describe one revision while quoting
+                      another.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_SOURCE_REVISION_REQUIRED</code></td>
+                    <td>
+                      A source repository has no revision, branch, or commit
+                      identity. Content without a revision cannot be checked for
+                      staleness later.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_RELATIONSHIP</code></td>
+                    <td>
+                      The architecture relationship type is not supported.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_EVIDENCE_TYPE</code></td>
+                    <td>
+                      A citation must declare whether it is direct evidence,
+                      synthesis, or interpretation. Being explicit about which
+                      is how a reviewer knows how hard to look.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_CONFIDENCE</code></td>
+                    <td>
+                      Evidence confidence is not one of the supported explicit
+                      states. Uncertainty must be stated, not implied.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="identifiers">
+            <h2>Contract codes: identifiers, ordering, and limits</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Meaning and remedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CIC_DUPLICATE_ID</code></td>
+                    <td>
+                      A stable identifier is used twice. RepoFluent reports
+                      every colliding path rather than overwriting one entity
+                      with another.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_ID</code></td>
+                    <td>
+                      An identifier is not normalized lowercase kebab case — for
+                      example <code>order-processing-foundations</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_ORDER</code></td>
+                    <td>An ordering value is out of range.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_RANGE</code></td>
+                    <td>
+                      A source line range is invalid — for example an end line
+                      before its start line.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_DURATION</code></td>
+                    <td>A duration or time limit is out of range.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="types">
+            <h2>Contract codes: types, required fields, and formats</h2>
+            <p>
+              Most of these are caught by the offline validator in a second,
+              which is why running it first is worth the trouble.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Meaning and remedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CIC_REQUIRED</code></td>
+                    <td>A required contract value is absent.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_EMPTY_PACKAGE</code></td>
+                    <td>The package has no content.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_JSON</code></td>
+                    <td>
+                      The content cannot be read as the versioned package
+                      contract. Structurally valid JSON that is not a curriculum
+                      package lands here.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_NON_CANONICAL_DATE_TIME</code></td>
+                    <td>
+                      A date and time is not RFC 3339 UTC with a <code>Z</code>
+                      suffix. Local times and offsets are rejected so that
+                      timestamps compare correctly across versions.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_BLOCK</code></td>
+                    <td>
+                      The lesson block type is not allow-listed. See
+                      <a href="../learners/courses-and-lessons.html"
+                        >the eight supported blocks</a
+                      >.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_CALLOUT</code></td>
+                    <td>The callout tone is not allow-listed.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_LANGUAGE</code></td>
+                    <td>
+                      A code reference language is not allow-listed. C# and
+                      Angular are the supported ecosystems in this release.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_DIFFICULTY</code></td>
+                    <td>The learning difficulty value is not supported.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_LOCALE</code></td>
+                    <td>
+                      The package locale is outside the supported catalog.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="extensions">
+            <h2>Contract codes: extensions</h2>
+            <p>
+              Extensions let a package carry data the core contract does not
+              define. The rule is simple: an extension may add, but it may never
+              change how core content is interpreted.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Severity</th>
+                    <th scope="col">Meaning and remedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CIC_EXTENSION_IGNORED</code></td>
+                    <td>
+                      <span class="rf-status rf-status--warning">warning</span>
+                    </td>
+                    <td>
+                      An unsupported noncritical extension was ignored. Core
+                      interpretation is unchanged and the draft is reviewable.
+                      This is the warning the worked example package produces.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_CRITICAL_EXTENSION</code></td>
+                    <td>
+                      <span class="rf-status rf-status--danger">error</span>
+                    </td>
+                    <td>
+                      A <em>critical</em> extension is not supported. Marking an
+                      extension critical means "refuse rather than ignore me",
+                      so RepoFluent does. Either drop the extension or stop
+                      marking it critical.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_EXTENSION_REDEFINES_CORE</code></td>
+                    <td>
+                      <span class="rf-status rf-status--danger">error</span>
+                    </td>
+                    <td>
+                      An extension tried to redefine a core package field. Move
+                      the data into the extension's own namespace.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_EXTENSION_DATA</code></td>
+                    <td>
+                      <span class="rf-status rf-status--danger">error</span>
+                    </td>
+                    <td>The payload is missing or is not a JSON object.</td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_EXTENSION_NAMESPACE</code></td>
+                    <td>
+                      <span class="rf-status rf-status--danger">error</span>
+                    </td>
+                    <td>
+                      The namespace is not normalized reverse-domain notation,
+                      for example <code>com.example.my-extension</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_INVALID_EXTENSION_VERSION</code></td>
+                    <td>
+                      <span class="rf-status rf-status--danger">error</span>
+                    </td>
+                    <td>
+                      The extension version is not a canonical semantic version.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="compatibility">
+            <h2>Contract codes: compatibility and releases</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Meaning and remedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CIC_UNSUPPORTED_VERSION</code></td>
+                    <td>
+                      The package declares a contract version outside the
+                      supported window. Regenerate against a supported contract
+                      — see
+                      <a href="../advanced/curriculum-contract.html"
+                        >The curriculum contract</a
+                      >.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_CONTRACT_VERSION_UNSUPPORTED</code></td>
+                    <td>
+                      You asked the instance for a contract release it has not
+                      published. Only <code>0.1.0</code> exists today.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_CONTRACT_ARTIFACT_NOT_FOUND</code></td>
+                    <td>
+                      The artifact you requested is not declared by that
+                      release.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>CIC_CONTRACT_RELEASE_INVALID</code></td>
+                    <td>
+                      A published release failed its own checksum or manifest
+                      verification. This is an instance problem, not yours —
+                      report it with the correlation identifier.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>The catalog is published, not just documented</strong>
+                <p>
+                  This list mirrors <code>validation-codes.json</code>, which
+                  ships inside every contract release and inside the authoring
+                  kit. Your offline validator reports exactly the same codes the
+                  server does, so you can resolve everything on this page
+                  without uploading anything.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

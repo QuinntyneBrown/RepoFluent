@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Reading the My learning dashboard: assignment cards, required and optional work, why something is next, and starting a course."
+    />
+    <title>My learning — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="For learners" data-page="learners/my-learning">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">For learners / 06</p>
+              <h1>My learning</h1>
+              <p class="ug-hero__lede">
+                <strong>My learning</strong> is where a learner starts. It
+                answers one question — what should I work on now — and gets you
+                into a course in a single press.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Learner</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-06</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="getting-there">
+            <h2>Getting there</h2>
+            <p>
+              Set the <strong>Development persona</strong> menu to
+              <strong>Learner</strong>, then choose <strong>Learning</strong> in
+              the activity bar on the left. The page heading is
+              <strong>My learning</strong>.
+            </p>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>You must be the Learner persona</strong>
+                <p>
+                  Opening this page as Author, Reviewer, Administrator, or
+                  Auditor shows a red
+                  <strong>Learning dashboard unavailable</strong>
+                  message. That is not a fault — learning is deliberately
+                  restricted to learners. Switch persona and the page loads.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="states">
+            <h2>The four things this page can show you</h2>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">What you see</th>
+                    <th scope="col">What it means</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Loading assigned learning…
+                    </td>
+                    <td>
+                      Placeholder shapes while your assignments are fetched.
+                      This should be brief.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Learning dashboard unavailable
+                    </td>
+                    <td>
+                      Either you are not the Learner persona, or the API could
+                      not be reached. The message underneath names which.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">No learning assigned</td>
+                    <td>
+                      You are a learner, the page works, and nobody has assigned
+                      you anything yet. An administrator has to publish a
+                      version and assign it to you.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Ready when you are, Maya</td>
+                    <td>
+                      The populated dashboard. One card per assignment, plus a
+                      status rail and a queue table.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="card">
+            <h2>Reading an assignment card</h2>
+            <p>
+              Each assignment is one card. Everything on it comes from the
+              published curriculum, so the wording is the author's, not the
+              product's.
+            </p>
+            <div class="ug-figure">
+              <div class="ug-figure__head">
+                <span>Assignment card</span><span>annotated</span>
+              </div>
+              <div class="ug-figure__body ug-figure__body--flush">
+                <div class="ug-screen">
+                  <div class="ug-screen__part ug-screen__part--chrome">
+                    <span class="ug-screen__tag">1</span>
+                    <span>Recommended_next</span>
+                    <span class="ug-screen__tag">2</span>
+                    <span>Required</span>
+                  </div>
+                  <div class="ug-screen__part ug-screen__part--content">
+                    <span class="ug-screen__tag">3</span>
+                    <span>Assigned course / Not started</span>
+                    <span class="ug-screen__tag">4</span>
+                    <span><strong>Order Processing Foundations</strong></span>
+                    <span class="ug-screen__tag">5</span>
+                    <span
+                      >Why this is next → Begin with the intake boundary</span
+                    >
+                    <span class="ug-screen__tag">6</span>
+                    <span>Start course ↵</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ol class="ug-anatomy">
+              <li>
+                <span
+                  ><strong>Recommended_next.</strong> A fixed label on every
+                  card, not a ranking.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Required or Optional.</strong> Set by the
+                  administrator when the work was assigned to you. Required work
+                  is expected; optional work is enrichment.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Assigned course / Not started.</strong> A fixed
+                  label. See the limitation below — it does not update.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Course title and description.</strong> From the
+                  published curriculum.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Why this is next.</strong> The most useful line on
+                  the card: the author's own reason this course comes at this
+                  point.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Start course.</strong> Opens the course. This is the
+                  only interactive control on the card.</span
+                >
+              </li>
+            </ol>
+            <p>
+              Below the card you will also see a line like
+              <code>$ course start order-processing-foundations</code>. That is
+              styling, not a command you can run — it shows the course's stable
+              identifier, which is occasionally useful when reporting a problem.
+            </p>
+          </section>
+
+          <section class="ug-section" id="progress">
+            <h2>About the progress figures</h2>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>Preview limitation — progress is not tracked</strong>
+                <p>
+                  RepoFluent does not yet record what you have read or
+                  completed. Every progress indicator on this page is a fixed
+                  placeholder:
+                  <em>Session progress 0%</em>, the ring reading
+                  <em>0 complete</em>, <em>Course progress 0</em>, the status
+                  <em>Ready to begin</em>, <em>Not started</em>, and the
+                  <em>queued</em> pill in the table. They will not change
+                  however much you read, and they are not reported to anyone.
+                </p>
+              </div>
+            </div>
+            <p>
+              Two figures on the page are real, because they are simple counts:
+            </p>
+            <ul>
+              <li>
+                <strong>Assigned queue</strong> — how many assignments you have.
+              </li>
+              <li>
+                The line reading <em>N active assignments</em> — the same count
+                in words.
+              </li>
+            </ul>
+            <p>
+              This also means you cannot lose your place by closing the browser,
+              because there is no place being saved. Use the course outline to
+              find where you were.
+            </p>
+          </section>
+
+          <section class="ug-section" id="queue">
+            <h2>The queue table</h2>
+            <p>
+              At the bottom of the page is a compact table of the same
+              assignments, useful when you have several. Its columns are:
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Type</dt>
+                <dd>Always <strong>Course</strong> in this release.</dd>
+              </div>
+              <div>
+                <dt>Next action</dt>
+                <dd>
+                  The same author-written reason shown as
+                  <em>Why this is next</em> on the card.
+                </dd>
+              </div>
+              <div>
+                <dt>Priority</dt>
+                <dd>
+                  <strong>REQ</strong> for required, <strong>OPTIONAL</strong>
+                  otherwise. This is real and comes from your assignment.
+                </dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>
+                  Always <em>queued</em>. A placeholder, as described above.
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="ug-section" id="next">
+            <h2>What happens when you press Start course</h2>
+            <p>
+              You move to the course page, which shows the outcomes you should
+              be able to demonstrate, the estimated time, and the full outline
+              of modules and lessons. That is the subject of the next page.
+            </p>
+            <p>
+              If a course you were using stops opening, the version it belonged
+              to may have been retired. Retirement keeps existing assignments
+              working, so this is unusual — see
+              <a href="../advanced/troubleshooting.html">Troubleshooting</a>.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

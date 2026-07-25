@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A complete fifteen-minute walkthrough: upload a curriculum package, review it, publish it, assign it, and read the lesson as a learner."
+    />
+    <title>Your first curriculum — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body
+    data-category="Start here"
+    data-page="getting-started/first-walkthrough"
+  >
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Start here / 05</p>
+              <h1>Your first curriculum</h1>
+              <p class="ug-hero__lede">
+                Because you control every persona, you can drive the entire
+                product single-handedly. In about fifteen minutes you will take
+                a JSON file, get it validated, review and approve it, publish
+                it, assign it to a learner, and then read the resulting lesson
+                and the source code behind it. Do this once and the rest of the
+                guide will make sense.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Everyone</span></li>
+                <li>
+                  <span class="rf-status rf-status--success">~15 minutes</span>
+                </li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-05</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="before">
+            <h2>Before you start</h2>
+            <p>
+              You need a curriculum package to upload. Your instance ships with
+              a worked example of a C# and Angular order-processing system,
+              which is the file this walkthrough uses:
+            </p>
+            <div class="ug-figure" data-copy-source>
+              <div class="ug-figure__head">
+                <span>The example package</span>
+                <button
+                  class="ug-copy-button"
+                  type="button"
+                  data-copy="contracts/curriculum/0.1.0/fixtures/order-processing.json"
+                >
+                  Copy path
+                </button>
+              </div>
+              <div class="ug-figure__body">
+                <code
+                  >contracts/curriculum/0.1.0/fixtures/order-processing.json</code
+                >
+              </div>
+              <p class="ug-figure__caption">
+                That path is relative to the root of the RepoFluent repository.
+                If you do not have a copy of the repository, ask whoever runs
+                your instance for the file, or download
+                <code>examples/valid/order-processing.json</code> from the
+                <a href="../advanced/authoring-kit.html">authoring kit</a> page
+                in the application — it is the same content.
+              </p>
+            </div>
+            <p>
+              Open your instance and confirm you can see the heading
+              <strong>Curriculum imports</strong>. If you can, you are ready.
+            </p>
+          </section>
+
+          <section class="ug-section" id="upload">
+            <h2>Part one — upload and validate</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title"
+                  >Become the author<span class="ug-steps__persona"
+                    >Persona: Author</span
+                  ></span
+                >
+                <p>
+                  Set the <strong>Development persona</strong> menu in the
+                  header to <strong>Author</strong>. Only an author can upload.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Choose the file</span>
+                <p>
+                  In panel <strong>01</strong> find the field labelled
+                  <strong>Curriculum package</strong> and select
+                  <code>order-processing.json</code>.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The live status line changes from
+                    <em>Ready for a curriculum package</em> to
+                    <em>Curriculum package selected</em>.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Upload and validate</span>
+                <p>
+                  RepoFluent accepts the file and hands you a receipt
+                  immediately; validation then happens in the background. You
+                  will see the status move through
+                  <em>Uploading curriculum package</em> and
+                  <em>Validating curriculum package</em> on its own — do not
+                  press anything again.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    Within a second or two, the status reads
+                    <em>Curriculum package is ready for review</em> and a status
+                    pill labelled <strong>Ready for review</strong> appears in
+                    panel <strong>02</strong>.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Look at the evidence you just created</span
+                >
+                <p>
+                  Panel <strong>02</strong> now shows a
+                  <strong>Content checksum</strong> beginning
+                  <code>sha256:</code>, a
+                  <strong>Correlation</strong> identifier, the package identity
+                  and version, and a <strong>Validation evidence</strong> block
+                  reading <em>0 errors · 1 warning</em> across eleven check
+                  categories.
+                </p>
+                <p>
+                  That single warning is deliberate. The example package
+                  declares a contract extension RepoFluent does not implement,
+                  which is non-blocking — the core content is interpreted
+                  normally. You will clear it in part two.
+                </p>
+              </li>
+            </ol>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>The checksum is the point</strong>
+                <p>
+                  Every later decision is bound to this exact checksum. If the
+                  bytes change, approvals and warning acknowledgements stop
+                  being valid and have to be made again. This is what stops
+                  content from being swapped after review.
+                </p>
+              </div>
+            </div>
+            <p>
+              Full detail on this stage:
+              <a href="../authors/upload-a-package.html">Uploading a package</a
+              >.
+            </p>
+          </section>
+
+          <section class="ug-section" id="review">
+            <h2>Part two — review and approve</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title"
+                  >Become the reviewer<span class="ug-steps__persona"
+                    >Persona: Reviewer</span
+                  ></span
+                >
+                <p>
+                  Switch the persona menu to <strong>Reviewer</strong>. The page
+                  reloads its data and a different set of buttons appears.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Preview draft</span>
+                <p>
+                  This renders the draft through the same renderer a learner
+                  uses, with three safeguards active: no learner progress is
+                  written, no assessment state is written, and correct answers
+                  are withheld from the response entirely.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    A <strong>Draft preview</strong> section containing the
+                    lesson <strong>How an order becomes a workflow</strong>.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Acknowledge the warning</span>
+                <p>
+                  Press <strong>Acknowledge exact warnings</strong>. You cannot
+                  approve while an unacknowledged warning exists, and the
+                  acknowledgement is bound to this precise set of issues — not
+                  to "warnings in general".
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The warning gate flips from
+                    <em>Acknowledgement required</em> to
+                    <em>Warnings acknowledged</em>.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Optionally record your rationale</span
+                >
+                <p>
+                  The <strong>Review rationale</strong> box is where you write
+                  what you actually checked. It is optional for an approval and
+                  <em>required</em> for a rejection — the reject button stays
+                  disabled until you type something.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Approve this checksum</span>
+                <p>
+                  Note the wording. You are not approving "the curriculum", you
+                  are approving one immutable set of bytes.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    A <strong>Review decision evidence</strong> region showing
+                    <em>Approved</em>, who approved it, the package checksum,
+                    the validation-report checksum, and your rationale.
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>There is no undo</strong>
+                <p>
+                  A review decision is recorded once and can never be edited or
+                  replaced. If you reject this draft you cannot then approve it
+                  — the author has to produce a new version. Read the whole
+                  panel before you press either button.
+                </p>
+              </div>
+            </div>
+            <p>
+              Full detail on this stage:
+              <a href="../reviewers/review-a-draft.html">Reviewing a draft</a>.
+            </p>
+          </section>
+
+          <section class="ug-section" id="publish">
+            <h2>Part three — publish and assign</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title"
+                  >Become the administrator<span class="ug-steps__persona"
+                    >Persona: Administrator</span
+                  ></span
+                >
+                <p>
+                  Switch the persona menu to <strong>Administrator</strong>.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Publish version</span>
+                <p>
+                  Publication creates one immutable published version bound to
+                  the exact checksum the reviewer approved.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The status pill reads <strong>Published</strong> and a
+                    <strong>Publication evidence</strong> block appears with an
+                    <em>Active for assignment</em> pill, the version identity,
+                    who published it, and four immutability guarantees.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Assign it to the learner</span>
+                <p>
+                  Scroll to <strong>Assign published learning</strong>. Choose
+                  <strong>Maya Quinn · Learner</strong> — the only learner that
+                  exists — tick <strong>Required assignment</strong>, and press
+                  <strong>Assign learner</strong>.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The status region reads <em>Assignment created</em>.
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <p>
+              Full detail on this stage:
+              <a href="../administrators/publish-and-assign.html"
+                >Publishing and assigning</a
+              >.
+            </p>
+          </section>
+
+          <section class="ug-section" id="learn">
+            <h2>Part four — learn it</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title"
+                  >Become the learner<span class="ug-steps__persona"
+                    >Persona: Learner</span
+                  ></span
+                >
+                <p>
+                  Switch the persona menu to <strong>Learner</strong>, then
+                  choose <strong>Learning</strong> in the activity bar on the
+                  left.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The <strong>My learning</strong> page greeting Maya, with
+                    one assignment card for
+                    <strong>Order Processing Foundations</strong> marked
+                    <strong>Required</strong>.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Start course</span>
+                <p>
+                  The course page shows its outcomes, difficulty, estimated
+                  minutes, and a <strong>Course outline</strong> of modules and
+                  numbered lessons.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Open the lesson</span>
+                <p>
+                  Choose <strong>How an order becomes a workflow</strong>. You
+                  are now reading generated learning content that is bound to a
+                  specific commit of a real repository.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Open the code behind the explanation</span
+                >
+                <p>
+                  Find the code reference block and press
+                  <strong>Open source context for OrderController.Create</strong
+                  >.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    A <strong>Source context</strong> panel — beside the lesson
+                    on a wide screen, as a drawer on a narrow one — showing
+                    <code>src/Order.Api/Controllers/OrderController.cs</code>,
+                    the branch and commit it came from, the line range, and a
+                    <em>Provenance · verified</em> note. Your place in the
+                    lesson is preserved, and the browser
+                    <strong>Back</strong> button closes the panel.
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <div class="rf-callout rf-callout--success">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong>That is the product</strong>
+                <p>
+                  You have taken agent-generated content through validation,
+                  human approval, immutable publication, and assignment, and
+                  then read it as a learner with the source code one press away
+                  and its provenance intact.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="worth-trying">
+            <h2>Three things worth trying next</h2>
+            <dl class="ug-terms">
+              <div>
+                <dt>Upload the same file again</dt>
+                <dd>
+                  As Author, upload <code>order-processing.json</code> a second
+                  time. RepoFluent recognizes the identical bytes, reuses the
+                  existing draft, and labels the receipt
+                  <em>Existing receipt</em>
+                  rather than creating a duplicate. See
+                  <a href="../authors/upload-a-package.html"
+                    >Uploading a package</a
+                  >.
+                </dd>
+              </div>
+              <div>
+                <dt>Look at the history</dt>
+                <dd>
+                  Switch to <strong>Auditor</strong> and press
+                  <strong>Inspect lifecycle history</strong>. Every step you
+                  just took is there in order, with the actor, state, timestamp,
+                  and correlation identifier. See
+                  <a href="../advanced/audit-and-support.html"
+                    >Audit and support</a
+                  >.
+                </dd>
+              </div>
+              <div>
+                <dt>Break something on purpose</dt>
+                <dd>
+                  Try uploading a file that is not JSON, or an edited copy of
+                  the example with the same version but different content. Both
+                  are refused, with a specific code and an exact location. See
+                  <a href="../reference/validation-issues.html"
+                    >Validation issues</a
+                  >.
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A named tour of the RepoFluent application frame: banner, header, activity bar, workspace sidebar, workbench, and status bar."
+    />
+    <title>Tour of the workspace — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Start here" data-page="getting-started/workspace-tour">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Start here / 04</p>
+              <h1>Tour of the workspace</h1>
+              <p class="ug-hero__lede">
+                RepoFluent looks like a code editor on purpose. The frame around
+                your content never moves, so you always know where you are. This
+                page names every part of it, tells you which parts are
+                interactive, and — just as usefully — tells you which parts are
+                only scenery.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Everyone</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-04</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="frame">
+            <h2>The whole frame at once</h2>
+            <div class="ug-figure">
+              <div class="ug-figure__head">
+                <span>Application frame</span><span>wide desktop</span>
+              </div>
+              <div class="ug-figure__body ug-figure__body--flush">
+                <div class="ug-screen">
+                  <div class="ug-screen__part ug-screen__part--banner">
+                    <span class="ug-screen__tag">1</span>
+                    <span
+                      >Development identities only — not production
+                      authentication</span
+                    >
+                  </div>
+                  <div class="ug-screen__part ug-screen__part--chrome">
+                    <span class="ug-screen__tag">2</span>
+                    <span><strong>RF</strong> RepoFluent</span>
+                    <span class="ug-screen__tag">3</span>
+                    <span
+                      >Search curriculum, code, systems… <kbd>Ctrl K</kbd></span
+                    >
+                    <span class="ug-screen__tag">4</span>
+                    <span>synced · Development persona</span>
+                  </div>
+                  <div class="ug-screen__part">
+                    <span class="ug-screen__tag">5</span>
+                    <span>Curricula · Learning · Systems · Quality</span>
+                    <span class="ug-screen__tag">6</span>
+                    <span>Workspace explorer</span>
+                  </div>
+                  <div class="ug-screen__part ug-screen__part--content">
+                    <span class="ug-screen__tag">7</span>
+                    <span
+                      >workspace.rf tab · repofluent › governed-learning ›
+                      workspace.rf</span
+                    >
+                    <span class="ug-screen__tag">8</span>
+                    <span>The page you asked for</span>
+                  </div>
+                  <div class="ug-screen__part ug-screen__part--chrome">
+                    <span class="ug-screen__tag">9</span>
+                    <span>RF local · 0 errors · WCAG 2.2 AA · UTF-8 · LF</span>
+                  </div>
+                </div>
+              </div>
+              <p class="ug-figure__caption">
+                A schematic, not a screenshot. The numbers correspond to the
+                list below.
+              </p>
+            </div>
+            <ol class="ug-anatomy">
+              <li>
+                <span
+                  ><strong>Development banner.</strong> Explained on
+                  <a href="first-sign-in.html">Opening RepoFluent</a>. Never
+                  scrolls away.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Brand.</strong> Returns you to the Curricula page. It
+                  also acts as the top-level heading of the application.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Command search.</strong> Opens a search dialog. See
+                  the warning below — it does not search anything yet.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Sync pill and persona menu.</strong> The pill is
+                  decorative; the menu decides who you are.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Activity bar.</strong> The only real navigation. Four
+                  destinations, described below.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Workspace explorer.</strong> Scenery. Looks like a
+                  file tree; nothing in it is clickable.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Tab and breadcrumb strip.</strong> Also scenery. It
+                  always reads the same thing.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Workbench.</strong> The actual page content. This is
+                  the only region that changes as you navigate.</span
+                >
+              </li>
+              <li>
+                <span
+                  ><strong>Status bar.</strong> Four fixed labels. It does not
+                  report live state.</span
+                >
+              </li>
+            </ol>
+          </section>
+
+          <section class="ug-section" id="navigation">
+            <h2>Getting around: the activity bar</h2>
+            <p>
+              The narrow icon rail down the left edge is the whole of
+              RepoFluent's navigation. It has four destinations. The current one
+              is marked with a green edge.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Destination</th>
+                    <th scope="col">What is there</th>
+                    <th scope="col">Who it is for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Curricula</td>
+                    <td>
+                      The governed content pipeline: upload, validation
+                      evidence, review, publication, assignment, comparison,
+                      retirement, and audit history. This is the page you land
+                      on.
+                    </td>
+                    <td>Author, Reviewer, Administrator, Auditor</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Learning</td>
+                    <td>
+                      Your assigned learning, and the way in to courses,
+                      lessons, and source context.
+                    </td>
+                    <td>Learner only</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Systems</td>
+                    <td>
+                      A map of an example system with a filter, a node
+                      inspector, and an accessible relationship table.
+                    </td>
+                    <td>Anyone</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Quality</td>
+                    <td>
+                      The performance budgets and the published browser support
+                      policy this instance is measured against.
+                    </td>
+                    <td>Anyone</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>Two pages have no link</strong>
+                <p>
+                  <em>The curriculum contract</em> and
+                  <em>the authoring kit</em> are fully working pages that are
+                  not in the activity bar. You reach them by typing the address:
+                  add <code>/contracts</code> or <code>/authoring-kit</code> to
+                  your instance URL. Both are worth bookmarking if you author
+                  content — see
+                  <a href="../advanced/curriculum-contract.html"
+                    >The curriculum contract</a
+                  >
+                  and
+                  <a href="../advanced/authoring-kit.html">The authoring kit</a
+                  >.
+                </p>
+              </div>
+            </div>
+            <h3>On a narrow window</h3>
+            <p>
+              Below roughly a tablet width the workspace explorer disappears
+              entirely, and on a phone-sized window the activity bar moves to
+              the bottom of the screen and the status bar is hidden. The banner
+              and header stay pinned in both cases.
+            </p>
+          </section>
+
+          <section class="ug-section" id="scenery">
+            <h2>What is scenery, and why</h2>
+            <p>
+              RepoFluent's frame is a finished visual design wrapped around a
+              partly built product. Several parts of it look interactive and are
+              not. Knowing which is which will save you real time.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Looks like</th>
+                    <th scope="col">Actually is</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Command search (Ctrl K)</td>
+                    <td>
+                      A working dialog around a search that has not been built.
+                      It opens, traps focus correctly, closes on <kbd>Esc</kbd>,
+                      and returns focus to the button — but typing produces no
+                      results and it always shows
+                      <em>Start typing to search the current workspace.</em>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Workspace explorer tree</td>
+                    <td>
+                      A fixed illustration. The entries
+                      (<code>workspace.rf</code>,
+                      <code>curriculum.lifecycle</code>,
+                      <code>learning.dashboard</code>, and so on) name the
+                      product's capabilities but do not navigate anywhere.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Tab strip and breadcrumbs</td>
+                    <td>
+                      Fixed text. They always read <code>workspace.rf</code> and
+                      <code>repofluent › governed-learning › workspace.rf</code>
+                      regardless of the page you are on.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Sync pill</td>
+                    <td>
+                      The literal word <em>synced</em>. It is not monitoring
+                      anything.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Status bar</td>
+                    <td>
+                      Four fixed labels. <em>0 errors</em> is not a live count.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Everything else in the frame — the persona menu, the activity bar,
+              the skip link — works exactly as it appears to.
+            </p>
+          </section>
+
+          <section class="ug-section" id="accessibility-built-in">
+            <h2>The parts built for keyboards and screen readers</h2>
+            <p>
+              Three behaviors in the frame are easy to miss but make the product
+              much faster to use.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Skip to content</dt>
+                <dd>
+                  Press <kbd>Tab</kbd> as soon as the page loads and a
+                  <strong>Skip to content</strong> link appears in the top-left
+                  corner. Following it jumps straight past the banner, header,
+                  and navigation into the page itself.
+                </dd>
+              </div>
+              <div>
+                <dt>Page change announcements</dt>
+                <dd>
+                  Every time you navigate, RepoFluent moves keyboard focus to
+                  the new page's main heading and announces
+                  <em>&lt;Heading&gt; page loaded</em> to assistive technology.
+                  You do not have to hunt for where you landed.
+                </dd>
+              </div>
+              <div>
+                <dt>Pinned chrome</dt>
+                <dd>
+                  The banner and header stay at the top of the window while
+                  content scrolls beneath them, and scrolling to an anchor
+                  accounts for their height so the target is never hidden behind
+                  them.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              The full keyboard and preference reference is on
+              <a href="../reference/accessibility-and-preferences.html"
+                >Accessibility and preferences</a
+              >.
+            </p>
+          </section>
+
+          <section class="ug-section" id="next">
+            <h2>Ready for the real thing</h2>
+            <p>
+              You now know what everything is called. The next page walks a
+              complete curriculum from a JSON file to a learner reading a
+              lesson, switching persona at each stage. It takes about fifteen
+              minutes and it is the fastest way to understand the whole product.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

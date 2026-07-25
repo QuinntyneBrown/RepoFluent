@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Comparing two published curriculum versions: finding version identifiers, reading the classification table, and deciding on learner refresh."
+    />
+    <title>Comparing versions — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Advanced" data-page="advanced/compare-versions">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Advanced / 16</p>
+              <h1>Comparing versions</h1>
+              <p class="ug-hero__lede">
+                Code changes, so curriculum goes stale. When a new version of
+                the same curriculum is published, comparison answers the
+                question that actually matters: does anyone who already learned
+                the old version need to come back?
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Reviewer</span></li>
+                <li><span class="rf-badge">Administrator</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-16</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="prerequisites">
+            <h2>What you need first</h2>
+            <p>
+              Comparison works between two <strong>published</strong> versions
+              of the <strong>same package identity</strong>. Both must exist
+              before you can compare, so the normal sequence is:
+            </p>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Publish version one</span>
+                <p>
+                  Upload, review, approve, publish. Copy the version identifier
+                  from the publication evidence.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Publish version two</span>
+                <p>
+                  The author regenerates the package against a newer source
+                  snapshot, increments the declared package version, and the
+                  whole lifecycle runs again. Copy this version identifier too.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Compare, from the newer one</span>
+                <p>
+                  Open the newer version and paste the <em>older</em> identifier
+                  as the base. The comparison is directional: base is where
+                  learners have been, target is where they are going.
+                </p>
+              </li>
+            </ol>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>There is no version picker</strong>
+                <p>
+                  The base version has to be typed or pasted in by hand as an
+                  identifier. Nothing in the product lists published versions
+                  for you. This is the single most common reason people get
+                  stuck here, so copy version identifiers out of the publication
+                  evidence at the moment you publish and keep them somewhere.
+                  See
+                  <a href="../administrators/publish-and-assign.html"
+                    >Publishing and assigning</a
+                  >.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="running">
+            <h2>Running a comparison</h2>
+            <p>
+              With a published or retired curriculum open, and as a reviewer or
+              an administrator, find
+              <strong>Compare published versions</strong>.
+            </p>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title"
+                  >Paste the base version identifier</span
+                >
+                <p>
+                  Into the field labelled
+                  <strong>Base published version</strong>. The submit button
+                  stays disabled while it is empty.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Compare versions</span>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    A <strong>Semantic version comparison</strong> section
+                    headed with the base and target versions, a refresh verdict
+                    pill, any affected objectives, and a table of changes.
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <h3>When it is refused</h3>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Refusal</th>
+                    <th scope="col">Cause</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Base version not found</td>
+                    <td>
+                      The identifier does not name a retained published version.
+                      Check for a copy-paste error before assuming anything
+                      worse.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Package mismatch</td>
+                    <td>
+                      The two versions belong to different curricula. Comparison
+                      is only meaningful within one package identity.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Distinct versions required</td>
+                    <td>You have given the same version twice.</td>
+                  </tr>
+                  <tr>
+                    <td>No comparison form at all</td>
+                    <td>
+                      Your persona is not Reviewer or Administrator, or the
+                      curriculum has never been published.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Every comparison you run is recorded in the lifecycle history as
+              <em>Version comparison viewed</em>. Looking is an audited action,
+              because the comparison is what a refresh decision is justified by.
+            </p>
+          </section>
+
+          <section class="ug-section" id="reading">
+            <h2>Reading the result</h2>
+            <p>
+              The comparison is <em>semantic</em>, not a text diff. It reports
+              changes to meaningful entities — lessons, assessments, sources,
+              ordering — rather than changed characters. The table has four
+              columns.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Classification</dt>
+                <dd>The kind of change. The five kinds are listed below.</dd>
+              </div>
+              <div>
+                <dt>Stable entity</dt>
+                <dd>
+                  The type and identifier of the thing that changed. Because
+                  identifiers are stable across regenerations, this tells you it
+                  is the
+                  <em>same</em> lesson that changed rather than a new one
+                  appearing.
+                </dd>
+              </div>
+              <div>
+                <dt>Impact</dt>
+                <dd>What the change means for a learner.</dd>
+              </div>
+              <div>
+                <dt>Evidence</dt>
+                <dd>What the judgement is based on.</dd>
+              </div>
+            </dl>
+            <h3>The five classifications</h3>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Classification</th>
+                    <th scope="col">Means</th>
+                    <th scope="col">Usually implies</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Source changed</td>
+                    <td>
+                      The code a lesson is built on is different — a new commit,
+                      a moved file, a changed line range.
+                    </td>
+                    <td>
+                      <span class="rf-status rf-status--warning"
+                        >review carefully</span
+                      >
+                      The explanation may no longer match reality.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Assessment changed</td>
+                    <td>
+                      A question, its options, its scoring, or its objective
+                      mapping is different.
+                    </td>
+                    <td>
+                      <span class="rf-status rf-status--warning"
+                        >review carefully</span
+                      >
+                      Prior results were measured against different items.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Removed</td>
+                    <td>An entity that existed in the base version is gone.</td>
+                    <td>
+                      <span class="rf-status rf-status--warning"
+                        >review carefully</span
+                      >
+                      Objectives that depended on it may now have no coverage.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Reordered</td>
+                    <td>The same content, in a different sequence.</td>
+                    <td>
+                      <span class="rf-status rf-status--info">low concern</span>
+                      Understanding is not invalidated by ordering.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Presentational</td>
+                    <td>
+                      Wording or formatting only, with no change in meaning.
+                    </td>
+                    <td>
+                      <span class="rf-status rf-status--success"
+                        >no concern</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>The refresh verdict</h3>
+            <p>
+              A pill reads either <strong>Learner refresh required</strong> or
+              <strong>No learner refresh</strong>, and any objectives affected
+              are listed beside it. Treat it as a well-informed recommendation,
+              not an instruction: it is derived from the classifications, and
+              you know things about your team that the comparison does not.
+            </p>
+          </section>
+
+          <section class="ug-section" id="deciding">
+            <h2>Deciding what to do</h2>
+            <p>
+              Existing learning records stay attached to the version they were
+              earned on. Nothing you decide here rewrites history — you are
+              deciding what happens next.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">If the comparison shows</th>
+                    <th scope="col">A reasonable response</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Only presentational and reordered changes</td>
+                    <td>
+                      Publish and assign the new version to new learners. Leave
+                      existing learners alone.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Source changed on a few lessons</td>
+                    <td>
+                      Assign the new version to the affected learners as
+                      targeted refresh work, and say in the assignment why.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Assessment changed, or objectives lost coverage</td>
+                    <td>
+                      Treat prior results on those objectives as no longer
+                      current. This is the case where reassignment is genuinely
+                      warranted.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Substantial removal or restructuring</td>
+                    <td>
+                      Retire the old version so it stops being assigned, and
+                      assign the new one broadly. See
+                      <a href="retire-a-version.html">Retiring a version</a>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong
+                  >Preview limitation — refresh is a manual decision</strong
+                >
+                <p>
+                  RepoFluent does not act on the verdict. There is no mechanism
+                  to require a retake, to invalidate a prior result, to notify a
+                  learner, or to grant or withdraw credit. Comparison tells you
+                  what changed; carrying out the decision means assigning the
+                  new version and telling people yourself.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

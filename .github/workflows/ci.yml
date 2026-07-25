@@ -97,3 +97,71 @@ jobs:
 
       - name: Validate authoring-kit releases
         run: node eng/verify_authoring_kits.mjs
+
+  # The user guide is a dependency-free static site. It is validated and
+  # published independently of the application so that a frontend or backend
+  # failure never blocks documentation, and vice versa.
+  user-guide:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Verify user-guide vendored assets
+        run: node eng/verify_user_guide_assets.mjs
+
+      - name: Restore user-guide QA tools
+        working-directory: user-guides
+        run: npm install --no-package-lock
+
+      - name: Check user-guide formatting
+        working-directory: user-guides
+        run: npm run format:check
+
+      - name: Validate user-guide HTML
+        working-directory: user-guides
+        run: npm run validate
+
+      - name: Smoke-test user guide
+        working-directory: user-guides
+        run: npm test
+
+  deploy-user-guide:
+    needs: user-guide
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    concurrency:
+      group: user-guide-deploy
+      cancel-in-progress: false
+
+    env:
+      SWA_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+
+    steps:
+      - name: Report a missing deployment token
+        if: env.SWA_TOKEN == ''
+        run: |
+          echo "::warning title=User guide not deployed::AZURE_STATIC_WEB_APPS_API_TOKEN is not set, so the user guide was validated but not published. Add the secret from an Azure Static Web Apps resource to enable deployment."
+
+      - name: Check out source
+        if: env.SWA_TOKEN != ''
+        uses: actions/checkout@v7
+
+      - name: Deploy user guide to Azure Static Web Apps
+        if: env.SWA_TOKEN != ''
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.SWA_TOKEN }}
+          action: upload
+          app_location: "user-guides"
+          output_location: ""
+          skip_app_build: true

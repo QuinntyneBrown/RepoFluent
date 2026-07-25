@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Uploading a curriculum package as an author: what is accepted, the validation receipt, re-uploads, and stalled validation."
+    />
+    <title>Uploading a package — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="For authors" data-page="authors/upload-a-package">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">For authors / 09</p>
+              <h1>Uploading a package</h1>
+              <p class="ug-hero__lede">
+                Uploading is one field and one button, but what happens
+                afterwards is worth understanding: RepoFluent takes your file,
+                hands you a receipt immediately, and validates it in the
+                background. Everything that follows in the lifecycle is bound to
+                the receipt you get here.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Author</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-09</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="accepted">
+            <h2>What RepoFluent will accept</h2>
+            <p>
+              The field is labelled <strong>Curriculum package</strong> and its
+              hint reads
+              <em
+                >JSON · validated against schema and policy · active content is
+                rejected</em
+              >. Four hard limits are checked before your file is even given a
+              receipt.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Rule</th>
+                    <th scope="col">Limit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">File type</td>
+                    <td>
+                      A single <code>.json</code> file, or a file sent as
+                      <code>application/json</code>. Nothing else.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Size</td>
+                    <td>512&nbsp;KiB maximum, and it must not be empty.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Content shape</td>
+                    <td>
+                      Strict UTF-8 JSON with a single object at the root. No
+                      comments, no trailing commas, and nesting no deeper than
+                      128 levels.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">No executables</td>
+                    <td>
+                      Files that begin like a Windows or Linux executable, a zip
+                      archive, or a PDF, or that contain null bytes, are refused
+                      outright.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Anything that fails these checks is rejected with a code beginning
+              <code>CLI_</code> and no receipt is created — the upload simply
+              did not happen. Codes and remedies are listed on
+              <a href="../reference/validation-issues.html">Validation issues</a
+              >.
+            </p>
+            <div class="rf-callout rf-callout--success">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong>Validate offline first</strong>
+                <p>
+                  The authoring kit includes a validator that runs on your
+                  machine with no network access and reports the same codes
+                  RepoFluent will. Running it before you upload turns most of
+                  this page into something you never need. See
+                  <a href="../advanced/authoring-kit.html">The authoring kit</a
+                  >.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="uploading">
+            <h2>Uploading</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Set your persona to Author</span>
+                <p>
+                  Only an author can upload. As any other persona, panel
+                  <strong>01</strong> either refuses the action or is not
+                  offered.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Choose the file</span>
+                <p>
+                  Use the <strong>Curriculum package</strong> field in panel
+                  <strong>01</strong>.
+                </p>
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The live status region changes to
+                    <em>Curriculum package selected</em>.
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="ug-steps__title">Press Upload and validate</span>
+                <p>
+                  If you press it without choosing a file first you get an
+                  inline error attached to the field reading
+                  <em
+                    >Choose a curriculum package first. Select a JSON package,
+                    then try again.</em
+                  >
+                  — the message is linked to the field, so a screen reader
+                  announces it with the field.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Let it work</span>
+                <p>
+                  The button becomes busy and the status region moves through
+                  <em>Uploading curriculum package</em> then
+                  <em>Validating curriculum package</em>. RepoFluent is polling
+                  on your behalf; do not press anything again.
+                </p>
+              </li>
+            </ol>
+            <h3>Every message the status region can show</h3>
+            <p>
+              The region is labelled <em>Curriculum operation status</em> and is
+              announced as it changes, so you can follow the whole upload
+              without watching the screen.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Message</th>
+                    <th scope="col">Meaning</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>Ready for a curriculum package</code></td>
+                    <td>Nothing selected yet.</td>
+                  </tr>
+                  <tr>
+                    <td><code>Curriculum package selected</code></td>
+                    <td>A file is chosen but not sent.</td>
+                  </tr>
+                  <tr>
+                    <td><code>Uploading curriculum package</code></td>
+                    <td>The file is on its way.</td>
+                  </tr>
+                  <tr>
+                    <td><code>Validating curriculum package</code></td>
+                    <td>Accepted; a background worker is checking it.</td>
+                  </tr>
+                  <tr>
+                    <td><code>Curriculum package is ready for review</code></td>
+                    <td>
+                      Success. A draft exists and a reviewer can take it from
+                      here.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>Existing draft reused</code></td>
+                    <td>
+                      You uploaded bytes that are already on file. See
+                      <a href="#reupload">Uploading again</a>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>Curriculum operation failed: …</code></td>
+                    <td>
+                      Something was refused. The rest of the message names what.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="receipt">
+            <h2>Reading the receipt</h2>
+            <p>
+              Panel <strong>02</strong> is your evidence. A status pill at the
+              top names the current state:
+            </p>
+            <div class="ug-row">
+              <span class="rf-status rf-status--info"
+                >Queued for validation</span
+              >
+              <span class="rf-status rf-status--info">Validating</span>
+              <span class="rf-status rf-status--success">Ready for review</span>
+              <span class="rf-status rf-status--danger">Validation failed</span>
+            </div>
+            <h3>Draft identity</h3>
+            <p>Four fields, and the distinction between them matters.</p>
+            <dl class="rf-property-list">
+              <div>
+                <dt>Package identity</dt>
+                <dd>
+                  The stable identifier your authoring agent chose. It is the
+                  same across regenerations of the same curriculum.
+                </dd>
+              </div>
+              <div>
+                <dt>Package version</dt>
+                <dd>
+                  The version your package declares. Together with the package
+                  identity, this is what RepoFluent uses to decide whether an
+                  upload is new, a replay, or a conflict.
+                </dd>
+              </div>
+              <div>
+                <dt>Platform draft</dt>
+                <dd>
+                  An opaque identifier RepoFluent generated for this draft. It
+                  is deliberately separate from your identifiers so that
+                  choosing an identifier can never let you overwrite somebody
+                  else's content.
+                </dd>
+              </div>
+              <div>
+                <dt>Validation attempts</dt>
+                <dd>How many times validation has been run for this draft.</dd>
+              </div>
+            </dl>
+            <h3>Content checksum and correlation</h3>
+            <p>
+              The <strong>Content checksum</strong> is a
+              <code>sha256:</code> value over your exact bytes. Approval,
+              warning acknowledgement, and publication are all bound to it —
+              change one byte and those decisions stop applying. The
+              <strong>Correlation</strong> identifier is the value to quote when
+              you ask for help; it ties your upload to the instance's own
+              records without exposing your content.
+            </p>
+            <h3>Validation evidence</h3>
+            <p>
+              A <em>versioned validation receipt</em> recording the contract
+              version, the validator version, a count such as
+              <em>0 errors · 1 warning</em>, the number of check categories
+              applied (eleven), and an <strong>issue-set checksum</strong> over
+              the exact set of issues found. If warnings exist, a warning gate
+              appears here reading <em>Acknowledgement required</em> — only a
+              reviewer can clear it.
+            </p>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>Errors block, warnings do not</strong>
+                <p>
+                  Any error at all means no draft and no path forward until you
+                  fix it and upload a new version. Warnings produce a perfectly
+                  reviewable draft, but a reviewer has to acknowledge the exact
+                  set of them before approving. Both are explained fully on
+                  <a href="../reference/validation-issues.html"
+                    >Validation issues</a
+                  >.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="reupload">
+            <h2>Uploading again</h2>
+            <p>
+              Re-uploading is safe and predictable. RepoFluent compares your
+              package identity, your declared version, and your bytes, and does
+              one of three things.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Situation</th>
+                    <th scope="col">What happens</th>
+                    <th scope="col">What to do</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Same identity and version, identical bytes
+                    </td>
+                    <td>
+                      The existing receipt comes back, badged
+                      <strong>Existing receipt</strong>, and the status reads
+                      <em>Existing draft reused</em>. No duplicate draft is
+                      created.
+                    </td>
+                    <td>
+                      Nothing. This is what makes re-running an authoring
+                      pipeline harmless.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Same identity and version, different bytes
+                    </td>
+                    <td>
+                      Refused with <code>CLI_PACKAGE_VERSION_CONFLICT</code> —
+                      <em
+                        >…already exist with different bytes. Use a new
+                        version.</em
+                      >
+                    </td>
+                    <td>
+                      Increment the version in your package and upload again.
+                      This is the rule that stops content being silently swapped
+                      under a version somebody already reviewed.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      Two identical uploads at once
+                    </td>
+                    <td>
+                      One succeeds; the other is refused with
+                      <code>CLI_INTAKE_RETRY</code>.
+                    </td>
+                    <td>
+                      Wait a moment and upload again. It is a transient
+                      collision, not a rejection of your content.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Your place is remembered</h3>
+            <p>
+              The import you are working on is remembered in your browser, so
+              reloading the page or switching persona brings the same panel
+              <strong>02</strong> back rather than losing it. Clearing site data
+              or using a different browser starts from an empty upload panel.
+            </p>
+          </section>
+
+          <section class="ug-section" id="stalled">
+            <h2>When validation stalls</h2>
+            <p>
+              Validation normally finishes in a moment. If a draft sits in
+              <strong>Validating</strong> for more than five minutes, RepoFluent
+              treats it as stale, shows the failure code
+              <code>CLI_VALIDATION_STALE</code>, and offers a
+              <strong>Retry validation</strong> button.
+            </p>
+            <ul>
+              <li>
+                Only an author or an administrator sees the retry button, and
+                only while the draft is genuinely stale.
+              </li>
+              <li>
+                Retrying is safe. It re-queues the same bytes; it does not
+                create a second draft and it does not change your checksum.
+              </li>
+              <li>
+                The attempt is recorded, so <strong>Validation attempts</strong>
+                increases and the history shows the retry.
+              </li>
+            </ul>
+            <p>
+              If retrying does not clear it, the background worker is probably
+              not running. Quote the correlation identifier to whoever operates
+              the instance — see
+              <a href="../advanced/audit-and-support.html">Audit and support</a
+              >.
+            </p>
+          </section>
+
+          <section class="ug-section" id="after">
+            <h2>What you can and cannot do next</h2>
+            <p>
+              With a draft in hand, an author can inspect it but not advance it.
+              That separation is the whole point of the workflow.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>You can</dt>
+                <dd>
+                  Read the full import status and validation evidence, open
+                  <strong>Inspect contract model</strong> to check how
+                  RepoFluent interpreted your package, read the lifecycle
+                  history with <strong>Inspect lifecycle history</strong>, and
+                  retry stale validation.
+                </dd>
+              </div>
+              <div>
+                <dt>You cannot</dt>
+                <dd>
+                  Acknowledge warnings, approve, reject, publish, assign, or
+                  retire. Those belong to a reviewer or an administrator. The
+                  <strong>Preview draft</strong> button is offered to reviewers
+                  only — as an author, use
+                  <strong>Inspect contract model</strong>, which is available on
+                  any draft or approved version.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              <strong>Inspect contract model</strong> is the most useful of
+              those. It shows your package back to you as RepoFluent understood
+              it — metadata and source snapshots, the architecture model, the
+              learning model, the assessment model with correct answers
+              withheld, and your declared provenance, assumptions, omissions,
+              and unresolved questions. It is the fastest way to catch a package
+              that validated cleanly but does not say what you meant. The same
+              workbench is described from the reviewer's side on
+              <a href="../reviewers/review-a-draft.html">Reviewing a draft</a>.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

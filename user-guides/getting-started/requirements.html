@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="What you need before opening RepoFluent: supported browsers, screen sizes, graphics requirements, and who to ask for an address."
+    />
+    <title>Before you begin — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Start here" data-page="getting-started/requirements">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Start here / 02</p>
+              <h1>Before you begin</h1>
+              <p class="ug-hero__lede">
+                RepoFluent runs entirely in your browser. There is nothing to
+                install, nothing to configure, and no account to create. You
+                need three things: a supported browser, the address of a
+                RepoFluent instance, and — if you are going to upload content —
+                a curriculum package to upload.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Everyone</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-02</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="what-you-need">
+            <h2>What you need</h2>
+            <dl class="ug-terms">
+              <div>
+                <dt>An address to open</dt>
+                <dd>
+                  RepoFluent is a web application served from a URL. Somebody on
+                  your team runs the instance; ask them for the address. There
+                  is no public, hosted RepoFluent service, so if nobody has told
+                  you a URL, nobody has started one yet.
+                </dd>
+              </div>
+              <div>
+                <dt>A supported browser</dt>
+                <dd>
+                  A current release of Chrome, Edge, Firefox, or Safari. See
+                  <a href="#browsers">Supported browsers</a> below.
+                </dd>
+              </div>
+              <div>
+                <dt>No credentials</dt>
+                <dd>
+                  This release has no sign-in form, no password, and no single
+                  sign-on. You pick an identity from a menu in the header. This
+                  is explained in full on
+                  <a href="first-sign-in.html">Opening RepoFluent</a>.
+                </dd>
+              </div>
+              <div>
+                <dt>A curriculum package, if you author</dt>
+                <dd>
+                  A single JSON file, at most 512&nbsp;KiB, produced by an
+                  authoring agent and validated offline before you upload it.
+                  See
+                  <a href="../advanced/authoring-kit.html">The authoring kit</a
+                  >. If you only want to try the product, your instance ships
+                  with a worked example described in
+                  <a href="first-walkthrough.html">Your first curriculum</a>.
+                </dd>
+              </div>
+            </dl>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>If the address does not load at all</strong>
+                <p>
+                  RepoFluent is two parts — an application and an API — and both
+                  have to be running. A page that loads but shows
+                  <em>unavailable</em> messages everywhere usually means the API
+                  is not up. Report the address you tried to whoever operates
+                  the instance rather than trying to diagnose it yourself.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="browsers">
+            <h2>Supported browsers</h2>
+            <p>
+              RepoFluent follows the Angular 21 widely available Baseline, with
+              a baseline date of 20 October 2025. In practice that means any
+              browser release that is current or near-current is supported. The
+              instance publishes its own policy — you can read it yourself at
+              any time on the <strong>Quality</strong> page inside the
+              application.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Browser family</th>
+                    <th scope="col">Production policy</th>
+                    <th scope="col">Engine verified in testing</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Chrome and Edge</td>
+                    <td>Angular 21 Baseline</td>
+                    <td><code>Chromium 149.0.7827.x</code></td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Firefox</td>
+                    <td>Angular 21 Baseline</td>
+                    <td><code>Firefox 151.0</code></td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Safari and iOS</td>
+                    <td>Angular 21 Baseline</td>
+                    <td><code>WebKit 26.5</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Capabilities RepoFluent requires</h3>
+            <p>
+              Five browser capabilities are mandatory. Every supported browser
+              above has had them for years; they are listed because RepoFluent
+              checks for them and changes its behavior if one is missing.
+            </p>
+            <ul>
+              <li><strong>Native dialog</strong> — modal windows.</li>
+              <li><strong>CSS Grid</strong> — the whole page layout.</li>
+              <li><strong>Custom events</strong> — internal communication.</li>
+              <li><strong>Abort controller</strong> — cancelling requests.</li>
+              <li>
+                <strong>Animation frames</strong> — smooth reveal and scrolling.
+              </li>
+            </ul>
+            <h3>What happens on an unsupported browser</h3>
+            <p>
+              RepoFluent does not lock you out. If a required capability is
+              missing you get a
+              <strong>Browser compatibility mode</strong> notice near the top of
+              the page reading <em>Effects reduced · safe access active</em>,
+              visual effects are switched off, and the content stays readable
+              and operable. The notice deliberately does not name the browser or
+              version, so it never leaks information about your environment.
+            </p>
+            <div class="rf-callout rf-callout--success">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong
+                  >Nothing important depends on graphics acceleration</strong
+                >
+                <p>
+                  WebGPU is optional. RepoFluent uses it only to make the system
+                  map look better. If your machine or browser has no WebGPU, or
+                  it fails to start, the map falls back to a semantic view with
+                  the same information in a table you can read and operate by
+                  keyboard. No lesson, assessment, control, or status is ever
+                  available only through a graphical effect.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="screen">
+            <h2>Screens, zoom, and motion</h2>
+            <p>
+              RepoFluent is designed for desktop and tablet, and the lesson and
+              review flows stay usable on a narrow phone-sized window. Nothing
+              scrolls sideways: if a table or code excerpt is wider than your
+              screen, that one element scrolls inside its own frame while the
+              page itself does not.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Width</th>
+                    <th scope="col">What changes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Wide desktop</td>
+                    <td>
+                      Full frame. Source code opens beside the lesson as a split
+                      view so you can read both at once.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Narrow desktop or tablet</td>
+                    <td>
+                      The workspace sidebar is hidden to give content more room.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Phone-sized window</td>
+                    <td>
+                      Navigation moves to the bottom of the screen, the status
+                      bar is hidden, and source code opens as a drawer over the
+                      lesson instead of beside it.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Zoom</h3>
+            <p>
+              Interactive controls stay visible and operable at high browser
+              zoom. Zooming to 200% is equivalent to halving the window width,
+              so at high zoom on a normal monitor you will see the narrow layout
+              described above. That is expected, not a fault.
+            </p>
+            <h3>Reduced motion</h3>
+            <p>
+              If your operating system or browser is set to reduce motion,
+              RepoFluent honors it automatically: animations are reduced to
+              effectively nothing while every state change still happens
+              immediately. You never have to wait out an animation to see a
+              result, and reducing motion never hides information. See
+              <a href="../reference/accessibility-and-preferences.html"
+                >Accessibility and preferences</a
+              >.
+            </p>
+          </section>
+
+          <section class="ug-section" id="speed">
+            <h2>How fast it should feel</h2>
+            <p>
+              The instance publishes the performance targets it is measured
+              against, so you can tell the difference between "this product is
+              slow" and "something is wrong right now". You can read the current
+              figures on the <strong>Quality</strong> page in the application.
+            </p>
+            <dl class="rf-property-list">
+              <div>
+                <dt>Shell ready</dt>
+                <dd>
+                  Within 2.5 seconds, measured as the main heading being visible
+                  and navigation being operable.
+                </dd>
+              </div>
+              <div>
+                <dt>Typical interaction</dt>
+                <dd>Under 200 milliseconds.</dd>
+              </div>
+              <div>
+                <dt>Animation</dt>
+                <dd>60 frames per second, degrading rather than stuttering.</dd>
+              </div>
+              <div>
+                <dt>Reference conditions</dt>
+                <dd>
+                  Desktop with 4 logical cores and 8&nbsp;GB memory, Chromium
+                  stable, 10&nbsp;Mbps broadband at 40&nbsp;ms round trip, cold
+                  shell and warm interaction, over a lesson of 33 blocks.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              If your experience is much worse than this and your machine and
+              connection are comparable, that is worth reporting. See
+              <a href="../advanced/troubleshooting.html">Troubleshooting</a> for
+              what information to include.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

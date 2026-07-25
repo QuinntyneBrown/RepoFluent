@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Reading the RepoFluent lifecycle audit trail as an auditor, and how to escalate a problem with the right identifiers."
+    />
+    <title>Audit and support — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Advanced" data-page="advanced/audit-and-support">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Advanced / 18</p>
+              <h1>Audit and support</h1>
+              <p class="ug-hero__lede">
+                Every action in a curriculum's life is recorded in order,
+                permanently, with who did it and when. This page explains how to
+                read that trail, and how to use the same identifiers to get help
+                without handing over your content.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Auditor</span></li>
+                <li><span class="rf-badge">Author</span></li>
+                <li><span class="rf-badge">Administrator</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-18</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="auditor">
+            <h2>The auditor persona</h2>
+            <p>
+              <strong>Auditor</strong> is a genuine read-only role. An auditor
+              can read import status and the complete lifecycle history, and can
+              do nothing else at all — no preview, no contract model, no
+              decisions, no publication, no assignment, no retirement, not even
+              retrying a stalled validation.
+            </p>
+            <p>
+              That is the point: an auditor can verify what happened without
+              being able to become part of what happened. Authors and
+              administrators can read the same history; reviewers cannot.
+            </p>
+          </section>
+
+          <section class="ug-section" id="reading">
+            <h2>Reading the trail</h2>
+            <p>
+              Press <strong>Inspect lifecycle history</strong>. A
+              <strong>Lifecycle audit evidence</strong> region appears, headed
+              <em>Ordered lifecycle record</em> with a badge counting the
+              events, and above the table: the package, the version, the current
+              state, and the package checksum.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Column</th>
+                    <th scope="col">Tells you</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Sequence</td>
+                    <td>
+                      Position in the record. The sequence is gap-free — a
+                      missing number would itself be evidence, and there are
+                      none.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Lifecycle evidence</td>
+                    <td>
+                      What happened, in words. The vocabulary is listed below.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Actor or system</td>
+                    <td>
+                      Which persona did it, or that RepoFluent itself did it.
+                      Validation steps are attributed to the system, not to a
+                      person.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">State</td>
+                    <td>
+                      The lifecycle state after the event, so you can read the
+                      state machine off the trail.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Timestamp</td>
+                    <td>When, in UTC.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Correlation</td>
+                    <td>
+                      The request that caused it. This is what ties a user
+                      action to the instance's own operational records.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>The event vocabulary</h3>
+            <p>
+              A complete, healthy lifecycle produces roughly this sequence.
+              Anything absent tells you where things stopped.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Event</th>
+                    <th scope="col">Meaning</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Uploaded</td>
+                    <td>An author submitted bytes and received a receipt.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Scan completed</td>
+                    <td>
+                      Intake safety checks passed — media type, size, shape, no
+                      executable signatures.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Validation started</td>
+                    <td>A worker claimed the package.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Validation completed</td>
+                    <td>A versioned validation receipt was produced.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Draft imported</td>
+                    <td>
+                      The content was persisted as a draft, invisible to
+                      learners.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Warnings acknowledged</td>
+                    <td>
+                      A reviewer accepted an exact set of warnings. Absent if
+                      there were none.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Approved</td>
+                    <td>
+                      A reviewer bound an approval to a specific checksum.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Published</td>
+                    <td>An administrator created one immutable version.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Version comparison viewed</td>
+                    <td>
+                      Somebody compared two versions. Recorded because refresh
+                      decisions are justified by it.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Retired</td>
+                    <td>
+                      An administrator withdrew the version, with a reason.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Refusals are recorded too — a replayed upload, a package-version
+              conflict, and an intake rejection all leave a trace, so a failed
+              attempt is as visible as a successful one.
+            </p>
+          </section>
+
+          <section class="ug-section" id="auditing-well">
+            <h2>What to check when auditing</h2>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Is the sequence complete?</span>
+                <p>
+                  Upload, scan, validation, draft import, review, publication. A
+                  gap means the lifecycle stopped there, and the operational
+                  evidence panel names the failure code.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Did different people approve and publish?</span
+                >
+                <p>
+                  Compare the actors on <em>Approved</em> and
+                  <em>Published</em>. The product does not require them to
+                  differ, so this is exactly the kind of thing an audit exists
+                  to check.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Do the checksums line up?</span>
+                <p>
+                  The checksum in the review decision evidence and the approved
+                  checksum in the publication evidence must be the same value.
+                  If they were not, publication would have been refused —
+                  confirming it is a two-second check that the binding held.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Were warnings acknowledged, and why?</span
+                >
+                <p>
+                  If <em>Warnings acknowledged</em> is present, read the
+                  reviewer's rationale in the decision evidence. An
+                  acknowledgement with no explanation is worth a question.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title">Was a retirement justified?</span>
+                <p>
+                  The retirement reason is mandatory and permanent. Check that
+                  it names why and, ideally, what replaced it.
+                </p>
+              </li>
+            </ol>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong
+                  >Preview limitation — the scope of the audit trail</strong
+                >
+                <p>
+                  What is recorded is the curriculum lifecycle. There is no
+                  access log, no record of sign-ins (there is no sign-in), no
+                  role-change history, no report exports, and no export of the
+                  trail itself — you read it on screen. Assume the trail covers
+                  content governance and nothing wider.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="support">
+            <h2>Getting help</h2>
+            <p>
+              RepoFluent is built so that you can report a problem precisely
+              without sending anybody your curriculum. Two values do the work.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>The correlation identifier</dt>
+                <dd>
+                  Attached to every response and shown in the lifecycle
+                  operations panel as the support correlation. It lets an
+                  operator find the exact request in their records.
+                </dd>
+              </div>
+              <div>
+                <dt>The stable code</dt>
+                <dd>
+                  Every failure carries one, such as
+                  <code>CLI_VALIDATION_STALE</code> or
+                  <code>CIC_REVISION_MISMATCH</code>. Codes do not get reworded
+                  between releases, so quoting one is unambiguous. See
+                  <a href="../reference/validation-issues.html"
+                    >Validation issues</a
+                  >.
+                </dd>
+              </div>
+            </dl>
+            <h3>What to include in a report</h3>
+            <ul>
+              <li>The correlation identifier and the stable code.</li>
+              <li>Which persona you were and what you pressed.</li>
+              <li>
+                The lifecycle state shown in the status pill, and the package
+                identity and version — not the package itself.
+              </li>
+              <li>What you expected instead.</li>
+              <li>
+                Your browser, if the problem is visual or a matter of
+                interaction.
+              </li>
+            </ul>
+            <div class="rf-callout rf-callout--success">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m4 10 4 4 8-8" />
+              </svg>
+              <div>
+                <strong>Do not send curriculum content to get support</strong>
+                <p>
+                  Source code, documentation, generated lessons, answer keys,
+                  and learner activity are all treated as customer data. The
+                  identifiers above are designed to make sharing content
+                  unnecessary, and diagnostic messages are written so as not to
+                  reproduce your content — a suspected credential, for example,
+                  is reported without ever echoing the value.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

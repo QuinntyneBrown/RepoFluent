@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Reviewing a curriculum draft: the preview safeguards, the contract model workbench, acknowledging warnings, and recording an immutable decision."
+    />
+    <title>Reviewing a draft — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="For reviewers" data-page="reviewers/review-a-draft">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">For reviewers / 10</p>
+              <h1>Reviewing a draft</h1>
+              <p class="ug-hero__lede">
+                You are the control that stops generated content reaching
+                learners unchecked. RepoFluent's job is to give you everything
+                you need to judge a draft, and to make your decision permanent
+                once you make it.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Reviewer</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-10</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="what-you-approve">
+            <h2>What you are actually approving</h2>
+            <p>
+              The button says <strong>Approve this checksum</strong>, not
+              "approve this curriculum", and the wording is exact. You approve
+              one immutable set of bytes together with one specific validation
+              report. Three things follow from that.
+            </p>
+            <ul>
+              <li>
+                If the author changes anything at all, your approval no longer
+                applies and the new bytes need a new decision.
+              </li>
+              <li>
+                An administrator can only publish content that carries a
+                matching approval, so nothing can slip past you between approval
+                and publication.
+              </li>
+              <li>
+                A decision is recorded once and cannot be edited, replaced, or
+                withdrawn.
+              </li>
+            </ul>
+            <div class="rf-callout rf-callout--danger">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="m7.5 7.5 5 5M12.5 7.5l-5 5" />
+              </svg>
+              <div>
+                <strong>There is no undo, and no second attempt</strong>
+                <p>
+                  Approving or rejecting is final for that version. If you
+                  reject a draft you cannot later approve the same bytes — the
+                  author must produce a new version. Read the whole panel before
+                  you press either button.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ug-section" id="preview">
+            <h2>Previewing as a learner would see it</h2>
+            <p>
+              Press <strong>Preview draft</strong>. The draft renders through
+              exactly the same renderer a learner uses — not a separate preview
+              mode — so what you see is what they get. Four safeguards are
+              active, and the preview shows them to you so you can be sure.
+            </p>
+            <dl class="rf-property-list">
+              <div>
+                <dt>Presentation path</dt>
+                <dd>
+                  Production renderer. There is no risk of approving something
+                  that looks different once published.
+                </dd>
+              </div>
+              <div>
+                <dt>Learner state</dt>
+                <dd>
+                  Progress writes disabled. Previewing does not create or
+                  disturb any learner record.
+                </dd>
+              </div>
+              <div>
+                <dt>Assessment state</dt>
+                <dd>Assessment writes disabled.</dd>
+              </div>
+              <div>
+                <dt>Answer policy</dt>
+                <dd>
+                  Protected answers withheld. Correct answers are removed from
+                  the response itself, not merely hidden on screen.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              A receipt line beneath repeats the package checksum and the
+              issue-set checksum, so the thing you are looking at is provably
+              the thing you are about to approve.
+            </p>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>The preview shows one lesson</strong>
+                <p>
+                  The learner-equivalent preview renders the first lesson of the
+                  first module of the first course. It is a rendering check, not
+                  a way to read the entire curriculum. To assess coverage and
+                  structure, use the contract model workbench described next.
+                </p>
+              </div>
+            </div>
+            <p>
+              What you can judge from the preview: whether prose reads
+              correctly, whether diagrams have meaningful captions, whether code
+              references point at plausible symbols and revisions, and whether
+              callouts and examples are useful rather than filler. What you
+              cannot judge from it: whether the whole curriculum is complete.
+            </p>
+          </section>
+
+          <section class="ug-section" id="workbench">
+            <h2>The contract model workbench</h2>
+            <p>
+              <strong>Inspect contract model</strong> opens a read-only view of
+              the entire package as RepoFluent understood it, in five numbered
+              sections. This is where the real review happens.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Section</th>
+                    <th scope="col">Contains</th>
+                    <th scope="col">Look for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">01 Package metadata</td>
+                    <td>
+                      Stable package identifier, contract and package versions,
+                      owner, who created it and when, and for each repository
+                      its relative root, commit, documents, and capture time.
+                    </td>
+                    <td>
+                      Does the source snapshot match the code this content
+                      claims to describe? Is the commit recent enough to be
+                      worth teaching?
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">02 Architecture model</td>
+                    <td>
+                      Systems and their subsystems with boundaries, typed
+                      relationships from source to target, and terminology
+                      definitions.
+                    </td>
+                    <td>
+                      Are the boundaries and dependencies right? A wrong
+                      architecture claim teaches a wrong mental model that is
+                      hard to unlearn.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">03 Learning model</td>
+                    <td>
+                      Courses in order with audience, difficulty, duration,
+                      tags, prerequisites, completion rules, and structure.
+                    </td>
+                    <td>
+                      Is the ordering sensible? Are prerequisites honest? Is the
+                      estimated duration plausible?
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">04 Assessment model</td>
+                    <td>
+                      Purpose, title, attempt limit, time limit, feedback
+                      release, item types, selection, and the mapping of each
+                      item to objectives, systems, and subsystems.
+                    </td>
+                    <td>
+                      Does every objective have coverage? Are questions testing
+                      capability rather than trivia? Correct answers are
+                      withheld from you here by design — a notice says so.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      05 Provenance and identity
+                    </td>
+                    <td>
+                      Resolvable citations with their evidence type, plus the
+                      author's declared assumptions, omissions, conflicting
+                      sources, and unresolved questions, and the canonical
+                      formatting rules applied.
+                    </td>
+                    <td>
+                      <strong>Read this first, not last.</strong> The unresolved
+                      questions and assumptions are the agent telling you where
+                      it was not sure. That is your shortlist.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              A <strong>Contract extensions</strong> panel is embedded here too,
+              listing any extensions the package declared and confirming that
+              core interpretation is unchanged by them.
+            </p>
+          </section>
+
+          <section class="ug-section" id="warnings">
+            <h2>Acknowledging warnings</h2>
+            <p>
+              If validation produced warnings, the warning gate in the
+              validation evidence reads
+              <strong>Acknowledgement required</strong> and an
+              <strong>Acknowledge exact warnings</strong> button appears. You
+              cannot approve until it is cleared.
+            </p>
+            <ol class="ug-steps">
+              <li>
+                <span class="ug-steps__title">Read the issues table first</span>
+                <p>
+                  Every warning is listed with its code, severity, exact JSON
+                  path, and message. Acknowledging without reading defeats the
+                  purpose of the gate. Codes are explained on
+                  <a href="../reference/validation-issues.html"
+                    >Validation issues</a
+                  >.
+                </p>
+              </li>
+              <li>
+                <span class="ug-steps__title"
+                  >Press Acknowledge exact warnings</span
+                >
+                <div class="ug-expect">
+                  <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m4 10 4 4 8-8" />
+                  </svg>
+                  <div>
+                    <span class="ug-expect__label">What you should see</span>
+                    The gate changes to <em>Warnings acknowledged</em>, and the
+                    change is announced to assistive technology.
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <p>
+              The acknowledgement is bound to two checksums: the package bytes
+              and the exact set of issues. It is not a blanket "warnings are
+              fine" setting. If the package is revalidated and the issue set
+              changes, your acknowledgement is invalidated automatically and has
+              to be made again against the new set.
+            </p>
+          </section>
+
+          <section class="ug-section" id="decision">
+            <h2>Recording your decision</h2>
+            <h3>Rationale</h3>
+            <p>
+              The <strong>Review rationale</strong> box is hinted
+              <em>Record the evidence checked or explain a rejection</em>, and
+              it is stored permanently alongside your decision and both
+              checksums.
+            </p>
+            <ul>
+              <li>
+                For an approval it is optional — but it is what a future auditor
+                will read to understand why this content was trusted. Write what
+                you actually verified.
+              </li>
+              <li>
+                For a rejection it is required. The
+                <strong>Reject this checksum</strong> button stays disabled
+                until you type something.
+              </li>
+            </ul>
+            <h3>Approving</h3>
+            <p>
+              Press <strong>Approve this checksum</strong>. A
+              <strong>Review decision evidence</strong> region appears showing
+              an <em>Approved</em> pill, your identity as reviewer, the package
+              and candidate version, the warning-gate binding, the package
+              checksum, the validation-report checksum, and your rationale. The
+              draft is now publishable by an administrator, and by nobody else.
+            </p>
+            <h3>Rejecting</h3>
+            <p>
+              Press <strong>Reject this checksum</strong>. The same evidence
+              region appears with a <em>Rejected</em> pill and your explanation.
+              The lifecycle records the failure code
+              <code>CLI_REVIEW_REJECTED</code>. The author's next step is a new
+              version, not an edit of this one.
+            </p>
+            <h3>If the button will not work</h3>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Symptom</th>
+                    <th scope="col">Cause</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">No review buttons at all</td>
+                    <td>
+                      You are not the Reviewer persona, or the draft is not in a
+                      reviewable state — it may already have a decision.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Approve is refused</td>
+                    <td>
+                      There is an unacknowledged warning, or the validation
+                      report changed under you. Reload the page and read the
+                      evidence again.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Reject stays disabled</td>
+                    <td>The rationale box is empty.</td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">
+                      A conflict message about a stale checksum
+                    </td>
+                    <td>
+                      The package or its report is no longer what your page
+                      thinks it is. Reload before deciding — this guard exists
+                      precisely so you cannot approve something you did not look
+                      at.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="ug-section" id="also">
+            <h2>Also yours: comparing versions</h2>
+            <p>
+              Reviewers, as well as administrators, can compare two published
+              versions of the same package to see what changed and decide
+              whether learners need to redo anything. That is the subject of
+              <a href="../advanced/compare-versions.html">Comparing versions</a
+              >.
+            </p>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong>You may review your own upload</strong>
+                <p>
+                  In this release nothing stops the same person from authoring
+                  and reviewing the same package. That is deliberate so one
+                  person can exercise the whole workflow, but it means
+                  separation of duties is a matter of your team's practice
+                  rather than something the product enforces.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

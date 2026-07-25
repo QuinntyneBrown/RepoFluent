@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="The published curriculum contract: release checksums, downloadable artifacts, the compatibility and migration policy, and the conformance suite."
+    />
+    <title>The curriculum contract — RepoFluent User Guide</title>
+    <link rel="stylesheet" href="../assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="../assets/vendor/components.css" />
+    <link rel="stylesheet" href="../assets/guide.css" />
+    <script src="../assets/guide.js" defer></script>
+  </head>
+  <body data-category="Advanced" data-page="advanced/curriculum-contract">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <div class="ug-breadcrumbs" data-ug-breadcrumbs></div>
+          <header class="ug-hero">
+            <div>
+              <p class="ug-eyebrow">Advanced / 19</p>
+              <h1>The curriculum contract</h1>
+              <p class="ug-hero__lede">
+                The contract is the agreement between whatever produces a
+                curriculum package and RepoFluent, which consumes it. It is
+                published as a versioned, checksummed release you can download
+                and verify — not as documentation you have to trust.
+              </p>
+              <ul class="ug-hero__audience">
+                <li><span class="rf-badge">Author</span></li>
+                <li><span class="rf-badge">Reviewer</span></li>
+              </ul>
+            </div>
+            <span class="ug-page-id">RF-UG-19</span>
+          </header>
+          <nav class="ug-toc" data-ug-toc aria-label="On this page"></nav>
+
+          <section class="ug-section" id="finding">
+            <h2>Finding the page</h2>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>This page has no navigation link</strong>
+                <p>
+                  Add <code>/contracts</code> to your instance address. It works
+                  for anyone, with no persona required — the contract is public
+                  information. Bookmark it if you author content.
+                </p>
+              </div>
+            </div>
+            <p>
+              While the page is loading it says it is verifying. That is
+              literal: the instance recomputes the checksum of every artifact
+              and the aggregate release checksum on every request, rather than
+              reading a stored value. If it reports
+              <strong>Contract release unavailable</strong>, the release failed
+              its own verification and that is an instance problem worth
+              reporting.
+            </p>
+          </section>
+
+          <section class="ug-section" id="release">
+            <h2>The release and its checksum</h2>
+            <p>
+              One contract release exists today: <strong>0.1.0</strong>,
+              published as a prerelease. The page shows its verification state
+              and a release checksum over the whole release.
+            </p>
+            <p>
+              Under <strong>Checksummed artifacts</strong>, each file is listed
+              as a card with a download link and its own hash. The set is fixed
+              for the release; nothing can be added, removed, or edited after
+              publication.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Artifact</th>
+                    <th scope="col">What it is for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>curriculum.schema.json</code></td>
+                    <td>
+                      The machine-readable JSON Schema. This is what your
+                      authoring pipeline validates against.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>ICD.md</code></td>
+                    <td>
+                      The Interface Control Document — the authoritative prose
+                      definition of the exchange boundary, including formats,
+                      limits, and extension points.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>compatibility.json</code></td>
+                    <td>
+                      The versioning and migration policy, described below.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>validation-codes.json</code></td>
+                    <td>
+                      Every validation code with its category and meaning.
+                      Mirrored in
+                      <a href="../reference/validation-issues.html"
+                        >Validation issues</a
+                      >.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>fixtures/minimal-valid.json</code></td>
+                    <td>
+                      The smallest package that validates. A good starting
+                      skeleton.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>fixtures/order-processing.json</code></td>
+                    <td>
+                      A representative C# and Angular package. This is the file
+                      the
+                      <a href="../getting-started/first-walkthrough.html"
+                        >walkthrough</a
+                      >
+                      uses.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>fixtures/conformance-catalog.json</code></td>
+                    <td>The executable conformance suite, described below.</td>
+                  </tr>
+                  <tr>
+                    <td><code>release-notes.md</code></td>
+                    <td>What this release contains and changes.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Fetching artifacts directly</h3>
+            <p>
+              Both the manifest and each artifact are retrievable over plain
+              HTTP, which is what lets a build pipeline pull the schema and
+              verify it. Requesting a version that does not exist returns
+              <code>CIC_CONTRACT_VERSION_UNSUPPORTED</code>; requesting a path
+              the release does not declare returns
+              <code>CIC_CONTRACT_ARTIFACT_NOT_FOUND</code>; a path that tries to
+              escape the release returns
+              <code>CIC_CONTRACT_ARTIFACT_PATH</code>.
+            </p>
+            <div class="ug-figure" data-copy-source>
+              <div class="ug-figure__head">
+                <span>Retrieving the manifest</span>
+                <button
+                  class="ug-copy-button"
+                  type="button"
+                  data-copy="/api/contracts/curriculum/releases/0.1.0"
+                >
+                  Copy path
+                </button>
+              </div>
+              <div class="ug-figure__body">
+                <p><code>/api/contracts/curriculum/releases/0.1.0</code></p>
+                <p>
+                  and, for a single file,
+                  <code
+                    >/api/contracts/curriculum/releases/0.1.0/artifacts/curriculum.schema.json</code
+                  >
+                </p>
+              </div>
+              <p class="ug-figure__caption">
+                Relative to your instance address. Always verify the hash you
+                get against the one in the manifest — that is what the checksums
+                are for.
+              </p>
+            </div>
+          </section>
+
+          <section class="ug-section" id="compatibility">
+            <h2>Compatibility and migration policy</h2>
+            <p>
+              The point of the policy is that you are not locked into one agent,
+              model, or generation workflow, and that an upgrade cannot silently
+              change what your existing packages mean.
+            </p>
+            <h3>What a version change signifies</h3>
+            <dl class="ug-terms">
+              <div>
+                <dt>Major</dt>
+                <dd>
+                  Breaking changes to package shape or meaning that require an
+                  explicit migration.
+                </dd>
+              </div>
+              <div>
+                <dt>Minor</dt>
+                <dd>
+                  Backward-compatible additions that an older consumer may
+                  safely ignore.
+                </dd>
+              </div>
+              <div>
+                <dt>Patch</dt>
+                <dd>
+                  Clarifications, fixture corrections, and validation fixes that
+                  do not change accepted semantics.
+                </dd>
+              </div>
+            </dl>
+            <h3>The supported version window</h3>
+            <p>
+              Today: <code>&gt;=0.1.0 &lt;0.2.0</code>. A package declaring a
+              contract version outside the window is rejected with
+              <code>CIC_UNSUPPORTED_VERSION</code>, and the rejection identifies
+              the supported line rather than failing vaguely.
+            </p>
+            <dl class="rf-property-list">
+              <div>
+                <dt>Backward compatible</dt>
+                <dd>
+                  A <code>0.1.x</code> consumer accepts packages produced for
+                  <code>0.1.0</code> where required semantics are unchanged.
+                </dd>
+              </div>
+              <div>
+                <dt>Forward compatible</dt>
+                <dd>
+                  A <code>0.1.0</code> consumer rejects unknown
+                  <em>required</em> semantics and ignores only declared
+                  <em>optional</em> extensions. That asymmetry is deliberate:
+                  silently ignoring something a package said was required would
+                  be unsafe.
+                </dd>
+              </div>
+              <div>
+                <dt>Deprecation notice</dt>
+                <dd>180 days before a supported version is withdrawn.</dd>
+              </div>
+              <div>
+                <dt>Migration responsibility</dt>
+                <dd>Contract maintainers, not you.</dd>
+              </div>
+              <div>
+                <dt>A migration preserves</dt>
+                <dd>Stable identifiers and protected semantics.</dd>
+              </div>
+              <div>
+                <dt>If something cannot be preserved</dt>
+                <dd>
+                  You get an explicit loss report, addressed by path,
+                  <em>before</em>
+                  publication — never a silent drop.
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="ug-section" id="conformance">
+            <h2>The conformance suite</h2>
+            <p>
+              The page ends with <strong>Conformance fixture suite</strong>: the
+              total number of cases, how many are expected to succeed, how many
+              are expected to fail, and the categories covered. Today that is
+              ten cases — two that must validate and eight that must be rejected
+              in a specific way.
+            </p>
+            <p>
+              Testing the failures is the more valuable half. It is easy to
+              write a validator that accepts good packages; the suite proves
+              this one rejects bad ones for the right reason, at the right path,
+              with the right code.
+            </p>
+            <div class="rf-callout">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 9v5M10 6h.01" />
+              </svg>
+              <div>
+                <strong
+                  >Why this matters if you are building an authoring
+                  pipeline</strong
+                >
+                <p>
+                  Because the codes, the schema, and the failure cases are all
+                  published and checksummed, you can hold your own generator to
+                  exactly the same standard the server applies — before anything
+                  is uploaded. That is what the authoring kit automates.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>

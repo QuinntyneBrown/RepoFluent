@@ -1,0 +1,17 @@
+{
+  "name": "repofluent-user-guide",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static RepoFluent user guide and its optional QA tooling.",
+  "scripts": {
+    "format:check": "prettier --check \"*.{html,json,md}\" \"assets/guide.{css,js}\" \"getting-started/*.html\" \"learners/*.html\" \"authors/*.html\" \"reviewers/*.html\" \"administrators/*.html\" \"reference/*.html\" \"advanced/*.html\" \"tests/*.js\"",
+    "format:write": "prettier --write \"*.{html,json,md}\" \"assets/guide.{css,js}\" \"getting-started/*.html\" \"learners/*.html\" \"authors/*.html\" \"reviewers/*.html\" \"administrators/*.html\" \"reference/*.html\" \"advanced/*.html\" \"tests/*.js\"",
+    "test": "playwright test tests/smoke.spec.js --reporter=line",
+    "validate": "html-validate \"*.html\" \"getting-started/*.html\" \"learners/*.html\" \"authors/*.html\" \"reviewers/*.html\" \"administrators/*.html\" \"reference/*.html\" \"advanced/*.html\""
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "html-validate": "11.4.0",
+    "prettier": "3.9.6"
+  }
+}

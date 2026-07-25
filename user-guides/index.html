@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="The RepoFluent user guide: how to publish curriculum and learn a codebase, from first sign-in to advanced workflows."
+    />
+    <title>RepoFluent User Guide</title>
+    <link rel="stylesheet" href="assets/vendor/tokens.css" />
+    <link rel="stylesheet" href="assets/vendor/components.css" />
+    <link rel="stylesheet" href="assets/guide.css" />
+    <script src="assets/guide.js" defer></script>
+  </head>
+  <body data-category="Start here" data-page="index">
+    <a class="ug-skip-link" href="#main-content">Skip to content</a>
+    <div class="ug-app">
+      <header class="ug-header" data-ug-header></header>
+      <aside class="ug-sidebar" aria-label="User guide sections">
+        <div class="ug-sidebar__head">
+          <span>GUIDE CONTENTS</span><span>21</span>
+        </div>
+        <nav
+          class="ug-nav"
+          data-ug-nav
+          aria-label="User guide navigation"
+        ></nav>
+      </aside>
+      <main class="ug-main" id="main-content">
+        <div class="ug-page">
+          <header class="ug-overview-hero">
+            <p class="ug-eyebrow">RepoFluent user guide</p>
+            <h1>Learn a codebase <span>the way it was built</span>.</h1>
+            <p>
+              RepoFluent turns an organization's source code and documentation
+              into courses, lessons, code tours, and assessments that stay tied
+              to the code they describe. This guide takes you from opening the
+              application for the first time through the advanced governance
+              workflows, and it assumes you have never seen the product before.
+            </p>
+            <div class="ug-row ug-hero-actions">
+              <a
+                class="rf-button rf-button--primary"
+                href="getting-started/requirements.html"
+                >Start at the beginning</a
+              >
+              <a class="rf-button" href="getting-started/first-walkthrough.html"
+                >Jump to the 15-minute walkthrough</a
+              >
+            </div>
+          </header>
+
+          <section class="ug-section" id="what-it-does">
+            <h2>What RepoFluent does</h2>
+            <p class="ug-lead">
+              RepoFluent separates preparing content from delivering it. An AI
+              agent analyses approved source material and produces a single JSON
+              <strong>curriculum package</strong>. RepoFluent validates that
+              package, a person reviews and approves it, and an approved version
+              is published as learning that people can be assigned to.
+            </p>
+            <p>
+              The rule that shapes everything else is:
+              <strong>agents prepare, humans approve</strong>. Nothing an agent
+              produces reaches a learner until a reviewer has approved a
+              specific, checksummed version of it and an administrator has
+              published that version.
+            </p>
+            <div class="ug-figure">
+              <div class="ug-figure__head">
+                <span>The curriculum lifecycle</span><span>five stages</span>
+              </div>
+              <div class="ug-figure__body">
+                <div class="rf-workflow rf-workflow--long">
+                  <div class="rf-workflow__node">
+                    <strong>Upload</strong><small>Author</small>
+                  </div>
+                  <div class="rf-workflow__edge"></div>
+                  <div class="rf-workflow__node">
+                    <strong>Validate</strong><small>RepoFluent</small>
+                  </div>
+                  <div class="rf-workflow__edge"></div>
+                  <div class="rf-workflow__node">
+                    <strong>Review</strong><small>Reviewer</small>
+                  </div>
+                  <div class="rf-workflow__edge"></div>
+                  <div class="rf-workflow__node">
+                    <strong>Publish</strong><small>Administrator</small>
+                  </div>
+                  <div class="rf-workflow__edge"></div>
+                  <div class="rf-workflow__node">
+                    <strong>Learn</strong><small>Learner</small>
+                  </div>
+                </div>
+              </div>
+              <p class="ug-figure__caption">
+                Each stage leaves durable evidence — a checksum, an actor, and a
+                timestamp — that the next stage is bound to. Retirement is a
+                sixth state that withdraws a published version without deleting
+                what people already learned from it.
+              </p>
+            </div>
+          </section>
+
+          <section class="ug-section" id="roles">
+            <h2>Who does what</h2>
+            <p>
+              RepoFluent gives you a different set of controls depending on
+              which role you hold. You will only ever see the actions your role
+              allows at the current stage, which is why two people looking at
+              the same curriculum can see different buttons.
+            </p>
+            <div class="rf-table-wrap">
+              <table class="rf-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Role</th>
+                    <th scope="col">What you do</th>
+                    <th scope="col">Start here</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rf-table__primary">Learner</td>
+                    <td>
+                      Open the learning assigned to you, work through courses
+                      and lessons, and read the source code behind each
+                      explanation.
+                    </td>
+                    <td><a href="learners/my-learning.html">My learning</a></td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Author</td>
+                    <td>
+                      Upload curriculum packages, read the validation receipt,
+                      and fix whatever the validator rejected.
+                    </td>
+                    <td>
+                      <a href="authors/upload-a-package.html"
+                        >Uploading a package</a
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Reviewer</td>
+                    <td>
+                      Preview a draft exactly as a learner would see it,
+                      acknowledge warnings, and approve or reject a version.
+                    </td>
+                    <td>
+                      <a href="reviewers/review-a-draft.html"
+                        >Reviewing a draft</a
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Administrator</td>
+                    <td>
+                      Publish an approved version, assign it to learners,
+                      compare versions, and retire content that is no longer
+                      accurate.
+                    </td>
+                    <td>
+                      <a href="administrators/publish-and-assign.html"
+                        >Publishing and assigning</a
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="rf-table__primary">Auditor</td>
+                    <td>
+                      Read the complete lifecycle history for any curriculum
+                      without being able to change anything.
+                    </td>
+                    <td>
+                      <a href="advanced/audit-and-support.html"
+                        >Audit and support</a
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              One person can hold more than one role. See
+              <a href="reference/roles-and-permissions.html"
+                >Roles and permissions</a
+              >
+              for the full matrix of who can do what at each stage.
+            </p>
+          </section>
+
+          <section class="ug-section" id="how-to-read">
+            <h2>How this guide is organized</h2>
+            <p>
+              The guide runs in order of increasing depth. If you read it front
+              to back you will never meet a term before it has been explained.
+              If you are here for one task, use the navigation or press
+              <kbd>Ctrl</kbd> <kbd>K</kbd> to search.
+            </p>
+            <div class="ug-cards">
+              <a class="ug-card" href="getting-started/requirements.html">
+                <small>Start here</small>
+                <strong>Getting set up</strong>
+                <span>
+                  What you need, what the banner at the top means, what every
+                  part of the screen is called, and a complete first
+                  walkthrough.
+                </span>
+              </a>
+              <a class="ug-card" href="learners/my-learning.html">
+                <small>Everyday tasks</small>
+                <strong>Doing your job</strong>
+                <span>
+                  One page per role covering the task you will repeat most:
+                  learning, uploading, reviewing, publishing.
+                </span>
+              </a>
+              <a class="ug-card" href="reference/validation-issues.html">
+                <small>Reference</small>
+                <strong>Looking things up</strong>
+                <span>
+                  Validation codes, lifecycle states and evidence, the
+                  permission matrix, and accessibility options.
+                </span>
+              </a>
+              <a class="ug-card" href="advanced/compare-versions.html">
+                <small>Advanced</small>
+                <strong>Governing content over time</strong>
+                <span>
+                  Comparing versions, retiring content, reading audit history,
+                  and working with the contract and authoring kit.
+                </span>
+              </a>
+              <a class="ug-card" href="advanced/troubleshooting.html">
+                <small>Advanced</small>
+                <strong>When something is wrong</strong>
+                <span>
+                  A symptom-first table that names the cause and the fix for
+                  every error the product can show you.
+                </span>
+              </a>
+              <a
+                class="ug-card"
+                href="reference/accessibility-and-preferences.html"
+              >
+                <small>Reference</small>
+                <strong>Making it work for you</strong>
+                <span>
+                  Keyboard-only operation, reduced motion, high zoom, and the
+                  display options RepoFluent honors.
+                </span>
+              </a>
+            </div>
+          </section>
+
+          <section class="ug-section" id="reading-paths">
+            <h2>Reading paths by role</h2>
+            <p>
+              Everyone should read the four Start here pages. After that, follow
+              the path for your role.
+            </p>
+            <dl class="ug-terms">
+              <div>
+                <dt>Learner</dt>
+                <dd>
+                  <a href="learners/my-learning.html">My learning</a> →
+                  <a href="learners/courses-and-lessons.html"
+                    >Courses and lessons</a
+                  >
+                  →
+                  <a href="learners/source-context.html"
+                    >Reading source context</a
+                  >
+                  →
+                  <a href="reference/accessibility-and-preferences.html"
+                    >Accessibility and preferences</a
+                  >
+                </dd>
+              </div>
+              <div>
+                <dt>Author</dt>
+                <dd>
+                  <a href="advanced/authoring-kit.html">The authoring kit</a> →
+                  <a href="authors/upload-a-package.html"
+                    >Uploading a package</a
+                  >
+                  →
+                  <a href="reference/validation-issues.html"
+                    >Validation issues</a
+                  >
+                  →
+                  <a href="reference/lifecycle-and-evidence.html"
+                    >Lifecycle and evidence</a
+                  >
+                </dd>
+              </div>
+              <div>
+                <dt>Reviewer</dt>
+                <dd>
+                  <a href="reviewers/review-a-draft.html">Reviewing a draft</a>
+                  →
+                  <a href="reference/validation-issues.html"
+                    >Validation issues</a
+                  >
+                  →
+                  <a href="advanced/compare-versions.html"
+                    >Comparing versions</a
+                  >
+                </dd>
+              </div>
+              <div>
+                <dt>Administrator</dt>
+                <dd>
+                  <a href="administrators/publish-and-assign.html"
+                    >Publishing and assigning</a
+                  >
+                  →
+                  <a href="advanced/retire-a-version.html"
+                    >Retiring a version</a
+                  >
+                  →
+                  <a href="reference/roles-and-permissions.html"
+                    >Roles and permissions</a
+                  >
+                  →
+                  <a href="advanced/troubleshooting.html">Troubleshooting</a>
+                </dd>
+              </div>
+              <div>
+                <dt>Auditor</dt>
+                <dd>
+                  <a href="advanced/audit-and-support.html"
+                    >Audit and support</a
+                  >
+                  →
+                  <a href="reference/lifecycle-and-evidence.html"
+                    >Lifecycle and evidence</a
+                  >
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="ug-section" id="what-exists">
+            <h2>What this release does and does not do</h2>
+            <p>
+              RepoFluent is a working vertical slice, not a finished product.
+              This guide documents only what actually works today, and it says
+              so plainly wherever a control on screen is not yet connected to
+              anything. Reading this section first will save you from hunting
+              for features that are not there.
+            </p>
+            <h3>Working today</h3>
+            <ul>
+              <li>
+                Uploading a curriculum package, asynchronous validation with a
+                detailed receipt, and idempotent re-upload.
+              </li>
+              <li>
+                Learner-equivalent draft preview with answers withheld, exact
+                warning acknowledgement, and immutable approve or reject
+                decisions.
+              </li>
+              <li>
+                Publishing one immutable version, assigning it to a learner, and
+                comparing or retiring published versions.
+              </li>
+              <li>
+                A learner dashboard, course outlines, eight kinds of lesson
+                block, and source context bound to a specific commit.
+              </li>
+              <li>
+                A complete, ordered lifecycle audit trail readable by an
+                auditor.
+              </li>
+              <li>
+                The published curriculum contract and the offline authoring kit,
+                both retrievable with verified checksums.
+              </li>
+            </ul>
+            <h3>Not in this release</h3>
+            <div class="rf-callout rf-callout--warning">
+              <svg class="rf-icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 3 8 14H2L10 3Z" />
+                <path d="M10 8v4M10 14h.01" />
+              </svg>
+              <div>
+                <strong>These are visible but not functional</strong>
+                <p>
+                  Answering or scoring a quiz or test; progress tracking of any
+                  kind (every progress figure you see is a placeholder); the
+                  <kbd>Ctrl</kbd> <kbd>K</kbd> search inside the application;
+                  analytics and reporting; managing users, groups, or tenants;
+                  and real authentication. Wherever one of these appears in the
+                  interface, this guide marks it rather than pretending it
+                  works.
+                </p>
+              </div>
+            </div>
+            <p>
+              The identities you sign in with are development personas, not real
+              accounts. That is explained on
+              <a href="getting-started/first-sign-in.html">Opening RepoFluent</a
+              >, and it is the single most important thing to understand before
+              you start.
+            </p>
+          </section>
+
+          <nav class="ug-pager" data-ug-pager aria-label="Guide pages"></nav>
+        </div>
+      </main>
+      <footer class="ug-statusbar" data-ug-status></footer>
+    </div>
+  </body>
+</html>
