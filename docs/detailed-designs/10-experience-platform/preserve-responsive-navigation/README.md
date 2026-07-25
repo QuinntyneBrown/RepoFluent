@@ -40,7 +40,7 @@ the first L1 identifier named by the source requirement as its primary parent.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-EXP-06` | `L1-EXP-04` | The platform shall provide route, breadcrumb, tab, drawer, split-pane, focus-return, and back-navigation patterns that retain domain context in URL/state where safe. Opening contextual code, glossary, or map detail shall not discard unsaved/progress state. |
+| `L2-EXP-06` | `L1-EXP-04` | The platform shall provide route, breadcrumb, tab, drawer, split-pane, focus-return, and back-navigation patterns that retain domain context in URL/state where safe. Opening contextual code, glossary, or map detail shall not discard unsaved/progress state. The global application header, and the environment banner presented above it, shall remain pinned to the top of the viewport while page content scrolls, and the primary navigation rails shall remain pinned beneath them at profiles that present them. Pinned chrome shall paint above scrolled content without concealing focused controls or anchor targets, and shall fit within the viewport so that no element of the chrome introduces page scrolling on its own. |
 | `L2-EXP-07` | `L1-EXP-05` | Supported profiles shall define minimum viewport, zoom, pointer, and orientation expectations for desktop, tablet, and narrow use. Navigation, assessment, lesson, import/review, administration, and analytics shall reflow without two-dimensional page scrolling, clipped controls, or inaccessible offscreen actions except intentional code/table regions with their own scrolling. |
 | `L2-EXP-14` | `L1-EXP-09` | Long lessons, file trees, tables, result lists, and analytics datasets shall use an appropriate paging/virtualization/progressive strategy that preserves semantic order, focus, screen-reader access, find/filter behavior, and stable scroll position. |
 
@@ -101,6 +101,18 @@ Status: **Implemented**
 - Source context is represented by the `source` URL parameter and a browser
   history entry. Browser Back or the close control removes the context and
   restores focus to the invoking source reference.
+- The development-identity banner and the application header are pinned with
+  `position: sticky` at the top of the document scroller and layered on the
+  shared sticky token. The banner occupies the first strip and the header pins
+  directly beneath it. Root scroll padding reserves the combined chrome height,
+  published as `--app-chrome-top-height`, so focus and anchor targets stay
+  visible.
+- The activity bar and workspace explorer are pinned below the combined chrome
+  and sized to one shared rail height derived from the same token. The rails
+  therefore meet the status bar without a gap, and the banner costs the shell no
+  scroll distance. The explorer tree scrolls inside the rail. The narrow profile
+  returns the activity bar to its fixed bottom placement, which the narrow
+  fill-height calculation reserves in place of the status bar.
 - The lesson workspace uses a desktop split pane and a token-based narrow
   drawer. Acceptance coverage verifies 390 px narrow and 640 px high-zoom
   equivalent profiles without page-level horizontal overflow.
@@ -112,4 +124,7 @@ Status: **Implemented**
   predictable without rendering the full pilot-limit fixture.
 - `responsive-navigation.spec.ts` starts from a Page Object, exercises a
   deterministic 33-block assigned lesson, and records desktop and narrow visual
-  baselines on Windows and Linux.
+  baselines on Windows and Linux. It measures the pinned chrome at the desktop
+  and narrow profiles. The banner holds the top of the viewport while the page
+  is scrolled. With the routed content collapsed, the chrome alone leaves the
+  document with no vertical overflow.

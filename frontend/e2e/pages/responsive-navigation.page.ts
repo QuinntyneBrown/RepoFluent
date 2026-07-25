@@ -193,6 +193,71 @@ export class ResponsiveNavigationPage {
     ).toBeFocused();
   }
 
+  async expectPinnedChromeWhileScrolling(): Promise<void> {
+    await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const geometry = await this.page.evaluate(() => {
+      const banner = document.querySelector<HTMLElement>('.development-banner')!;
+      const header = document.querySelector<HTMLElement>('.app-header')!;
+      const bannerBox = banner.getBoundingClientRect();
+      const headerBox = header.getBoundingClientRect();
+      const covered = document.elementFromPoint(
+        headerBox.left + headerBox.width / 2,
+        headerBox.top + headerBox.height / 2,
+      );
+      return {
+        bannerTop: Math.round(bannerBox.top),
+        bannerBottom: Math.round(bannerBox.bottom),
+        headerTop: Math.round(headerBox.top),
+        chromeHeight: Math.round(bannerBox.height + headerBox.height),
+        headerPaintsOverContent: header.contains(covered),
+        scrollOffset: Math.round(window.scrollY),
+        scrollPaddingTop: Math.round(
+          parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop),
+        ),
+      };
+    });
+
+    expect(geometry.scrollOffset).toBeGreaterThan(0);
+    expect(geometry.bannerTop).toBe(0);
+    expect(geometry.headerTop).toBe(geometry.bannerBottom);
+    expect(geometry.headerPaintsOverContent).toBe(true);
+    expect(geometry.scrollPaddingTop).toBe(geometry.chromeHeight);
+
+    await expect(this.page.getByRole('heading', { name: 'RepoFluent', exact: true })).toBeVisible();
+    await expect(
+      this.page.getByRole('button', { name: 'Search curriculum, code, and systems' }),
+    ).toBeVisible();
+    await expect(this.page.getByLabel('Development persona')).toBeVisible();
+
+    await this.page.evaluate(() => window.scrollTo(0, 0));
+  }
+
+  // The pinned chrome — development banner, header, navigation rails, and the
+  // bottom dock — must fit the viewport by itself so that no part of it spends
+  // scroll distance the page content did not ask for. Collapsing the routed
+  // content isolates the chrome from whatever the current page renders.
+  async expectPinnedChromeFitsViewport(): Promise<void> {
+    const collapsedContent = await this.page.addStyleTag({
+      content: '#main-content { display: none !important; }',
+    });
+    const geometry = await this.page.evaluate(() => {
+      const root = document.scrollingElement!;
+      const bannerBox = document
+        .querySelector<HTMLElement>('.development-banner')!
+        .getBoundingClientRect();
+      return {
+        verticalOverflow: root.scrollHeight - root.clientHeight,
+        bannerTop: Math.round(bannerBox.top),
+        bannerHeight: Math.round(bannerBox.height),
+      };
+    });
+    await collapsedContent.evaluate((node) => node.parentNode?.removeChild(node));
+
+    expect(geometry.bannerHeight).toBeGreaterThan(0);
+    expect(geometry.bannerTop).toBe(0);
+    expect(geometry.verticalOverflow).toBe(0);
+  }
+
   async expectDesktopSplitLayout(): Promise<void> {
     const layout = await this.page.locator('.lesson').evaluate((lesson) => {
       const source = lesson.querySelector<HTMLElement>('.lesson__source')!;

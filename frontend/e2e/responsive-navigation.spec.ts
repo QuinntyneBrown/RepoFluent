@@ -20,6 +20,8 @@ test('responsive navigation preserves source context and progressive lesson posi
 
   await responsiveNavigation.openAssignedLesson(lessonUrl);
   await responsiveNavigation.expectProgressiveContent(33);
+  await responsiveNavigation.expectPinnedChromeWhileScrolling();
+  await responsiveNavigation.expectPinnedChromeFitsViewport();
 
   await responsiveNavigation.openSourceContext();
   await responsiveNavigation.expectDesktopSplitLayout();
@@ -28,6 +30,7 @@ test('responsive navigation preserves source context and progressive lesson posi
 
   await responsiveNavigation.useNarrowViewport();
   await responsiveNavigation.expectNoPageOverflow();
+  await responsiveNavigation.expectPinnedChromeFitsViewport();
   await responsiveNavigation.openSourceContext();
   await responsiveNavigation.expectNarrowDrawerLayout();
   await responsiveNavigation.expectScreenshot('preserve-responsive-navigation-narrow.png', 0.08);

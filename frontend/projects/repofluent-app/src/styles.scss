@@ -8,8 +8,22 @@
 }
 
 html {
+  --app-banner-height: var(--rf-size-statusbar);
+  --app-header-height: var(--rf-size-titlebar);
+
+  // Combined height of the pinned chrome above the document scroller: the
+  // development banner and the application header.
+  --app-chrome-top-height: calc(var(--app-banner-height) + var(--app-header-height));
+
   color-scheme: dark;
   min-width: 20rem;
+  scroll-padding-top: var(--app-chrome-top-height);
+}
+
+@media (max-width: 48rem) {
+  html {
+    --app-header-height: 3rem;
+  }
 }
 
 body {

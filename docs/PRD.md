@@ -324,6 +324,8 @@ RepoFluent should communicate quality through clarity, responsiveness, typograph
 - Never make an assessment answer, navigation control, status, or required explanation available only through animation, hover, color, or a GPU effect.
 - Keep motion short and interruptible and honor the user's reduced-motion preference throughout the product.
 - Preserve learner context through split views, drawers, breadcrumbs, and back navigation instead of opening unnecessary new pages.
+- Keep the global application header, with its brand, search, and identity controls, visible at the top of the viewport while page content scrolls, and keep primary navigation reachable alongside it.
+- Treat a persistent environment notice, such as the development-identity banner, as part of that fixed shell chrome: it should stay visible and never cost the shell scrolling that the page content did not ask for.
 - Design responsive experiences for supported desktop and tablet sizes; assessment and core lesson flows should remain usable on a narrow viewport.
 
 ### 9.2 Accessibility
